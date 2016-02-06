@@ -1,0 +1,6 @@
+bin/*
+nbproject/*
+include/generated/*
+src/generated/*
+
+*.o
