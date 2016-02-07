@@ -31,9 +31,35 @@ Identifier                  ({Letter}|[_]){LetterOrDigit}*
 
 <INITIAL>Descriptor                     {return TOKEN_DESCRIPTOR;}
 
-<INITIAL>extends                        {
-                                            return TOKEN_EXTENDS;
-                                        }
+<INITIAL>extends                        {return TOKEN_EXTENDS;}
+
+<INITIAL>architecture                   {return TOKEN_ARCHITECTURE;}
+
+<INITIAL>constraint                     {return TOKEN_CONSTRAINT;}
+
+<INITIAL>service                        {return TOKEN_SERVICE;}
+
+<INITIAL>internally                     {return TOKEN_INTERNALLY;}
+
+<INITIAL>externally                     {return TOKEN_EXTERNALLY;}
+
+<INITIAL>provides                       {return TOKEN_PROVIDES;}
+
+<INITIAL>requires                       {return TOKEN_REQUIRES;}
+
+<INITIAL>atomic                         {return TOKEN_ATOMIC;}
+
+<INITIAL>connect                        {return TOKEN_CONNECT;}
+
+<INITIAL>disconnect                     {return TOKEN_DISCONNECT;}
+
+<INITIAL>"{"                            {return TOKEN_OPENBRACE;}
+
+<INITIAL>"}"                            {return TOKEN_CLOSEBRACE;}
+
+<INITIAL>"("                            {return TOKEN_OPENPAR;}
+
+<INITIAL>")"                            {return TOKEN_CLOSEPAR;}
 
 <INITIAL>{Identifier}                   {
                                             yylval = new CCompoSymbol(std::string(yytext, yyleng));
