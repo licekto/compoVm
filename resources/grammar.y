@@ -92,12 +92,17 @@ compoExprs      :   compoExpr compoExprs
                 |   /* epsilon */
                 ;
 
-compoExpr       :   service
-                |   exRequirements
-                |   exProvisions
+
+compoExpr	:   exProvision
+		|   exRequirement
+		|   service
+		|   constraint
+		|   inRequirement
+		|   inProvision
+		|   architecture
                 ;
 
-exProvisions    :   externally TOKEN_PROVIDES TOKEN_OPENBRACE ports TOKEN_CLOSEBRACE
+exProvision     :   externally TOKEN_PROVIDES TOKEN_OPENBRACE ports TOKEN_CLOSEBRACE
 		    {
 			currentBody.push_back(new CCompoProvision(externallyPresent, currentPorts));
 			currentPorts.clear();
@@ -118,7 +123,7 @@ atomic		:   TOKEN_ATOMIC	{atomicPresent = true;}
 		|   /* epsilon */	{atomicPresent = false;}
 		;
 
-exRequirements  :   externally TOKEN_REQUIRES TOKEN_IDENTIFIER TOKEN_OPENBRACE TOKEN_CLOSEBRACE
+exRequirement   :   externally TOKEN_REQUIRES TOKEN_IDENTIFIER TOKEN_OPENBRACE TOKEN_CLOSEBRACE
                 ;
 
 externally      :   TOKEN_EXTERNALLY	{externallyPresent = true;}
@@ -142,6 +147,19 @@ serviceParams   :   TOKEN_IDENTIFIER
                     }
                 |   /* epsilon */
                 ;
+
+constraint	:
+		;
+
+inRequirement	:
+		;
+
+inProvision	:
+		;
+
+architecture	:
+		;
+
 
 %%
 
