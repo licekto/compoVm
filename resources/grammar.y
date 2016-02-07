@@ -7,7 +7,10 @@
 #define yylex()                  parser->getLexer()->yylex()
 #define yyerror(parser, message) parser->error(message)
 
+NODE_VECTOR currentBody;
+
 SYMBOL_VECTOR currentServiceParams;
+NODE_VECTOR currentServiceBody;
 CCompoService * currentService = nullptr;
 CCompoNode *root = nullptr;
 
@@ -46,21 +49,20 @@ CCompoNode *root = nullptr;
 
 S               :   descriptors TOKEN_END
                     {
-                        parser->setRoot($1); YYACCEPT; return 0;
+                        parser->setRoot(root); YYACCEPT; return 0;
                     }
 
 descriptors     :   descriptor descriptors
-                    {$$ = $1;}
                 |   /* epsilon */
                 ;
 
 descriptor      :   TOKEN_DESCRIPTOR TOKEN_IDENTIFIER inheritance TOKEN_OPENBRACE compoExprs TOKEN_CLOSEBRACE
                     {
-                        CCompoDescriptor *descriptor = new CCompoDescriptor((CCompoSymbol*) $2, nullptr, nullptr);
+                        CCompoDescriptor *descriptor = new CCompoDescriptor((CCompoSymbol*) $2, nullptr, currentBody);
                         if ($3) {
                             descriptor->setExtends((CCompoSymbol*) $3);
                         }
-                        $$ = descriptor;
+                        root = descriptor;
                     }
 
 inheritance     :   TOKEN_EXTENDS TOKEN_IDENTIFIER
@@ -72,10 +74,17 @@ inheritance     :   TOKEN_EXTENDS TOKEN_IDENTIFIER
                 ;
 
 compoExprs      :   compoExpr compoExprs
+                    {
+                        currentBody.push_back($1);
+                        currentService = nullptr;
+                    }
                 |   /* epsilon */
                 ;
 
 compoExpr       :   services
+                    {
+                        $$ = currentService;
+                    }
                 |   exRequirements
                 |   exProvisions
                 ;
@@ -91,15 +100,12 @@ externally      :   TOKEN_EXTERNALLY
                 ;
 
 services        :   TOKEN_SERVICE serviceSign
-                    {
-                        currentService = nullptr;
-                        currentServiceParams.clear();
-                    }
                 ;
 
 serviceSign     :   TOKEN_IDENTIFIER TOKEN_OPENPAR serviceParams TOKEN_CLOSEPAR TOKEN_OPENBRACE TOKEN_CLOSEBRACE
                     {
-                        currentService = new CCompoService((CCompoSymbol*) $1, currentServiceParams, nullptr);
+                        currentService = new CCompoService((CCompoSymbol*) $1, currentServiceParams, currentServiceBody);
+                        currentServiceParams.clear();
                     }
                 ;
 

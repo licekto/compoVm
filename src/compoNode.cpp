@@ -37,28 +37,32 @@ std::string CCompoSymbol::getName() const {
 
 /*----------------------------------------------------------------------------*/
 
-CCompoDescriptor::CCompoDescriptor(CCompoSymbol *name = nullptr, CCompoSymbol *extends = nullptr, CCompoNode* body = nullptr)
+CCompoDescriptor::CCompoDescriptor(CCompoSymbol *name = nullptr, CCompoSymbol *extends = nullptr, NODE_VECTOR body = NODE_VECTOR(0))
 : CCompoNode(NodeTypeEnum::DESCRIPTOR), m_name(name), m_extends(extends), m_body(body)
 {}
 
 CCompoDescriptor::~CCompoDescriptor() {
     delete m_name;
-    delete m_body;
+    for (CCompoNode *expr : m_body) {
+        delete expr;
+    }
 }
 
 void CCompoDescriptor::print(std::ostream& os) const {
     os << typeName(m_type) << " ";
     os << *m_name << " ";
     if (m_extends) {
-        os << "extends " << *m_extends << std::endl;
+        os << "extends " << *m_extends;
     }
-    os << "{";
+    os << " {" << std::endl;
     
-    if (m_body) {
-        
+    if (m_body.size() != 0) {
+        for (CCompoNode *expr : m_body) {
+            os << *expr;
+        }
     }
     
-    os << "}";
+    os << "}" << std::endl;
 }
 
 CCompoSymbol * CCompoDescriptor::getName() const {
@@ -75,7 +79,7 @@ CCompoSymbol * CCompoDescriptor::getExtends() const {
 /*----------------------------------------------------------------------------*/
 
 
-CCompoService::CCompoService(CCompoSymbol* name = nullptr, SYMBOL_VECTOR params = SYMBOL_VECTOR(0), CCompoNode* body = nullptr)
+CCompoService::CCompoService(CCompoSymbol* name = nullptr, SYMBOL_VECTOR params = SYMBOL_VECTOR(0), NODE_VECTOR body = NODE_VECTOR(0))
 : CCompoNode(NodeTypeEnum::SERVICE), m_name(name), m_params(params), m_body(body)
 {}
 
@@ -86,13 +90,14 @@ CCompoService::~CCompoService() {
         delete symbol;
     }
     
-    delete m_body;
+    for (CCompoNode *expr : m_body) {
+        delete expr;
+    }
 }
 
 void CCompoService::print(std::ostream& os) const {
-    if (!m_toString) {
-        os << typeName(m_type) << " ";
-    }
+    os << "\t";
+    os << typeName(m_type) << " ";
     
     os << *m_name << " (";
     
@@ -105,18 +110,20 @@ void CCompoService::print(std::ostream& os) const {
         os << *symbol;
     }
     
-    os << ") {" << *m_body << std::endl << "}";
+    os << ") {" << std::endl;
+    os << "\t";
+    os << "}" << std::endl;
 }
 
 CCompoSymbol * CCompoService::getName() const {
     return m_name;
 }
 
-CCompoNode * CCompoService::getBody() const {
-    return m_body;
+NODE_VECTOR * CCompoService::getBody() {
+    return &m_body;
 }
 
-void CCompoService::setBody(CCompoNode* body) {
+void CCompoService::setBody(NODE_VECTOR body) {
     m_body = body;
 }
 

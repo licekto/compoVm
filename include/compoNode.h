@@ -15,6 +15,11 @@ const char * typeName(NodeTypeEnum type);
 
 /*----------------------------------------------------------------------------*/
 
+#define SYMBOL_VECTOR std::vector<CCompoSymbol*>
+#define NODE_VECTOR std::vector<CCompoNode*>
+
+/*----------------------------------------------------------------------------*/
+
 class CCompoNode {
 protected:
             NodeTypeEnum        m_type;
@@ -46,10 +51,10 @@ class CCompoDescriptor : public CCompoNode {
 private:
             CCompoSymbol      * m_name;
             CCompoSymbol      * m_extends;
-            CCompoNode        * m_body;
+            NODE_VECTOR         m_body;
             
 public:
-                                CCompoDescriptor    (CCompoSymbol *name, CCompoSymbol *extends, CCompoNode *body);
+                                CCompoDescriptor    (CCompoSymbol *name, CCompoSymbol *extends, NODE_VECTOR body);
     virtual                     ~CCompoDescriptor   ();
     virtual void                print               (std::ostream& os) const;
             CCompoSymbol *      getName             () const;
@@ -59,21 +64,19 @@ public:
 
 /*----------------------------------------------------------------------------*/
 
-#define SYMBOL_VECTOR std::vector<CCompoSymbol*>
-
 class CCompoService : public CCompoNode {
 private:
             CCompoSymbol      * m_name;
             SYMBOL_VECTOR       m_params;
-            CCompoNode        * m_body;
+            NODE_VECTOR         m_body;
             
 public:
-                                CCompoService       (CCompoSymbol *name, SYMBOL_VECTOR params, CCompoNode *body);
+                                CCompoService       (CCompoSymbol *name, SYMBOL_VECTOR params, NODE_VECTOR body);
     virtual                     ~CCompoService      ();
     virtual void                print               (std::ostream& os) const;
             CCompoSymbol *      getName             () const;
-            CCompoNode *        getBody             () const;
-            void                setBody             (CCompoNode *body);
+            NODE_VECTOR *       getBody             ();
+            void                setBody             (NODE_VECTOR body);
             SYMBOL_VECTOR *     getParams           ();
             void                setParam            (CCompoSymbol *param);
 };
