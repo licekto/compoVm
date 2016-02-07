@@ -4,7 +4,6 @@
 #include "compoNode.h"
 #include "compoPort.h"
 
-
 class CCompoProvision : public CCompoNode {
 private:
             bool                m_externally;
