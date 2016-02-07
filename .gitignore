@@ -2,5 +2,10 @@ bin/*
 nbproject/*
 include/generated/*
 src/generated/*
+CMakeFiles/*
+CMakeCache.txt
+Makefile
+cmake_install.cmake
+compile_commands.json
 
 *.o
