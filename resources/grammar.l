@@ -53,6 +53,20 @@ Identifier                  ({Letter}|[_]){LetterOrDigit}*
 
 <INITIAL>disconnect                     {return TOKEN_DISCONNECT;}
 
+<INITIAL>delegate			{return TOKEN_DELEGATE;}
+
+<INITIAL>return				{return TOKEN_RETURN;}
+
+<INITIAL>to				{return TOKEN_TO;}
+
+<INITIAL>"@"				{return TOKEN_AT;}
+
+<INITIAL>":="				{return TOKEN_ASSIGN;}
+
+<INITIAL>"."				{return TOKEN_DOT;}
+
+<INITIAL>","				{return TOKEN_COMMA;}
+
 <INITIAL>"{"                            {return TOKEN_OPENBRACE;}
 
 <INITIAL>"}"                            {return TOKEN_CLOSEBRACE;}
@@ -60,6 +74,12 @@ Identifier                  ({Letter}|[_]){LetterOrDigit}*
 <INITIAL>"("                            {return TOKEN_OPENPAR;}
 
 <INITIAL>")"                            {return TOKEN_CLOSEPAR;}
+
+<INITIAL>":"                            {return TOKEN_COLON;}
+
+<INITIAL>";"                            {return TOKEN_SEMICOLON;}
+
+<INITIAL>"|"                            {return TOKEN_PIPE;}
 
 <INITIAL>{Identifier}                   {
                                             yylval = new CCompoSymbol(std::string(yytext, yyleng));
