@@ -1,14 +1,19 @@
 #pragma once
 
 #include <iostream>
+#include <vector>
+#include <map>
 
 enum NodeTypeEnum {
     END = 0,
     DESCRIPTOR,
-    SYMBOL
+    SYMBOL,
+    SERVICE
 };
 
 const char * typeName(NodeTypeEnum type);
+
+/*----------------------------------------------------------------------------*/
 
 class CCompoNode {
 protected:
@@ -22,6 +27,8 @@ public:
     friend  std::ostream&       operator <<         (std::ostream& os, const CCompoNode& node);
 };
 
+/*----------------------------------------------------------------------------*/
+
 class CCompoSymbol : public CCompoNode {
 private:
             std::string         m_name;
@@ -29,9 +36,11 @@ private:
 public:
                                 CCompoSymbol        (const std::string& name);
     virtual                     ~CCompoSymbol       () {};
-            std::string         getName             () const;
     virtual void                print               (std::ostream& os) const;
+            std::string         getName             () const;
 };
+
+/*----------------------------------------------------------------------------*/
 
 class CCompoDescriptor : public CCompoNode {
 private:
@@ -42,8 +51,31 @@ private:
 public:
                                 CCompoDescriptor    (CCompoSymbol *name, CCompoSymbol *extends, CCompoNode *body);
     virtual                     ~CCompoDescriptor   ();
-            CCompoSymbol *      getName             () const;
     virtual void                print               (std::ostream& os) const;
+            CCompoSymbol *      getName             () const;
             void                setExtends          (CCompoSymbol * extends);
             CCompoSymbol *      getExtends          () const;
 };
+
+/*----------------------------------------------------------------------------*/
+
+#define SYMBOL_VECTOR std::vector<CCompoSymbol*>
+
+class CCompoService : public CCompoNode {
+private:
+            CCompoSymbol      * m_name;
+            SYMBOL_VECTOR       m_params;
+            CCompoNode        * m_body;
+            
+public:
+                                CCompoService       (CCompoSymbol *name, SYMBOL_VECTOR params, CCompoNode *body);
+    virtual                     ~CCompoService      ();
+    virtual void                print               (std::ostream& os) const;
+            CCompoSymbol *      getName             () const;
+            CCompoNode *        getBody             () const;
+            void                setBody             (CCompoNode *body);
+            SYMBOL_VECTOR *     getParams           ();
+            void                setParam            (CCompoSymbol *param);
+};
+
+/*----------------------------------------------------------------------------*/
