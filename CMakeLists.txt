@@ -9,6 +9,7 @@ file(MAKE_DIRECTORY include/generated)
 
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/include)
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/include/generated)
+include_directories(${CMAKE_CURRENT_SOURCE_DIR}/include/nodes)
 
 find_package(BISON REQUIRED)
 set(BisonOutput ${CMAKE_CURRENT_SOURCE_DIR}/src/generated/parser.cpp ${CMAKE_CURRENT_SOURCE_DIR}/include/generated/parser.h)
@@ -45,7 +46,7 @@ if (FLEX_FOUND)
     )
 endif ()
 
-FILE(GLOB inFiles RELATIVE "${CMAKE_CURRENT_SOURCE_DIR}/" src/*.cpp src/generated/*.cpp include/*.h include/generated/*.h)
+FILE(GLOB inFiles RELATIVE "${CMAKE_CURRENT_SOURCE_DIR}/" src/*.cpp src/nodes/*.cpp src/generated/*.cpp include/*.h include/nodes/*.h  include/generated/*.h)
 set(SOURCE_FILES ${inFiles} ${BisonOutput} ${FlexOutput})
 
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/bin)

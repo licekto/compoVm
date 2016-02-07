@@ -3,6 +3,11 @@
 #include "parserWrapper.h"
 #include "lexer.h"
 #include "compoNode.h"
+#include "compoSymbol.h"
+#include "compoService.h"
+#include "compoPort.h"
+#include "compoDescriptor.h"
+#include "compoProvision.h"
 
 #define yylex()                  parser->getLexer()->yylex()
 #define yyerror(parser, message) parser->error(message)

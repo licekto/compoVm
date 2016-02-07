@@ -9,6 +9,7 @@
 #include "parserWrapper.h"
 #include "parser.h"
 #include "compoNode.h"
+#include "compoSymbol.h"
 %}
 
 Letter                      [a-zA-Z]
