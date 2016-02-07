@@ -8,7 +8,9 @@ enum NodeTypeEnum {
     END = 0,
     DESCRIPTOR,
     SYMBOL,
-    SERVICE
+    SERVICE,
+    PORT,
+    PROVISION
 };
 
 const char * typeName(NodeTypeEnum type);
@@ -17,6 +19,8 @@ const char * typeName(NodeTypeEnum type);
 
 #define SYMBOL_VECTOR std::vector<CCompoSymbol*>
 #define NODE_VECTOR std::vector<CCompoNode*>
+#define PORT_VECTOR std::vector<CCompoPort*>
+#define PRINT_TAB os << "\t";
 
 /*----------------------------------------------------------------------------*/
 
@@ -79,6 +83,35 @@ public:
             void                setBody             (NODE_VECTOR body);
             SYMBOL_VECTOR *     getParams           ();
             void                setParam            (CCompoSymbol *param);
+};
+
+/*----------------------------------------------------------------------------*/
+
+class CCompoPort : public CCompoNode {
+private:
+            CCompoSymbol      * m_name;
+            bool                m_atomic;
+            
+public:
+                                CCompoPort          (CCompoSymbol *name, bool atomic);
+    virtual                     ~CCompoPort         ();
+    virtual void                print               (std::ostream& os) const;
+            CCompoSymbol *      getName             () const;
+};
+
+/*----------------------------------------------------------------------------*/
+
+class CCompoProvision : public CCompoNode {
+private:
+            bool                m_externally;
+            PORT_VECTOR         m_ports;
+            
+public:
+                                CCompoProvision     (bool externally, PORT_VECTOR ports);
+    virtual                     ~CCompoProvision    ();
+    virtual void                print               (std::ostream& os) const;
+            bool                isExternal          ();
+            PORT_VECTOR *       getPorts            ();
 };
 
 /*----------------------------------------------------------------------------*/

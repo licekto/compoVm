@@ -1,1 +1,7 @@
-Descriptor HTTPServer extends server
+Descriptor HTTPServer extends server {
+	externally provides {
+		default : {}
+	}
+	service create(url) {}
+	service discard() {}
+}

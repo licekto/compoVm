@@ -4,7 +4,9 @@ std::map<NodeTypeEnum, const char *> typeNames = {
     {NodeTypeEnum::END, "End"},
     {NodeTypeEnum::DESCRIPTOR, "Descriptor"},
     {NodeTypeEnum::SYMBOL, "Symbol"},
-    {NodeTypeEnum::SERVICE, "Service"}
+    {NodeTypeEnum::SERVICE, "service"},
+    {NodeTypeEnum::PORT, "port"},
+    {NodeTypeEnum::PROVISION, "provides"}
 };
 
 const char * typeName(NodeTypeEnum type) {
@@ -78,7 +80,6 @@ CCompoSymbol * CCompoDescriptor::getExtends() const {
 }
 /*----------------------------------------------------------------------------*/
 
-
 CCompoService::CCompoService(CCompoSymbol* name = nullptr, SYMBOL_VECTOR params = SYMBOL_VECTOR(0), NODE_VECTOR body = NODE_VECTOR(0))
 : CCompoNode(NodeTypeEnum::SERVICE), m_name(name), m_params(params), m_body(body)
 {}
@@ -133,4 +134,59 @@ SYMBOL_VECTOR * CCompoService::getParams() {
 
 void CCompoService::setParam(CCompoSymbol* param) {
     m_params.push_back(param);
+}
+
+/*----------------------------------------------------------------------------*/
+
+CCompoPort::CCompoPort(CCompoSymbol* name = nullptr, bool atomic = false)
+: CCompoNode(NodeTypeEnum::PORT), m_name(name), m_atomic(atomic)
+{}
+
+CCompoPort::~CCompoPort() {
+    delete m_name;
+}
+
+void CCompoPort::print(std::ostream& os) const {
+    if (!m_toString) {
+        os << typeName(m_type) << " ";
+    }
+    
+    PRINT_TAB;
+    os << *m_name << " : { }";
+}
+
+CCompoSymbol * CCompoPort::getName() const {
+    return m_name;
+}
+/*----------------------------------------------------------------------------*/
+
+
+CCompoProvision::CCompoProvision(bool externally = false, PORT_VECTOR ports = PORT_VECTOR(0))
+: CCompoNode(NodeTypeEnum::PROVISION), m_externally(externally), m_ports(ports)
+{}
+
+CCompoProvision::~CCompoProvision() {
+    for (CCompoPort *port : m_ports) {
+        delete port;
+    }
+}
+
+void CCompoProvision::print(std::ostream& os) const {
+    if (!m_toString) {
+        os << typeName(m_type) << " ";
+    }
+    PRINT_TAB;
+    if (m_externally) {
+        os << "externally ";
+    }
+
+    os << "provides {" << std::endl;
+    
+    for (CCompoPort *port : m_ports) {
+        PRINT_TAB;
+        os << *port << std::endl;
+    }
+    
+    PRINT_TAB;
+    os << "}" << std::endl;
 }

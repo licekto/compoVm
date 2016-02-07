@@ -7,12 +7,17 @@
 #define yylex()                  parser->getLexer()->yylex()
 #define yyerror(parser, message) parser->error(message)
 
+CCompoNode *root = nullptr;
+
 NODE_VECTOR currentBody;
 
+CCompoService * currentService = nullptr;
 SYMBOL_VECTOR currentServiceParams;
 NODE_VECTOR currentServiceBody;
-CCompoService * currentService = nullptr;
-CCompoNode *root = nullptr;
+
+bool externallyPresent = false;
+bool atomicPresent = false;
+PORT_VECTOR currentPorts;
 
 %}
 
@@ -38,10 +43,20 @@ CCompoNode *root = nullptr;
 %token TOKEN_ATOMIC
 %token TOKEN_CONNECT
 %token TOKEN_DISCONNECT
+%token TOKEN_DELEGATE
+%token TOKEN_RETURN
+%token TOKEN_TO
+%token TOKEN_AT
+%token TOKEN_ASSIGN
+%token TOKEN_DOT
+%token TOKEN_COMMA
 %token TOKEN_OPENBRACE
 %token TOKEN_CLOSEBRACE
 %token TOKEN_OPENPAR
 %token TOKEN_CLOSEPAR
+%token TOKEN_COLON
+%token TOKEN_SEMICOLON
+%token TOKEN_PIPE
 %token TOKEN_IDENTIFIER
 %token TOKEN_END        0   "end of file"
 
@@ -74,37 +89,45 @@ inheritance     :   TOKEN_EXTENDS TOKEN_IDENTIFIER
                 ;
 
 compoExprs      :   compoExpr compoExprs
-                    {
-                        currentBody.push_back($1);
-                        currentService = nullptr;
-                    }
                 |   /* epsilon */
                 ;
 
-compoExpr       :   services
-                    {
-                        $$ = currentService;
-                    }
+compoExpr       :   service
                 |   exRequirements
                 |   exProvisions
                 ;
 
-exProvisions    :   externally TOKEN_PROVIDES TOKEN_IDENTIFIER TOKEN_OPENBRACE TOKEN_CLOSEBRACE
+exProvisions    :   externally TOKEN_PROVIDES TOKEN_OPENBRACE ports TOKEN_CLOSEBRACE
+		    {
+			currentBody.push_back(new CCompoProvision(externallyPresent, currentPorts));
+			currentPorts.clear();
+		    }
                 ;
+
+ports		:   port ports
+		|   /* epsilon */
+		;
+
+port		:   atomic TOKEN_IDENTIFIER TOKEN_COLON TOKEN_OPENBRACE TOKEN_CLOSEBRACE
+		    {
+			currentPorts.push_back(new CCompoPort((CCompoSymbol*) $2, atomicPresent));
+		    }
+		;
+
+atomic		:   TOKEN_ATOMIC	{atomicPresent = true;}
+		|   /* epsilon */	{atomicPresent = false;}
+		;
 
 exRequirements  :   externally TOKEN_REQUIRES TOKEN_IDENTIFIER TOKEN_OPENBRACE TOKEN_CLOSEBRACE
                 ;
 
-externally      :   TOKEN_EXTERNALLY
-                |   /* epsilon */
+externally      :   TOKEN_EXTERNALLY	{externallyPresent = true;}
+                |   /* epsilon */	{externallyPresent = false;}
                 ;
 
-services        :   TOKEN_SERVICE serviceSign
-                ;
-
-serviceSign     :   TOKEN_IDENTIFIER TOKEN_OPENPAR serviceParams TOKEN_CLOSEPAR TOKEN_OPENBRACE TOKEN_CLOSEBRACE
+service         :   TOKEN_SERVICE TOKEN_IDENTIFIER TOKEN_OPENPAR serviceParams TOKEN_CLOSEPAR TOKEN_OPENBRACE TOKEN_CLOSEBRACE
                     {
-                        currentService = new CCompoService((CCompoSymbol*) $1, currentServiceParams, currentServiceBody);
+                        currentBody.push_back(new CCompoService((CCompoSymbol*) $2, currentServiceParams, currentServiceBody));
                         currentServiceParams.clear();
                     }
                 ;
