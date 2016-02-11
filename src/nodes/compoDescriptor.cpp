@@ -1,6 +1,6 @@
 #include "compoDescriptor.h"
 
-CCompoDescriptor::CCompoDescriptor(CCompoSymbol *name = nullptr, CCompoSymbol *extends = nullptr, NODE_VECTOR body = NODE_VECTOR(0))
+CCompoDescriptor::CCompoDescriptor(CCompoSymbol *name = nullptr, CCompoSymbol *extends = nullptr, std::vector<CCompoNode*> body = std::vector<CCompoNode*>(0))
 : CCompoNode(NodeTypeEnum::DESCRIPTOR), m_name(name), m_extends(extends), m_body(body)
 {}
 

@@ -1,6 +1,6 @@
 #include "compoService.h"
 
-CCompoService::CCompoService(CCompoSymbol* name = nullptr, SYMBOL_VECTOR params = SYMBOL_VECTOR(0), NODE_VECTOR body = NODE_VECTOR(0))
+CCompoService::CCompoService(CCompoSymbol* name = nullptr, std::vector<CCompoSymbol*> params = std::vector<CCompoSymbol*>(0), std::vector<CCompoNode*> body = std::vector<CCompoNode*>(0))
 : CCompoNode(NodeTypeEnum::SERVICE), m_name(name), m_params(params), m_body(body)
 {}
 
@@ -40,15 +40,15 @@ CCompoSymbol * CCompoService::getName() const {
     return m_name;
 }
 
-NODE_VECTOR * CCompoService::getBody() {
+std::vector<CCompoNode*> * CCompoService::getBody() {
     return &m_body;
 }
 
-void CCompoService::setBody(NODE_VECTOR body) {
+void CCompoService::setBody(std::vector<CCompoNode*> body) {
     m_body = body;
 }
 
-SYMBOL_VECTOR * CCompoService::getParams() {
+std::vector<CCompoSymbol*> * CCompoService::getParams() {
     return &m_params;
 }
 

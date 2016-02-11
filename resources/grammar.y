@@ -14,15 +14,15 @@
 
 CCompoNode *root = nullptr;
 
-NODE_VECTOR currentBody;
+std::vector<CCompoNode*> currentBody;
 
 CCompoService * currentService = nullptr;
-SYMBOL_VECTOR currentServiceParams;
-NODE_VECTOR currentServiceBody;
+std::vector<CCompoSymbol*> currentServiceParams;
+std::vector<CCompoNode*> currentServiceBody;
 
 bool externallyPresent = false;
 bool atomicPresent = false;
-PORT_VECTOR currentPorts;
+std::vector<CCompoPort*> currentPorts;
 
 %}
 

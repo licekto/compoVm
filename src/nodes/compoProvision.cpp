@@ -1,6 +1,6 @@
 #include "compoProvision.h"
 
-CCompoProvision::CCompoProvision(bool externally = false, PORT_VECTOR ports = PORT_VECTOR(0))
+CCompoProvision::CCompoProvision(bool externally = false, std::vector<CCompoPort*> ports = std::vector<CCompoPort*>(0))
 : CCompoNode(NodeTypeEnum::PROVISION), m_externally(externally), m_ports(ports)
 {}
 
@@ -14,7 +14,7 @@ void CCompoProvision::print(std::ostream& os) const {
     if (!m_toString) {
         os << typeName(m_type) << " ";
     }
-    PRINT_TAB;
+    os << "\t";
     if (m_externally) {
         os << "externally ";
     }
@@ -22,10 +22,18 @@ void CCompoProvision::print(std::ostream& os) const {
     os << "provides {" << std::endl;
     
     for (CCompoPort *port : m_ports) {
-        PRINT_TAB;
+        os << "\t";;
         os << *port << std::endl;
     }
     
-    PRINT_TAB;
+    os << "\t";;
     os << "}" << std::endl;
+}
+
+bool CCompoProvision::isExternal() {
+    return m_externally;
+}
+
+std::vector<CCompoPort*> * CCompoProvision::getPorts() {
+    return &m_ports;
 }

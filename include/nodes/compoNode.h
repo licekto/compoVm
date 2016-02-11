@@ -3,7 +3,6 @@
 #include <iostream>
 #include <vector>
 
-#include "nodeDefinitions.h"
 #include "nodeType.h"
 
 class CCompoNode {

@@ -13,7 +13,7 @@ void CCompoPort::print(std::ostream& os) const {
         os << typeName(m_type) << " ";
     }
     
-    PRINT_TAB;
+    os << "\t";
     os << *m_name << " : { }";
 }
 
