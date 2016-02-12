@@ -19,7 +19,7 @@ void CCompoRequirement::print(std::ostream& os) const {
         os << "externally ";
     }
 
-    os << "provides {" << std::endl;
+    os << "requires {" << std::endl;
     
     for (CCompoPort *port : m_ports) {
         os << "\t";
