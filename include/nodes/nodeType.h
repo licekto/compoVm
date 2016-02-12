@@ -8,7 +8,8 @@ enum NodeTypeEnum {
     SYMBOL,
     SERVICE,
     PORT,
-    PROVISION
+    PROVISION,
+    CONSTRAINT
 };
 
 const char * typeName(NodeTypeEnum type);
