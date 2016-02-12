@@ -5,10 +5,12 @@
 #include "compoNode.h"
 #include "compoSymbol.h"
 #include "compoService.h"
+#include "compoConstraint.h"
 #include "compoPort.h"
 #include "compoDescriptor.h"
 #include "compoProvision.h"
 #include "compoRequirement.h"
+#include "intExtType.h"
 
 #define yylex()                  parser->getLexer()->yylex()
 #define yyerror(parser, message) parser->error(message)
@@ -21,7 +23,7 @@ CCompoService * currentService = nullptr;
 std::vector<CCompoSymbol*> currentServiceParams;
 std::vector<CCompoNode*> currentServiceBody;
 
-bool externallyPresent = false;
+intExtType iEType = intExtType::PLAIN;
 bool atomicPresent = false;
 std::vector<CCompoPort*> currentPorts;
 
@@ -108,22 +110,25 @@ compoExpr	:   exProvision
 		|   architecture
                 ;
 
-exProvision     :   externally TOKEN_PROVIDES TOKEN_OPENBRACE ports TOKEN_CLOSEBRACE
+exProvision     :   externally TOKEN_PROVIDES provReqSign
 		    {
-			currentBody.push_back(new CCompoProvision(externallyPresent, currentPorts));
+			currentBody.push_back(new CCompoProvision(iEType, currentPorts));
 			currentPorts.clear();
 		    }
                 ;
 
-exRequirement   :   externally TOKEN_REQUIRES TOKEN_OPENBRACE ports TOKEN_CLOSEBRACE
+exRequirement   :   externally TOKEN_REQUIRES provReqSign
                     {
-			currentBody.push_back(new CCompoRequirement(externallyPresent, currentPorts));
+			currentBody.push_back(new CCompoRequirement(iEType, currentPorts));
 			currentPorts.clear();
 		    }
                 ;
 
-externally      :   TOKEN_EXTERNALLY	{externallyPresent = true;}
-                |   /* epsilon */	{externallyPresent = false;}
+provReqSign     :   TOKEN_OPENBRACE ports TOKEN_CLOSEBRACE
+                ;
+
+externally      :   TOKEN_EXTERNALLY	{iEType = intExtType::EXTERNAL;}
+                |   /* epsilon */	{iEType = intExtType::PLAIN;}
                 ;
 
 ports		:   port ports TOKEN_SEMICOLON
@@ -165,13 +170,25 @@ serviceParams   :   TOKEN_IDENTIFIER
                 ;
 
 constraint	:   TOKEN_CONSTRAINT serviceSign TOKEN_OPENBRACE TOKEN_CLOSEBRACE
+                    {
+                        currentBody.push_back(new CCompoConstraint((CCompoSymbol*) $2, currentServiceParams, currentServiceBody));
+                        currentServiceParams.clear();
+                    }
 		;
 
-inRequirement	:
+inRequirement	:   internally TOKEN_PROVIDES provReqSign
+                    {
+			currentBody.push_back(new CCompoRequirement(iEType, currentPorts));
+			currentPorts.clear();
+		    }
 		;
 
 inProvision	:
 		;
+
+internally      :   TOKEN_INTERNALLY	{iEType = intExtType::INTERNAL;}
+                |   /* epsilon */	{iEType = intExtType::PLAIN;}
+                ;
 
 architecture	:
 		;
