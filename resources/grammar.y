@@ -8,6 +8,7 @@
 #include "compoPort.h"
 #include "compoDescriptor.h"
 #include "compoProvision.h"
+#include "compoRequirement.h"
 
 #define yylex()                  parser->getLexer()->yylex()
 #define yyerror(parser, message) parser->error(message)
@@ -114,7 +115,18 @@ exProvision     :   externally TOKEN_PROVIDES TOKEN_OPENBRACE ports TOKEN_CLOSEB
 		    }
                 ;
 
-ports		:   port ports
+exRequirement   :   externally TOKEN_REQUIRES TOKEN_OPENBRACE ports TOKEN_CLOSEBRACE
+                    {
+			currentBody.push_back(new CCompoRequirement(externallyPresent, currentPorts));
+			currentPorts.clear();
+		    }
+                ;
+
+externally      :   TOKEN_EXTERNALLY	{externallyPresent = true;}
+                |   /* epsilon */	{externallyPresent = false;}
+                ;
+
+ports		:   port ports TOKEN_SEMICOLON
 		|   /* epsilon */
 		;
 
@@ -128,17 +140,16 @@ atomic		:   TOKEN_ATOMIC	{atomicPresent = true;}
 		|   /* epsilon */	{atomicPresent = false;}
 		;
 
-exRequirement   :   externally TOKEN_REQUIRES TOKEN_IDENTIFIER TOKEN_OPENBRACE TOKEN_CLOSEBRACE
-                ;
-
-externally      :   TOKEN_EXTERNALLY	{externallyPresent = true;}
-                |   /* epsilon */	{externallyPresent = false;}
-                ;
-
-service         :   TOKEN_SERVICE TOKEN_IDENTIFIER TOKEN_OPENPAR serviceParams TOKEN_CLOSEPAR TOKEN_OPENBRACE TOKEN_CLOSEBRACE
+service         :   TOKEN_SERVICE serviceSign TOKEN_OPENBRACE TOKEN_CLOSEBRACE
                     {
                         currentBody.push_back(new CCompoService((CCompoSymbol*) $2, currentServiceParams, currentServiceBody));
                         currentServiceParams.clear();
+                    }
+                ;
+
+serviceSign     :   TOKEN_IDENTIFIER TOKEN_OPENPAR serviceParams TOKEN_CLOSEPAR
+                    {
+                        $$ = $1;
                     }
                 ;
 
@@ -153,7 +164,7 @@ serviceParams   :   TOKEN_IDENTIFIER
                 |   /* epsilon */
                 ;
 
-constraint	:
+constraint	:   TOKEN_CONSTRAINT serviceSign TOKEN_OPENBRACE TOKEN_CLOSEBRACE
 		;
 
 inRequirement	:
