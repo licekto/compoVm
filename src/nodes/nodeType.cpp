@@ -5,6 +5,7 @@ std::map<NodeTypeEnum, const char *> typeNames = {
     {NodeTypeEnum::DESCRIPTOR, "Descriptor"},
     {NodeTypeEnum::SYMBOL, "Symbol"},
     {NodeTypeEnum::SERVICE, "service"},
+    {NodeTypeEnum::CONSTRAINT, "constraint"},
     {NodeTypeEnum::PORT, "port"},
     {NodeTypeEnum::PROVISION, "provides"}
 };
