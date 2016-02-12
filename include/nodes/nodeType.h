@@ -9,7 +9,12 @@ enum NodeTypeEnum {
     SERVICE,
     PORT,
     PROVISION,
-    CONSTRAINT
+    REQUIREMENT,
+    CONSTRAINT,
+    INTERFACE,
+    ARCHITECTURE,
+    CONNECTION,
+    DISCONNECTION
 };
 
 const char * typeName(NodeTypeEnum type);
