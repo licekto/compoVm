@@ -1,17 +1,9 @@
 #pragma once
 
-#include "compoNode.h"
-#include "compoPort.h"
+#include "compoAbstractReqProv.h"
 
-class CCompoRequirement : public CCompoNode {
-private:
-            bool                        m_externally;
-            std::vector<CCompoPort*>    m_ports;
-            
+class CCompoRequirement : public CCompoAbstractReqProv {            
 public:
-                                        CCompoRequirement   (bool m_externally, std::vector<CCompoPort*> ports);
-    virtual                             ~CCompoRequirement  ();
-    virtual void                        print               (std::ostream& os) const;
-            bool                        isExternal          ();
-            std::vector<CCompoPort*> *  getPorts            ();
+                                            CCompoRequirement     (intExtType type, std::vector<CCompoPort*> ports);
+    virtual                                 ~CCompoRequirement    ();
 };
