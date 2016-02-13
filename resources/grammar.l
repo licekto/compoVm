@@ -26,11 +26,13 @@ Identifier                  ({Letter}|[_]){LetterOrDigit}*
 
 <COMMENT>\"                             {BEGIN(INITIAL);}
 
-    /* Multi-line comments allowed? */
+    /* Multi-line comments allowed */
 <COMMENT>\n                             {}
 <COMMENT>.                              {}
 
-<INITIAL>Descriptor                     {return TOKEN_DESCRIPTOR;}
+<INITIAL>descriptor                     {return TOKEN_DESCRIPTOR;}
+
+<INITIAL>interface                      {return TOKEN_INTERFACE;}
 
 <INITIAL>extends                        {return TOKEN_EXTENDS;}
 
@@ -60,27 +62,63 @@ Identifier                  ({Letter}|[_]){LetterOrDigit}*
 
 <INITIAL>to				{return TOKEN_TO;}
 
+<INITIAL>inject-with                    {return TOKEN_INJECTWITH;}
+
+<INITIAL>of-kind                        {return TOKEN_OFKIND;}
+
+<INITIAL>for				{return TOKEN_FOR;}
+
+<INITIAL>if				{return TOKEN_IF;}
+
+<INITIAL>else				{return TOKEN_ELSE;}
+
+<INITIAL>while				{return TOKEN_WHILE;}
+
+<INITIAL>":="				{return TOKEN_ASSIGNMENT;}
+
+<INITIAL>"*"				{return TOKEN_ASTERISK;}
+
 <INITIAL>"@"				{return TOKEN_AT;}
 
-<INITIAL>":="				{return TOKEN_ASSIGN;}
+<INITIAL>"#"				{return TOKEN_HASHTAG;}
 
 <INITIAL>"."				{return TOKEN_DOT;}
 
 <INITIAL>","				{return TOKEN_COMMA;}
 
-<INITIAL>"{"                            {return TOKEN_OPENBRACE;}
+<INITIAL>":"                            {return TOKEN_COLON;}
 
-<INITIAL>"}"                            {return TOKEN_CLOSEBRACE;}
+<INITIAL>";"                            {return TOKEN_SEMICOLON;}
+
+<INITIAL>"&"                            {return TOKEN_AMPERSAND;}
+
+<INITIAL>"|"                            {return TOKEN_PIPE;}
+
+<INITIAL>"$"                            {return TOKEN_DOLLAR;}
+
+<INITIAL>"'"                            {return TOKEN_APOSTROPHE;}
+
+<INITIAL>"+"                            {return TOKEN_PLUS;}
+
+<INITIAL>"-"                            {return TOKEN_MINUS;}
+
+<INITIAL>"/"                            {return TOKEN_SLASH;}
+
+<INITIAL>"<"                            {return TOKEN_LESSTHAN;}
+
+<INITIAL>">"                            {return TOKEN_GREATERTHAN;}
 
 <INITIAL>"("                            {return TOKEN_OPENPAR;}
 
 <INITIAL>")"                            {return TOKEN_CLOSEPAR;}
 
-<INITIAL>":"                            {return TOKEN_COLON;}
+<INITIAL>"["                            {return TOKEN_OPENBRACKET;}
 
-<INITIAL>";"                            {return TOKEN_SEMICOLON;}
+<INITIAL>"]"                            {return TOKEN_CLOSEBRACKET;}
 
-<INITIAL>"|"                            {return TOKEN_PIPE;}
+<INITIAL>"{"                            {return TOKEN_OPENBRACE;}
+
+<INITIAL>"}"                            {return TOKEN_CLOSEBRACE;}
 
 <INITIAL>{Identifier}                   {
                                             yylval = new CCompoSymbol(std::string(yytext, yyleng));
