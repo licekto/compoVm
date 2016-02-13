@@ -14,7 +14,8 @@ enum NodeTypeEnum {
     INTERFACE,
     ARCHITECTURE,
     CONNECTION,
-    DISCONNECTION
+    DISCONNECTION,
+    INJECTED_NODE
 };
 
 const char * typeName(NodeTypeEnum type);

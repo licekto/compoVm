@@ -13,6 +13,7 @@ std::map<NodeTypeEnum, const char *> typeNames = {
     {NodeTypeEnum::ARCHITECTURE, "architecture"},
     {NodeTypeEnum::CONNECTION, "connection"},
     {NodeTypeEnum::DISCONNECTION, "disconnection"},
+    {NodeTypeEnum::INJECTED_NODE, "inject-with"},
 };
 
 const char * typeName(NodeTypeEnum type) {
