@@ -37,9 +37,10 @@ std::vector<CCompoPort*> currentPorts;
 
 %parse-param {ParserWrapper* parser}
 
-%start S
+%start start
 
 %token TOKEN_DESCRIPTOR
+%token TOKEN_INTERFACE
 %token TOKEN_EXTENDS
 %token TOKEN_ARCHITECTURE
 %token TOKEN_CONSTRAINT
@@ -54,26 +55,144 @@ std::vector<CCompoPort*> currentPorts;
 %token TOKEN_DELEGATE
 %token TOKEN_RETURN
 %token TOKEN_TO
+%token TOKEN_INJECTWITH
+%token TOKEN_OFKIND
+%token TOKEN_FOR
+%token TOKEN_IF
+%token TOKEN_ELSE
+%token TOKEN_WHILE
+%token TOKEN_ASSIGNMENT
+%token TOKEN_ASTERISK
 %token TOKEN_AT
-%token TOKEN_ASSIGN
+%token TOKEN_HASHTAG
 %token TOKEN_DOT
 %token TOKEN_COMMA
-%token TOKEN_OPENBRACE
-%token TOKEN_CLOSEBRACE
-%token TOKEN_OPENPAR
-%token TOKEN_CLOSEPAR
 %token TOKEN_COLON
 %token TOKEN_SEMICOLON
+%token TOKEN_AMPERSAND
 %token TOKEN_PIPE
+%token TOKEN_DOLLAR
+%token TOKEN_PLUS
+%token TOKEN_MINUS
+%token TOKEN_SLASH
+%token TOKEN_APOSTROPHE
+%token TOKEN_LESSTHAN
+%token TOKEN_GREATERTHAN
+%token TOKEN_OPENPAR
+%token TOKEN_CLOSEPAR
+%token TOKEN_OPENBRACKET
+%token TOKEN_CLOSEBRACKET
+%token TOKEN_OPENBRACE
+%token TOKEN_CLOSEBRACE
 %token TOKEN_IDENTIFIER
 %token TOKEN_END        0   "end of file"
 
 %%
 
-S               :   descriptors TOKEN_END
+/*------------------------------- grammar ------------------------------------*/
+
+array           :   TOKEN_OPENBRACE expressions TOKEN_CLOSEBRACE
+
+assignment      :   variable TOKEN_ASSIGNMENT
+
+expressions     :   expression TOKEN_SEMICOLON expressions
+                |   /* epsilon */
+                ;
+
+expression      :   assignment /* cascadeExpression */
+                ;
+
+methodSequence  :   pragmas temporaries pragmas statements
+
+parens          :   TOKEN_OPENPAR expression TOKEN_CLOSEPAR
+                ;
+
+statementsBody  :   TOKEN_OPENBRACE methodSequence TOKEN_CLOSEBRACE
+                ;
+
+forStatement    :   TOKEN_FOR TOKEN_OPENPAR expression TOKEN_SEMICOLON expression TOKEN_SEMICOLON expression TOKEN_SEMICOLON TOKEN_CLOSEPAR statementsBody
+                ;
+
+whileStatement  :   TOKEN_WHILE parens statementsBody
+                ;
+
+ifStatement     :   TOKEN_IF parens statementsBody
+                ;
+
+else            :   TOKEN_ELSE statementsBody
+                |   /* epsilon */
+                ;
+
+pragmas         :   pragma TOKEN_SEMICOLON pragmas
+                |   /* epsilon */
+                ;
+
+pragma          :   TOKEN_LESSTHAN TOKEN_GREATERTHAN
+                ;
+
+return          :   TOKEN_RETURN expression
+                ;
+
+sequence        :   temporaries statements
+                ;
+
+statements      :   return TOKEN_SEMICOLON
+                |   forStatement TOKEN_SEMICOLON
+                |   whileStatement TOKEN_SEMICOLON
+                |   ifStatement TOKEN_SEMICOLON
+                |   connectionDisconnection TOKEN_SEMICOLON
+                |   expression TOKEN_SEMICOLON
+                ;
+
+temporaries     :   TOKEN_PIPE variables TOKEN_PIPE
+                ;
+
+variables       :   variable variables
+                |   /* epsilon */
+                ;
+
+variable        :   TOKEN_IDENTIFIER
+                ;
+
+/*---------------------------- grammar-blocks --------------------------------*/
+
+block           :   TOKEN_OPENBRACKET blockBody TOKEN_CLOSEBRACKET
+                ;
+
+blockBody       :   blockArgsSign sequence
+                ;
+
+blockArgsSign   :   blockArgumentsWith
+                |   blockArgumentsWithout
+                ;
+
+blockArgumentsWith
+                :   blockArguments TOKEN_PIPE
+                ;
+
+blockArgumentsWithout
+                :   /* epsilon */
+                ;
+
+blockArguments  :   blockArgument blockArguments
+                |   blockArgument
+                ;
+
+blockArgument   :   TOKEN_COLON variable
+                ;
+
+/*---------------------------- grammar-compo ---------------------------------*/
+
+start           :   descriptorInterface TOKEN_END
+                ;
+
+descriptorInterface
+                :   descriptors
                     {
                         parser->setRoot(root); YYACCEPT; return 0;
                     }
+                |   interface
+                    
 
 descriptors     :   descriptor descriptors
                 |   /* epsilon */
@@ -87,6 +206,9 @@ descriptor      :   TOKEN_DESCRIPTOR TOKEN_IDENTIFIER inheritance TOKEN_OPENBRAC
                         }
                         root = descriptor;
                     }
+
+interface       :   TOKEN_INTERFACE TOKEN_IDENTIFIER inheritance servicesSignsList
+                ;
 
 inheritance     :   TOKEN_EXTENDS TOKEN_IDENTIFIER
                     {
@@ -103,10 +225,10 @@ compoExprs      :   compoExpr compoExprs
 
 compoExpr	:   exProvision
 		|   exRequirement
-		|   service
-		|   constraint
-		|   inRequirement
 		|   inProvision
+		|   inRequirement
+		|   constraint
+		|   service
 		|   architecture
                 ;
 
@@ -131,11 +253,11 @@ externally      :   TOKEN_EXTERNALLY	{iEType = intExtType::EXTERNAL;}
                 |   /* epsilon */	{iEType = intExtType::PLAIN;}
                 ;
 
-ports		:   port ports TOKEN_SEMICOLON
+ports		:   port TOKEN_SEMICOLON ports
 		|   /* epsilon */
 		;
 
-port		:   atomic TOKEN_IDENTIFIER TOKEN_COLON TOKEN_OPENBRACE TOKEN_CLOSEBRACE
+port		:   atomic TOKEN_IDENTIFIER brackets TOKEN_COLON portSign ofKind
 		    {
 			currentPorts.push_back(new CCompoPort((CCompoSymbol*) $2, atomicPresent));
 		    }
@@ -144,6 +266,19 @@ port		:   atomic TOKEN_IDENTIFIER TOKEN_COLON TOKEN_OPENBRACE TOKEN_CLOSEBRACE
 atomic		:   TOKEN_ATOMIC	{atomicPresent = true;}
 		|   /* epsilon */	{atomicPresent = false;}
 		;
+
+brackets        :   TOKEN_OPENBRACKET TOKEN_CLOSEBRACKET
+                |   /* epsilon */
+                ;
+
+portSign        :   TOKEN_IDENTIFIER
+                |   TOKEN_ASTERISK
+                |   servicesSignsList
+                ;
+
+ofKind          :   TOKEN_OFKIND TOKEN_IDENTIFIER
+                |   /* epsilon */
+                ;
 
 service         :   TOKEN_SERVICE serviceSign TOKEN_OPENBRACE TOKEN_CLOSEBRACE
                     {
@@ -157,6 +292,13 @@ serviceSign     :   TOKEN_IDENTIFIER TOKEN_OPENPAR serviceParams TOKEN_CLOSEPAR
                         $$ = $1;
                     }
                 ;
+
+serviceSigns    :   serviceSign TOKEN_COMMA serviceSigns
+                |   /* epsilon */
+                ;
+
+servicesSignsList
+                :   TOKEN_OPENBRACE serviceSigns TOKEN_CLOSEBRACE
 
 serviceParams   :   TOKEN_IDENTIFIER
                     {
@@ -176,24 +318,75 @@ constraint	:   TOKEN_CONSTRAINT serviceSign TOKEN_OPENBRACE TOKEN_CLOSEBRACE
                     }
 		;
 
-inRequirement	:   internally TOKEN_PROVIDES provReqSign
+inRequirement   :   internally TOKEN_REQUIRES TOKEN_OPENBRACE injectPorts TOKEN_CLOSEBRACE
+		;
+
+inProvision	:   internally TOKEN_PROVIDES provReqSign
                     {
 			currentBody.push_back(new CCompoRequirement(iEType, currentPorts));
 			currentPorts.clear();
+                        iEType = intExtType::PLAIN;
 		    }
 		;
 
-inProvision	:
-		;
-
-internally      :   TOKEN_INTERNALLY	{iEType = intExtType::INTERNAL;}
-                |   /* epsilon */	{iEType = intExtType::PLAIN;}
+injectPorts     :   injectPort TOKEN_SEMICOLON injectPorts
+                |   /* epsilon */
                 ;
 
-architecture	:
+injectPort      :   port inject
+                ;
+
+inject          :   TOKEN_INJECTWITH TOKEN_IDENTIFIER
+                |   /* epsilon */
+                ;
+
+internally      :   TOKEN_INTERNALLY	{iEType = intExtType::INTERNAL;}
+                |   /* epsilon */
+                ;
+
+architecture	:   TOKEN_ARCHITECTURE TOKEN_OPENBRACE connectionDisconnection TOKEN_CLOSEBRACE
 		;
 
+connectionDisconnection
+                :   connections
+                |   disconnections
+                ;
 
+connections     :   connection TOKEN_SEMICOLON connections 
+                |   /* epsilon */
+                ;
+
+connection      :   TOKEN_CONNECT
+                ;
+
+disconnections  :   disconnection TOKEN_SEMICOLON disconnections
+                |   /* epsilon */
+                ;
+
+disconnection   :
+                ;
+
+/*-------------------------- grammar-literals-compo --------------------------*/
+
+collectionPortLiteral
+                :   TOKEN_IDENTIFIER TOKEN_OPENBRACKET expression TOKEN_CLOSEBRACKET
+                ;
+
+dereferenceLiteral
+                :   TOKEN_AMPERSAND TOKEN_IDENTIFIER
+                ;
+
+portAddressLiteral
+                :   TOKEN_IDENTIFIER TOKEN_AT 
+                ;
+
+portAddress     :   collectionPortLiteral
+                |   TOKEN_OPENPAR /* cascadeExpression */ TOKEN_CLOSEPAR
+                |   dereferenceLiteral
+                |   TOKEN_IDENTIFIER
+                ;
+
+/*----------------------------------------------------------------------------*/
 %%
 
 void ParserWrapper::error(const std::string& message) {
