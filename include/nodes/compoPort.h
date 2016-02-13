@@ -3,8 +3,8 @@
 #include "compoNode.h"
 #include "compoSymbol.h"
 
-class CCompoPort : public CCompoNode {
-private:
+class CCompoPort : public virtual CCompoNode {
+protected:
             CCompoSymbol      * m_name;
             bool                m_atomic;
             
