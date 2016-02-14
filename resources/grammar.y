@@ -15,17 +15,13 @@
 #define yylex()                  parser->getLexer()->yylex()
 #define yyerror(parser, message) parser->error(message)
 
-CCompoNode *root = nullptr;
-
-std::vector<CCompoNode*> currentBody;
-
-CCompoService * currentService = nullptr;
-std::vector<CCompoSymbol*> currentServiceParams;
-std::vector<CCompoNode*> currentServiceBody;
-
-intExtType iEType = intExtType::PLAIN;
-bool atomicPresent = false;
-std::vector<CCompoPort*> currentPorts;
+std::vector<CCompoNode*>    currentBody;
+CCompoService             * currentService      = nullptr;
+std::vector<CCompoSymbol*>  currentServiceParams;
+std::vector<CCompoNode*>    currentServiceBody;
+intExtType                  iEType              = intExtType::PLAIN;
+bool                        atomicPresent       = false;
+std::vector<CCompoPort*>    currentPorts;
 
 %}
 
@@ -184,17 +180,21 @@ blockArgument   :   TOKEN_COLON variable
 /*---------------------------- grammar-compo ---------------------------------*/
 
 start           :   descriptorInterface TOKEN_END
+                    {
+                         YYACCEPT; return 0;
+                    }
                 ;
 
 descriptorInterface
                 :   descriptors
-                    {
-                        parser->setRoot(root); YYACCEPT; return 0;
-                    }
                 |   interface
+                ;
                     
 
 descriptors     :   descriptor descriptors
+                    {
+                        parser->setRootNode($1);
+                    }
                 |   /* epsilon */
                 ;
 
@@ -204,7 +204,7 @@ descriptor      :   TOKEN_DESCRIPTOR TOKEN_IDENTIFIER inheritance TOKEN_OPENBRAC
                         if ($3) {
                             descriptor->setExtends((CCompoSymbol*) $3);
                         }
-                        root = descriptor;
+                        $$ = descriptor;
                     }
 
 interface       :   TOKEN_INTERFACE TOKEN_IDENTIFIER inheritance servicesSignsList
