@@ -26,7 +26,9 @@ int main(int argc, char **argv) {
 
     infile.close();
     
-    std::cout << *parser.getRoot() << std::endl;
+    for (unsigned int i = 0; i < parser.getRootNodesSize(); ++i) {
+        std::cout << *parser.getRootNodeAt(i) << std::endl;
+    }
 
     return 0;
 }

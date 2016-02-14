@@ -5,15 +5,16 @@
 
 class ParserWrapper {
 private:
-                    Lexer       * m_lexer;
-                    CCompoNode  * m_root;
+                    Lexer                     * m_lexer;
+                    std::vector<CCompoNode*>    m_rootNodes;
 
 public:
-                    ParserWrapper   (Lexer *lexer);
-                    ~ParserWrapper  ();
-    Lexer *         getLexer        () const;
-    int             parse           (std::istream& is);
-    void            error           (const std::string& message);
-    void            setRoot         (CCompoNode * root);
-    CCompoNode *    getRoot         ();
+                                ParserWrapper               (Lexer *lexer);
+                                ~ParserWrapper              ();
+    Lexer *                     getLexer                    () const;
+    int                         parse                       (std::istream& is);
+    void                        error                       (const std::string& message);
+    void                        setRootNode                 (CCompoNode * node);
+    size_t                      getRootNodesSize            () const;
+    CCompoNode *                getRootNodeAt               (unsigned int index);
 };
