@@ -1,7 +1,10 @@
 cmake_minimum_required(VERSION 3.3)
 project(compoVm)
+enable_testing()
 
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11 -pedantic -Wall -Wextra")
+
+set(Boost_ADDITIONAL_VERSIONS "1.60" "1.60.0")
 
 file(MAKE_DIRECTORY bin)
 file(MAKE_DIRECTORY src/generated)
@@ -10,6 +13,8 @@ file(MAKE_DIRECTORY include/generated)
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/include)
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/include/generated)
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/include/nodes)
+
+find_package(Boost 1.60 REQUIRED COMPONENTS unit_test_framework)
 
 find_package(BISON REQUIRED)
 set(BisonOutput ${CMAKE_CURRENT_SOURCE_DIR}/src/generated/parser.cpp ${CMAKE_CURRENT_SOURCE_DIR}/include/generated/parser.h)
@@ -49,7 +54,18 @@ endif ()
 FILE(GLOB inFiles RELATIVE "${CMAKE_CURRENT_SOURCE_DIR}/" src/*.cpp src/nodes/*.cpp src/generated/*.cpp include/*.h include/nodes/*.h  include/generated/*.h)
 set(SOURCE_FILES ${inFiles} ${BisonOutput} ${FlexOutput})
 
+FILE(GLOB testFiles RELATIVE "${CMAKE_CURRENT_SOURCE_DIR}/" test/*.cpp)
+set(TEST_FILES ${testFiles})
+
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/bin)
 
 add_executable(compoVm ${SOURCE_FILES})
-target_link_libraries(compoVm)
+add_executable(tests ${TEST_FILES})
+
+target_include_directories(tests PRIVATE ${Boost_INCLUDE_DIRS})
+target_compile_definitions(tests PRIVATE "BOOST_TEST_DYN_LINK=1")
+target_link_libraries(tests ${Boost_UNIT_TEST_FRAMEWORK_LIBRARY})
+
+target_link_libraries(  compoVm
+                        ${Boost_UNIT_TEST_FRAMEWORK_LIBRARY} )
+add_test(NAME test1 COMMAND test_executable)
