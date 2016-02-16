@@ -14,7 +14,15 @@ include_directories(${CMAKE_CURRENT_SOURCE_DIR}/include)
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/include/generated)
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/include/nodes)
 
-find_package(Boost 1.60 REQUIRED COMPONENTS unit_test_framework)
+find_package(Boost 1.60 REQUIRED COMPONENTS log log_setup thread date_time filesystem system unit_test_framework)
+find_package(Threads)
+
+if(Boost_FOUND)
+  include_directories( ${Boost_INCLUDE_DIRS} )
+  link_libraries(${CMAKE_THREAD_LIBS_INIT} ${Boost_LIBRARIES})
+else(Boost_FOUND)
+  message(FATAL_ERROR "Cannot build Quantib Boost Log test without Boost. Please set Boost_DIR.")
+endif(Boost_FOUND)
 
 find_package(BISON REQUIRED)
 set(BisonOutput ${CMAKE_CURRENT_SOURCE_DIR}/src/generated/parser.cpp ${CMAKE_CURRENT_SOURCE_DIR}/include/generated/parser.h)
@@ -66,6 +74,9 @@ target_include_directories(tests PRIVATE ${Boost_INCLUDE_DIRS})
 target_compile_definitions(tests PRIVATE "BOOST_TEST_DYN_LINK=1")
 target_link_libraries(tests ${Boost_UNIT_TEST_FRAMEWORK_LIBRARY})
 
+target_compile_definitions(compoVm PRIVATE "BOOST_LOG_DYN_LINK=1")
 target_link_libraries(  compoVm
-                        ${Boost_UNIT_TEST_FRAMEWORK_LIBRARY} )
+                        ${Boost_UNIT_TEST_FRAMEWORK_LIBRARY}
+                        ${Boost_LOG_LIBRARY}
+                        ${CMAKE_THREAD_LIBS_INIT} )
 add_test(NAME test1 COMMAND test_executable)
