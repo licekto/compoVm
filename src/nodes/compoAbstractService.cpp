@@ -40,16 +40,16 @@ CCompoSymbol * CCompoAbstractService::getName() const {
     return m_name;
 }
 
-std::vector<CCompoNode*> * CCompoAbstractService::getBody() {
-    return &m_body;
+std::vector<CCompoNode*> * CCompoAbstractService::getBody() const {
+    return const_cast<std::vector<CCompoNode*> *>(&m_body);
 }
 
 void CCompoAbstractService::setBody(std::vector<CCompoNode*> body) {
     m_body = body;
 }
 
-std::vector<CCompoSymbol*> * CCompoAbstractService::getParams() {
-    return &m_params;
+std::vector<CCompoSymbol*> * CCompoAbstractService::getParams() const {
+    return const_cast<std::vector<CCompoSymbol*> *>(&m_params);
 }
 
 void CCompoAbstractService::setParam(CCompoSymbol* param) {

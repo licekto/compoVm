@@ -15,8 +15,8 @@ public:
     virtual                             ~CCompoAbstractService  ();
     virtual void                        print                   (std::ostream& os) const;
             CCompoSymbol *              getName                 () const;
-            std::vector<CCompoNode*> *  getBody                 ();
+            std::vector<CCompoNode*> *  getBody                 () const;
             void                        setBody                 (std::vector<CCompoNode*> body);
-            std::vector<CCompoSymbol*> *getParams               ();
+            std::vector<CCompoSymbol*> *getParams               () const;
             void                        setParam                (CCompoSymbol *param);
 };
