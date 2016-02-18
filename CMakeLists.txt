@@ -4,7 +4,7 @@ enable_testing()
 
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11 -pedantic -Wall -Wextra")
 
-set(Boost_ADDITIONAL_VERSIONS "1.60" "1.60.0")
+set(Boost_ADDITIONAL_VERSIONS "1.55" "1.55.0")
 
 file(MAKE_DIRECTORY bin)
 file(MAKE_DIRECTORY src/generated)
@@ -15,7 +15,7 @@ include_directories(${CMAKE_CURRENT_SOURCE_DIR}/include/generated)
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/include/nodes)
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/include/parser)
 
-find_package(Boost 1.60 REQUIRED COMPONENTS log log_setup thread date_time filesystem system unit_test_framework)
+find_package(Boost 1.55 REQUIRED COMPONENTS log log_setup thread date_time filesystem system unit_test_framework)
 find_package(Threads)
 
 if(Boost_FOUND)
