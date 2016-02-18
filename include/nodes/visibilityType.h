@@ -1,7 +1,6 @@
 #pragma once
 
-enum intExtType {
+enum visibilityType {
     INTERNAL,
     EXTERNAL,
-    PLAIN
 };
