@@ -5,6 +5,8 @@ enable_testing()
 #-Weffc++
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11 -pedantic -Wall -Wextra -Wfloat-equal -Wundef -Wshadow -Wpointer-arith -Wunreachable-code -Wuninitialized")
 
+set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
+
 set(Boost_ADDITIONAL_VERSIONS "1.55" "1.55.0")
 
 file(MAKE_DIRECTORY bin)
@@ -15,6 +17,7 @@ include_directories(${CMAKE_CURRENT_SOURCE_DIR}/include)
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/include/generated)
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/include/nodes)
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/include/parser)
+include_directories(${CMAKE_CURRENT_SOURCE_DIR}/include/core)
 
 find_package(Boost 1.55 REQUIRED COMPONENTS log log_setup thread date_time filesystem system unit_test_framework)
 find_package(Threads)
@@ -61,7 +64,7 @@ if (FLEX_FOUND)
     )
 endif ()
 
-FILE(GLOB inFiles RELATIVE "${CMAKE_CURRENT_SOURCE_DIR}/" src/parser/*.cpp src/nodes/*.cpp src/generated/*.cpp include/*.h include/parser/*.h include/nodes/*.h  include/generated/*.h)
+FILE(GLOB inFiles RELATIVE "${CMAKE_CURRENT_SOURCE_DIR}/" src/parser/*.cpp src/nodes/*.cpp src/generated/*.cpp src/core/*.cpp include/*.h include/parser/*.h include/nodes/*.h  include/generated/*.h include/core/*.h)
 set(SOURCE_FILES ${inFiles} ${BisonOutput} ${FlexOutput})
 
 FILE(GLOB testFiles RELATIVE "${CMAKE_CURRENT_SOURCE_DIR}/" test/*.cpp)
