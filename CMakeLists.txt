@@ -81,4 +81,4 @@ target_link_libraries(  compoVm
                         ${Boost_UNIT_TEST_FRAMEWORK_LIBRARY}
                         ${Boost_LOG_LIBRARY}
                         ${CMAKE_THREAD_LIBS_INIT} )
-add_test(NAME test1 COMMAND tests)
+add_test(NAME compoTest COMMAND tests)
