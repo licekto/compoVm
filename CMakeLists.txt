@@ -3,7 +3,7 @@ project(compoVm)
 enable_testing()
 
 option(WITH_TEST_GENERATORS "Build Generator tests" OFF)
-option(WITH_TEST_STATIC "Build Generator tests" OFF
+option(WITH_TEST_STATIC "Build Generator tests" OFF)
 
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11 -pedantic -Wall -Wextra")
 
