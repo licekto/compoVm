@@ -204,6 +204,7 @@ descriptor      :   TOKEN_DESCRIPTOR TOKEN_IDENTIFIER inheritance TOKEN_OPENBRAC
                         if ($3) {
                             descriptor->setExtends((CCompoSymbol*) $3);
                         }
+                        currentBody.clear();
                         $$ = descriptor;
                     }
 
@@ -304,7 +305,7 @@ serviceParams   :   TOKEN_IDENTIFIER
                     {
                         currentServiceParams.push_back((CCompoSymbol*) $1);
                     }
-                |   TOKEN_IDENTIFIER "," serviceParams
+                |   TOKEN_IDENTIFIER TOKEN_COMMA serviceParams
                     {
                         currentServiceParams.push_back((CCompoSymbol*) $1);
                     }
@@ -399,4 +400,16 @@ int ParserWrapper::parse(std::istream& is) {
     m_lexer->resetState();
 
     return yyparse(this);
+}
+
+void ParserWrapper::parseAll(std::istream& is) {
+
+    m_lexer->switch_streams(&is, &std::cout);
+    m_lexer->resetState();
+
+    while(1) {
+        if (!yyparse(this)) {
+            break;
+        }
+    }
 }
