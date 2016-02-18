@@ -4,6 +4,6 @@
 
 class CCompoRequirement : public CCompoAbstractReqProv {            
 public:
-                                            CCompoRequirement     (intExtType type, std::vector<CCompoPort*> ports);
+                                            CCompoRequirement     (visibilityType type, std::vector<CCompoPort*> ports);
     virtual                                 ~CCompoRequirement    ();
 };
