@@ -11,10 +11,6 @@ CCompoInjectedPort::~CCompoInjectedPort() {
 }
 
 void CCompoInjectedPort::print(std::ostream& os) const {
-    if (!m_toString) {
-        os << typeName(m_type) << " ";
-    }
-    
     os << "\t";
     os << *m_name << " : { }";
 }
