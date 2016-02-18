@@ -39,3 +39,7 @@ void CCompoDescriptor::setExtends(CCompoSymbol* extends) {
 CCompoSymbol * CCompoDescriptor::getExtends() const {
     return m_extends;
 }
+
+std::vector<CCompoNode*> * CCompoDescriptor::getBody() const {
+    return const_cast<std::vector<CCompoNode*> *>(&m_body); // yuck
+}

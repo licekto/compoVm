@@ -17,4 +17,5 @@ public:
             CCompoSymbol *      getName             () const;
             void                setExtends          (CCompoSymbol * extends);
             CCompoSymbol *      getExtends          () const;
+    std::vector<CCompoNode*> *  getBody             () const;
 };
