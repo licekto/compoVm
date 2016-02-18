@@ -2,18 +2,18 @@
 
 #include "compoNode.h"
 #include "compoPort.h"
-#include "intExtType.h"
+#include "visibilityType.h"
 
 class CCompoAbstractReqProv : public virtual CCompoNode {
 protected:
-            intExtType                      m_intExtType;
+            visibilityType                      m_intExtType;
             std::vector<CCompoPort*>        m_ports;
             
-                                            CCompoAbstractReqProv   (intExtType type, std::vector<CCompoPort*> ports);
+                                            CCompoAbstractReqProv   (visibilityType type, std::vector<CCompoPort*> ports);
                                             
 public:
     virtual                                 ~CCompoAbstractReqProv  ();
     virtual void                            print                   (std::ostream& os) const;
-            intExtType                      getType                 ();
-            std::vector<CCompoPort*> *      getPorts                ();
+            visibilityType                  getVisibilityType       ();
+            std::vector<CCompoPort*> *      getPorts                () const;
 };

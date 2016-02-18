@@ -1,6 +1,6 @@
 #include "compoAbstractReqProv.h"
 
-CCompoAbstractReqProv::CCompoAbstractReqProv(intExtType type = intExtType::PLAIN, std::vector<CCompoPort*> ports = std::vector<CCompoPort*>(0))
+CCompoAbstractReqProv::CCompoAbstractReqProv(visibilityType type = visibilityType::EXTERNAL, std::vector<CCompoPort*> ports = std::vector<CCompoPort*>(0))
 : CCompoNode(NodeTypeEnum::PROVISION), m_intExtType(type), m_ports(ports)
 {}
 
@@ -12,9 +12,9 @@ CCompoAbstractReqProv::~CCompoAbstractReqProv() {
 
 void CCompoAbstractReqProv::print(std::ostream& os) const {
     os << "\t";
-    if (m_intExtType == intExtType::EXTERNAL) {
+    if (m_intExtType == visibilityType::EXTERNAL) {
         os << "externally ";
-    } else if (m_intExtType == intExtType::INTERNAL) {
+    } else if (m_intExtType == visibilityType::INTERNAL) {
         os << "internally ";
     }
 
@@ -29,10 +29,10 @@ void CCompoAbstractReqProv::print(std::ostream& os) const {
     os << "}" << std::endl;
 }
 
-intExtType CCompoAbstractReqProv::getType() {
+visibilityType CCompoAbstractReqProv::getVisibilityType() {
     return m_intExtType;
 }
 
-std::vector<CCompoPort*> * CCompoAbstractReqProv::getPorts() {
-    return &m_ports;
+std::vector<CCompoPort*> * CCompoAbstractReqProv::getPorts() const {
+    return const_cast<std::vector<CCompoPort*> *>(&m_ports);    // yuck
 }
