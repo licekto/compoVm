@@ -10,5 +10,5 @@ public:
                                 CCompoSymbol        (const std::string& name);
     virtual                     ~CCompoSymbol       () {};
     virtual void                print               (std::ostream& os) const;
-            std::string         getName             () const;
+            std::string         getStringValue      () const;
 };

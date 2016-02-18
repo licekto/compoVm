@@ -6,6 +6,6 @@ void CCompoSymbol::print(std::ostream& os) const {
     os << m_name;
 }
 
-std::string CCompoSymbol::getName() const {
+std::string CCompoSymbol::getStringValue() const {
     return m_name;
 }
