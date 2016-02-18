@@ -2,10 +2,8 @@ cmake_minimum_required(VERSION 2.8)
 project(compoVm)
 enable_testing()
 
-option(WITH_TEST_GENERATORS "Build Generator tests" OFF)
-option(WITH_TEST_STATIC "Build Generator tests" OFF)
-
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11 -pedantic -Wall -Wextra")
+#-Weffc++
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11 -pedantic -Wall -Wextra -Wfloat-equal -Wundef -Wshadow -Wpointer-arith -Wunreachable-code -Wuninitialized")
 
 set(Boost_ADDITIONAL_VERSIONS "1.55" "1.55.0")
 
