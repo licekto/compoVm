@@ -5,9 +5,7 @@ ParserWrapper::ParserWrapper(Lexer *lexer)
 {}
 
 ParserWrapper::~ParserWrapper() {
-    for (CCompoNode * node : m_rootNodes) {
-        delete node;
-    }
+    this->clear();
 }
 
 Lexer * ParserWrapper::getLexer() const {
@@ -28,4 +26,11 @@ CCompoNode * ParserWrapper::getRootNodeAt(unsigned int index) {
     } else {
         return nullptr;
     }
+}
+
+void ParserWrapper::clear() {
+    for (CCompoNode * node : m_rootNodes) {
+        delete node;
+    }
+    m_rootNodes.clear();
 }
