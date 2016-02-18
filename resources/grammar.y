@@ -10,7 +10,7 @@
 #include "compoDescriptor.h"
 #include "compoProvision.h"
 #include "compoRequirement.h"
-#include "intExtType.h"
+#include "visibilityType.h"
 
 #define yylex()                  parser->getLexer()->yylex()
 #define yyerror(parser, message) parser->error(message)
@@ -19,7 +19,7 @@ std::vector<CCompoNode*>    currentBody;
 CCompoService             * currentService      = nullptr;
 std::vector<CCompoSymbol*>  currentServiceParams;
 std::vector<CCompoNode*>    currentServiceBody;
-intExtType                  iEType              = intExtType::PLAIN;
+visibilityType              visType             = visibilityType::EXTERNAL;
 bool                        atomicPresent       = false;
 std::vector<CCompoPort*>    currentPorts;
 
@@ -234,14 +234,14 @@ compoExpr	:   exProvision
 
 exProvision     :   externally TOKEN_PROVIDES provReqSign
 		    {
-			currentBody.push_back(new CCompoProvision(iEType, currentPorts));
+			currentBody.push_back(new CCompoProvision(visType, currentPorts));
 			currentPorts.clear();
 		    }
                 ;
 
 exRequirement   :   externally TOKEN_REQUIRES provReqSign
                     {
-			currentBody.push_back(new CCompoRequirement(iEType, currentPorts));
+			currentBody.push_back(new CCompoRequirement(visType, currentPorts));
 			currentPorts.clear();
 		    }
                 ;
@@ -249,8 +249,8 @@ exRequirement   :   externally TOKEN_REQUIRES provReqSign
 provReqSign     :   TOKEN_OPENBRACE ports TOKEN_CLOSEBRACE
                 ;
 
-externally      :   TOKEN_EXTERNALLY	{iEType = intExtType::EXTERNAL;}
-                |   /* epsilon */	{iEType = intExtType::PLAIN;}
+externally      :   TOKEN_EXTERNALLY	{visType = visibilityType::EXTERNAL;}
+                |   /* epsilon */
                 ;
 
 ports		:   port TOKEN_SEMICOLON ports
@@ -323,9 +323,9 @@ inRequirement   :   internally TOKEN_REQUIRES TOKEN_OPENBRACE injectPorts TOKEN_
 
 inProvision	:   internally TOKEN_PROVIDES provReqSign
                     {
-			currentBody.push_back(new CCompoRequirement(iEType, currentPorts));
+			currentBody.push_back(new CCompoRequirement(visType, currentPorts));
 			currentPorts.clear();
-                        iEType = intExtType::PLAIN;
+                        visType = visibilityType::EXTERNAL;
 		    }
 		;
 
@@ -340,7 +340,7 @@ inject          :   TOKEN_INJECTWITH TOKEN_IDENTIFIER
                 |   /* epsilon */
                 ;
 
-internally      :   TOKEN_INTERNALLY	{iEType = intExtType::INTERNAL;}
+internally      :   TOKEN_INTERNALLY	{visType = visibilityType::INTERNAL;}
                 |   /* epsilon */
                 ;
 
