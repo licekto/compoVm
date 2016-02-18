@@ -13,6 +13,6 @@ public:
                                 CCompoNode          (NodeTypeEnum type);
     virtual                     ~CCompoNode         () {};
     virtual void                print               (std::ostream& os) const = 0;
-    NodeTypeEnum                getType             () const;
+    NodeTypeEnum                getNodeType         () const;
     friend  std::ostream&       operator <<         (std::ostream& os, const CCompoNode& node);
 };

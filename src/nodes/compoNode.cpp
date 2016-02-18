@@ -2,7 +2,7 @@
 
 CCompoNode::CCompoNode(NodeTypeEnum type = NodeTypeEnum::END) : m_type(type) {}
 
-NodeTypeEnum CCompoNode::getType() const {
+NodeTypeEnum CCompoNode::getNodeType() const {
     return m_type;
 }
 
