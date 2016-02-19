@@ -7,13 +7,15 @@ set(MEMORYCHECK_COMMAND_OPTIONS "--leak-check=full --show-reachable=yes --track-
 include(CTest)
 
 #-Weffc++
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11 -pedantic -Wall -Wextra -Wfloat-equal -Wundef -Wshadow -Wpointer-arith -Wunreachable-code -Wuninitialized")
+set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -ggdb -std=c++11 -pedantic -Wall -Wextra -fno-inline -O0 -Wfloat-equal -Wundef -Wshadow -Wpointer-arith -Wunreachable-code -Wuninitialized")
+set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} -std=c++11 -pedantic -Wall -Wextra -Weffc++ -O3")
 
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
 set(Boost_ADDITIONAL_VERSIONS "1.55" "1.55.0")
 
 file(MAKE_DIRECTORY bin)
+file(MAKE_DIRECTORY build)
 file(MAKE_DIRECTORY src/generated)
 file(MAKE_DIRECTORY include/generated)
 
