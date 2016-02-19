@@ -120,3 +120,33 @@ target_compile_definitions(tests PRIVATE "BOOST_TEST_DYN_LINK=1")
 target_link_libraries(tests ${Boost_UNIT_TEST_FRAMEWORK_LIBRARY})
 add_test(NAME compoTest COMMAND tests)
 #------------------------------
+
+# Doxygen
+#------------------------------
+FIND_PACKAGE(Doxygen)
+
+if(CMAKE_BUILD_TYPE STREQUAL "Release")
+    IF (DOXYGEN_FOUND)
+
+        SET(DOXYGEN_INPUT "${CMAKE_CURRENT_SOURCE_DIR}/resources/Doxyfile")
+        SET(DOXYGEN_OUTPUT "${CMAKE_CURRENT_SOURCE_DIR}/doc/doxygen/")
+
+        ADD_CUSTOM_COMMAND(
+            OUTPUT ${DOXYGEN_OUTPUT}
+            COMMAND ${CMAKE_COMMAND} -E echo_append "Building API Documentation..."
+            COMMAND ${DOXYGEN_EXECUTABLE} ${DOXYGEN_INPUT}
+            COMMAND ${CMAKE_COMMAND} -E echo "Done."
+            WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
+            DEPENDS ${DOXYGEN_INPUT}    )
+
+        ADD_CUSTOM_TARGET(doc ALL DEPENDS ${DOXYGEN_OUTPUT}  )
+
+        ADD_CUSTOM_TARGET(doc_forced
+            COMMAND ${CMAKE_COMMAND} -E echo_append "Building API Documentation..."
+            COMMAND ${DOXYGEN_EXECUTABLE} ${DOXYGEN_INPUT}
+            COMMAND ${CMAKE_COMMAND} -E echo "Done."
+            WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}   )
+
+    ENDIF (DOXYGEN_FOUND)
+endif()
+#------------------------------
