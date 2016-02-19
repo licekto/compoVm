@@ -9,6 +9,10 @@ use File::Path qw(make_path remove_tree);
 
 my $testCommand = "ctest -T Test -D ExperimentalBuild -D ExperimentalTest -D ExperimentalMemCheck";
 my $oclintCommand = "oclint-json-compilation-database -e ../src/generated/parser.cpp -e ../src/generated/lexer.cpp -- -report-type html -o oclint.html";
+my $doxygenCommand = "doxygen Doxyfile";
+
+chdir("../resources");
+system($doxygenCommand);
 
 chdir("../build/");
 system($testCommand);
