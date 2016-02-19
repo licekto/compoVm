@@ -15,7 +15,12 @@ enum NodeTypeEnum {
     ARCHITECTURE,
     CONNECTION,
     DISCONNECTION,
-    INJECTED_NODE
+    INJECTED_NODE,
+    ASSIGNMENT,
+    FOR,
+    WHILE,
+    IF,
+    ELSE
 };
 
 const char * typeName(NodeTypeEnum type);
