@@ -10,18 +10,6 @@ file(MAKE_DIRECTORY src/generated)
 file(MAKE_DIRECTORY include/generated)
 #------------------------------
 
-# Files preparation
-#------------------------------
-FILE(GLOB HEADER_FILES RELATIVE "${CMAKE_CURRENT_SOURCE_DIR}/" include/*.h include/parser/*.h include/nodes/*.h  include/generated/*.h include/core/*.h)
-FILE(GLOB SOURCE_FILES RELATIVE "${CMAKE_CURRENT_SOURCE_DIR}/" src/parser/*.cpp src/nodes/*.cpp src/generated/*.cpp src/core/*.cpp)
-FILE(GLOB MAIN_FILE RELATIVE "${CMAKE_CURRENT_SOURCE_DIR}/" src/main.cpp)
-set(SOURCE_FILES_ALL ${HEADER_FILES} ${SOURCE_FILES} ${BISON_OUTPUT} ${FLEX_OUTPUT})
-
-FILE(GLOB TEST_FILES RELATIVE "${CMAKE_CURRENT_SOURCE_DIR}/" test/*.cpp)
-
-set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/bin)
-#------------------------------
-
 # C++ flags
 #------------------------------
 set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -ggdb -std=c++11 -pedantic -Wall -Wextra -fno-inline -O0 -Wfloat-equal -Wundef -Wshadow -Wpointer-arith -Wunreachable-code -Wuninitialized")
@@ -38,11 +26,11 @@ include_directories(${INCLUDE_DIRS})
 #------------------------------
 # Enable tests
 enable_testing()
-include(CTest)
 
 # Memory check
 set(CTEST_MEMORYCHECK_COMMAND "/usr/bin/valgrind")
 set(MEMORYCHECK_COMMAND_OPTIONS "--leak-check=full --show-reachable=yes --track-origins=yes --xml=yes --xml-file=valgrind.xml")
+include(CTest)
 
 # OCLint
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
@@ -101,6 +89,18 @@ if (FLEX_FOUND)
             VERBATIM
     )
 endif ()
+#------------------------------
+
+# Files preparation
+#------------------------------
+FILE(GLOB HEADER_FILES RELATIVE "${CMAKE_CURRENT_SOURCE_DIR}/" include/*.h include/parser/*.h include/nodes/*.h  include/generated/*.h include/core/*.h)
+FILE(GLOB SOURCE_FILES RELATIVE "${CMAKE_CURRENT_SOURCE_DIR}/" src/parser/*.cpp src/nodes/*.cpp src/generated/*.cpp src/core/*.cpp)
+FILE(GLOB MAIN_FILE RELATIVE "${CMAKE_CURRENT_SOURCE_DIR}/" src/main.cpp)
+set(SOURCE_FILES_ALL ${HEADER_FILES} ${SOURCE_FILES} ${BISON_OUTPUT} ${FLEX_OUTPUT})
+
+FILE(GLOB TEST_FILES RELATIVE "${CMAKE_CURRENT_SOURCE_DIR}/" test/*.cpp)
+
+set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/bin)
 #------------------------------
 
 # Executables preparation
