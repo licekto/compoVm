@@ -10,15 +10,26 @@
 #include "compoDescriptor.h"
 #include "compoProvision.h"
 #include "compoRequirement.h"
+#include "compoFor.h"
+#include "compoAssignment.h"
 #include "visibilityType.h"
 
 #define yylex()                  parser->getLexer()->yylex()
 #define yyerror(parser, message) parser->error(message)
 
+typedef struct sequence {
+    std::vector<CCompoNode*>    temporaries;
+    std::vector<CCompoNode*>    statements;
+
+    void                        clear()     {temporaries.clear(); statements.clear();}
+} TSEQUENCE;
+
 std::vector<CCompoNode*>    currentBody;
 CCompoService             * currentService      = nullptr;
 std::vector<CCompoSymbol*>  currentServiceParams;
 std::vector<CCompoNode*>    currentServiceBody;
+TSEQUENCE                   currentSequence;
+
 visibilityType              visType             = visibilityType::EXTERNAL;
 bool                        atomicPresent       = false;
 std::vector<CCompoPort*>    currentPorts;
@@ -89,13 +100,24 @@ std::vector<CCompoPort*>    currentPorts;
 
 array           :   TOKEN_OPENBRACE expressions TOKEN_CLOSEBRACE
 
-assignment      :   variable TOKEN_ASSIGNMENT
+assignment      :   variable TOKEN_ASSIGNMENT expression
+                    {
+                        CCompoAssignment *assignment = new CCompoAssignment((CCompoSymbol*) $1, $2);
+                        $$ = assignment;
+                    }
 
 expressions     :   expression TOKEN_SEMICOLON expressions
                 |   /* epsilon */
                 ;
 
 expression      :   assignment /* cascadeExpression */
+                    {
+                        $$ = $1;
+                    }
+                |   variable
+                    {
+                        $$ = $1;
+                    }
                 ;
 
 methodSequence  :   pragmas temporaries pragmas statements
@@ -107,6 +129,9 @@ statementsBody  :   TOKEN_OPENBRACE methodSequence TOKEN_CLOSEBRACE
                 ;
 
 forStatement    :   TOKEN_FOR TOKEN_OPENPAR expression TOKEN_SEMICOLON expression TOKEN_SEMICOLON expression TOKEN_SEMICOLON TOKEN_CLOSEPAR statementsBody
+                    {
+                        CCompoFor *compoFor = new CCompoFor();
+                    }
                 ;
 
 whileStatement  :   TOKEN_WHILE parens statementsBody
@@ -130,17 +155,29 @@ return          :   TOKEN_RETURN expression
                 ;
 
 sequence        :   temporaries statements
+                |   /* epsilon */
                 ;
 
-statements      :   return TOKEN_SEMICOLON
-                |   forStatement TOKEN_SEMICOLON
-                |   whileStatement TOKEN_SEMICOLON
-                |   ifStatement TOKEN_SEMICOLON
+statements      :   statement statements
+                    {
+                        currentSequence.statements.push_back($1);
+                    }
+                |   /* epsilon */
+                ;
+
+statement       :   return TOKEN_SEMICOLON
+                |   forStatement
+                |   whileStatement
+                |   ifStatement
                 |   connectionDisconnection TOKEN_SEMICOLON
-                |   expression TOKEN_SEMICOLON
+                |   expression TOKEN_SEMICOLON                  { $$ = $1; }
                 ;
 
 temporaries     :   TOKEN_PIPE variables TOKEN_PIPE
+                    {
+                        currentSequence.temporaries.push_back($2);
+                    }
+                |   /* epsilon */
                 ;
 
 variables       :   variable variables
@@ -148,6 +185,9 @@ variables       :   variable variables
                 ;
 
 variable        :   TOKEN_IDENTIFIER
+                    {
+                        $$ = $1;
+                    }
                 ;
 
 /*---------------------------- grammar-blocks --------------------------------*/
@@ -281,10 +321,11 @@ ofKind          :   TOKEN_OFKIND TOKEN_IDENTIFIER
                 |   /* epsilon */
                 ;
 
-service         :   TOKEN_SERVICE serviceSign TOKEN_OPENBRACE TOKEN_CLOSEBRACE
+service         :   TOKEN_SERVICE serviceSign TOKEN_OPENBRACE sequence TOKEN_CLOSEBRACE
                     {
-                        currentBody.push_back(new CCompoService((CCompoSymbol*) $2, currentServiceParams, currentServiceBody));
+                        currentBody.push_back(new CCompoService((CCompoSymbol*) $2, currentServiceParams, currentSequence.statements, currentSequence.temporaries));
                         currentServiceParams.clear();
+                        currentSequence.clear();
                     }
                 ;
 
