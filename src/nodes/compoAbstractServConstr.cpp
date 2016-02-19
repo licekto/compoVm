@@ -1,12 +1,12 @@
-#include "compoAbstractService.h"
+#include "compoAbstractServConstr.h"
 
-CCompoAbstractService::CCompoAbstractService(   CCompoSymbol* name,
-                                                std::vector<CCompoSymbol*> params,
-                                                std::vector<CCompoNode*> body)
+CCompoAbstractServConstr::CCompoAbstractServConstr(   CCompoSymbol* name,
+                                                const std::vector<CCompoSymbol*>& params,
+                                                const std::vector<CCompoNode*>& body)
 : CCompoNode(NodeTypeEnum::SERVICE), m_name(name), m_params(params), m_body(body)
 {}
 
-CCompoAbstractService::~CCompoAbstractService() {
+CCompoAbstractServConstr::~CCompoAbstractServConstr() {
     delete m_name;
     
     for (CCompoSymbol *symbol : m_params) {
@@ -18,7 +18,7 @@ CCompoAbstractService::~CCompoAbstractService() {
     }
 }
 
-void CCompoAbstractService::print(std::ostream& outstream) const {
+void CCompoAbstractServConstr::print(std::ostream& outstream) const {
     outstream << "\t";
     outstream << typeName(m_type) << " ";
     
@@ -38,22 +38,22 @@ void CCompoAbstractService::print(std::ostream& outstream) const {
     outstream << "}" << std::endl;
 }
 
-CCompoSymbol * CCompoAbstractService::getName() const {
+CCompoSymbol * CCompoAbstractServConstr::getName() const {
     return m_name;
 }
 
-std::vector<CCompoNode*> * CCompoAbstractService::getBody() const {
+std::vector<CCompoNode*> * CCompoAbstractServConstr::getBody() const {
     return const_cast<std::vector<CCompoNode*> *>(&m_body);
 }
 
-void CCompoAbstractService::setBody(std::vector<CCompoNode*> body) {
+void CCompoAbstractServConstr::setBody(const std::vector<CCompoNode*>& body) {
     m_body = body;
 }
 
-std::vector<CCompoSymbol*> * CCompoAbstractService::getParams() const {
+std::vector<CCompoSymbol*> * CCompoAbstractServConstr::getParams() const {
     return const_cast<std::vector<CCompoSymbol*> *>(&m_params);
 }
 
-void CCompoAbstractService::setParam(CCompoSymbol* param) {
+void CCompoAbstractServConstr::setParam(CCompoSymbol* param) {
     m_params.push_back(param);
 }
