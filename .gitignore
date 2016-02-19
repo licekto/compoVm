@@ -3,3 +3,4 @@ nbproject/*
 include/generated/*
 src/generated/*
 build/*
+doc/stats/*
