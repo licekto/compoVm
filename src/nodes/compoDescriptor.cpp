@@ -2,7 +2,7 @@
 
 CCompoDescriptor::CCompoDescriptor( CCompoSymbol *name,
                                     CCompoSymbol *extends,
-                                    std::vector<CCompoNode*> body)
+                                    const std::vector<CCompoNode*>& body)
 : CCompoNode(NodeTypeEnum::DESCRIPTOR), m_name(name), m_extends(extends), m_body(body)
 {}
 

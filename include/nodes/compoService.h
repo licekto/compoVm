@@ -1,16 +1,33 @@
 #pragma once
 
-#include "compoAbstractService.h"
+#include "compoAbstractServConstr.h"
 
-class CCompoService : public CCompoAbstractService {
+/**
+ * \class CCompoService
+ * \brief Class for Compo service node representation.
+ */
+class CCompoService : public CCompoAbstractServConstr {
 private:
-                std::vector<CCompoNode*>    m_temporaries;
+            std::vector<CCompoNode*>        m_temporaries;      /**< Type of node */
 public:
-
-                                        CCompoService           (   CCompoSymbol* name = nullptr,
-                                                                    std::vector<CCompoSymbol*> params = std::vector<CCompoSymbol*>(0),
-                                                                    std::vector<CCompoNode*> body = std::vector<CCompoNode*>(0),
-                                                                    std::vector<CCompoNode*> temporaries = std::vector<CCompoNode*>(0)  );
-    virtual                             ~CCompoService          ();
-            std::vector<CCompoNode*> *  getTemporaries          () const;
+                                            /**
+                                            * Parametric constructor with default value
+                                            * @param name: Name symbol of service
+                                            * @param params: Vector of parameters
+                                            * @param body: Vector of body nodes
+                                            * @param temporaries: Vector of temporaries
+                                            */
+                                            CCompoService       (   CCompoSymbol* name = nullptr,
+                                                                    const std::vector<CCompoSymbol*>& params = std::vector<CCompoSymbol*>(0),
+                                                                    const std::vector<CCompoNode*>& body = std::vector<CCompoNode*>(0),
+                                                                    const std::vector<CCompoNode*>& temporaries = std::vector<CCompoNode*>(0)  );
+                                            /**
+                                            * Virtual destructor
+                                            */
+    virtual                                 ~CCompoService      ();
+                                            /**
+                                            * Temporaries getter
+                                            * @return constant pointer to temporaries
+                                            */
+            std::vector<CCompoNode*> *      getTemporaries      () const;
 };

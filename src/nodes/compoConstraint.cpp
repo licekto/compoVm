@@ -1,9 +1,10 @@
 #include "compoConstraint.h"
 
 CCompoConstraint::CCompoConstraint( CCompoSymbol* name,
-                                    std::vector<CCompoSymbol*> params,
-                                    std::vector<CCompoNode*> body)
+                                    const std::vector<CCompoSymbol*>& params,
+                                    const std::vector<CCompoNode*>& body)
 :   CCompoNode(NodeTypeEnum::CONSTRAINT),
-    CCompoAbstractService(name, params, body) {}
+    CCompoAbstractServConstr(name, params, body)
+{}
 
 CCompoConstraint::~CCompoConstraint() {}

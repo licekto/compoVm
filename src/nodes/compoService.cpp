@@ -1,11 +1,11 @@
 #include "compoService.h"
 
 CCompoService::CCompoService(   CCompoSymbol* name,
-                                std::vector<CCompoSymbol*> params,
-                                std::vector<CCompoNode*> body,
-                                std::vector<CCompoNode*> temporaries    )
+                                const std::vector<CCompoSymbol*>& params,
+                                const std::vector<CCompoNode*>& body,
+                                const std::vector<CCompoNode*>& temporaries    )
 :   CCompoNode(NodeTypeEnum::SERVICE),
-    CCompoAbstractService(name, params, body),
+    CCompoAbstractServConstr(name, params, body),
     m_temporaries(temporaries)
 {}
 

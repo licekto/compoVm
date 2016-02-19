@@ -1,12 +1,24 @@
 #pragma once
 
-#include "compoAbstractService.h"
+#include "compoAbstractServConstr.h"
 
-class CCompoConstraint : public CCompoAbstractService {
+/**
+ * \class CCompoConstraint
+ * \brief Class for Compo constraint representation.
+ */
+class CCompoConstraint : public CCompoAbstractServConstr {
 public:
-
-                CCompoConstraint    (   CCompoSymbol *name = nullptr,
-                                        std::vector<CCompoSymbol*> params = std::vector<CCompoSymbol*>(0),
-                                        std::vector<CCompoNode*> body = std::vector<CCompoNode*>(0));
-    virtual     ~CCompoConstraint   ();
+                                            /**
+                                            * Parametric constructor with default values
+                                            * @param name: Name of constraint
+                                            * @param params: Vector of parameters
+                                            * @param body: Vector of body expressions
+                                            */
+                                            CCompoConstraint    (   CCompoSymbol *name = nullptr,
+                                                                    const std::vector<CCompoSymbol*>& params = std::vector<CCompoSymbol*>(0),
+                                                                    const std::vector<CCompoNode*>& body = std::vector<CCompoNode*>(0));
+                                            /**
+                                            * Virtual destructor
+                                            */
+    virtual                                 ~CCompoConstraint   ();
 };

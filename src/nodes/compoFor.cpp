@@ -3,7 +3,7 @@
 CCompoFor::CCompoFor(   CCompoNode* startCond,
                         CCompoNode* endCond,
                         CCompoNode* step,
-                        std::vector<CCompoNode*> body)
+                        const std::vector<CCompoNode*>& body)
 :   CCompoNode(NodeTypeEnum::FOR),
     m_startCondition(startCond),
     m_endCondition(endCond),

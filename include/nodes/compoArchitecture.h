@@ -2,10 +2,20 @@
 
 #include "compoNode.h"
 
+/**
+ * \class CCompoArchitecture
+ * \brief Class for Compo architecture representation.
+ */
 class CCompoArchitecture : public CCompoNode {
 private:
     
 public:
-                CCompoArchitecture      ();
-    virtual     ~CCompoArchitecture     ();
+                                            /**
+                                            * Parametric constructor
+                                            */
+                                            CCompoArchitecture      ();
+                                            /**
+                                            * Virtual destructor
+                                            */
+    virtual                                 ~CCompoArchitecture     ();
 };

@@ -5,6 +5,10 @@ CCompoSymbol::CCompoSymbol(const std::string& name)
     m_name(name)
 {}
 
+CCompoSymbol::~CCompoSymbol() {
+    
+}
+
 void CCompoSymbol::print(std::ostream& outstream) const {
     outstream << m_name;
 }

@@ -2,13 +2,33 @@
 
 #include "compoNode.h"
 
+/**
+ * \class CCompoSymbol
+ * \brief Class for Compo symbol node representation.
+ */
 class CCompoSymbol : public CCompoNode {
 private:
-            std::string         m_name;
+            std::string                     m_name;         /**< Name of symbol */
 
 public:
-                                CCompoSymbol        (const std::string& name);
-    virtual                     ~CCompoSymbol       () {};
-    virtual void                print               (std::ostream& os) const;
-            std::string         getStringValue      () const;
+                                            /**
+                                            * Parametric constructor with default value
+                                            * @param name: string name
+                                            */
+                                            CCompoSymbol        (const std::string& name);
+                                            /**
+                                            * Virtual destructor
+                                            */
+    virtual                                 ~CCompoSymbol       ();
+                                            /**
+                                            * Virtual print function to call from operator <<
+                                            * @param os: output stream
+                                            * @see operator <<()
+                                            */
+    virtual void                            print               (std::ostream& os) const;
+                                            /**
+                                            * StringValue getter
+                                            * @return name string object
+                                            */
+            std::string                     getStringValue      () const;
 };

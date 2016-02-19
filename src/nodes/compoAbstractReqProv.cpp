@@ -1,7 +1,7 @@
 #include "compoAbstractReqProv.h"
 
 CCompoAbstractReqProv::CCompoAbstractReqProv(   visibilityType type,
-                                                std::vector<CCompoPort*> ports)
+                                                const std::vector<CCompoPort*>& ports)
 : CCompoNode(NodeTypeEnum::PROVISION), m_intExtType(type), m_ports(ports)
 {}
 

@@ -2,6 +2,10 @@
 
 #include <map>
 
+/**
+ * \enum NodeTypeEnum
+ * \brief Types of all nodes in AST
+ */
 enum NodeTypeEnum {
     END = 0,
     DESCRIPTOR,
@@ -23,4 +27,8 @@ enum NodeTypeEnum {
     ELSE
 };
 
+/**
+ * Function to print names of types
+ * @param type: type of node
+ */
 const char * typeName(NodeTypeEnum type);
