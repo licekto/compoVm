@@ -131,8 +131,6 @@ Identifier                  ({Letter}|[_]){LetterOrDigit}*
 
 %%
 
-YYSTYPE yylval;
-
 Lexer::Lexer() : yyFlexLexer()
 {
 
