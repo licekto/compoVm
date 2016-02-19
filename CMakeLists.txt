@@ -3,7 +3,7 @@ project(compoVm)
 enable_testing()
 
 set(CTEST_MEMORYCHECK_COMMAND "/usr/bin/valgrind")
-set(MEMORYCHECK_COMMAND_OPTIONS "--leak-check=full --show-reachable=yes --track-origins=yes --xml=yes --xml-file=test.xml")
+set(MEMORYCHECK_COMMAND_OPTIONS "--leak-check=full --show-reachable=yes --track-origins=yes --xml=yes --xml-file=valgrind.xml")
 include(CTest)
 
 #-Weffc++
@@ -15,6 +15,7 @@ set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 set(Boost_ADDITIONAL_VERSIONS "1.55" "1.55.0")
 
 file(MAKE_DIRECTORY bin)
+file(MAKE_DIRECTORY doc)
 file(MAKE_DIRECTORY build)
 file(MAKE_DIRECTORY src/generated)
 file(MAKE_DIRECTORY include/generated)
