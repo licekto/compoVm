@@ -2,16 +2,4 @@ bin/*
 nbproject/*
 include/generated/*
 src/generated/*
-CMakeFiles/*
-CMakeCache.txt
-Makefile
-cmake_install.cmake
-compile_commands.json
-CTestTestfile.cmake
-doc/notes
-*.log
-CTestCostData.txt
-*.html
-
-*.o
-/build/
+build/*
