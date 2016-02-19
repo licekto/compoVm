@@ -10,7 +10,7 @@ protected:
             NodeTypeEnum        m_type;
 
 public:
-                                CCompoNode          (NodeTypeEnum type);
+                                CCompoNode          (NodeTypeEnum type = NodeTypeEnum::END);
     virtual                     ~CCompoNode         () {};
     virtual void                print               (std::ostream& os) const = 0;
     NodeTypeEnum                getNodeType         () const;

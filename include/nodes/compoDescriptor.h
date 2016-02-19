@@ -11,7 +11,9 @@ private:
             std::vector<CCompoNode*>    m_body;
             
 public:
-                                CCompoDescriptor    (CCompoSymbol *name, CCompoSymbol *extends, std::vector<CCompoNode*> body);
+                                CCompoDescriptor    (   CCompoSymbol *name = nullptr,
+                                                        CCompoSymbol *extends = nullptr,
+                                                        std::vector<CCompoNode*> body = std::vector<CCompoNode*>(0));
     virtual                     ~CCompoDescriptor   ();
     virtual void                print               (std::ostream& os) const;
             CCompoSymbol *      getName             () const;

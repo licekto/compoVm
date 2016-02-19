@@ -11,7 +11,9 @@ protected:
             std::vector<CCompoNode*>    m_body;
             
 public:
-                                        CCompoAbstractService   (CCompoSymbol *name, std::vector<CCompoSymbol*> params, std::vector<CCompoNode*> body);
+                                        CCompoAbstractService   (   CCompoSymbol *name = nullptr,
+                                                                    std::vector<CCompoSymbol*> params = std::vector<CCompoSymbol*>(0),
+                                                                    std::vector<CCompoNode*> body = std::vector<CCompoNode*>(0));
     virtual                             ~CCompoAbstractService  ();
     virtual void                        print                   (std::ostream& os) const;
             CCompoSymbol *              getName                 () const;

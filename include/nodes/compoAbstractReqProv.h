@@ -9,7 +9,8 @@ protected:
             visibilityType                      m_intExtType;
             std::vector<CCompoPort*>        m_ports;
             
-                                            CCompoAbstractReqProv   (visibilityType type, std::vector<CCompoPort*> ports);
+                                            CCompoAbstractReqProv   (   visibilityType type = visibilityType::EXTERNAL,
+                                                                        std::vector<CCompoPort*> ports = std::vector<CCompoPort*>(0));
                                             
 public:
     virtual                                 ~CCompoAbstractReqProv  ();

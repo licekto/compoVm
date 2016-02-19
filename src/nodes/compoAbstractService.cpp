@@ -1,6 +1,8 @@
 #include "compoAbstractService.h"
 
-CCompoAbstractService::CCompoAbstractService(CCompoSymbol* name = nullptr, std::vector<CCompoSymbol*> params = std::vector<CCompoSymbol*>(0), std::vector<CCompoNode*> body = std::vector<CCompoNode*>(0))
+CCompoAbstractService::CCompoAbstractService(   CCompoSymbol* name,
+                                                std::vector<CCompoSymbol*> params,
+                                                std::vector<CCompoNode*> body)
 : CCompoNode(NodeTypeEnum::SERVICE), m_name(name), m_params(params), m_body(body)
 {}
 
@@ -16,24 +18,24 @@ CCompoAbstractService::~CCompoAbstractService() {
     }
 }
 
-void CCompoAbstractService::print(std::ostream& os) const {
-    os << "\t";
-    os << typeName(m_type) << " ";
+void CCompoAbstractService::print(std::ostream& outstream) const {
+    outstream << "\t";
+    outstream << typeName(m_type) << " ";
     
-    os << *m_name << " (";
+    outstream << *m_name << " (";
     
     bool first = true;
     for (CCompoSymbol *symbol : m_params) {
         if (!first) {
-            os << ", ";
+            outstream << ", ";
             first = false;
         }
-        os << *symbol;
+        outstream << *symbol;
     }
     
-    os << ") {" << std::endl;
-    os << "\t";
-    os << "}" << std::endl;
+    outstream << ") {" << std::endl;
+    outstream << "\t";
+    outstream << "}" << std::endl;
 }
 
 CCompoSymbol * CCompoAbstractService::getName() const {

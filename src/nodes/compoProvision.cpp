@@ -1,6 +1,6 @@
 #include "compoProvision.h"
 
-CCompoProvision::CCompoProvision(visibilityType type = visibilityType::EXTERNAL, std::vector<CCompoPort*> ports = std::vector<CCompoPort*>(0))
+CCompoProvision::CCompoProvision(visibilityType type, std::vector<CCompoPort*> ports)
 :   CCompoNode(NodeTypeEnum::PROVISION),
     CCompoAbstractReqProv(type, ports)
 {}

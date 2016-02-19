@@ -23,9 +23,8 @@ size_t ParserWrapper::getRootNodesSize() const {
 CCompoNode * ParserWrapper::getRootNodeAt(unsigned int index) {
     if (index < m_rootNodes.size()) {
         return m_rootNodes.at(index);
-    } else {
-        return nullptr;
     }
+    return nullptr;
 }
 
 void ParserWrapper::clear() {

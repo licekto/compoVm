@@ -10,7 +10,7 @@ CCompoInjectedPort::~CCompoInjectedPort() {
     delete m_injectedWith;
 }
 
-void CCompoInjectedPort::print(std::ostream& os) const {
-    os << "\t";
-    os << *m_name << " : { }";
+void CCompoInjectedPort::print(std::ostream& outstream) const {
+    outstream << "\t";
+    outstream << *m_name << " : { }";
 }

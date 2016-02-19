@@ -1,6 +1,8 @@
 #include "compoDescriptor.h"
 
-CCompoDescriptor::CCompoDescriptor(CCompoSymbol *name = nullptr, CCompoSymbol *extends = nullptr, std::vector<CCompoNode*> body = std::vector<CCompoNode*>(0))
+CCompoDescriptor::CCompoDescriptor( CCompoSymbol *name,
+                                    CCompoSymbol *extends,
+                                    std::vector<CCompoNode*> body)
 : CCompoNode(NodeTypeEnum::DESCRIPTOR), m_name(name), m_extends(extends), m_body(body)
 {}
 
@@ -11,21 +13,21 @@ CCompoDescriptor::~CCompoDescriptor() {
     }
 }
 
-void CCompoDescriptor::print(std::ostream& os) const {
-    os << typeName(m_type) << " ";
-    os << *m_name << " ";
+void CCompoDescriptor::print(std::ostream& outstream) const {
+    outstream << typeName(m_type) << " ";
+    outstream << *m_name << " ";
     if (m_extends) {
-        os << "extends " << *m_extends;
+        outstream << "extends " << *m_extends;
     }
-    os << " {" << std::endl;
+    outstream << " {" << std::endl;
     
     if (m_body.size() != 0) {
         for (CCompoNode *expr : m_body) {
-            os << *expr;
+            outstream << *expr;
         }
     }
     
-    os << "}" << std::endl;
+    outstream << "}" << std::endl;
 }
 
 CCompoSymbol * CCompoDescriptor::getName() const {

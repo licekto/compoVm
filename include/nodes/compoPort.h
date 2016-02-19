@@ -9,7 +9,7 @@ protected:
             bool                m_atomic;
             
 public:
-                                CCompoPort          (CCompoSymbol *name, bool atomic);
+                                CCompoPort          (CCompoSymbol *name = nullptr, bool atomic = false);
     virtual                     ~CCompoPort         ();
     virtual void                print               (std::ostream& os) const;
             CCompoSymbol *      getName             () const;

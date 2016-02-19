@@ -1,7 +1,20 @@
 #include "compoService.h"
 
-CCompoService::CCompoService(CCompoSymbol* name = nullptr, std::vector<CCompoSymbol*> params = std::vector<CCompoSymbol*>(0), std::vector<CCompoNode*> body = std::vector<CCompoNode*>(0))
+CCompoService::CCompoService(   CCompoSymbol* name,
+                                std::vector<CCompoSymbol*> params,
+                                std::vector<CCompoNode*> body,
+                                std::vector<CCompoNode*> temporaries    )
 :   CCompoNode(NodeTypeEnum::SERVICE),
-    CCompoAbstractService(name, params, body) {}
+    CCompoAbstractService(name, params, body),
+    m_temporaries(temporaries)
+{}
 
-CCompoService::~CCompoService() {}
+CCompoService::~CCompoService() {
+    for (CCompoNode * node : m_temporaries) {
+        delete node;
+    }
+}
+
+std::vector<CCompoNode*> * CCompoService::getTemporaries() const {
+    return const_cast<std::vector<CCompoNode*> *>(&m_temporaries);
+}
