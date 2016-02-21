@@ -22,7 +22,7 @@ namespace compo {
 
     void CCompoAbstractServConstr::print(std::ostream& outstream) const {
         outstream << "\t";
-        outstream << typeName(m_type) << " ";
+        outstream << typeName(m_nodeType) << " ";
 
         outstream << *m_name << " (";
 
