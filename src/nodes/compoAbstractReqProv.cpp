@@ -7,38 +7,38 @@ namespace compo {
     : CCompoNode(NodeTypeEnum::PROVISION), m_visibilityType(type), m_ports(ports)
     {}
 
-    CCompoAbstractReqProv::CCompoAbstractReqProv(const CCompoAbstractReqProv& rp)
-    : CCompoNode(rp.m_nodeType), m_visibilityType(rp.m_visibilityType) {
-        *this = rp;
+    CCompoAbstractReqProv::CCompoAbstractReqProv(const CCompoAbstractReqProv& other)
+    : CCompoNode(other.m_nodeType), m_visibilityType(other.m_visibilityType) {
+        *this = other;
     }
     
-    CCompoAbstractReqProv::CCompoAbstractReqProv(CCompoAbstractReqProv&& rp) noexcept
-    : CCompoNode(std::move(rp.m_nodeType)),
-      m_visibilityType(std::move(rp.m_visibilityType))
+    CCompoAbstractReqProv::CCompoAbstractReqProv(CCompoAbstractReqProv&& other) noexcept
+    : CCompoNode(std::move(other.m_nodeType)),
+      m_visibilityType(std::move(other.m_visibilityType))
     {
-        this->m_ports = std::move(rp.m_ports);
+        this->m_ports = std::move(other.m_ports);
     }
     
-    CCompoAbstractReqProv& CCompoAbstractReqProv::operator =(const CCompoAbstractReqProv& rp) {
-        if (&rp != this) {
-            this->m_nodeType = rp.m_nodeType;
-            this->m_visibilityType = rp.m_visibilityType;
+    CCompoAbstractReqProv& CCompoAbstractReqProv::operator =(const CCompoAbstractReqProv& other) {
+        if (&other != this) {
+            this->m_nodeType = other.m_nodeType;
+            this->m_visibilityType = other.m_visibilityType;
             this->m_ports.clear();
 
-            for (CCompoPort *port : rp.m_ports) {
-                this->m_ports.push_back(new CCompoPort(*port));     // Create whole new instance of port
+            for (CCompoPort *port : other.m_ports) {
+                this->m_ports.push_back(new CCompoPort(*port));     // Create whole new instance of ports
             }
         }
         
         return *this;
     }
     
-    CCompoAbstractReqProv& CCompoAbstractReqProv::operator =(CCompoAbstractReqProv&& rp) noexcept {
-        this->m_nodeType = rp.m_nodeType;
-        this->m_visibilityType = rp.m_visibilityType;
+    CCompoAbstractReqProv& CCompoAbstractReqProv::operator =(CCompoAbstractReqProv&& other) noexcept {
+        this->m_nodeType = other.m_nodeType;
+        this->m_visibilityType = other.m_visibilityType;
         this->m_ports.clear();
         
-        this->m_ports = std::move(rp.m_ports);
+        this->m_ports = std::move(other.m_ports);
         
         return *this;
     }
