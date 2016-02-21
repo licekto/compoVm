@@ -2,7 +2,9 @@
 
 namespace compo {
     
-    CCompoInjectedPort::CCompoInjectedPort(CCompoSymbol* name, bool atomic, CCompoSymbol* injectedWith)
+    CCompoInjectedPort::CCompoInjectedPort( CCompoSymbol* name,
+                                            bool atomic,
+                                            CCompoSymbol* injectedWith  )
     :   CCompoNode(NodeTypeEnum::INJECTED_NODE),
         CCompoPort(name, atomic),
         m_injectedWith(injectedWith)
