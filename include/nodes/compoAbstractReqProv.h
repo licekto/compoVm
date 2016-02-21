@@ -32,21 +32,21 @@ namespace compo {
                                                 /**
                                                 * Copy constructor
                                                 * Copy constructor is made protected to prevent from copying of object of this (abstract) type.
-                                                * @param rp: reference to another object of same type
+                                                * @param other: reference to another object of same type
                                                 */
                                                 CCompoAbstractReqProv   (const CCompoAbstractReqProv& other);
                                                 
                                                 /**
                                                 * Move constructor
                                                 * Move constructor is made protected to prevent from moving of object of this (abstract) type.
-                                                * @param rp: rvalue-reference to another object of same type
+                                                * @param other: rvalue-reference to another object of same type
                                                 */
                                                 CCompoAbstractReqProv   (CCompoAbstractReqProv&& other) noexcept;
                                                 
                                                 /**
                                                 * Copy assignment operator
                                                 * Copy assignment operator is made protected to prevent from assigning of object of this (abstract) type.
-                                                * @param rp: reference to another object of same type
+                                                * @param other: reference to another object of same type
                                                 * @return reference to assigned object
                                                 */
     CCompoAbstractReqProv&                      operator =              (const CCompoAbstractReqProv& other);
@@ -54,7 +54,7 @@ namespace compo {
                                                 /**
                                                 * Move assignment operator
                                                 * Move assignment operator is made protected to prevent from assigning of object of this (abstract) type.
-                                                * @param rp: rvalue-reference to another object of same type
+                                                * @param other: rvalue-reference to another object of same type
                                                 * @return reference to assigned object
                                                 */
     CCompoAbstractReqProv&                      operator =              (CCompoAbstractReqProv&& other) noexcept;
