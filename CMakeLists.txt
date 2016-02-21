@@ -6,6 +6,7 @@ project(compoVm)
 file(MAKE_DIRECTORY bin)
 file(MAKE_DIRECTORY doc)
 file(MAKE_DIRECTORY build)
+file(MAKE_DIRECTORY lib)
 file(MAKE_DIRECTORY src/generated)
 file(MAKE_DIRECTORY include/generated)
 #------------------------------
@@ -93,20 +94,25 @@ endif ()
 
 # Files preparation
 #------------------------------
-FILE(GLOB HEADER_FILES RELATIVE "${CMAKE_CURRENT_SOURCE_DIR}/" include/*.h include/parser/*.h include/nodes/*.h  include/generated/*.h include/core/*.h)
-FILE(GLOB SOURCE_FILES RELATIVE "${CMAKE_CURRENT_SOURCE_DIR}/" src/parser/*.cpp src/nodes/*.cpp src/generated/*.cpp src/core/*.cpp)
+FILE(GLOB PARSER_SOURCE_FILES RELATIVE "${CMAKE_CURRENT_SOURCE_DIR}/" src/parser/*.cpp)
+FILE(GLOB NODES_SOURCE_FILES RELATIVE "${CMAKE_CURRENT_SOURCE_DIR}/" src/nodes/*.cpp)
+FILE(GLOB GENERATED_SOURCE_FILES RELATIVE "${CMAKE_CURRENT_SOURCE_DIR}/" src/generated/*.cpp)
+FILE(GLOB CORE_SOURCE_FILES RELATIVE "${CMAKE_CURRENT_SOURCE_DIR}/" src/core/*.cpp)
 FILE(GLOB MAIN_FILE RELATIVE "${CMAKE_CURRENT_SOURCE_DIR}/" src/main.cpp)
-set(SOURCE_FILES_ALL ${HEADER_FILES} ${SOURCE_FILES} ${BISON_OUTPUT} ${FLEX_OUTPUT})
+
+set(SOURCE_FILES_ALL ${PARSER_SOURCE_FILES} ${NODES_SOURCE_FILES} ${GENERATED_SOURCE_FILES} ${CORE_SOURCE_FILES} ${BISON_OUTPUT} ${FLEX_OUTPUT})
 
 FILE(GLOB TEST_FILES RELATIVE "${CMAKE_CURRENT_SOURCE_DIR}/" test/*.cpp)
 
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/bin)
 #------------------------------
 
+add_library(OBJECT_FILES OBJECT ${SOURCE_FILES_ALL})
+
 # Executables preparation
 #------------------------------
 # Main binary
-add_executable(compoVm ${MAIN_FILE} ${SOURCE_FILES_ALL})
+add_executable(compoVm ${MAIN_FILE} $<TARGET_OBJECTS:OBJECT_FILES>)
 target_link_libraries(  compoVm
                         ${Boost_UNIT_TEST_FRAMEWORK_LIBRARY}
                         ${Boost_LOG_LIBRARY}
@@ -114,10 +120,10 @@ target_link_libraries(  compoVm
 target_compile_definitions(compoVm PRIVATE "BOOST_LOG_DYN_LINK=1")
 
 # Tests
-add_executable(tests ${TEST_FILES} ${SOURCE_FILES_ALL})
+add_executable(tests ${TEST_FILES} $<TARGET_OBJECTS:OBJECT_FILES>)
 target_include_directories(tests PRIVATE ${Boost_INCLUDE_DIRS})
 target_compile_definitions(tests PRIVATE "BOOST_TEST_DYN_LINK=1")
-target_link_libraries(tests ${Boost_UNIT_TEST_FRAMEWORK_LIBRARY})
+target_link_libraries(tests ${nodes} ${Boost_UNIT_TEST_FRAMEWORK_LIBRARY})
 add_test(NAME compoTest COMMAND tests)
 #------------------------------
 
