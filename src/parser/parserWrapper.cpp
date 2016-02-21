@@ -1,7 +1,7 @@
 #include "parserWrapper.h"
 
 ParserWrapper::ParserWrapper(Lexer *lexer)
-: m_lexer(lexer), m_rootNodes(std::vector<CCompoNode*>())
+: m_lexer(lexer), m_rootNodes(std::vector<compo::CCompoNode*>())
 {}
 
 ParserWrapper::~ParserWrapper() {
@@ -12,7 +12,7 @@ Lexer * ParserWrapper::getLexer() const {
     return m_lexer;
 }
 
-void ParserWrapper::setRootNode(CCompoNode * node) {
+void ParserWrapper::setRootNode(compo::CCompoNode * node) {
     m_rootNodes.push_back(node);
 }
 
@@ -20,7 +20,7 @@ size_t ParserWrapper::getRootNodesSize() const {
     return m_rootNodes.size();
 }
 
-CCompoNode * ParserWrapper::getRootNodeAt(unsigned int index) {
+compo::CCompoNode * ParserWrapper::getRootNodeAt(unsigned int index) {
     if (index < m_rootNodes.size()) {
         return m_rootNodes.at(index);
     }
@@ -28,7 +28,7 @@ CCompoNode * ParserWrapper::getRootNodeAt(unsigned int index) {
 }
 
 void ParserWrapper::clear() {
-    for (CCompoNode * node : m_rootNodes) {
+    for (compo::CCompoNode * node : m_rootNodes) {
         delete node;
     }
     m_rootNodes.clear();

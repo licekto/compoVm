@@ -10,7 +10,7 @@
 class ParserWrapper {
 private:
             Lexer                         * m_lexer;            /**< Lexer pointer */
-            std::vector<CCompoNode*>        m_rootNodes;        /**< Vector of root nodes */
+            std::vector<compo::CCompoNode*> m_rootNodes;        /**< Vector of root nodes */
 
 public:
                                             /**
@@ -49,7 +49,7 @@ public:
                                             * Root node setter
                                             * @param node pointer
                                             */
-    void                                    setRootNode                 (CCompoNode * node);
+    void                                    setRootNode                 (compo::CCompoNode * node);
                                             /**
                                             * Root node vector size getter
                                             * @return size of node vector
@@ -60,5 +60,5 @@ public:
                                             * @param index: index of wanted node
                                             * @return root node at given index
                                             */
-    CCompoNode *                            getRootNodeAt               (unsigned int index);
+    compo::CCompoNode *                     getRootNodeAt               (unsigned int index);
 };

@@ -121,7 +121,7 @@ Identifier                  ({Letter}|[_]){LetterOrDigit}*
 <INITIAL>"}"                            {return TOKEN_CLOSEBRACE;}
 
 <INITIAL>{Identifier}                   {
-                                            yylval = new CCompoSymbol(std::string(yytext, yyleng));
+                                            yylval = new compo::CCompoSymbol(std::string(yytext, yyleng));
                                             return TOKEN_IDENTIFIER;
                                         }
 

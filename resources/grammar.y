@@ -18,25 +18,25 @@
 #define yyerror(parser, message) parser->error(message)
 
 typedef struct sequence {
-    std::vector<CCompoNode*>    temporaries;
-    std::vector<CCompoNode*>    statements;
+    std::vector<compo::CCompoNode*>    temporaries;
+    std::vector<compo::CCompoNode*>    statements;
 
     void                        clear()     {temporaries.clear(); statements.clear();}
 } TSEQUENCE;
 
-std::vector<CCompoNode*>    currentBody;
-CCompoService             * currentService      = nullptr;
-std::vector<CCompoSymbol*>  currentServiceParams;
-std::vector<CCompoNode*>    currentServiceBody;
-TSEQUENCE                   currentSequence;
+std::vector<compo::CCompoNode*>     currentBody;
+compo::CCompoService              * currentService      = nullptr;
+std::vector<compo::CCompoSymbol*>   currentServiceParams;
+std::vector<compo::CCompoNode*>     currentServiceBody;
+TSEQUENCE                           currentSequence;
 
-visibilityType              visType             = visibilityType::EXTERNAL;
-bool                        atomicPresent       = false;
-std::vector<CCompoPort*>    currentPorts;
+compo::visibilityType               visType             = compo::visibilityType::EXTERNAL;
+bool                                atomicPresent       = false;
+std::vector<compo::CCompoPort*>     currentPorts;
 
 %}
 
-%define api.value.type {CCompoNode*}
+%define api.value.type {compo::CCompoNode*}
 %define parse.error verbose
 %define parse.lac full
 
@@ -102,7 +102,7 @@ array           :   TOKEN_OPENBRACE expressions TOKEN_CLOSEBRACE
 
 assignment      :   variable TOKEN_ASSIGNMENT expression
                     {
-                        CCompoAssignment *assignment = new CCompoAssignment((CCompoSymbol*) $1, $2);
+                        compo::CCompoAssignment *assignment = new compo::CCompoAssignment((compo::CCompoSymbol*) $1, $2);
                         $$ = assignment;
                     }
 
@@ -130,7 +130,7 @@ statementsBody  :   TOKEN_OPENBRACE methodSequence TOKEN_CLOSEBRACE
 
 forStatement    :   TOKEN_FOR TOKEN_OPENPAR expression TOKEN_SEMICOLON expression TOKEN_SEMICOLON expression TOKEN_SEMICOLON TOKEN_CLOSEPAR statementsBody
                     {
-                        CCompoFor *compoFor = new CCompoFor();
+                        compo::CCompoFor *compoFor = new compo::CCompoFor();
                     }
                 ;
 
@@ -240,9 +240,9 @@ descriptors     :   descriptor descriptors
 
 descriptor      :   TOKEN_DESCRIPTOR TOKEN_IDENTIFIER inheritance TOKEN_OPENBRACE compoExprs TOKEN_CLOSEBRACE
                     {
-                        CCompoDescriptor *descriptor = new CCompoDescriptor((CCompoSymbol*) $2, nullptr, currentBody);
+                        compo::CCompoDescriptor *descriptor = new compo::CCompoDescriptor((compo::CCompoSymbol*) $2, nullptr, std::move(currentBody));
                         if ($3) {
-                            descriptor->setExtends((CCompoSymbol*) $3);
+                            descriptor->setExtends((compo::CCompoSymbol*) $3);
                         }
                         currentBody.clear();
                         $$ = descriptor;
@@ -275,14 +275,14 @@ compoExpr	:   exProvision
 
 exProvision     :   externally TOKEN_PROVIDES provReqSign
 		    {
-			currentBody.push_back(new CCompoProvision(visType, currentPorts));
+			currentBody.push_back(new compo::CCompoProvision(visType, std::move(currentPorts)));
 			currentPorts.clear();
 		    }
                 ;
 
 exRequirement   :   externally TOKEN_REQUIRES provReqSign
                     {
-			currentBody.push_back(new CCompoRequirement(visType, currentPorts));
+			currentBody.push_back(new compo::CCompoRequirement(visType, std::move(currentPorts)));
 			currentPorts.clear();
 		    }
                 ;
@@ -290,7 +290,7 @@ exRequirement   :   externally TOKEN_REQUIRES provReqSign
 provReqSign     :   TOKEN_OPENBRACE ports TOKEN_CLOSEBRACE
                 ;
 
-externally      :   TOKEN_EXTERNALLY	{visType = visibilityType::EXTERNAL;}
+externally      :   TOKEN_EXTERNALLY	{visType = compo::visibilityType::EXTERNAL;}
                 |   /* epsilon */
                 ;
 
@@ -300,7 +300,7 @@ ports		:   port TOKEN_SEMICOLON ports
 
 port		:   atomic TOKEN_IDENTIFIER brackets TOKEN_COLON portSign ofKind
 		    {
-			currentPorts.push_back(new CCompoPort((CCompoSymbol*) $2, atomicPresent));
+			currentPorts.push_back(new compo::CCompoPort((compo::CCompoSymbol*) $2, atomicPresent));
 		    }
 		;
 
@@ -323,7 +323,7 @@ ofKind          :   TOKEN_OFKIND TOKEN_IDENTIFIER
 
 service         :   TOKEN_SERVICE serviceSign TOKEN_OPENBRACE sequence TOKEN_CLOSEBRACE
                     {
-                        currentBody.push_back(new CCompoService((CCompoSymbol*) $2, currentServiceParams, currentSequence.statements, currentSequence.temporaries));
+                        currentBody.push_back(new compo::CCompoService((compo::CCompoSymbol*) $2, std::move(currentServiceParams), std::move(currentSequence.statements), std::move(currentSequence.temporaries)));
                         currentServiceParams.clear();
                         currentSequence.clear();
                     }
@@ -344,18 +344,18 @@ servicesSignsList
 
 serviceParams   :   TOKEN_IDENTIFIER
                     {
-                        currentServiceParams.push_back((CCompoSymbol*) $1);
+                        currentServiceParams.push_back((compo::CCompoSymbol*) $1);
                     }
                 |   TOKEN_IDENTIFIER TOKEN_COMMA serviceParams
                     {
-                        currentServiceParams.push_back((CCompoSymbol*) $1);
+                        currentServiceParams.push_back((compo::CCompoSymbol*) $1);
                     }
                 |   /* epsilon */
                 ;
 
 constraint	:   TOKEN_CONSTRAINT serviceSign TOKEN_OPENBRACE TOKEN_CLOSEBRACE
                     {
-                        currentBody.push_back(new CCompoConstraint((CCompoSymbol*) $2, currentServiceParams, currentServiceBody));
+                        currentBody.push_back(new compo::CCompoConstraint((compo::CCompoSymbol*) $2, std::move(currentServiceParams), currentServiceBody));
                         currentServiceParams.clear();
                     }
 		;
@@ -365,9 +365,9 @@ inRequirement   :   internally TOKEN_REQUIRES TOKEN_OPENBRACE injectPorts TOKEN_
 
 inProvision	:   internally TOKEN_PROVIDES provReqSign
                     {
-			currentBody.push_back(new CCompoRequirement(visType, currentPorts));
+			currentBody.push_back(new compo::CCompoRequirement(visType, std::move(currentPorts)));
 			currentPorts.clear();
-                        visType = visibilityType::EXTERNAL;
+                        visType = compo::visibilityType::EXTERNAL;
 		    }
 		;
 
@@ -382,7 +382,7 @@ inject          :   TOKEN_INJECTWITH TOKEN_IDENTIFIER
                 |   /* epsilon */
                 ;
 
-internally      :   TOKEN_INTERNALLY	{visType = visibilityType::INTERNAL;}
+internally      :   TOKEN_INTERNALLY	{visType = compo::visibilityType::INTERNAL;}
                 |   /* epsilon */
                 ;
 

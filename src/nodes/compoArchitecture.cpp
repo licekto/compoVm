@@ -1,7 +1,11 @@
 #include "compoArchitecture.h"
 
-CCompoArchitecture::CCompoArchitecture()
-: CCompoNode(NodeTypeEnum::ARCHITECTURE)
-{}
+namespace compo {
+    
+    CCompoArchitecture::CCompoArchitecture()
+    : CCompoNode(NodeTypeEnum::ARCHITECTURE)
+    {}
 
-CCompoArchitecture::~CCompoArchitecture() {}
+    CCompoArchitecture::~CCompoArchitecture() {}
+
+}
