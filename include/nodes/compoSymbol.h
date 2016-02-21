@@ -18,6 +18,7 @@ namespace compo {
                                                 * @param name: string name
                                                 */
                                                 CCompoSymbol        (const std::string& name);
+                                                
                                                 /**
                                                 * Virtual destructor
                                                 */

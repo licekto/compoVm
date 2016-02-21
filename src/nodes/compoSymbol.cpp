@@ -6,7 +6,7 @@ namespace compo {
     :   CCompoNode(NodeTypeEnum::SYMBOL),
         m_name(name)
     {}
-
+    
     CCompoSymbol::~CCompoSymbol() {
 
     }
