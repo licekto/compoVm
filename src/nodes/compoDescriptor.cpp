@@ -16,7 +16,7 @@ namespace compo {
     }
 
     void CCompoDescriptor::print(std::ostream& outstream) const {
-        outstream << typeName(m_type) << " ";
+        outstream << typeName(m_nodeType) << " ";
         outstream << *m_name << " ";
         if (m_extends) {
             outstream << "extends " << *m_extends;
