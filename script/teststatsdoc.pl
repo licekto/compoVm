@@ -8,20 +8,36 @@ use File::Copy;
 use File::Path qw(make_path remove_tree);
 
 my $testCommand = "ctest -T Test -D ExperimentalBuild -D ExperimentalTest -D ExperimentalMemCheck";
-my $oclintCommand = "oclint-json-compilation-database -e ../src/generated/parser.cpp -e ../src/generated/lexer.cpp -- -report-type html -o oclint.html";
+my $oclintCommand = "oclint-json-compilation-database -e ../src/generated/parser.cpp -e ../src/generated/lexer.cpp -- -rc=LONG_LINE=150 -report-type html -o oclint.html";
 my $doxygenCommand = "doxygen Doxyfile";
-
-chdir("../resources");
-system($doxygenCommand);
+my $cppcheckCommand = "cppcheck -j 4 -i src/generated/ -i include/generated/ src/ include/ --force --enable=warning,performance,information,style --xml 2> cppcheck.xml";
 
 chdir("../build/");
+say "Running tests...";
 system($testCommand);
+say "Tests completed";
+say "-----------------------------------\n";
+
+chdir("../resources");
+say "Running Doxygen...";
+system($doxygenCommand);
+say "Doxygen completed";
+say "-----------------------------------\n";
 
 my $oclintFile = "compile_commands.json";
 copy($oclintFile, "../" . $oclintFile);
 chdir("..");
+say "Running OCLint...";
 system($oclintCommand);
+say "OCLint completed";
+say "-----------------------------------\n";
+say "Running CPPCheck...";
+system($cppcheckCommand);
+say "CPPCheck completed";
+say "-----------------------------------\n";
 
+
+say "Cleaning directories...";
 unlink($oclintFile);
 
 if (not -d "doc/stats")
@@ -30,6 +46,7 @@ if (not -d "doc/stats")
 }
 move("build/valgrind.xml", "doc/stats");
 move("oclint.html", "doc/stats");
+move("cppcheck.xml", "doc/stats");
 move("script/Testing", "build/");
 
 my $testingDir = "build/Testing/";
@@ -42,5 +59,6 @@ my @files = grep(/$testingDirPattern/, readdir($dh));
 closedir($dh);
 
 my $testingXml = $testingDir . $files[0] . "/Test.xml";
-move($testingXml, "doc/stats");
+move($testingXml, "doc/stats/tests.xml");
 
+say "Cleaning completed";
