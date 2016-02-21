@@ -20,10 +20,12 @@ namespace compo {
      * \brief Abstract base class for other nodes.
      * 
      * Abstract base class of AST. Every node in AST is inherited from this one.
+     * 
+     * Rule of five is not needed since CCompoNode class has no dynamic types included.
      */
     class CCompoNode {
     protected:
-                NodeTypeEnum                    m_type;         /**< Type of node */
+                NodeTypeEnum                    m_nodeType;         /**< Type of node */
 
     public:
                                                 /**
