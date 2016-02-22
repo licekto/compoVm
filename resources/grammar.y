@@ -102,7 +102,7 @@ array           :   TOKEN_OPENBRACE expressions TOKEN_CLOSEBRACE
 
 assignment      :   variable TOKEN_ASSIGNMENT expression
                     {
-                        compo::CCompoAssignment *assignment = new compo::CCompoAssignment((compo::CCompoSymbol*) $1, $2);
+                        compo::CCompoAssignment *assignment = new compo::CCompoAssignment(dynamic_cast<compo::CCompoSymbol*>($1), $2);
                         $$ = assignment;
                     }
 
@@ -240,9 +240,9 @@ descriptors     :   descriptor descriptors
 
 descriptor      :   TOKEN_DESCRIPTOR TOKEN_IDENTIFIER inheritance TOKEN_OPENBRACE compoExprs TOKEN_CLOSEBRACE
                     {
-                        compo::CCompoDescriptor *descriptor = new compo::CCompoDescriptor((compo::CCompoSymbol*) $2, nullptr, std::move(currentBody));
+                        compo::CCompoDescriptor *descriptor = new compo::CCompoDescriptor(dynamic_cast<compo::CCompoSymbol*>($2), nullptr, std::move(currentBody));
                         if ($3) {
-                            descriptor->setExtends((compo::CCompoSymbol*) $3);
+                            descriptor->setExtends(dynamic_cast<compo::CCompoSymbol*>($3));
                         }
                         currentBody.clear();
                         $$ = descriptor;
@@ -300,7 +300,7 @@ ports		:   port TOKEN_SEMICOLON ports
 
 port		:   atomic TOKEN_IDENTIFIER brackets TOKEN_COLON portSign ofKind
 		    {
-			currentPorts.push_back(new compo::CCompoPort((compo::CCompoSymbol*) $2, atomicPresent));
+			currentPorts.push_back(new compo::CCompoPort(dynamic_cast<compo::CCompoSymbol*>($2), atomicPresent));
 		    }
 		;
 
@@ -323,7 +323,7 @@ ofKind          :   TOKEN_OFKIND TOKEN_IDENTIFIER
 
 service         :   TOKEN_SERVICE serviceSign TOKEN_OPENBRACE sequence TOKEN_CLOSEBRACE
                     {
-                        currentBody.push_back(new compo::CCompoService((compo::CCompoSymbol*) $2, std::move(currentServiceParams), std::move(currentSequence.statements), std::move(currentSequence.temporaries)));
+                        currentBody.push_back(new compo::CCompoService(dynamic_cast<compo::CCompoSymbol*>($2), std::move(currentServiceParams), std::move(currentSequence.statements), std::move(currentSequence.temporaries)));
                         currentServiceParams.clear();
                         currentSequence.clear();
                     }
@@ -344,18 +344,18 @@ servicesSignsList
 
 serviceParams   :   TOKEN_IDENTIFIER
                     {
-                        currentServiceParams.push_back((compo::CCompoSymbol*) $1);
+                        currentServiceParams.push_back(dynamic_cast<compo::CCompoSymbol*>($1));
                     }
                 |   TOKEN_IDENTIFIER TOKEN_COMMA serviceParams
                     {
-                        currentServiceParams.push_back((compo::CCompoSymbol*) $1);
+                        currentServiceParams.push_back(dynamic_cast<compo::CCompoSymbol*>($1));
                     }
                 |   /* epsilon */
                 ;
 
 constraint	:   TOKEN_CONSTRAINT serviceSign TOKEN_OPENBRACE TOKEN_CLOSEBRACE
                     {
-                        currentBody.push_back(new compo::CCompoConstraint((compo::CCompoSymbol*) $2, std::move(currentServiceParams), currentServiceBody));
+                        currentBody.push_back(new compo::CCompoConstraint(dynamic_cast<compo::CCompoSymbol*>($2), std::move(currentServiceParams), currentServiceBody));
                         currentServiceParams.clear();
                     }
 		;
