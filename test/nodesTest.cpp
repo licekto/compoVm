@@ -5,6 +5,7 @@
 #include "compoSymbol.h"
 #include "compoPort.h"
 #include "compoRequirement.h"
+#include "compoProvision.h"
 
 BOOST_AUTO_TEST_SUITE(nodes)
 
@@ -77,6 +78,74 @@ BOOST_AUTO_TEST_CASE(compoPort) {
     BOOST_CHECK(portMoved1.getAtomic());
     BOOST_CHECK_EQUAL("port", portMoved2.getName()->getStringValue());
     BOOST_CHECK(portMoved2.getAtomic());
+}
+
+BOOST_AUTO_TEST_CASE(compoProvision) {
+    // Port vector preparation
+    std::vector<compo::CCompoPort*> portVec;
+    portVec.push_back(new compo::CCompoPort(new compo::CCompoSymbol("port1"), true));
+    portVec.push_back(new compo::CCompoPort(new compo::CCompoSymbol("port2"), false));
+    
+    // Original provision creation
+    compo::CCompoProvision provision(compo::visibilityType::EXTERNAL, portVec);
+    BOOST_CHECK_EQUAL(compo::NodeTypeEnum::PROVISION, provision.getNodeType());
+    BOOST_CHECK_EQUAL(compo::visibilityType::EXTERNAL, provision.getVisibilityType());
+    BOOST_CHECK_EQUAL(2, provision.getNumberOfPorts());
+    BOOST_CHECK_EQUAL("port1", provision.getPortAt(0)->getName()->getStringValue());
+    BOOST_CHECK(provision.getPortAt(0)->getAtomic());
+    BOOST_CHECK_EQUAL("port2", provision.getPortAt(1)->getName()->getStringValue());
+    BOOST_CHECK(!provision.getPortAt(1)->getAtomic());
+    
+    // Copy constructor test
+    compo::CCompoProvision provisionCopy1(provision);
+    BOOST_CHECK_EQUAL(compo::NodeTypeEnum::PROVISION, provisionCopy1.getNodeType());
+    BOOST_CHECK_EQUAL(compo::visibilityType::EXTERNAL, provisionCopy1.getVisibilityType());
+    BOOST_CHECK_EQUAL(2, provisionCopy1.getNumberOfPorts());
+    BOOST_CHECK_EQUAL("port1", provisionCopy1.getPortAt(0)->getName()->getStringValue());
+    BOOST_CHECK_EQUAL("port2", provisionCopy1.getPortAt(1)->getName()->getStringValue());
+    
+    // Assignment operator test
+    compo::CCompoProvision provisionCopy2 = provision;
+    BOOST_CHECK_EQUAL(compo::NodeTypeEnum::PROVISION, provisionCopy2.getNodeType());
+    BOOST_CHECK_EQUAL(compo::visibilityType::EXTERNAL, provisionCopy2.getVisibilityType());
+    BOOST_CHECK_EQUAL(2, provisionCopy2.getNumberOfPorts());
+    BOOST_CHECK_EQUAL("port1", provisionCopy2.getPortAt(0)->getName()->getStringValue());
+    BOOST_CHECK_EQUAL("port2", provisionCopy2.getPortAt(1)->getName()->getStringValue());
+    
+    // Test of original provision
+    BOOST_CHECK_EQUAL(compo::NodeTypeEnum::PROVISION, provision.getNodeType());
+    BOOST_CHECK_EQUAL(compo::visibilityType::EXTERNAL, provision.getVisibilityType());
+    BOOST_CHECK_EQUAL(2, provision.getNumberOfPorts());
+    BOOST_CHECK_EQUAL("port1", provision.getPortAt(0)->getName()->getStringValue());
+    BOOST_CHECK_EQUAL("port2", provision.getPortAt(1)->getName()->getStringValue());
+    
+    compo::CCompoProvision provisionNew1(std::move(provision));
+    
+    // Test of original requirement
+    BOOST_CHECK_EQUAL(compo::NodeTypeEnum::PROVISION, provision.getNodeType());
+    BOOST_CHECK_EQUAL(compo::visibilityType::EXTERNAL, provision.getVisibilityType());
+    BOOST_CHECK_EQUAL(0, provision.getNumberOfPorts());
+    
+    // Test of moved requirement
+    BOOST_CHECK_EQUAL(compo::NodeTypeEnum::PROVISION, provisionNew1.getNodeType());
+    BOOST_CHECK_EQUAL(compo::visibilityType::EXTERNAL, provisionNew1.getVisibilityType());
+    BOOST_CHECK_EQUAL(2, provisionNew1.getNumberOfPorts());
+    BOOST_CHECK_EQUAL("port1", provisionNew1.getPortAt(0)->getName()->getStringValue());
+    BOOST_CHECK_EQUAL("port2", provisionNew1.getPortAt(1)->getName()->getStringValue());
+    
+    compo::CCompoProvision provisionNew2 = std::move(provisionNew1);
+    
+    // Test of original requirement
+    BOOST_CHECK_EQUAL(compo::NodeTypeEnum::PROVISION, provisionNew1.getNodeType());
+    BOOST_CHECK_EQUAL(compo::visibilityType::EXTERNAL, provisionNew1.getVisibilityType());
+    BOOST_CHECK_EQUAL(0, provisionNew1.getNumberOfPorts());
+    
+    // Test of moved requirement
+    BOOST_CHECK_EQUAL(compo::NodeTypeEnum::PROVISION, provisionNew2.getNodeType());
+    BOOST_CHECK_EQUAL(compo::visibilityType::EXTERNAL, provisionNew2.getVisibilityType());
+    BOOST_CHECK_EQUAL(2, provisionNew2.getNumberOfPorts());
+    BOOST_CHECK_EQUAL("port1", provisionNew2.getPortAt(0)->getName()->getStringValue());
+    BOOST_CHECK_EQUAL("port2", provisionNew2.getPortAt(1)->getName()->getStringValue());
 }
 
 BOOST_AUTO_TEST_CASE(compoRequirement) {
