@@ -6,14 +6,17 @@
 
 %{
 #include <iostream>
+#include <cstdlib>
 #include "parserWrapper.h"
 #include "parser.h"
 #include "compoNode.h"
 #include "compoSymbol.h"
+#include "compoIntegerLiteral.h"
 %}
 
 Letter                      [a-zA-Z]
 DecimalDigit                [0-9]
+IntegerLiteral              ([+-]?{DecimalDigit}+)
 LetterOrDigit               ({Letter}|{DecimalDigit})
 Whitespace                  [\n\r\t ]
 Identifier                  ({Letter}|[_]){LetterOrDigit}*
@@ -123,6 +126,11 @@ Identifier                  ({Letter}|[_]){LetterOrDigit}*
 <INITIAL>{Identifier}                   {
                                             yylval = new compo::CCompoSymbol(std::string(yytext, yyleng));
                                             return TOKEN_IDENTIFIER;
+                                        }
+
+<INITIAL>{IntegerLiteral}               {
+                                            yylval = new compo::CCompoIntegerLiteral(atoll(yytext));
+                                            return TOKEN_INTEGER_LITERAL;
                                         }
 
 <<EOF>>                                 {return TOKEN_END;}

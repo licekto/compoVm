@@ -92,6 +92,7 @@ std::vector<compo::CCompoPort*>     currentPorts;
 %token TOKEN_OPENBRACE
 %token TOKEN_CLOSEBRACE
 %token TOKEN_IDENTIFIER
+%token TOKEN_INTEGER_LITERAL;
 %token TOKEN_END        0   "end of file"
 
 %%
