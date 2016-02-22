@@ -12,16 +12,16 @@ my $oclintCommand = "oclint-json-compilation-database -e ../src/generated/parser
 my $doxygenCommand = "doxygen Doxyfile";
 my $cppcheckCommand = "cppcheck -j 4 -i src/generated/ -i include/generated/ src/ include/ --force --enable=warning,performance,information,style --xml 2> cppcheck.xml";
 
-chdir("../build/");
-say "Running tests...";
-system($testCommand);
-say "Tests completed";
-say "-----------------------------------\n";
-
 chdir("../resources");
 say "Running Doxygen...";
 system($doxygenCommand);
 say "Doxygen completed";
+say "-----------------------------------\n";
+
+chdir("../build/");
+say "Running tests...";
+system($testCommand);
+say "Tests completed";
 say "-----------------------------------\n";
 
 my $oclintFile = "compile_commands.json";
