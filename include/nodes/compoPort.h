@@ -49,7 +49,7 @@ namespace compo {
                                                 * @param other: rvalue-reference to another object of same type
                                                 * @return reference to assigned object
                                                 */
-                CCompoPort&                     operator =              (CCompoPort&& other) noexcept;
+                CCompoPort&                     operator=           (CCompoPort&& other) noexcept;
                 
                                                 /**
                                                 * Virtual destructor
@@ -66,6 +66,12 @@ namespace compo {
                                                 * @return Name symbol of port
                                                 */
                 CCompoSymbol *                  getName             () const;
+                
+                                                /**
+                                                * Atomic getter
+                                                * @return is atomic?
+                                                */
+                bool                            getAtomic           () const;
     };
 
 }
