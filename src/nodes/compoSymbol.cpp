@@ -6,14 +6,14 @@ namespace compo {
     :   CCompoNode(NodeTypeEnum::SYMBOL),
         m_name(name)
     {}
-    /*
+    
     CCompoSymbol::CCompoSymbol(const CCompoSymbol& other)
-    : CCompoNode(other.m_nodeType),
+    : CCompoNode(other),
       m_name(other.m_name)
     {}
     
     CCompoSymbol::CCompoSymbol(CCompoSymbol&& other) noexcept
-    : CCompoNode(std::move(other.m_nodeType)),
+    : CCompoNode(std::move(other)),
       m_name(std::move(other.m_name))
     {
         other.m_name.clear();
@@ -23,8 +23,8 @@ namespace compo {
          if (&other != this) {
             this->m_nodeType = other.m_nodeType;
             this->m_name = other.m_name;
-        }
-        return *this;
+         }
+         return *this;
     }
     
     CCompoSymbol& CCompoSymbol::operator= (CCompoSymbol&& other) noexcept {
@@ -32,12 +32,11 @@ namespace compo {
             this->m_nodeType = std::move(other.m_nodeType);
             this->m_name = std::move(other.m_name);
             other.m_name.clear();
-        }
-        return *this;
+         }
+         return *this;
     }
-    */
+    
     CCompoSymbol::~CCompoSymbol() {
-
     }
 
     void CCompoSymbol::print(std::ostream& outstream) const {

@@ -9,37 +9,36 @@
 BOOST_AUTO_TEST_SUITE(nodes)
 
 BOOST_AUTO_TEST_CASE(compoPort) {
+    // Original port creation
     compo::CCompoPort port(new compo::CCompoSymbol("port"), true);
     BOOST_CHECK_EQUAL("port", port.getName()->getStringValue());
     BOOST_CHECK(port.getAtomic());
     
+    // Copy ctor test
     compo::CCompoPort portCopy1(port);
     BOOST_CHECK_EQUAL("port", port.getName()->getStringValue());
     BOOST_CHECK(port.getAtomic());
-    
     BOOST_CHECK_EQUAL("port", portCopy1.getName()->getStringValue());
     BOOST_CHECK(portCopy1.getAtomic());
     
+    // Copy assignment operator test
     compo::CCompoPort portCopy2 = port;
     BOOST_CHECK_EQUAL("port", port.getName()->getStringValue());
     BOOST_CHECK(port.getAtomic());
-    
     BOOST_CHECK_EQUAL("port", portCopy2.getName()->getStringValue());
     BOOST_CHECK(portCopy2.getAtomic());
     
-    
-    
+    // Move constructor test
     compo::CCompoPort portMoved1(std::move(port));
     BOOST_CHECK_EQUAL("", port.getName()->getStringValue());
     BOOST_CHECK(port.getAtomic());
-    
     BOOST_CHECK_EQUAL("port", portMoved1.getName()->getStringValue());
     BOOST_CHECK(portMoved1.getAtomic());
     
+    // Move assignment operator test
     compo::CCompoPort portMoved2 = std::move(portMoved1);
     BOOST_CHECK_EQUAL("", portMoved1.getName()->getStringValue());
     BOOST_CHECK(portMoved1.getAtomic());
-    
     BOOST_CHECK_EQUAL("port", portMoved2.getName()->getStringValue());
     BOOST_CHECK(portMoved2.getAtomic());
 }

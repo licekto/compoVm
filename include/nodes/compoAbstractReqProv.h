@@ -28,7 +28,6 @@ namespace compo {
                                                 */
                                                 CCompoAbstractReqProv   (   visibilityType type = visibilityType::EXTERNAL,
                                                                             const std::vector<CCompoPort*>& ports = std::vector<CCompoPort*>(0));
-                                                
                                                 /**
                                                 * Copy constructor
                                                 * Copy constructor is made protected to prevent from copying of object of this (abstract) type.
@@ -64,12 +63,14 @@ namespace compo {
                                                 * Virtual destructor
                                                 */
         virtual                                 ~CCompoAbstractReqProv  ();
+        
                                                 /**
                                                 * Virtual print function to call from operator <<
                                                 * @param os: output stream
                                                 * @see operator <<()
                                                 */
         virtual void                            print                   (std::ostream& os) const;
+        
                                                 /**
                                                 * visibilityType getter
                                                 * @return Type of visibility

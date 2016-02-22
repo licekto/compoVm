@@ -9,13 +9,13 @@ namespace compo {
     {}
     
     CCompoRequirement::CCompoRequirement(const CCompoRequirement& other)
-    : CCompoNode(other.m_nodeType),
+    : CCompoNode(other),
       CCompoAbstractReqProv(other)
     {}
 
     
     CCompoRequirement::CCompoRequirement(CCompoRequirement&& other) noexcept
-    : CCompoNode(std::move(other.m_nodeType)),
+    : CCompoNode(std::move(other)),
       CCompoAbstractReqProv(std::move(other))
     {}
     

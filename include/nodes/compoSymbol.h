@@ -23,27 +23,27 @@ namespace compo {
                                                 * Copy constructor
                                                 * @param other: reference to another object of same type
                                                 */
-                                                //CCompoSymbol        (const CCompoSymbol& other);
+                                                CCompoSymbol        (const CCompoSymbol& other);
                                                 
                                                 /**
                                                 * Move constructor
                                                 * @param other: rvalue-reference to another object of same type
                                                 */
-                                                //CCompoSymbol        (CCompoSymbol&& other) noexcept;
+                                                CCompoSymbol        (CCompoSymbol&& other) noexcept;
                                                 
                                                 /**
                                                 * Copy assignment operator
                                                 * @param other: reference to another object of same type
                                                 * @return reference to assigned object
                                                 */
-                //CCompoSymbol&                   operator=           (const CCompoSymbol& other);
+                CCompoSymbol&                   operator=           (const CCompoSymbol& other);
                 
                                                 /**
                                                 * Move assignment operator
                                                 * @param other: rvalue-reference to another object of same type
                                                 * @return reference to assigned object
                                                 */
-                //CCompoSymbol&                   operator=           (CCompoSymbol&& other) noexcept;
+                CCompoSymbol&                   operator=           (CCompoSymbol&& other) noexcept;
                                                 
                                                 /**
                                                 * Virtual destructor

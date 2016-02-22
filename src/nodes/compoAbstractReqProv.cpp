@@ -8,12 +8,12 @@ namespace compo {
     {}
 
     CCompoAbstractReqProv::CCompoAbstractReqProv(const CCompoAbstractReqProv& other)
-    : CCompoNode(other.m_nodeType), m_visibilityType(other.m_visibilityType) {
+    : CCompoNode(other), m_visibilityType(other.m_visibilityType) {
         *this = other;
     }
     
     CCompoAbstractReqProv::CCompoAbstractReqProv(CCompoAbstractReqProv&& other) noexcept
-    : CCompoNode(std::move(other.m_nodeType)),
+    : CCompoNode(std::move(other)),
       m_visibilityType(std::move(other.m_visibilityType))
     {
         this->m_ports = std::move(other.m_ports);

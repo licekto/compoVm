@@ -8,14 +8,14 @@ namespace compo {
     {}
     
     CCompoPort::CCompoPort(const CCompoPort& other)
-    : CCompoNode(other.m_nodeType),
+    : CCompoNode(other),
       m_name(new CCompoSymbol(*other.m_name)),
       m_atomic(other.m_atomic)
     {}
 
     CCompoPort::CCompoPort(CCompoPort&& other) noexcept
-    : CCompoNode(std::move(other.m_nodeType)),
-      m_name(std::move(other.m_name)),
+    : CCompoNode(std::move(other)),
+      m_name(new CCompoSymbol(std::move(*other.m_name))),
       m_atomic(std::move(other.m_atomic))
     {}
     
