@@ -9,26 +9,26 @@ namespace compo {
     {}
     
     CCompoRequirement::CCompoRequirement(const CCompoRequirement& other)
-    : CCompoNode(req.m_nodeType),
-      CCompoAbstractReqProv(req)
+    : CCompoNode(other.m_nodeType),
+      CCompoAbstractReqProv(other)
     {}
 
     
     CCompoRequirement::CCompoRequirement(CCompoRequirement&& other) noexcept
-    : CCompoNode(std::move(req.m_nodeType)),
-      CCompoAbstractReqProv(std::move(req))
+    : CCompoNode(std::move(other.m_nodeType)),
+      CCompoAbstractReqProv(std::move(other))
     {}
     
     CCompoRequirement& CCompoRequirement::operator =(const CCompoRequirement& other) {
-        if (&req != this) {
-            *this = req;
+        if (&other != this) {
+            *this = other;
         }
         return *this;
     }
 
     CCompoRequirement& CCompoRequirement::operator =(CCompoRequirement&& other) noexcept {
-        if (&req != this) {
-            *this = std::move(req);
+        if (&other != this) {
+            *this = std::move(other);
         }
         return *this;
     }
