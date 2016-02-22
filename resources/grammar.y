@@ -103,7 +103,7 @@ array           :   TOKEN_OPENBRACE expressions TOKEN_CLOSEBRACE
 
 assignment      :   variable TOKEN_ASSIGNMENT expression
                     {
-                        compo::CCompoAssignment *assignment = new compo::CCompoAssignment(dynamic_cast<compo::CCompoSymbol*>($1), $2);
+                        compo::CCompoAssignment *assignment = new compo::CCompoAssignment(dynamic_cast<compo::CCompoSymbol*>($1), $3);
                         $$ = assignment;
                     }
 
@@ -116,6 +116,16 @@ expression      :   assignment /* cascadeExpression */
                         $$ = $1;
                     }
                 |   variable
+                    {
+                        $$ = $1;
+                    }
+                |   literal
+                    {
+                        $$ = $1;
+                    }
+                ;
+
+literal         :   TOKEN_INTEGER_LITERAL
                     {
                         $$ = $1;
                     }
