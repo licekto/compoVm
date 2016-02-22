@@ -8,9 +8,45 @@
 
 BOOST_AUTO_TEST_SUITE(nodes)
 
+BOOST_AUTO_TEST_CASE(compoSymbol) {
+    // Original symbol creation
+    compo::CCompoSymbol symbol("Symbol");
+    BOOST_CHECK_EQUAL(compo::NodeTypeEnum::SYMBOL, symbol.getNodeType());
+    BOOST_CHECK_EQUAL("Symbol", symbol.getStringValue());
+    
+    // Copy ctor test
+    compo::CCompoSymbol symbolCopy1(symbol);
+    BOOST_CHECK_EQUAL(compo::NodeTypeEnum::SYMBOL, symbol.getNodeType());
+    BOOST_CHECK_EQUAL("Symbol", symbol.getStringValue());
+    BOOST_CHECK_EQUAL(compo::NodeTypeEnum::SYMBOL, symbolCopy1.getNodeType());
+    BOOST_CHECK_EQUAL("Symbol", symbolCopy1.getStringValue());
+    
+    // Copy assignment operator test
+    compo::CCompoSymbol symbolCopy2 = symbol;
+    BOOST_CHECK_EQUAL(compo::NodeTypeEnum::SYMBOL, symbol.getNodeType());
+    BOOST_CHECK_EQUAL("Symbol", symbol.getStringValue());
+    BOOST_CHECK_EQUAL(compo::NodeTypeEnum::SYMBOL, symbolCopy2.getNodeType());
+    BOOST_CHECK_EQUAL("Symbol", symbolCopy2.getStringValue());
+    
+    // Move constructor test
+    compo::CCompoSymbol symbolNew1(std::move(symbol));
+    BOOST_CHECK_EQUAL(compo::NodeTypeEnum::SYMBOL, symbol.getNodeType());
+    BOOST_CHECK_EQUAL("", symbol.getStringValue());
+    BOOST_CHECK_EQUAL(compo::NodeTypeEnum::SYMBOL, symbolCopy1.getNodeType());
+    BOOST_CHECK_EQUAL("Symbol", symbolCopy1.getStringValue());
+    
+    // Move assignment operator test
+    compo::CCompoSymbol symbolNew2 = std::move(symbolNew1);
+    BOOST_CHECK_EQUAL(compo::NodeTypeEnum::SYMBOL, symbolNew1.getNodeType());
+    BOOST_CHECK_EQUAL("", symbolNew1.getStringValue());
+    BOOST_CHECK_EQUAL(compo::NodeTypeEnum::SYMBOL, symbolNew2.getNodeType());
+    BOOST_CHECK_EQUAL("Symbol", symbolNew2.getStringValue());
+}
+
 BOOST_AUTO_TEST_CASE(compoPort) {
     // Original port creation
     compo::CCompoPort port(new compo::CCompoSymbol("port"), true);
+    BOOST_CHECK_EQUAL(compo::NodeTypeEnum::PORT, port.getNodeType());
     BOOST_CHECK_EQUAL("port", port.getName()->getStringValue());
     BOOST_CHECK(port.getAtomic());
     
