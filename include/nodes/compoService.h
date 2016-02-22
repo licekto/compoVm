@@ -75,6 +75,8 @@ namespace compo {
                                                  * @return constant pointer to temporaries
                                                  */
                 CCompoNode *                    getTemporaryAt      (int index) const;
+                
+        virtual void                            print               (std::ostream& os) const;
     };
 
 }
