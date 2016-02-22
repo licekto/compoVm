@@ -52,20 +52,28 @@ namespace compo {
                 CCompoPort&                     operator=           (CCompoPort&& other) noexcept;
                 
                                                 /**
+                                                 * Clone method for copy-construction of polymorphic objects
+                                                 * @return pointer to newly copied object.
+                                                 */
+        virtual CCompoNode *                    clone                   () const;
+                
+                                                /**
                                                 * Virtual destructor
                                                 */
         virtual                                 ~CCompoPort         ();
+        
                                                 /**
                                                 * Virtual print function to call from operator <<
                                                 * @param os: output stream
                                                 * @see operator <<()
                                                 */
         virtual void                            print               (std::ostream& os) const;
+        
                                                 /**
                                                 * Name getter
-                                                * @return Name symbol of port
+                                                * @return Name of port
                                                 */
-                CCompoSymbol *                  getName             () const;
+                std::string                     getName             () const;
                 
                                                 /**
                                                 * Atomic getter

@@ -35,38 +35,36 @@ BOOST_AUTO_TEST_CASE(compo_basic_structure) {
     
     compo::CCompoDescriptor *descriptor = (compo::CCompoDescriptor*) parser.getRootNodeAt(0);
     
-    BOOST_CHECK_EQUAL(std::string("HTTPServer"), descriptor->getName()->getStringValue());
-    BOOST_CHECK_EQUAL(std::string("server"), descriptor->getExtends()->getStringValue());
+    BOOST_CHECK_EQUAL(std::string("HTTPServer"), descriptor->getName());
+    BOOST_CHECK_EQUAL(std::string("server"), descriptor->getExtends());
     
-    const std::vector<compo::CCompoNode*> * bodyPtr = descriptor->getBody();
+    BOOST_CHECK_EQUAL(4, descriptor->getBodySize());
     
-    BOOST_CHECK_EQUAL(bodyPtr->size(), 4);
-    
-    compo::CCompoProvision *provision = dynamic_cast<compo::CCompoProvision *>(bodyPtr->at(0));
+    compo::CCompoProvision *provision = dynamic_cast<compo::CCompoProvision *>(descriptor->getBodyNodeAt(0));
     BOOST_CHECK_EQUAL(compo::NodeTypeEnum::PROVISION, provision->getNodeType());
     BOOST_CHECK_EQUAL(compo::visibilityType::EXTERNAL, provision->getVisibilityType());    
     BOOST_CHECK_EQUAL(1, provision->getNumberOfPorts());
     BOOST_CHECK_EQUAL(compo::NodeTypeEnum::PORT, provision->getPortAt(0)->getNodeType());
-    BOOST_CHECK_EQUAL(std::string("default"), provision->getPortAt(0)->getName()->getStringValue());
+    BOOST_CHECK_EQUAL(std::string("default"), provision->getPortAt(0)->getName());
     
     
-    compo::CCompoRequirement *requirement = dynamic_cast<compo::CCompoRequirement *>(bodyPtr->at(1));
+    compo::CCompoRequirement *requirement = dynamic_cast<compo::CCompoRequirement *>(descriptor->getBodyNodeAt(1));
     BOOST_CHECK_EQUAL(compo::NodeTypeEnum::REQUIREMENT, requirement->getNodeType());
     BOOST_CHECK_EQUAL(compo::visibilityType::EXTERNAL, requirement->getVisibilityType());
     BOOST_CHECK_EQUAL(1, requirement->getNumberOfPorts());
     BOOST_CHECK_EQUAL(compo::NodeTypeEnum::PORT, requirement->getPortAt(0)->getNodeType());
-    BOOST_CHECK_EQUAL(std::string("default"), requirement->getPortAt(0)->getName()->getStringValue());
+    BOOST_CHECK_EQUAL(std::string("default"), requirement->getPortAt(0)->getName());
     
     
-    compo::CCompoService *service = dynamic_cast<compo::CCompoService *>(bodyPtr->at(2));
+    compo::CCompoService *service = dynamic_cast<compo::CCompoService *>(descriptor->getBodyNodeAt(2));
     BOOST_CHECK_EQUAL(compo::NodeTypeEnum::SERVICE, service->getNodeType());
-    BOOST_CHECK_EQUAL(std::string("create"), service->getName()->getStringValue());
-    BOOST_CHECK_EQUAL(0, service->getParams()->size());
+    BOOST_CHECK_EQUAL(std::string("create"), service->getName());
+    BOOST_CHECK_EQUAL(0, service->getParamsSize());
     
     
-    compo::CCompoConstraint *constraint = dynamic_cast<compo::CCompoConstraint *>(bodyPtr->at(3));
+    compo::CCompoConstraint *constraint = dynamic_cast<compo::CCompoConstraint *>(descriptor->getBodyNodeAt(3));
     BOOST_CHECK_EQUAL(compo::NodeTypeEnum::CONSTRAINT, constraint->getNodeType());
-    BOOST_CHECK_EQUAL(std::string("httpOnly"), constraint->getName()->getStringValue());
+    BOOST_CHECK_EQUAL(std::string("httpOnly"), constraint->getName());
     
     parser.clear();
 }
@@ -86,38 +84,37 @@ BOOST_AUTO_TEST_CASE(compo_service) {
     BOOST_CHECK_EQUAL(compo::NodeTypeEnum::DESCRIPTOR, parser.getRootNodeAt(0)->getNodeType());
     
     compo::CCompoDescriptor *descriptor = (compo::CCompoDescriptor*) parser.getRootNodeAt(0);
-    const std::vector<compo::CCompoNode*> * bodyPtr = descriptor->getBody();
     
-    BOOST_CHECK_EQUAL(bodyPtr->size(), 5);
+    BOOST_CHECK_EQUAL(5, descriptor->getBodySize());
     
-    compo::CCompoService *service = dynamic_cast<compo::CCompoService *>(bodyPtr->at(0));
+    compo::CCompoService *service = dynamic_cast<compo::CCompoService *>(descriptor->getBodyNodeAt(0));
     BOOST_CHECK_EQUAL(compo::NodeTypeEnum::SERVICE, service->getNodeType());
-    BOOST_CHECK_EQUAL(std::string("noparams"), service->getName()->getStringValue());
-    BOOST_CHECK_EQUAL(0, service->getParams()->size());
+    BOOST_CHECK_EQUAL(std::string("noparams"), service->getName());
+    BOOST_CHECK_EQUAL(0, service->getParamsSize());
     
-    service = dynamic_cast<compo::CCompoService *>(bodyPtr->at(1));
+    service = dynamic_cast<compo::CCompoService *>(descriptor->getBodyNodeAt(1));
     BOOST_CHECK_EQUAL(compo::NodeTypeEnum::SERVICE, service->getNodeType());
-    BOOST_CHECK_EQUAL(std::string("oneparam"), service->getName()->getStringValue());
-    BOOST_CHECK_EQUAL(1, service->getParams()->size());
+    BOOST_CHECK_EQUAL(std::string("oneparam"), service->getName());
+    BOOST_CHECK_EQUAL(1, service->getParamsSize());
     
-    service = dynamic_cast<compo::CCompoService *>(bodyPtr->at(2));
+    service = dynamic_cast<compo::CCompoService *>(descriptor->getBodyNodeAt(2));
     BOOST_CHECK_EQUAL(compo::NodeTypeEnum::SERVICE, service->getNodeType());
-    BOOST_CHECK_EQUAL(std::string("twoparams"), service->getName()->getStringValue());
-    BOOST_CHECK_EQUAL(2, service->getParams()->size());
+    BOOST_CHECK_EQUAL(std::string("twoparams"), service->getName());
+    BOOST_CHECK_EQUAL(2, service->getParamsSize());
     
-    service = dynamic_cast<compo::CCompoService *>(bodyPtr->at(3));
+    service = dynamic_cast<compo::CCompoService *>(descriptor->getBodyNodeAt(3));
     BOOST_CHECK_EQUAL(compo::NodeTypeEnum::SERVICE, service->getNodeType());
-    BOOST_CHECK_EQUAL(std::string("threeparams"), service->getName()->getStringValue());
-    BOOST_CHECK_EQUAL(3, service->getParams()->size());
+    BOOST_CHECK_EQUAL(std::string("threeparams"), service->getName());
+    BOOST_CHECK_EQUAL(3, service->getParamsSize());
     
-    service = dynamic_cast<compo::CCompoService *>(bodyPtr->at(4));
+    service = dynamic_cast<compo::CCompoService *>(descriptor->getBodyNodeAt(4));
     BOOST_CHECK_EQUAL(compo::NodeTypeEnum::SERVICE, service->getNodeType());
-    BOOST_CHECK_EQUAL(std::string("body"), service->getName()->getStringValue());
-    BOOST_CHECK_EQUAL(0, service->getParams()->size());
-    BOOST_CHECK_EQUAL(1, service->getBody()->size());
-    BOOST_CHECK_EQUAL(compo::NodeTypeEnum::SYMBOL, service->getBody()->at(0)->getNodeType());
+    BOOST_CHECK_EQUAL(std::string("body"), service->getName());
+    BOOST_CHECK_EQUAL(0, service->getParamsSize());
+    BOOST_CHECK_EQUAL(1, service->getBodySize());
+    BOOST_CHECK_EQUAL(compo::NodeTypeEnum::SYMBOL, service->getBodyNodeAt(0)->getNodeType());
     
-    compo::CCompoSymbol *symbol = dynamic_cast<compo::CCompoSymbol*>(service->getBody()->at(0));
+    compo::CCompoSymbol *symbol = dynamic_cast<compo::CCompoSymbol*>(service->getBodyNodeAt(0));
     BOOST_CHECK_EQUAL("a", symbol->getStringValue());
     
     parser.clear();

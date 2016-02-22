@@ -26,6 +26,10 @@ namespace compo {
         return *this;
     }
 
+    CCompoNode * CCompoProvision::clone() const {
+        return new CCompoProvision(*this);
+    }
+    
     CCompoProvision& CCompoProvision::operator =(CCompoProvision&& other) noexcept {
         if (&other != this) {
             *this = std::move(other);

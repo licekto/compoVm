@@ -46,6 +46,12 @@ namespace compo {
                 CCompoSymbol&                   operator=           (CCompoSymbol&& other) noexcept;
                                                 
                                                 /**
+                                                 * Clone method for copy-construction of polymorphic objects
+                                                 * @return pointer to newly copied object.
+                                                 */
+        virtual CCompoNode *                    clone                   () const;
+                
+                                                /**
                                                 * Virtual destructor
                                                 */
         virtual                                 ~CCompoSymbol       ();

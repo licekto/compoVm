@@ -12,7 +12,33 @@ namespace compo {
         m_step(step),
         m_body(body) // TODO: move semantics could be used here to move vector
     {}
+    CCompoFor::CCompoFor(const CCompoFor& other)
+    : CCompoNode(other)
+      //m_startCondition(new CCompoNode(other.m_startCondition),
+    {}
 
+    CCompoFor::CCompoFor(CCompoFor&& other) noexcept
+    : CCompoNode(std::move(other))
+    {}
+    
+    CCompoFor& CCompoFor::operator = (const CCompoFor& other) {
+        if (&other != this) {
+            
+        }
+        return *this;
+    }
+    
+    CCompoFor& CCompoFor::operator = (CCompoFor&& other) noexcept {
+        if (&other != this) {
+            
+        }
+        return *this;
+    }
+    
+    CCompoNode * CCompoFor::clone() const {
+        return new CCompoFor(*this);
+    }
+    
     CCompoFor::~CCompoFor() {
         delete m_startCondition;
         delete m_endCondition;
@@ -37,8 +63,14 @@ namespace compo {
         outstream << "}" << std::endl;
     }
 
-    std::vector<CCompoNode*> * CCompoFor::getBody() const {
-        return const_cast<std::vector<CCompoNode*> *>(&m_body); // yuck
+    CCompoNode * CCompoFor::getBodyNodeAt(int index) const {
+        CCompoNode * node = nullptr;
+        try {
+            node = m_body.at(index);
+        } catch (std::out_of_range ex) {
+            // log error message
+        }
+        return node;
     }
 
     CCompoNode * CCompoFor::getStartCond() const {

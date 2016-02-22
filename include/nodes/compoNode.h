@@ -53,7 +53,7 @@ namespace compo {
                                                 * @param other: reference to another object of same type
                                                 * @return reference to assigned object
                                                 */
-    CCompoNode&                                 operator =          (const CCompoNode& other);
+                CCompoNode&                     operator =          (const CCompoNode& other);
     
                                                 /**
                                                 * Move assignment operator
@@ -61,9 +61,15 @@ namespace compo {
                                                 * @param other: rvalue-reference to another object of same type
                                                 * @return reference to assigned object
                                                 */
-    CCompoNode&                                 operator =          (CCompoNode&& other) noexcept;
+                CCompoNode&                     operator =          (CCompoNode&& other) noexcept;
     
     public:
+                                                /**
+                                                 * Clone method for copy-construction of polymorphic objects
+                                                 * @return pointer to newly copied object.
+                                                 */
+        virtual CCompoNode *                    clone               () const = 0;
+        
                                                 /**
                                                 * Virtual destructor
                                                 */

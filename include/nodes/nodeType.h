@@ -21,7 +21,7 @@ namespace compo {
         ARCHITECTURE,
         CONNECTION,
         DISCONNECTION,
-        INJECTED_NODE,
+        INJECTED_PORT,
         ASSIGNMENT,
         FOR,
         WHILE,

@@ -1,4 +1,5 @@
 #include "compoSymbol.h"
+#include "compoService.h"
 
 namespace compo {
     
@@ -34,6 +35,10 @@ namespace compo {
             other.m_name.clear();
          }
          return *this;
+    }
+    
+    CCompoNode * CCompoSymbol::clone() const {
+        return new CCompoSymbol(*this);
     }
     
     CCompoSymbol::~CCompoSymbol() {

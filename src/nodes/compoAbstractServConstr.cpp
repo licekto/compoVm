@@ -8,8 +8,58 @@ namespace compo {
     : CCompoNode(NodeTypeEnum::SERVICE), m_name(name), m_params(params), m_body(body)
     {}
 
+    CCompoAbstractServConstr::CCompoAbstractServConstr(const CCompoAbstractServConstr& other)
+    : CCompoNode(other)
+    {
+        *this = other;
+    }
+    
+    CCompoAbstractServConstr::CCompoAbstractServConstr(CCompoAbstractServConstr&& other) noexcept
+    : CCompoNode(std::move(other)),
+      m_name(other.m_name),
+      m_params(std::move(other.m_params)),
+      m_body(std::move(other.m_body))
+    {
+        other.m_name = nullptr;
+    }
+    
+    CCompoAbstractServConstr& CCompoAbstractServConstr::operator =(const CCompoAbstractServConstr& other) {
+        if (&other != this) {
+            this->m_nodeType = other.m_nodeType;
+            
+            this->m_name = new CCompoSymbol(*other.m_name);
+            
+            for (CCompoSymbol *symbol : other.m_params) {
+                this->m_params.push_back(new CCompoSymbol(*symbol));
+            }
+            
+            for (CCompoNode *node : other.m_body) {
+                this->m_body.push_back(node->clone());
+            }
+        }
+        
+        return *this;
+    }
+    
+    CCompoAbstractServConstr& CCompoAbstractServConstr::operator =(CCompoAbstractServConstr&& other) noexcept {
+        if (&other != this) {
+            this->m_nodeType = std::move(other.m_nodeType);
+            this->m_name = other.m_name;
+            other.m_name = nullptr;
+            this->m_params = std::move(other.m_params);
+            this->m_body = std::move(other.m_body);
+        }
+        return *this;
+    }
+    
+    CCompoNode * CCompoAbstractServConstr::clone() const {
+        return new CCompoAbstractServConstr(*this);
+    }
+    
     CCompoAbstractServConstr::~CCompoAbstractServConstr() {
-        delete m_name;
+        if (m_name) {
+            delete m_name;
+        }
 
         for (CCompoSymbol *symbol : m_params) {
             delete symbol;
@@ -24,7 +74,9 @@ namespace compo {
         outstream << "\t";
         outstream << typeName(m_nodeType) << " ";
 
-        outstream << *m_name << " (";
+        if (m_name) {
+            outstream << *m_name << " (";
+        }
 
         bool first = true;
         for (CCompoSymbol *symbol : m_params) {
@@ -40,20 +92,43 @@ namespace compo {
         outstream << "}" << std::endl;
     }
 
-    CCompoSymbol * CCompoAbstractServConstr::getName() const {
-        return m_name;
+    std::string CCompoAbstractServConstr::getName() const {
+        if (m_name) {
+            return m_name->getStringValue();
+        }
+        return "";
     }
 
-    std::vector<CCompoNode*> * CCompoAbstractServConstr::getBody() const {
-        return const_cast<std::vector<CCompoNode*> *>(&m_body);
+    size_t CCompoAbstractServConstr::getBodySize() const {
+        return m_body.size();
+    }
+    
+    CCompoNode * CCompoAbstractServConstr::getBodyNodeAt(int index) const {
+        CCompoNode * node = nullptr;
+        try {
+            node = m_body.at(index);
+        } catch (std::out_of_range ex) {
+            // log error message
+        }
+        return node;
     }
 
-    void CCompoAbstractServConstr::setBody(const std::vector<CCompoNode*>& body) {
-        m_body = body;
+    void CCompoAbstractServConstr::setBodyNode(CCompoNode* bodyNode) {
+        m_body.push_back(bodyNode);
     }
 
-    std::vector<CCompoSymbol*> * CCompoAbstractServConstr::getParams() const {
-        return const_cast<std::vector<CCompoSymbol*> *>(&m_params);
+    size_t CCompoAbstractServConstr::getParamsSize() const {
+        return m_params.size();
+    }
+    
+    CCompoSymbol * CCompoAbstractServConstr::getParamAt(int index) const {
+        CCompoSymbol * param = nullptr;
+        try {
+            param = m_params.at(index);
+        } catch (std::out_of_range ex) {
+            // log error message
+        }
+        return param;
     }
 
     void CCompoAbstractServConstr::setParam(CCompoSymbol* param) {

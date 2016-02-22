@@ -33,6 +33,10 @@ namespace compo {
         return *this;
     }
     
+    CCompoNode * CCompoRequirement::clone() const {
+        return new CCompoRequirement(*this);
+    }
+    
     CCompoRequirement::~CCompoRequirement() {
     }
 

@@ -15,7 +15,7 @@ namespace compo {
         {NodeTypeEnum::ARCHITECTURE, "architecture"},
         {NodeTypeEnum::CONNECTION, "connection"},
         {NodeTypeEnum::DISCONNECTION, "disconnection"},
-        {NodeTypeEnum::INJECTED_NODE, "inject-with"},
+        {NodeTypeEnum::INJECTED_PORT, "inject-with"},
     };
 
     const char * typeName(NodeTypeEnum type) {

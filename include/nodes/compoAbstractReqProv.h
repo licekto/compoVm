@@ -48,7 +48,7 @@ namespace compo {
                                                 * @param other: reference to another object of same type
                                                 * @return reference to assigned object
                                                 */
-    CCompoAbstractReqProv&                      operator =              (const CCompoAbstractReqProv& other);
+                CCompoAbstractReqProv&          operator =              (const CCompoAbstractReqProv& other);
     
                                                 /**
                                                 * Move assignment operator
@@ -56,9 +56,15 @@ namespace compo {
                                                 * @param other: rvalue-reference to another object of same type
                                                 * @return reference to assigned object
                                                 */
-    CCompoAbstractReqProv&                      operator =              (CCompoAbstractReqProv&& other) noexcept;
-
+                CCompoAbstractReqProv&          operator =              (CCompoAbstractReqProv&& other) noexcept;
+    
     public:
+                                                /**
+                                                 * Clone method for copy-construction of polymorphic objects
+                                                 * @return pointer to newly copied object.
+                                                 */
+        virtual CCompoNode *                    clone                   () const;
+        
                                                 /**
                                                 * Virtual destructor
                                                 */

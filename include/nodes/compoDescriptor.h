@@ -25,36 +25,84 @@ namespace compo {
                                                 CCompoDescriptor    (   CCompoSymbol *name = nullptr,
                                                                         CCompoSymbol *extends = nullptr,
                                                                         const std::vector<CCompoNode*>& body = std::vector<CCompoNode*>(0));
+                                                
+                                                /**
+                                                * Copy constructor
+                                                * Copy constructor is made protected to prevent from copying of object of this (abstract) type.
+                                                * @param other: reference to another object of same type
+                                                */
+                                                CCompoDescriptor    (const CCompoDescriptor& other);
+                                                
+                                                /**
+                                                * Move constructor
+                                                * Move constructor is made protected to prevent from moving of object of this (abstract) type.
+                                                * @param other: rvalue-reference to another object of same type
+                                                */
+                                                CCompoDescriptor    (CCompoDescriptor&& other) noexcept;
+                                                
+                                                /**
+                                                * Copy assignment operator
+                                                * Copy assignment operator is made protected to prevent from assigning of object of this (abstract) type.
+                                                * @param other: reference to another object of same type
+                                                * @return reference to assigned object
+                                                */
+                CCompoDescriptor&               operator =          (const CCompoDescriptor& other);
+    
+                                                /**
+                                                * Move assignment operator
+                                                * Move assignment operator is made protected to prevent from assigning of object of this (abstract) type.
+                                                * @param other: rvalue-reference to another object of same type
+                                                * @return reference to assigned object
+                                                */
+                CCompoDescriptor&               operator =                  (CCompoDescriptor&& other) noexcept;
+    
+                                                /**
+                                                 * Clone method for copy-construction of polymorphic objects
+                                                 * @return pointer to newly copied object.
+                                                 */
+        virtual CCompoNode *                    clone                       () const;
+                                                
                                                 /**
                                                 * Virtual destructor
                                                 */
         virtual                                 ~CCompoDescriptor   ();
+        
                                                 /**
                                                 * Virtual print function to call from operator <<
                                                 * @param os: output stream
                                                 * @see operator <<()
                                                 */
         virtual void                            print               (std::ostream& os) const;
+        
                                                 /**
                                                 * Name getter
                                                 * @return Name symbol 
                                                 */
-                CCompoSymbol *                  getName             () const;
+                std::string                     getName             () const;
+                
                                                 /**
                                                 * Extends setter
                                                 * @param Name of parent class symbol 
                                                 */
                 void                            setExtends          (CCompoSymbol * extends);
+                
                                                 /**
                                                 * Extends getter
                                                 * @return Name of parent class symbol 
                                                 */
-                CCompoSymbol *                  getExtends          () const;
+                std::string                     getExtends          () const;
+                
+                                                /**
+                                                 * Body vector size getter
+                                                 * @return number of elements in body
+                                                 */
+                size_t                          getBodySize         () const;
+                
                                                 /**
                                                 * Body getter
                                                 * @return Constant pointer to body vector
                                                 */
-                std::vector<CCompoNode*> *      getBody             () const;
+                CCompoNode *                    getBodyNodeAt       (int index) const;
     };
 
 }

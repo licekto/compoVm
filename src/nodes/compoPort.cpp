@@ -15,9 +15,11 @@ namespace compo {
 
     CCompoPort::CCompoPort(CCompoPort&& other) noexcept
     : CCompoNode(std::move(other)),
-      m_name(new CCompoSymbol(std::move(*other.m_name))),
+      m_name(other.m_name),
       m_atomic(std::move(other.m_atomic))
-    {}
+    {
+        other.m_name = nullptr;
+    }
     
     CCompoPort& CCompoPort::operator =(const CCompoPort& other) {
         if (&other != this) {
@@ -32,22 +34,35 @@ namespace compo {
         if (&other != this) {
             this->m_nodeType = std::move(other.m_nodeType);
             this->m_atomic = std::move(other.m_atomic);
-            this->m_name = std::move(other.m_name);
+            this->m_name = other.m_name;
+            other.m_name = nullptr;
         }
         return *this;
     }
     
+    CCompoNode* CCompoPort::clone() const {
+        return new CCompoPort(*this);
+    }
+
+    
     CCompoPort::~CCompoPort() {
-        delete m_name;
+        if (m_name) {
+            delete m_name;
+        }
     }
 
     void CCompoPort::print(std::ostream& outstream) const {
-        outstream << "\t";
-        outstream << *m_name << " : { }";
+        if (m_name) {
+            outstream << "\t";
+            outstream << *m_name << " : { }";
+        }
     }
 
-    CCompoSymbol * CCompoPort::getName() const {
-        return m_name;
+    std::string CCompoPort::getName() const {
+        if (m_name) {
+            return m_name->getStringValue();
+        }
+        return "";
     }
     
     bool CCompoPort::getAtomic() const {
