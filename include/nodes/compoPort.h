@@ -24,6 +24,33 @@ namespace compo {
                                                 * @param atomic: Is atomic?
                                                 */
                                                 CCompoPort          (CCompoSymbol *name = nullptr, bool atomic = false);
+                                                
+                                                /**
+                                                * Copy constructor
+                                                * @param other: reference to another object of same type
+                                                */
+                                                CCompoPort          (const CCompoPort& other);
+                                                
+                                                /**
+                                                * Move constructor
+                                                * @param other: rvalue-reference to another object of same type
+                                                */
+                                                CCompoPort          (CCompoPort&& other) noexcept;
+                                                
+                                                /**
+                                                * Copy assignment operator
+                                                * @param other: reference to another object of same type
+                                                * @return reference to assigned object
+                                                */
+                CCompoPort&                     operator=           (const CCompoPort& other);
+                
+                                                /**
+                                                * Move assignment operator
+                                                * @param other: rvalue-reference to another object of same type
+                                                * @return reference to assigned object
+                                                */
+                CCompoPort&                     operator =              (CCompoPort&& other) noexcept;
+                
                                                 /**
                                                 * Virtual destructor
                                                 */
