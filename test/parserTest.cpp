@@ -1,6 +1,6 @@
-#include <boost/test/unit_test.hpp>
-
 #include <iostream>
+
+#include <boost/test/unit_test.hpp>
 
 #include "lexer.h"
 #include "parserWrapper.h"
@@ -45,21 +45,17 @@ BOOST_AUTO_TEST_CASE(compo_basic_structure) {
     compo::CCompoProvision *provision = dynamic_cast<compo::CCompoProvision *>(bodyPtr->at(0));
     BOOST_CHECK_EQUAL(compo::NodeTypeEnum::PROVISION, provision->getNodeType());
     BOOST_CHECK_EQUAL(compo::visibilityType::EXTERNAL, provision->getVisibilityType());    
-    std::vector<compo::CCompoPort*> * ports = provision->getPorts();
-    BOOST_CHECK_EQUAL(1, ports->size());
-    compo::CCompoPort *port = ports->at(0);
-    BOOST_CHECK_EQUAL(compo::NodeTypeEnum::PORT, port->getNodeType());
-    BOOST_CHECK_EQUAL(std::string("default"), port->getName()->getStringValue());
+    BOOST_CHECK_EQUAL(1, provision->getNumberOfPorts());
+    BOOST_CHECK_EQUAL(compo::NodeTypeEnum::PORT, provision->getPortAt(0)->getNodeType());
+    BOOST_CHECK_EQUAL(std::string("default"), provision->getPortAt(0)->getName()->getStringValue());
     
     
     compo::CCompoRequirement *requirement = dynamic_cast<compo::CCompoRequirement *>(bodyPtr->at(1));
     BOOST_CHECK_EQUAL(compo::NodeTypeEnum::REQUIREMENT, requirement->getNodeType());
-    BOOST_CHECK_EQUAL(compo::visibilityType::EXTERNAL, requirement->getVisibilityType());    
-    ports = requirement->getPorts();
-    BOOST_CHECK_EQUAL(1, ports->size());
-    port = ports->at(0);
-    BOOST_CHECK_EQUAL(compo::NodeTypeEnum::PORT, port->getNodeType());
-    BOOST_CHECK_EQUAL(std::string("default"), port->getName()->getStringValue());
+    BOOST_CHECK_EQUAL(compo::visibilityType::EXTERNAL, requirement->getVisibilityType());
+    BOOST_CHECK_EQUAL(1, requirement->getNumberOfPorts());
+    BOOST_CHECK_EQUAL(compo::NodeTypeEnum::PORT, requirement->getPortAt(0)->getNodeType());
+    BOOST_CHECK_EQUAL(std::string("default"), requirement->getPortAt(0)->getName()->getStringValue());
     
     
     compo::CCompoService *service = dynamic_cast<compo::CCompoService *>(bodyPtr->at(2));
@@ -125,10 +121,6 @@ BOOST_AUTO_TEST_CASE(compo_service) {
     BOOST_CHECK_EQUAL("a", symbol->getStringValue());
     
     parser.clear();
-}
-
-BOOST_AUTO_TEST_CASE(compo_for) {
-    
 }
 
 BOOST_AUTO_TEST_SUITE_END()
