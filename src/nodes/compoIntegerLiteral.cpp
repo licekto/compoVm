@@ -41,7 +41,7 @@ namespace compo {
     {}
     
     void CCompoIntegerLiteral::print(std::ostream& outStr) const {
-        outStr << m_intValue << std::endl;
+        outStr << m_intValue;
     }
     
     i32 CCompoIntegerLiteral::getValue() const {
