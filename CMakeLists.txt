@@ -6,7 +6,6 @@ project(compoVm)
 file(MAKE_DIRECTORY bin)
 file(MAKE_DIRECTORY doc)
 file(MAKE_DIRECTORY build)
-file(MAKE_DIRECTORY lib)
 file(MAKE_DIRECTORY src/generated)
 file(MAKE_DIRECTORY include/generated)
 #------------------------------
@@ -19,7 +18,12 @@ set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} -std=c++11 -pedantic -Wa
 
 # Include directories
 #------------------------------
-set(INCLUDE_DIRS ${CMAKE_CURRENT_SOURCE_DIR}/include ${CMAKE_CURRENT_SOURCE_DIR}/include/generated ${CMAKE_CURRENT_SOURCE_DIR}/include/nodes ${CMAKE_CURRENT_SOURCE_DIR}/include/parser ${CMAKE_CURRENT_SOURCE_DIR}/include/core)
+set(INCLUDE_DIRS ${CMAKE_CURRENT_SOURCE_DIR}/include
+                 ${CMAKE_CURRENT_SOURCE_DIR}/include/generated
+                 ${CMAKE_CURRENT_SOURCE_DIR}/include/nodes
+                 ${CMAKE_CURRENT_SOURCE_DIR}/include/parser
+                 ${CMAKE_CURRENT_SOURCE_DIR}/include/core
+                 ${CMAKE_CURRENT_SOURCE_DIR}/lib/turtle)
 include_directories(${INCLUDE_DIRS})
 #------------------------------
 
