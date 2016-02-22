@@ -46,9 +46,7 @@ namespace compo {
 
     
     CCompoPort::~CCompoPort() {
-        if (m_name) {
-            delete m_name;
-        }
+        delete m_name;
     }
 
     void CCompoPort::print(std::ostream& outstream) const {

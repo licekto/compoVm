@@ -57,9 +57,7 @@ namespace compo {
     }
     
     CCompoAbstractServConstr::~CCompoAbstractServConstr() {
-        if (m_name) {
-            delete m_name;
-        }
+        delete m_name;
 
         for (CCompoSymbol *symbol : m_params) {
             delete symbol;

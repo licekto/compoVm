@@ -51,9 +51,7 @@ namespace compo {
     }
     
     CCompoInjectedPort::~CCompoInjectedPort() {
-        if (m_injectedWith) {
-            delete m_injectedWith;
-        }
+        delete m_injectedWith;
     }
 
     void CCompoInjectedPort::print(std::ostream& outstream) const {

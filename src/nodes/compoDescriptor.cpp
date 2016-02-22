@@ -55,12 +55,8 @@ namespace compo {
     }
     
     CCompoDescriptor::~CCompoDescriptor() {
-        if (m_name) {
-            delete m_name;
-        }
-        if (m_extends) {
-            delete m_extends;
-        }
+        delete m_name;
+        delete m_extends;
         for (CCompoNode *expr : m_body) {
             delete expr;
         }

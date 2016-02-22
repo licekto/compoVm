@@ -33,10 +33,10 @@ namespace compo {
     
     CCompoArchitecture::~CCompoArchitecture() {}
 
-    void CCompoArchitecture::print(std::ostream& os) const {
-        os << "\t";
-        os << "architecture {}";
+    void CCompoArchitecture::print(std::ostream& outStr) const {
+        outStr << "\t";
+        outStr << "architecture {}";
         
-        os << std::endl;
+        outStr << std::endl;
     }
 }
