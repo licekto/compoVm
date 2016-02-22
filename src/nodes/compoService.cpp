@@ -67,7 +67,12 @@ namespace compo {
     
     void CCompoService::print(std::ostream& outStr) const {
         outStr << "\t";
-        outStr << "service " << m_name << "{" << std::endl;
+        outStr << "service " << *m_name << " {" << std::endl;
+        for (CCompoNode *node : m_body) {
+            outStr << "\t\t";
+            outStr << *node;
+        }
+        outStr << "\t";
         outStr << "}" << std::endl;;
     }
 

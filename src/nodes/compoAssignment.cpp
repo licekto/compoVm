@@ -9,21 +9,23 @@ namespace compo {
     
     CCompoAssignment::CCompoAssignment(const CCompoAssignment& other)
     : CCompoNode(other),
-      m_variable(new CCompoSymbol(*other.m_variable))
-      //m_rValue(new CCompoNode(*other.m_rValue))
+      m_variable(new CCompoSymbol(*other.m_variable)),
+      m_rValue(other.m_rValue->clone())
     {}
     
     CCompoAssignment::CCompoAssignment(CCompoAssignment&& other) noexcept
     : CCompoNode(std::move(other)),
-      m_variable(new CCompoSymbol(std::move(*other.m_variable)))
-      //m_rValue(new CCompoNode(std::move(*other.m_rValue)))
-    {}
+      m_variable(new CCompoSymbol(std::move(*other.m_variable))),
+      m_rValue(other.m_rValue)
+    {
+        other.m_rValue = nullptr;
+    }
 
     CCompoAssignment& CCompoAssignment::operator =(const CCompoAssignment& other) {
         if (&other != this) {
             this->m_nodeType = other.m_nodeType;
             this->m_variable = new CCompoSymbol(*other.m_variable);
-            //this->m_rValue = new CCompoNode(*other.m_rValue);
+            this->m_rValue = other.m_rValue->clone();
         }
         
         return *this;
@@ -33,7 +35,8 @@ namespace compo {
         if (&other != this) {
             this->m_nodeType = std::move(other.m_nodeType);
             this->m_variable = new CCompoSymbol(std::move(*other.m_variable));
-            //this->m_rValue = new CCompoNode(std::move(*other.m_rValue));
+            this->m_rValue = other.m_rValue;
+            other.m_rValue = nullptr;
         }
         
         return *this;
@@ -49,15 +52,15 @@ namespace compo {
     }
 
     void CCompoAssignment::print(std::ostream& outstream) const {
-        outstream << m_variable << " = " << m_rValue << ";" << std::endl;
+        outstream << *m_variable << " := " << *m_rValue << ";" << std::endl;
     }
 
     CCompoSymbol * CCompoAssignment::getVariable() const {
-        return const_cast<CCompoSymbol *>(m_variable);
+        return m_variable;
     }
 
     CCompoNode * CCompoAssignment::getRValue() const {
-        return const_cast<CCompoNode *>(m_rValue);
+        return m_rValue;
     }
 
 }
