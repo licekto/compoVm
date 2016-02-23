@@ -113,7 +113,7 @@ BOOST_AUTO_TEST_CASE(compoServiceBody) {
     std::stringstream input;
     input.str("descriptor test {\
         service body1() {a;}\
-        service body2() {a = 1;}\
+        service body2() {a := 1;}\
     }");
     
     parser.parse(input);    
@@ -122,7 +122,7 @@ BOOST_AUTO_TEST_CASE(compoServiceBody) {
     
     compo::CCompoDescriptor *descriptor = (compo::CCompoDescriptor*) parser.getRootNodeAt(0);
     
-    BOOST_CHECK_EQUAL(1, descriptor->getBodySize());
+    BOOST_CHECK_EQUAL(2, descriptor->getBodySize());
     
     compo::CCompoService *service = dynamic_cast<compo::CCompoService*>(descriptor->getBodyNodeAt(0));
     BOOST_CHECK_EQUAL(compo::NodeTypeEnum::SERVICE, service->getNodeType());
