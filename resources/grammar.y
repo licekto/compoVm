@@ -46,191 +46,134 @@ std::vector<compo::CCompoPort*>     currentPorts;
 
 %start start
 
-%token TOKEN_DESCRIPTOR
-%token TOKEN_INTERFACE
-%token TOKEN_EXTENDS
-%token TOKEN_ARCHITECTURE
-%token TOKEN_CONSTRAINT
-%token TOKEN_SERVICE
-%token TOKEN_INTERNALLY
-%token TOKEN_EXTERNALLY
-%token TOKEN_PROVIDES
-%token TOKEN_REQUIRES
-%token TOKEN_ATOMIC
-%token TOKEN_CONNECT
-%token TOKEN_DISCONNECT
-%token TOKEN_DELEGATE
-%token TOKEN_RETURN
-%token TOKEN_TO
-%token TOKEN_INJECTWITH
-%token TOKEN_OFKIND
-%token TOKEN_FOR
-%token TOKEN_IF
-%token TOKEN_ELSE
-%token TOKEN_WHILE
-%token TOKEN_ASSIGNMENT
-%token TOKEN_ASTERISK
-%token TOKEN_AT
-%token TOKEN_HASHTAG
-%token TOKEN_DOT
-%token TOKEN_COMMA
-%token TOKEN_COLON
-%token TOKEN_SEMICOLON
-%token TOKEN_AMPERSAND
-%token TOKEN_PIPE
-%token TOKEN_DOLLAR
-%token TOKEN_PLUS
-%token TOKEN_MINUS
-%token TOKEN_SLASH
-%token TOKEN_APOSTROPHE
-%token TOKEN_LESSTHAN
-%token TOKEN_GREATERTHAN
-%token TOKEN_OPENPAR
-%token TOKEN_CLOSEPAR
-%token TOKEN_OPENBRACKET
-%token TOKEN_CLOSEBRACKET
-%token TOKEN_OPENBRACE
-%token TOKEN_CLOSEBRACE
-%token TOKEN_IDENTIFIER
-%token TOKEN_INTEGER_LITERAL;
-%token TOKEN_END        0   "end of file"
+%token DESCRIPTOR
+%token INTERFACE
+%token EXTENDS
+%token ARCHITECTURE
+%token CONSTRAINT
+%token SERVICE
+%token INTERNALLY
+%token EXTERNALLY
+%token PROVIDES
+%token REQUIRES
+%token ATOMIC
+%token CONNECT
+%token DISCONNECT
+%token DELEGATE
+%token RETURN
+%token TO
+%token INJECTWITH
+%token OFKIND
+%token FOR
+%token IF
+%token ELSE
+%token WHILE
+%token ASSIGNMENT
+%token ADD_ASSIGNMENT;
+%token IDENTIFIER
+%token INTEGER_LITERAL;
+%token END
 
 %%
 
-/*------------------------------- grammar ------------------------------------*/
+/*-------------------------- grammar-procedural ------------------------------*/
 
-array           :   TOKEN_OPENBRACE expressions TOKEN_CLOSEBRACE
+array
+                :   '{' expression '}'
+                ;
 
-assignment      :   variable TOKEN_ASSIGNMENT expression
+primary_expression
+                :   IDENTIFIER
+                |   INTEGER_LITERAL
+                |   '(' expression ')'
+                ;
+
+multiplicative_expression
+                : primary_expression
+                | multiplicative_expression '*' primary_expression
+                | multiplicative_expression '/' primary_expression
+                ;
+
+additive_expression
+                : multiplicative_expression
+                | additive_expression '+' multiplicative_expression
+                | additive_expression '-' multiplicative_expression
+                ;
+
+assignment_expression
+                :   additive_expression
+                |   primary_expression assignment_operator expression
                     {
                         compo::CCompoAssignment *assignment = new compo::CCompoAssignment(dynamic_cast<compo::CCompoSymbol*>($1), $3);
                         $$ = assignment;
                     }
 
-expressions     :   expression TOKEN_SEMICOLON expressions
-                |   /* epsilon */
+assignment_operator
+                : ASSIGNMENT
+                | ADD_ASSIGNMENT
                 ;
 
-expression      :   assignment /* cascadeExpression */
+expression      
+                :   assignment_expression
                     {
                         $$ = $1;
                     }
-                |   variable
-                    {
-                        $$ = $1;
-                    }
-                |   literal
-                    {
-                        $$ = $1;
-                    }
+                |   expression ',' assignment_expression
                 ;
 
-literal         :   TOKEN_INTEGER_LITERAL
-                    {
-                        $$ = $1;
-                    }
+declaration
+                :   assignment_expression
                 ;
 
-methodSequence  :   pragmas temporaries pragmas statements
 
-parens          :   TOKEN_OPENPAR expression TOKEN_CLOSEPAR
+
+statement
+                :   compound_statement
+                |   expression_statement
+                |   selection_statement
+                |   iteration_statement
+                |   jump_statement
                 ;
 
-statementsBody  :   TOKEN_OPENBRACE methodSequence TOKEN_CLOSEBRACE
+compound_statement
+                :   '{' '}'
+                |   '{' block_item_list '}'
+
+block_item_list
+                : block_item
+                | block_item_list block_item
                 ;
 
-forStatement    :   TOKEN_FOR TOKEN_OPENPAR expression TOKEN_SEMICOLON expression TOKEN_SEMICOLON expression TOKEN_SEMICOLON TOKEN_CLOSEPAR statementsBody
-                    {
-                        compo::CCompoFor *compoFor = new compo::CCompoFor();
-                    }
+block_item
+                : declaration
+                | statement
                 ;
 
-whileStatement  :   TOKEN_WHILE parens statementsBody
+expression_statement
+                :   ';'
+                |   expression ';'
                 ;
 
-ifStatement     :   TOKEN_IF parens statementsBody
+selection_statement
+                :   IF '(' expression ')' statement
+                |   IF '(' expression ')' statement ELSE statement
                 ;
 
-else            :   TOKEN_ELSE statementsBody
-                |   /* epsilon */
+iteration_statement
+                : FOR '(' expression_statement expression_statement ')' statement
+                | FOR '(' expression_statement expression_statement expression ')' statement
+                | FOR '(' declaration expression_statement ')' statement
+                | FOR '(' declaration expression_statement expression ')' statement
                 ;
 
-pragmas         :   pragma TOKEN_SEMICOLON pragmas
-                |   /* epsilon */
-                ;
-
-pragma          :   TOKEN_LESSTHAN TOKEN_GREATERTHAN
-                ;
-
-return          :   TOKEN_RETURN expression
-                ;
-
-sequence        :   temporaries statements
-                |   /* epsilon */
-                ;
-
-statements      :   statement statements
-                    {
-                        currentSequence.statements.push_back($1);
-                    }
-                |   /* epsilon */
-                ;
-
-statement       :   return TOKEN_SEMICOLON
-                |   forStatement
-                |   whileStatement
-                |   ifStatement
-                |   connectionDisconnection TOKEN_SEMICOLON
-                |   expression TOKEN_SEMICOLON                  { $$ = $1; }
-                ;
-
-temporaries     :   TOKEN_PIPE variables TOKEN_PIPE
-                    {
-                        currentSequence.temporaries.push_back($2);
-                    }
-                |   /* epsilon */
-                ;
-
-variables       :   variable variables
-                |   /* epsilon */
-                ;
-
-variable        :   TOKEN_IDENTIFIER
-                    {
-                        $$ = $1;
-                    }
-                ;
-
-/*---------------------------- grammar-blocks --------------------------------*/
-
-block           :   TOKEN_OPENBRACKET blockBody TOKEN_CLOSEBRACKET
-                ;
-
-blockBody       :   blockArgsSign sequence
-                ;
-
-blockArgsSign   :   blockArgumentsWith
-                |   blockArgumentsWithout
-                ;
-
-blockArgumentsWith
-                :   blockArguments TOKEN_PIPE
-                ;
-
-blockArgumentsWithout
-                :   /* epsilon */
-                ;
-
-blockArguments  :   blockArgument blockArguments
-                |   blockArgument
-                ;
-
-blockArgument   :   TOKEN_COLON variable
+jump_statement
+                : RETURN expression ';'
                 ;
 
 /*---------------------------- grammar-compo ---------------------------------*/
 
-start           :   descriptorInterface TOKEN_END
+start           
+                :   descriptorInterface END
                     {
                          YYACCEPT; return 0;
                     }
@@ -242,14 +185,16 @@ descriptorInterface
                 ;
                     
 
-descriptors     :   descriptor descriptors
+descriptors     
+                :   descriptor descriptors
                     {
                         parser->setRootNode($1);
                     }
                 |   /* epsilon */
                 ;
 
-descriptor      :   TOKEN_DESCRIPTOR TOKEN_IDENTIFIER inheritance TOKEN_OPENBRACE compoExprs TOKEN_CLOSEBRACE
+descriptor      
+                :   DESCRIPTOR IDENTIFIER inheritance '{' compoExprs '}'
                     {
                         compo::CCompoDescriptor *descriptor = new compo::CCompoDescriptor(dynamic_cast<compo::CCompoSymbol*>($2), nullptr, std::move(currentBody));
                         if ($3) {
@@ -259,10 +204,12 @@ descriptor      :   TOKEN_DESCRIPTOR TOKEN_IDENTIFIER inheritance TOKEN_OPENBRAC
                         $$ = descriptor;
                     }
 
-interface       :   TOKEN_INTERFACE TOKEN_IDENTIFIER inheritance servicesSignsList
+interface       
+                :   INTERFACE IDENTIFIER inheritance servicesSignsList
                 ;
 
-inheritance     :   TOKEN_EXTENDS TOKEN_IDENTIFIER
+inheritance     
+                :   EXTENDS IDENTIFIER
                     {
                         $$ = $2;
                     }
@@ -270,12 +217,14 @@ inheritance     :   TOKEN_EXTENDS TOKEN_IDENTIFIER
                     {$$ = nullptr;}
                 ;
 
-compoExprs      :   compoExpr compoExprs
+compoExprs      
+                :   compoExpr compoExprs
                 |   /* epsilon */
                 ;
 
 
-compoExpr	:   exProvision
+compoExpr	
+                :   exProvision
 		|   exRequirement
 		|   inProvision
 		|   inRequirement
@@ -284,55 +233,69 @@ compoExpr	:   exProvision
 		|   architecture
                 ;
 
-exProvision     :   externally TOKEN_PROVIDES provReqSign
+exProvision     
+                :   externally PROVIDES provReqSign
 		    {
 			currentBody.push_back(new compo::CCompoProvision(visType, std::move(currentPorts)));
 			currentPorts.clear();
 		    }
                 ;
 
-exRequirement   :   externally TOKEN_REQUIRES provReqSign
+exRequirement   
+                :   externally REQUIRES provReqSign
                     {
 			currentBody.push_back(new compo::CCompoRequirement(visType, std::move(currentPorts)));
 			currentPorts.clear();
 		    }
                 ;
 
-provReqSign     :   TOKEN_OPENBRACE ports TOKEN_CLOSEBRACE
+provReqSign     
+                :   '{' ports '}'
                 ;
 
-externally      :   TOKEN_EXTERNALLY	{visType = compo::visibilityType::EXTERNAL;}
+externally      
+                :   EXTERNALLY
+                    {visType = compo::visibilityType::EXTERNAL;}
                 |   /* epsilon */
                 ;
 
-ports		:   port TOKEN_SEMICOLON ports
+ports		
+                :   port ';' ports
 		|   /* epsilon */
 		;
 
-port		:   atomic TOKEN_IDENTIFIER brackets TOKEN_COLON portSign ofKind
+port		
+                :   atomic IDENTIFIER brackets ':' portSign ofKind
 		    {
 			currentPorts.push_back(new compo::CCompoPort(dynamic_cast<compo::CCompoSymbol*>($2), atomicPresent));
 		    }
 		;
 
-atomic		:   TOKEN_ATOMIC	{atomicPresent = true;}
-		|   /* epsilon */	{atomicPresent = false;}
+atomic		
+                :   ATOMIC
+                    {atomicPresent = true;}
+		|   /* epsilon */
+                    {atomicPresent = false;}
 		;
 
-brackets        :   TOKEN_OPENBRACKET TOKEN_CLOSEBRACKET
+brackets        
+                :   '[' ']'
                 |   /* epsilon */
                 ;
 
-portSign        :   TOKEN_IDENTIFIER
-                |   TOKEN_ASTERISK
+portSign        
+                :   IDENTIFIER
+                |   '*'
                 |   servicesSignsList
                 ;
 
-ofKind          :   TOKEN_OFKIND TOKEN_IDENTIFIER
+ofKind          
+                :   OFKIND IDENTIFIER
                 |   /* epsilon */
                 ;
 
-service         :   TOKEN_SERVICE serviceSign TOKEN_OPENBRACE sequence TOKEN_CLOSEBRACE
+service         
+                :   SERVICE serviceSign block_item_list
                     {
                         currentBody.push_back(new compo::CCompoService(dynamic_cast<compo::CCompoSymbol*>($2), std::move(currentServiceParams), std::move(currentSequence.statements), std::move(currentSequence.temporaries)));
                         currentServiceParams.clear();
@@ -340,41 +303,47 @@ service         :   TOKEN_SERVICE serviceSign TOKEN_OPENBRACE sequence TOKEN_CLO
                     }
                 ;
 
-serviceSign     :   TOKEN_IDENTIFIER TOKEN_OPENPAR serviceParams TOKEN_CLOSEPAR
+serviceSign     
+                :   IDENTIFIER '(' serviceParams ')'
                     {
                         $$ = $1;
                     }
                 ;
 
-serviceSigns    :   serviceSign TOKEN_COMMA serviceSigns
+serviceSigns    
+                :   serviceSign ',' serviceSigns
                 |   /* epsilon */
                 ;
 
 servicesSignsList
-                :   TOKEN_OPENBRACE serviceSigns TOKEN_CLOSEBRACE
+                :   '{' serviceSigns '}'
 
-serviceParams   :   TOKEN_IDENTIFIER
+serviceParams   
+                :   IDENTIFIER
                     {
                         currentServiceParams.push_back(dynamic_cast<compo::CCompoSymbol*>($1));
                     }
-                |   TOKEN_IDENTIFIER TOKEN_COMMA serviceParams
+                |   IDENTIFIER ',' serviceParams
                     {
                         currentServiceParams.push_back(dynamic_cast<compo::CCompoSymbol*>($1));
                     }
                 |   /* epsilon */
                 ;
 
-constraint	:   TOKEN_CONSTRAINT serviceSign TOKEN_OPENBRACE TOKEN_CLOSEBRACE
+constraint	
+                :   CONSTRAINT serviceSign '{' '}'
                     {
                         currentBody.push_back(new compo::CCompoConstraint(dynamic_cast<compo::CCompoSymbol*>($2), std::move(currentServiceParams), currentServiceBody));
                         currentServiceParams.clear();
                     }
 		;
 
-inRequirement   :   internally TOKEN_REQUIRES TOKEN_OPENBRACE injectPorts TOKEN_CLOSEBRACE
+inRequirement   
+                :   internally REQUIRES '{' injectPorts '}'
 		;
 
-inProvision	:   internally TOKEN_PROVIDES provReqSign
+inProvision	
+                :   internally PROVIDES provReqSign
                     {
 			currentBody.push_back(new compo::CCompoRequirement(visType, std::move(currentPorts)));
 			currentPorts.clear();
@@ -382,22 +351,28 @@ inProvision	:   internally TOKEN_PROVIDES provReqSign
 		    }
 		;
 
-injectPorts     :   injectPort TOKEN_SEMICOLON injectPorts
+injectPorts     
+                :   injectPort ';' injectPorts
                 |   /* epsilon */
                 ;
 
-injectPort      :   port inject
+injectPort      
+                :   port inject
                 ;
 
-inject          :   TOKEN_INJECTWITH TOKEN_IDENTIFIER
+inject          
+                :   INJECTWITH IDENTIFIER
                 |   /* epsilon */
                 ;
 
-internally      :   TOKEN_INTERNALLY	{visType = compo::visibilityType::INTERNAL;}
+internally      
+                :   INTERNALLY
+                    {visType = compo::visibilityType::INTERNAL;}
                 |   /* epsilon */
                 ;
 
-architecture	:   TOKEN_ARCHITECTURE TOKEN_OPENBRACE connectionDisconnection TOKEN_CLOSEBRACE
+architecture	
+                :   ARCHITECTURE '{' connectionDisconnection '}'
 		;
 
 connectionDisconnection
@@ -405,38 +380,42 @@ connectionDisconnection
                 |   disconnections
                 ;
 
-connections     :   connection TOKEN_SEMICOLON connections 
+connections     
+                :   connection ';' connections 
                 |   /* epsilon */
                 ;
 
-connection      :   TOKEN_CONNECT
+connection      
+                :   CONNECT
                 ;
 
-disconnections  :   disconnection TOKEN_SEMICOLON disconnections
+disconnections  
+                :   disconnection ';' disconnections
                 |   /* epsilon */
                 ;
 
-disconnection   :
+disconnection   
+                :
                 ;
 
 /*-------------------------- grammar-literals-compo --------------------------*/
 
 collectionPortLiteral
-                :   TOKEN_IDENTIFIER TOKEN_OPENBRACKET expression TOKEN_CLOSEBRACKET
+                :   IDENTIFIER '[' expression ']'
                 ;
 
 dereferenceLiteral
-                :   TOKEN_AMPERSAND TOKEN_IDENTIFIER
+                :   '&' IDENTIFIER
                 ;
 
 portAddressLiteral
-                :   TOKEN_IDENTIFIER TOKEN_AT 
+                :   IDENTIFIER '@'
                 ;
 
 portAddress     :   collectionPortLiteral
-                |   TOKEN_OPENPAR /* cascadeExpression */ TOKEN_CLOSEPAR
+                |   '(' /* cascadeExpression */ ')'
                 |   dereferenceLiteral
-                |   TOKEN_IDENTIFIER
+                |   IDENTIFIER
                 ;
 
 /*----------------------------------------------------------------------------*/

@@ -33,109 +33,107 @@ Identifier                  ({Letter}|[_]){LetterOrDigit}*
 <COMMENT>\n                             {}
 <COMMENT>.                              {}
 
-<INITIAL>descriptor                     {return TOKEN_DESCRIPTOR;}
+<INITIAL>descriptor                     {return DESCRIPTOR;}
 
-<INITIAL>interface                      {return TOKEN_INTERFACE;}
+<INITIAL>interface                      {return INTERFACE;}
 
-<INITIAL>extends                        {return TOKEN_EXTENDS;}
+<INITIAL>extends                        {return EXTENDS;}
 
-<INITIAL>architecture                   {return TOKEN_ARCHITECTURE;}
+<INITIAL>architecture                   {return ARCHITECTURE;}
 
-<INITIAL>constraint                     {return TOKEN_CONSTRAINT;}
+<INITIAL>constraint                     {return CONSTRAINT;}
 
-<INITIAL>service                        {return TOKEN_SERVICE;}
+<INITIAL>service                        {return SERVICE;}
 
-<INITIAL>internally                     {return TOKEN_INTERNALLY;}
+<INITIAL>internally                     {return INTERNALLY;}
 
-<INITIAL>externally                     {return TOKEN_EXTERNALLY;}
+<INITIAL>externally                     {return EXTERNALLY;}
 
-<INITIAL>provides                       {return TOKEN_PROVIDES;}
+<INITIAL>provides                       {return PROVIDES;}
 
-<INITIAL>requires                       {return TOKEN_REQUIRES;}
+<INITIAL>requires                       {return REQUIRES;}
 
-<INITIAL>atomic                         {return TOKEN_ATOMIC;}
+<INITIAL>atomic                         {return ATOMIC;}
 
-<INITIAL>connect                        {return TOKEN_CONNECT;}
+<INITIAL>connect                        {return CONNECT;}
 
-<INITIAL>disconnect                     {return TOKEN_DISCONNECT;}
+<INITIAL>disconnect                     {return DISCONNECT;}
 
-<INITIAL>delegate			{return TOKEN_DELEGATE;}
+<INITIAL>delegate			{return DELEGATE;}
 
-<INITIAL>return				{return TOKEN_RETURN;}
+<INITIAL>return				{return RETURN;}
 
-<INITIAL>to				{return TOKEN_TO;}
+<INITIAL>to				{return TO;}
 
-<INITIAL>inject-with                    {return TOKEN_INJECTWITH;}
+<INITIAL>inject-with                    {return INJECTWITH;}
 
-<INITIAL>of-kind                        {return TOKEN_OFKIND;}
+<INITIAL>of-kind                        {return OFKIND;}
 
-<INITIAL>for				{return TOKEN_FOR;}
+<INITIAL>for				{return FOR;}
 
-<INITIAL>if				{return TOKEN_IF;}
+<INITIAL>if				{return IF;}
 
-<INITIAL>else				{return TOKEN_ELSE;}
+<INITIAL>else				{return ELSE;}
 
-<INITIAL>while				{return TOKEN_WHILE;}
+<INITIAL>while				{return WHILE;}
 
-<INITIAL>":="				{return TOKEN_ASSIGNMENT;}
+<INITIAL>":="				{return ASSIGNMENT;}
 
-<INITIAL>"*"				{return TOKEN_ASTERISK;}
+<INITIAL>"*"				{return '*';}
 
-<INITIAL>"@"				{return TOKEN_AT;}
+<INITIAL>"@"				{return '@';}
 
-<INITIAL>"#"				{return TOKEN_HASHTAG;}
+<INITIAL>"#"				{return '#';}
 
-<INITIAL>"."				{return TOKEN_DOT;}
+<INITIAL>"."				{return '.';}
 
-<INITIAL>","				{return TOKEN_COMMA;}
+<INITIAL>","				{return ',';}
 
-<INITIAL>":"                            {return TOKEN_COLON;}
+<INITIAL>":"                            {return ':';}
 
-<INITIAL>";"                            {return TOKEN_SEMICOLON;}
+<INITIAL>";"                            {return ';';}
 
-<INITIAL>"&"                            {return TOKEN_AMPERSAND;}
+<INITIAL>"&"                            {return '&';}
 
-<INITIAL>"|"                            {return TOKEN_PIPE;}
+<INITIAL>"|"                            {return '|';}
 
-<INITIAL>"$"                            {return TOKEN_DOLLAR;}
+<INITIAL>"'"                            {return '\'';}
 
-<INITIAL>"'"                            {return TOKEN_APOSTROPHE;}
+<INITIAL>"+"                            {return '+';}
 
-<INITIAL>"+"                            {return TOKEN_PLUS;}
+<INITIAL>"-"                            {return '-';}
 
-<INITIAL>"-"                            {return TOKEN_MINUS;}
+<INITIAL>"/"                            {return '/';}
 
-<INITIAL>"/"                            {return TOKEN_SLASH;}
+<INITIAL>"<"                            {return '<';}
 
-<INITIAL>"<"                            {return TOKEN_LESSTHAN;}
+<INITIAL>">"                            {return '>';}
 
-<INITIAL>">"                            {return TOKEN_GREATERTHAN;}
+<INITIAL>"("                            {return '(';}
 
-<INITIAL>"("                            {return TOKEN_OPENPAR;}
+<INITIAL>")"                            {return ')';}
 
-<INITIAL>")"                            {return TOKEN_CLOSEPAR;}
+<INITIAL>"["                            {return '[';}
 
-<INITIAL>"["                            {return TOKEN_OPENBRACKET;}
+<INITIAL>"]"                            {return ']';}
 
-<INITIAL>"]"                            {return TOKEN_CLOSEBRACKET;}
+<INITIAL>"{"                            {return '{';}
 
-<INITIAL>"{"                            {return TOKEN_OPENBRACE;}
-
-<INITIAL>"}"                            {return TOKEN_CLOSEBRACE;}
+<INITIAL>"}"                            {return '}';}
 
 <INITIAL>{Identifier}                   {
                                             yylval = new compo::CCompoSymbol(std::string(yytext, yyleng));
-                                            return TOKEN_IDENTIFIER;
+                                            return IDENTIFIER;
                                         }
 
 <INITIAL>{IntegerLiteral}               {
                                             yylval = new compo::CCompoIntegerLiteral(atoll(yytext));
-                                            return TOKEN_INTEGER_LITERAL;
+                                            return INTEGER_LITERAL;
                                         }
 
-<<EOF>>                                 {return TOKEN_END;}
+<<EOF>>                                 {return END;}
 
-<INITIAL>.                              {std::cerr << "Syntax error!" << std::endl; return TOKEN_END;}
+<INITIAL>.                              {std::cerr << "Syntax error!" << std::endl; return END;}
 
 %%
 
