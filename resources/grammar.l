@@ -1,4 +1,5 @@
 %state COMMENT
+%state STRING
 
 %option c++
 %option yyclass="Lexer"
@@ -12,6 +13,8 @@
 #include "compoNode.h"
 #include "compoSymbol.h"
 #include "compoIntegerLiteral.h"
+
+std::string buffer;
 %}
 
 Letter                      [a-zA-Z]
@@ -27,11 +30,19 @@ Identifier                  ({Letter}|[_]){LetterOrDigit}*
 
 <INITIAL>\"                             {BEGIN(COMMENT);}
 
+<INITIAL>\'                             {BEGIN(STRING);}
+
 <COMMENT>\"                             {BEGIN(INITIAL);}
 
     /* Multi-line comments allowed */
 <COMMENT>\n                             {}
 <COMMENT>.                              {}
+
+<STRING>[^\\']                          {buffer.append(yytext);}
+
+<STRING>\\.?                            {buffer.append(yytext+1);} // skip backslash
+
+<STRING>\'                              {BEGIN(INITIAL);}
 
 <INITIAL>descriptor                     {return DESCRIPTOR;}
 
