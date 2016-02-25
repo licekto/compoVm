@@ -13,6 +13,7 @@
 #include "compoFor.h"
 #include "compoAssignment.h"
 #include "visibilityType.h"
+#include "compoConstant.h"
 
 #define yylex()                  parser->getLexer()->yylex()
 #define yyerror(parser, message) parser->error(message)
@@ -69,9 +70,10 @@ std::vector<compo::CCompoPort*>     currentPorts;
 %token ELSE
 %token WHILE
 %token ASSIGNMENT
-%token ADD_ASSIGNMENT;
+%token ADD_ASSIGNMENT
 %token IDENTIFIER
-%token INTEGER_LITERAL;
+%token CONSTANT
+%token STRING_LITERAL
 %token END
 
 %%
@@ -84,7 +86,8 @@ array
 
 primary_expression
                 :   IDENTIFIER
-                |   INTEGER_LITERAL
+                |   CONSTANT
+                |   STRING_LITERAL
                 |   '(' expression ')'
                 ;
 

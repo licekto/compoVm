@@ -12,7 +12,8 @@
 #include "parser.h"
 #include "compoNode.h"
 #include "compoSymbol.h"
-#include "compoIntegerLiteral.h"
+#include "compoConstant.h"
+#include "compoStringLiteral.h"
 
 std::string buffer;
 %}
@@ -42,7 +43,11 @@ Identifier                  ({Letter}|[_]){LetterOrDigit}*
 
 <STRING>\\.?                            {buffer.append(yytext+1);} // skip backslash
 
-<STRING>\'                              {BEGIN(INITIAL);}
+<STRING>\'                              {
+                                            yylval = new compo::CCompoStringLiteral(buffer);
+                                            BEGIN(INITIAL);
+                                            return STRING_LITERAL;
+                                        }
 
 <INITIAL>descriptor                     {return DESCRIPTOR;}
 
@@ -138,8 +143,8 @@ Identifier                  ({Letter}|[_]){LetterOrDigit}*
                                         }
 
 <INITIAL>{IntegerLiteral}               {
-                                            yylval = new compo::CCompoIntegerLiteral(atoll(yytext));
-                                            return INTEGER_LITERAL;
+                                            yylval = new compo::CCompoConstant(atoll(yytext));
+                                            return CONSTANT;
                                         }
 
 <<EOF>>                                 {return END;}
