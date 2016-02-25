@@ -11,7 +11,7 @@ namespace compo {
      * 
      * Class contains positive or negative 4B integer value.
      */
-    class CCompoIntegerLiteral : public CCompoNode {
+    class CCompoConstant : public CCompoNode {
     private:
                 i32                             m_intValue;         /**< Integer 4B value */
         
@@ -21,21 +21,21 @@ namespace compo {
                                                 * @param type: type of node
                                                 * @param val: integer value
                                                 */
-                                                CCompoIntegerLiteral        (i32 val = 0);
+                                                CCompoConstant      (i32 val = 0);
                                                 
                                                 /**
                                                 * Copy constructor
                                                 * Copy constructor is made protected to prevent from copying of object of this (abstract) type.
                                                 * @param other: reference to another object of same type
                                                 */
-                                                CCompoIntegerLiteral        (const CCompoIntegerLiteral& other);
+                                                CCompoConstant      (const CCompoConstant& other);
                                                 
                                                 /**
                                                 * Move constructor
                                                 * Move constructor is made protected to prevent from moving of object of this (abstract) type.
                                                 * @param other: rvalue-reference to another object of same type
                                                 */
-                                                CCompoIntegerLiteral        (CCompoIntegerLiteral&& other) noexcept;
+                                                CCompoConstant      (CCompoConstant&& other) noexcept;
                                                 
                                                 /**
                                                 * Copy assignment operator
@@ -43,7 +43,7 @@ namespace compo {
                                                 * @param other: reference to another object of same type
                                                 * @return reference to assigned object
                                                 */
-                CCompoIntegerLiteral&           operator =                  (const CCompoIntegerLiteral& other);
+                CCompoConstant&                 operator =          (const CCompoConstant& other);
     
                                                 /**
                                                 * Move assignment operator
@@ -51,18 +51,18 @@ namespace compo {
                                                 * @param other: rvalue-reference to another object of same type
                                                 * @return reference to assigned object
                                                 */
-                CCompoIntegerLiteral&           operator =                  (CCompoIntegerLiteral&& other) noexcept;
+                CCompoConstant&                 operator =          (CCompoConstant&& other) noexcept;
 
                                                 /**
                                                  * Clone method for copy-construction of polymorphic objects
                                                  * @return pointer to newly copied object.
                                                  */
-        virtual CCompoNode *                    clone                       () const;
+        virtual CCompoNode *                    clone               () const;
         
                                                 /**
                                                 * Virtual destructor
                                                 */
-        virtual                                 ~CCompoIntegerLiteral       ();
+        virtual                                 ~CCompoConstant     ();
         
                                                 /**
                                                 * Virtual print function to call from operator <<
