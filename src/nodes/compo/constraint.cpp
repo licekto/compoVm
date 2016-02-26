@@ -7,7 +7,7 @@ namespace nodes {
         CConstraint::CConstraint( procedural::CSymbol* name,
                                             const std::vector<procedural::CSymbol*>& params,
                                             const std::vector<CNode*>& body)
-        :   CNode(types::nodeTypeEnum::CONSTRAINT),
+        :   CNode(types::nodeType::CONSTRAINT),
             CAbstractServConstr(name, params, body)
         {}
 

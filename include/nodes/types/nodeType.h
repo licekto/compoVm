@@ -15,10 +15,10 @@ namespace nodes {
     namespace types {
     
         /**
-         * \enum NodeTypeEnum
+         * \enum nodeType
          * \brief Types of all nodes in AST
          */
-        enum nodeTypeEnum {
+        enum nodeType {
             END = 0,
             DESCRIPTOR,
             SYMBOL,
@@ -46,7 +46,7 @@ namespace nodes {
          * Function to print names of types
          * @param type: type of node
          */
-        const char * typeName(nodeTypeEnum type);
+        const char * typeName(nodeType type);
 
     }
     

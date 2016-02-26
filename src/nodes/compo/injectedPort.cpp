@@ -7,7 +7,7 @@ namespace nodes {
         CInjectedPort::CInjectedPort( procedural::CSymbol* name,
                                                 bool atomic,
                                                 procedural::CSymbol* injectedWith  )
-        :   CNode(types::nodeTypeEnum::INJECTED_PORT),
+        :   CNode(types::nodeType::INJECTED_PORT),
             CPort(name, atomic),
             m_injectedWith(injectedWith)
         {}

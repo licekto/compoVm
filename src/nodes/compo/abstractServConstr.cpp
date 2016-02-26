@@ -7,7 +7,7 @@ namespace nodes {
         CAbstractServConstr::CAbstractServConstr(   procedural::CSymbol* name,
                                                         const std::vector<procedural::CSymbol*>& params,
                                                         const std::vector<CNode*>& body)
-        : CNode(types::nodeTypeEnum::SERVICE), m_name(name), m_params(params), m_body(body)
+        : CNode(types::nodeType::SERVICE), m_name(name), m_params(params), m_body(body)
         {}
 
         CAbstractServConstr::CAbstractServConstr(const CAbstractServConstr& other)

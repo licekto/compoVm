@@ -6,7 +6,7 @@ namespace nodes {
 
         CAbstractReqProv::CAbstractReqProv(   types::visibilityType type,
                                                         const std::vector<CPort*>& ports)
-        : CNode(types::nodeTypeEnum::PROVISION), m_visibilityType(type), m_ports(ports)
+        : CNode(types::nodeType::PROVISION), m_visibilityType(type), m_ports(ports)
         {}
 
         CAbstractReqProv::CAbstractReqProv(const CAbstractReqProv& other)

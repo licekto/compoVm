@@ -5,7 +5,7 @@ namespace nodes {
     namespace procedural {
 
         CStringLiteral::CStringLiteral(const std::string& val)
-        : CNode(types::nodeTypeEnum::STRING_LITERAL),
+        : CNode(types::nodeType::STRING_LITERAL),
           m_stringValue(val) 
         {}
 

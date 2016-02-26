@@ -5,7 +5,7 @@ namespace nodes {
     namespace procedural {
         
         CParens::CParens(CNode *expr)
-        : CNode(types::nodeTypeEnum::PARENS),
+        : CNode(types::nodeType::PARENS),
           CAbstractExpression(),
           CAbstractPrimaryExpression(),
           m_expression(expr)

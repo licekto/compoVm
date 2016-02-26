@@ -5,7 +5,7 @@ namespace nodes {
     namespace procedural {
     
         CSymbol::CSymbol(const std::string& name)
-        : CNode(types::nodeTypeEnum::SYMBOL),
+        : CNode(types::nodeType::SYMBOL),
           CAbstractExpression(),
           CAbstractPrimaryExpression(),
             m_name(name)

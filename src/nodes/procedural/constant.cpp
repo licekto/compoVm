@@ -5,7 +5,7 @@ namespace nodes {
     namespace procedural {
         
         CConstant::CConstant(i32 val)
-        : CNode(types::nodeTypeEnum::CONSTANT),
+        : CNode(types::nodeType::CONSTANT),
           CAbstractExpression(),
           CAbstractPrimaryExpression(),
           m_intValue(val) 

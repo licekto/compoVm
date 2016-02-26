@@ -25,13 +25,13 @@ namespace nodes {
      */
     class CNode {
     protected:
-                types::nodeTypeEnum                    m_nodeType;         /**< Type of node */
+                types::nodeType                    m_nodeType;         /**< Type of node */
                 
                                                 /**
                                                 * Parametric constructor with default value
                                                 * @param type: type of node
                                                 */
-                                                CNode          (types::nodeTypeEnum type = types::nodeTypeEnum::END);
+                                                CNode          (types::nodeType type = types::nodeType::END);
                                                 
                                                 /**
                                                 * Copy constructor
@@ -86,7 +86,7 @@ namespace nodes {
                                                 * NodeType getter
                                                 * @return Type of node
                                                 */
-        types::nodeTypeEnum                            getNodeType         () const;
+        types::nodeType                            getNodeType         () const;
         
                                                 /**
                                                 * Overloaded output operator

@@ -5,7 +5,7 @@ namespace nodes {
     namespace procedural {
 
         CAbstractExpression::CAbstractExpression()
-        : CNode(types::nodeTypeEnum::CONSTANT)
+        : CNode(types::nodeType::CONSTANT)
         {}
 
         CAbstractExpression::CAbstractExpression(const CAbstractExpression& other)

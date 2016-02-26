@@ -4,7 +4,7 @@ namespace nodes {
     namespace compo {
 
         CArchitecture::CArchitecture()
-        : CNode(types::nodeTypeEnum::ARCHITECTURE)
+        : CNode(types::nodeType::ARCHITECTURE)
         {}
 
         CArchitecture::CArchitecture(const CArchitecture& other)

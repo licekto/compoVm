@@ -7,7 +7,7 @@ namespace nodes {
         CDescriptor::CDescriptor( procedural::CSymbol *name,
                                             procedural::CSymbol *extends,
                                             const std::vector<CNode*>& body)
-        : CNode(types::nodeTypeEnum::DESCRIPTOR), m_name(name), m_extends(extends), m_body(body)
+        : CNode(types::nodeType::DESCRIPTOR), m_name(name), m_extends(extends), m_body(body)
         {}
 
         CDescriptor::CDescriptor(const CDescriptor& other)

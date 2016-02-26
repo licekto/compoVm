@@ -8,7 +8,7 @@ namespace nodes {
                                         const std::vector<procedural::CSymbol*>& params,
                                         const std::vector<CNode*>& body,
                                         const std::vector<CNode*>& temporaries    )
-        :   CNode(types::nodeTypeEnum::SERVICE),
+        :   CNode(types::nodeType::SERVICE),
             CAbstractServConstr(name, params, body),
             m_temporaries(temporaries)
         {}
