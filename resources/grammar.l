@@ -8,12 +8,12 @@
 %{
 #include <iostream>
 #include <cstdlib>
-#include "parserWrapper.h"
-#include "parser.h"
-#include "compoNode.h"
-#include "compoSymbol.h"
-#include "compoConstant.h"
-#include "compoStringLiteral.h"
+#include "parser/parserWrapper.h"
+#include "generated/parser.h"
+#include "nodes/compoNode.h"
+#include "nodes/proceduralNodes/compoSymbol.h"
+#include "nodes/proceduralNodes/compoConstant.h"
+#include "nodes/proceduralNodes/compoStringLiteral.h"
 
 std::string buffer;
 %}

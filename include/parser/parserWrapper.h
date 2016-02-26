@@ -1,7 +1,7 @@
 #pragma once
 
-#include "lexer.h"
-#include "compoNode.h"
+#include "parser/lexer.h"
+#include "nodes/compoNode.h"
 
 /**
  * \class ParserWrapper

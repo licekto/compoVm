@@ -1,4 +1,4 @@
-#include "parserWrapper.h"
+#include "parser/parserWrapper.h"
 
 ParserWrapper::ParserWrapper(Lexer *lexer)
 : m_lexer(lexer), m_rootNodes(std::vector<compo::CCompoNode*>())

@@ -2,14 +2,14 @@
 
 #include <boost/test/unit_test.hpp>
 
-#include "compoSymbol.h"
-#include "compoPort.h"
-#include "compoRequirement.h"
-#include "compoProvision.h"
-#include "compoService.h"
-#include "compoConstraint.h"
-#include "compoInjectedPort.h"
-#include "compoDescriptor.h"
+#include "nodes/proceduralNodes/compoSymbol.h"
+#include "nodes/compoNodes/compoPort.h"
+#include "nodes/compoNodes/compoRequirement.h"
+#include "nodes/compoNodes/compoProvision.h"
+#include "nodes/compoNodes/compoService.h"
+#include "nodes/compoNodes/compoConstraint.h"
+#include "nodes/compoNodes/compoInjectedPort.h"
+#include "nodes/compoNodes/compoDescriptor.h"
 
 BOOST_AUTO_TEST_SUITE(nodes)
 

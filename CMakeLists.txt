@@ -19,11 +19,7 @@ set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} -std=c++11 -pedantic -Wa
 # Include directories
 #------------------------------
 set(INCLUDE_DIRS ${CMAKE_CURRENT_SOURCE_DIR}/include
-                 ${CMAKE_CURRENT_SOURCE_DIR}/include/generated
-                 ${CMAKE_CURRENT_SOURCE_DIR}/include/nodes
-                 ${CMAKE_CURRENT_SOURCE_DIR}/include/parser
-                 ${CMAKE_CURRENT_SOURCE_DIR}/include/core
-                 ${CMAKE_CURRENT_SOURCE_DIR}/lib/turtle)
+                 ${CMAKE_CURRENT_SOURCE_DIR}/lib)
 include_directories(${INCLUDE_DIRS})
 #------------------------------
 
@@ -100,11 +96,22 @@ endif ()
 #------------------------------
 FILE(GLOB PARSER_SOURCE_FILES RELATIVE "${CMAKE_CURRENT_SOURCE_DIR}/" src/parser/*.cpp)
 FILE(GLOB NODES_SOURCE_FILES RELATIVE "${CMAKE_CURRENT_SOURCE_DIR}/" src/nodes/*.cpp)
+FILE(GLOB COMPONODES_SOURCE_FILES RELATIVE "${CMAKE_CURRENT_SOURCE_DIR}/" src/nodes/compoNodes/*.cpp)
+FILE(GLOB PROCEDURALNODES_SOURCE_FILES RELATIVE "${CMAKE_CURRENT_SOURCE_DIR}/" src/nodes/proceduralNodes/*.cpp)
+FILE(GLOB COMPOTYPES_SOURCE_FILES RELATIVE "${CMAKE_CURRENT_SOURCE_DIR}/" src/nodes/compoTypes/*.cpp)
 FILE(GLOB GENERATED_SOURCE_FILES RELATIVE "${CMAKE_CURRENT_SOURCE_DIR}/" src/generated/*.cpp)
 FILE(GLOB CORE_SOURCE_FILES RELATIVE "${CMAKE_CURRENT_SOURCE_DIR}/" src/core/*.cpp)
 FILE(GLOB MAIN_FILE RELATIVE "${CMAKE_CURRENT_SOURCE_DIR}/" src/main.cpp)
 
-set(SOURCE_FILES_ALL ${PARSER_SOURCE_FILES} ${NODES_SOURCE_FILES} ${GENERATED_SOURCE_FILES} ${CORE_SOURCE_FILES} ${BISON_OUTPUT} ${FLEX_OUTPUT})
+set(SOURCE_FILES_ALL    ${PARSER_SOURCE_FILES}
+                        ${NODES_SOURCE_FILES}
+                        ${COMPONODES_SOURCE_FILES}
+                        ${PROCEDURALNODES_SOURCE_FILES}
+                        ${COMPOTYPES_SOURCE_FILES}
+                        ${GENERATED_SOURCE_FILES}
+                        ${CORE_SOURCE_FILES}
+                        ${BISON_OUTPUT}
+                        ${FLEX_OUTPUT}  )
 
 FILE(GLOB TEST_FILES RELATIVE "${CMAKE_CURRENT_SOURCE_DIR}/" test/*.cpp)
 

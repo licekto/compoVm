@@ -3,15 +3,17 @@
 
 #include <boost/test/unit_test.hpp>
 
-#include "lexer.h"
-#include "parserWrapper.h"
-#include "compoDescriptor.h"
-#include "compoProvision.h"
-#include "compoRequirement.h"
-#include "compoService.h"
-#include "compoConstraint.h"
-#include "compoAssignment.h"
-#include "compoConstant.h"
+#include "parser/lexer.h"
+#include "parser/parserWrapper.h"
+#include "nodes/compoNodes/compoDescriptor.h"
+#include "nodes/compoNodes/compoProvision.h"
+#include "nodes/compoNodes/compoRequirement.h"
+#include "nodes/compoNodes/compoService.h"
+#include "nodes/compoNodes/compoConstraint.h"
+#include "nodes/proceduralNodes/compoAssignment.h"
+#include "nodes/proceduralNodes/compoConstant.h"
+#include "nodes/proceduralNodes/compoStringLiteral.h"
+#include "nodes/proceduralNodes/compoParens.h"
 
 void testDescriptor(const compo::CCompoDescriptor& descriptor, const std::string& name, const std::string& extends, int bodySize) {
     BOOST_CHECK_EQUAL(compo::NodeTypeEnum::DESCRIPTOR, descriptor.getNodeType());
@@ -51,6 +53,11 @@ void testSymbol(const compo::CCompoSymbol& symbol, const std::string& name) {
 void testConstant(const compo::CCompoConstant& constant, int value) {
     BOOST_CHECK_EQUAL(compo::NodeTypeEnum::CONSTANT, constant.getNodeType());
     BOOST_CHECK_EQUAL(value, constant.getValue());
+}
+
+void testStringLiteral(const compo::CCompoStringLiteral& stringLiteral, std::string value) {
+    BOOST_CHECK_EQUAL(compo::NodeTypeEnum::STRING_LITERAL, stringLiteral.getNodeType());
+    BOOST_CHECK_EQUAL(value, stringLiteral.getValue());
 }
 
 BOOST_AUTO_TEST_SUITE(parser)
@@ -204,6 +211,7 @@ BOOST_AUTO_TEST_CASE(compoProcedural) {
             a;\
             b := 1;\
             c := 'testString';\
+            d := (55);\
         }\
     }");
     
@@ -216,26 +224,51 @@ BOOST_AUTO_TEST_CASE(compoProcedural) {
     
     // Check service
     compo::CCompoService *service = dynamic_cast<compo::CCompoService*>(descriptor->getBodyNodeAt(0));
-    testServConstr(service, compo::NodeTypeEnum::SERVICE, "procedural", std::vector<std::string>(0), 3);
+    testServConstr(service, compo::NodeTypeEnum::SERVICE, "procedural", std::vector<std::string>(0), 4);
     
     // Check symbol
     compo::CCompoSymbol *symbol = dynamic_cast<compo::CCompoSymbol*>(service->getBodyNodeAt(0));
     testSymbol(*symbol, "a");
     
+    // Check assignment
     compo::CCompoAssignment *assignment = dynamic_cast<compo::CCompoAssignment*>(service->getBodyNodeAt(1));
     BOOST_CHECK_EQUAL(compo::NodeTypeEnum::ASSIGNMENT, assignment->getNodeType());
     
+    // Check symbol
     symbol = dynamic_cast<compo::CCompoSymbol*>(assignment->getVariable());
     testSymbol(*symbol, "b");
     
+    // Check constant
     compo::CCompoConstant *constant = dynamic_cast<compo::CCompoConstant*>(assignment->getRValue());
     testConstant(*constant, 1);
     
+    // Check assignment
     assignment = dynamic_cast<compo::CCompoAssignment*>(service->getBodyNodeAt(2));
     BOOST_CHECK_EQUAL(compo::NodeTypeEnum::ASSIGNMENT, assignment->getNodeType());
     
+    // Check symbol
     symbol = dynamic_cast<compo::CCompoSymbol*>(assignment->getVariable());
     testSymbol(*symbol, "c");
+    
+    // Check string literal
+    compo::CCompoStringLiteral *stringLiteral = dynamic_cast<compo::CCompoStringLiteral*>(assignment->getRValue());
+    testStringLiteral(*stringLiteral, "testString");
+    
+    // Check assignment
+    assignment = dynamic_cast<compo::CCompoAssignment*>(service->getBodyNodeAt(3));
+    BOOST_CHECK_EQUAL(compo::NodeTypeEnum::ASSIGNMENT, assignment->getNodeType());
+    
+    // Check symbol
+    symbol = dynamic_cast<compo::CCompoSymbol*>(assignment->getVariable());
+    testSymbol(*symbol, "d");
+    
+    // Check parens
+    compo::CCompoParens *parens = dynamic_cast<compo::CCompoParens*>(assignment->getRValue());
+    BOOST_CHECK_EQUAL(compo::NodeTypeEnum::PARENS, parens->getNodeType());
+    
+    // Check constant
+    constant = dynamic_cast<compo::CCompoConstant*>(parens->getExpression());
+    testConstant(*constant, 55);
     
     parser.clear();
 }

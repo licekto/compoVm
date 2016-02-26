@@ -1,51 +1,46 @@
 #pragma once
 
-#include <iostream>
-#include <vector>
+#include <exception>
 
-#include "compoTypes/nodeType.h"
+#include "nodes/compoNode.h"
+#include "nodes/compoNodes/compoPort.h"
+#include "nodes/compoTypes/visibilityType.h"
 
-/**
- *  \addtogroup compo
- *  @{
- */
-
-/**
- * compo Namespace to uniquely identify compo AST nodes.
- */
 namespace compo {
     
     /**
-     * \class CCompoNode
-     * \brief Abstract base class for other nodes.
+     * \class CCompoAbstractReqProv
+     * \brief Abstract base class for requirement and provision nodes.
      * 
-     * Abstract base class of AST. Every node in AST is inherited from this one.
-     * 
-     * Rule of five is needed since CCompoNode class has user-declared destructor.
+     * Abstract base class for requirement and provision nodes. Class inherits virtually from CCompoNode prevent diamond problem.
+     * This class was designed because of the same structure of provision a requirement nodes thus to prevent code repetition.
      */
-    class CCompoNode {
+    class CCompoAbstractReqProv : public virtual CCompoNode {
     protected:
-                NodeTypeEnum                    m_nodeType;         /**< Type of node */
-                
+                visibilityType                  m_visibilityType;   /**< Type of visibility */
+                std::vector<compo::CCompoPort*> m_ports;            /**< Vector of ports */
+
                                                 /**
-                                                * Parametric constructor with default value
-                                                * @param type: type of node
+                                                * Parametric constructor with default values
+                                                * Constructor is made protected to prevent from creation of object of this (abstract) type.
+                                                * @param type: type of visibilty
+                                                * @param ports: vector of ports
                                                 */
-                                                CCompoNode          (NodeTypeEnum type = NodeTypeEnum::END);
-                                                
+                                                CCompoAbstractReqProv   (   visibilityType type = visibilityType::EXTERNAL,
+                                                                            const std::vector<CCompoPort*>& ports = std::vector<CCompoPort*>(0));
                                                 /**
                                                 * Copy constructor
                                                 * Copy constructor is made protected to prevent from copying of object of this (abstract) type.
                                                 * @param other: reference to another object of same type
                                                 */
-                                                CCompoNode          (const CCompoNode& other);
+                                                CCompoAbstractReqProv   (const CCompoAbstractReqProv& other);
                                                 
                                                 /**
                                                 * Move constructor
                                                 * Move constructor is made protected to prevent from moving of object of this (abstract) type.
                                                 * @param other: rvalue-reference to another object of same type
                                                 */
-                                                CCompoNode          (CCompoNode&& other) noexcept;
+                                                CCompoAbstractReqProv   (CCompoAbstractReqProv&& other) noexcept;
                                                 
                                                 /**
                                                 * Copy assignment operator
@@ -53,7 +48,7 @@ namespace compo {
                                                 * @param other: reference to another object of same type
                                                 * @return reference to assigned object
                                                 */
-                CCompoNode&                     operator =          (const CCompoNode& other);
+                CCompoAbstractReqProv&          operator =              (const CCompoAbstractReqProv& other);
     
                                                 /**
                                                 * Move assignment operator
@@ -61,44 +56,44 @@ namespace compo {
                                                 * @param other: rvalue-reference to another object of same type
                                                 * @return reference to assigned object
                                                 */
-                CCompoNode&                     operator =          (CCompoNode&& other) noexcept;
+                CCompoAbstractReqProv&          operator =              (CCompoAbstractReqProv&& other) noexcept;
     
     public:
                                                 /**
                                                  * Clone method for copy-construction of polymorphic objects
                                                  * @return pointer to newly copied object.
                                                  */
-        virtual CCompoNode *                    clone               () const = 0;
+        virtual CCompoNode *                    clone                   () const;
         
                                                 /**
                                                 * Virtual destructor
                                                 */
-        virtual                                 ~CCompoNode         ();
+        virtual                                 ~CCompoAbstractReqProv  ();
         
                                                 /**
                                                 * Virtual print function to call from operator <<
                                                 * @param os: output stream
                                                 * @see operator <<()
                                                 */
-        virtual void                            print               (std::ostream& os) const = 0;
+        virtual void                            print                   (std::ostream& os) const;
         
                                                 /**
-                                                * NodeType getter
-                                                * @return Type of node
+                                                * visibilityType getter
+                                                * @return Type of visibility
                                                 */
-        NodeTypeEnum                            getNodeType         () const;
-        
+                visibilityType                  getVisibilityType       () const;
+                
                                                 /**
-                                                * Overloaded output operator
-                                                * Operator calls virtual print method inside because of inheritance.
-                                                * @param os: output stream
-                                                * @param node: node to print
-                                                * @see print()
-                                                * @return Altered output stream
+                                                * Number of ports getter
+                                                * @return number of ports of requirement
                                                 */
-        friend  std::ostream&                   operator <<         (std::ostream& os, const CCompoNode& node);
+                size_t                          getNumberOfPorts        () const;
+
+                                                /**
+                                                * Ports getter
+                                                * @return Port at given index
+                                                */                
+                CCompoPort *                    getPortAt               (unsigned int index) const;
     };
 
 }
-
-/*! @}*/

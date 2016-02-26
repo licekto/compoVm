@@ -1,4 +1,4 @@
-#include "compoNode.h"
+#include "nodes/compoNode.h"
 
 namespace compo {
     

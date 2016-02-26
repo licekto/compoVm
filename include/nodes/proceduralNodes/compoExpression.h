@@ -1,51 +1,35 @@
 #pragma once
 
-#include <iostream>
-#include <vector>
+#include "nodes/compoNode.h"
 
-#include "compoTypes/nodeType.h"
-
-/**
- *  \addtogroup compo
- *  @{
- */
-
-/**
- * compo Namespace to uniquely identify compo AST nodes.
- */
 namespace compo {
-    
+
     /**
-     * \class CCompoNode
-     * \brief Abstract base class for other nodes.
-     * 
-     * Abstract base class of AST. Every node in AST is inherited from this one.
-     * 
-     * Rule of five is needed since CCompoNode class has user-declared destructor.
+     * \class CCompoParens
+     * \brief Class for expression in parentheses.
      */
-    class CCompoNode {
-    protected:
-                NodeTypeEnum                    m_nodeType;         /**< Type of node */
-                
+    class CCompoExpression : public CCompoNode {        
+    public:
                                                 /**
-                                                * Parametric constructor with default value
+                                                * Parametric constructor with default values
                                                 * @param type: type of node
+                                                * @param val: integer value
                                                 */
-                                                CCompoNode          (NodeTypeEnum type = NodeTypeEnum::END);
+                                                CCompoExpression        ();
                                                 
                                                 /**
                                                 * Copy constructor
                                                 * Copy constructor is made protected to prevent from copying of object of this (abstract) type.
                                                 * @param other: reference to another object of same type
                                                 */
-                                                CCompoNode          (const CCompoNode& other);
+                                                CCompoExpression        (const CCompoExpression& other);
                                                 
                                                 /**
                                                 * Move constructor
                                                 * Move constructor is made protected to prevent from moving of object of this (abstract) type.
                                                 * @param other: rvalue-reference to another object of same type
                                                 */
-                                                CCompoNode          (CCompoNode&& other) noexcept;
+                                                CCompoExpression        (CCompoExpression&& other) noexcept;
                                                 
                                                 /**
                                                 * Copy assignment operator
@@ -53,7 +37,7 @@ namespace compo {
                                                 * @param other: reference to another object of same type
                                                 * @return reference to assigned object
                                                 */
-                CCompoNode&                     operator =          (const CCompoNode& other);
+                CCompoExpression&               operator =              (const CCompoExpression& other);
     
                                                 /**
                                                 * Move assignment operator
@@ -61,44 +45,31 @@ namespace compo {
                                                 * @param other: rvalue-reference to another object of same type
                                                 * @return reference to assigned object
                                                 */
-                CCompoNode&                     operator =          (CCompoNode&& other) noexcept;
-    
-    public:
+                CCompoExpression&               operator =              (CCompoParens&& other) noexcept;
+
                                                 /**
                                                  * Clone method for copy-construction of polymorphic objects
                                                  * @return pointer to newly copied object.
                                                  */
-        virtual CCompoNode *                    clone               () const = 0;
+        virtual CCompoNode *                    clone                   () const;
         
                                                 /**
                                                 * Virtual destructor
                                                 */
-        virtual                                 ~CCompoNode         ();
+        virtual                                 ~CCompoExpression       ();
         
                                                 /**
                                                 * Virtual print function to call from operator <<
                                                 * @param os: output stream
                                                 * @see operator <<()
                                                 */
-        virtual void                            print               (std::ostream& os) const = 0;
+        virtual void                            print               (std::ostream& outStr) const;
         
                                                 /**
-                                                * NodeType getter
-                                                * @return Type of node
-                                                */
-        NodeTypeEnum                            getNodeType         () const;
-        
-                                                /**
-                                                * Overloaded output operator
-                                                * Operator calls virtual print method inside because of inheritance.
-                                                * @param os: output stream
-                                                * @param node: node to print
-                                                * @see print()
-                                                * @return Altered output stream
-                                                */
-        friend  std::ostream&                   operator <<         (std::ostream& os, const CCompoNode& node);
+                                                 * Integer value getter
+                                                 * @return integer value
+                                                 */
+                CCompoNode *                    getExpression       () const;
     };
 
 }
-
-/*! @}*/
