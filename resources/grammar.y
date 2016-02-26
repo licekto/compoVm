@@ -14,6 +14,7 @@
 #include "compoAssignment.h"
 #include "visibilityType.h"
 #include "compoConstant.h"
+#include "compoParens.h"
 
 #define yylex()                  parser->getLexer()->yylex()
 #define yyerror(parser, message) parser->error(message)
@@ -99,7 +100,7 @@ primary_expression
                     }
                 |   '(' expression ')'
                     {
-                        $$ = $1;
+                        $$ = new compo::CCompoParens($2);
                     }
                 ;
 
@@ -128,8 +129,7 @@ assignment_expression
                     }
                 |   primary_expression assignment_operator expression
                     {
-                        compo::CCompoAssignment *assignment = new compo::CCompoAssignment(dynamic_cast<compo::CCompoSymbol*>($1), $3);
-                        $$ = assignment;
+                        $$ = new compo::CCompoAssignment(dynamic_cast<compo::CCompoSymbol*>($1), $3);
                     }
 
 assignment_operator
