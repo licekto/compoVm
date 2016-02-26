@@ -4,13 +4,21 @@
 
 namespace nodes {
     
+    /**
+     *  \addtogroup types
+     *  @{
+     */
+
+    /**
+     * types Namespace to uniquely identify compo AST nodes.
+     */
     namespace types {
     
         /**
          * \enum NodeTypeEnum
          * \brief Types of all nodes in AST
          */
-        enum NodeTypeEnum {
+        enum nodeTypeEnum {
             END = 0,
             DESCRIPTOR,
             SYMBOL,
@@ -38,7 +46,7 @@ namespace nodes {
          * Function to print names of types
          * @param type: type of node
          */
-        const char * typeName(NodeTypeEnum type);
+        const char * typeName(nodeTypeEnum type);
 
     }
     

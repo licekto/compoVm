@@ -7,7 +7,7 @@ namespace nodes {
     namespace compo {
 
         /**
-         * \class CCompoRequirement
+         * \class CRequirement
          * \brief Class for Compo requirement node representation.
          */
         class CRequirement : public CAbstractReqProv {            
@@ -17,8 +17,8 @@ namespace nodes {
                                                     * @param type: Type of visibility
                                                     * @param ports: Vector of ports
                                                     */
-                                                    CRequirement       ( nodes::types::visibilityType type = nodes::types::visibilityType::EXTERNAL,
-                                                                              const std::vector<nodes::compo::CPort*>& ports = std::vector<nodes::compo::CPort*>(0) );
+                                                    CRequirement       ( types::visibilityType type = types::visibilityType::EXTERNAL,
+                                                                              const std::vector<compo::CPort*>& ports = std::vector<compo::CPort*>(0) );
                                                     /**
                                                     * Copy constructor
                                                     * @param other: reference to another object of same type

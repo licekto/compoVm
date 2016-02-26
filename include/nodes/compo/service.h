@@ -7,12 +7,12 @@ namespace nodes {
     namespace compo {
 
         /**
-         * \class CCompoService
+         * \class CService
          * \brief Class for Compo service node representation.
          */
         class CService : public CAbstractServConstr {
         private:
-                    std::vector<nodes::CNode*>        m_temporaries;      /**< Type of node */
+                    std::vector<CNode*>        m_temporaries;      /**< Type of node */
         public:
                                                     /**
                                                     * Parametric constructor with default value
@@ -21,10 +21,10 @@ namespace nodes {
                                                     * @param body: Vector of body nodes
                                                     * @param temporaries: Vector of temporaries
                                                     */
-                                                    CService       ( nodes::procedural::CSymbol* name = nullptr,
-                                                                          const std::vector<nodes::procedural::CSymbol*>& params = std::vector<nodes::procedural::CSymbol*>(0),
-                                                                          const std::vector<nodes::CNode*>& body = std::vector<nodes::CNode*>(0),
-                                                                          const std::vector<nodes::CNode*>& temporaries = std::vector<nodes::CNode*>(0)  );
+                                                    CService       ( procedural::CSymbol* name = nullptr,
+                                                                          const std::vector<procedural::CSymbol*>& params = std::vector<procedural::CSymbol*>(0),
+                                                                          const std::vector<CNode*>& body = std::vector<CNode*>(0),
+                                                                          const std::vector<CNode*>& temporaries = std::vector<CNode*>(0)  );
 
                                                     /**
                                                     * Copy constructor
@@ -60,7 +60,7 @@ namespace nodes {
                                                      * Clone method for copy-construction of polymorphic objects
                                                      * @return pointer to newly copied object.
                                                      */
-            virtual nodes::CNode *                    clone               () const;
+            virtual CNode *                    clone               () const;
 
                                                     /**
                                                      * Virtual destructor
@@ -76,7 +76,7 @@ namespace nodes {
                                                      * Temporaries getter
                                                      * @return constant pointer to temporaries
                                                      */
-                    nodes::CNode *                    getTemporaryAt      (int index) const;
+                    CNode *                    getTemporaryAt      (int index) const;
 
             virtual void                            print               (std::ostream& os) const;
         };

@@ -5,7 +5,7 @@ namespace nodes {
     namespace compo {
     
         CPort::CPort(procedural::CSymbol* name, bool atomic)
-        :   CNode(types::NodeTypeEnum::PORT),
+        :   CNode(types::nodeTypeEnum::PORT),
             m_name(name), m_atomic(atomic)
         {}
 

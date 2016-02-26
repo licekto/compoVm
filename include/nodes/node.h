@@ -6,12 +6,12 @@
 #include "nodes/types/nodeType.h"
 
 /**
- *  \addtogroup compo
+ *  \addtogroup nodes
  *  @{
  */
 
 /**
- * compo Namespace to uniquely identify compo AST nodes.
+ * nodes Namespace to uniquely identify compo AST nodes.
  */
 namespace nodes {
     
@@ -25,13 +25,13 @@ namespace nodes {
      */
     class CNode {
     protected:
-                types::NodeTypeEnum                    m_nodeType;         /**< Type of node */
+                types::nodeTypeEnum                    m_nodeType;         /**< Type of node */
                 
                                                 /**
                                                 * Parametric constructor with default value
                                                 * @param type: type of node
                                                 */
-                                                CNode          (types::NodeTypeEnum type = types::NodeTypeEnum::END);
+                                                CNode          (types::nodeTypeEnum type = types::nodeTypeEnum::END);
                                                 
                                                 /**
                                                 * Copy constructor
@@ -86,7 +86,7 @@ namespace nodes {
                                                 * NodeType getter
                                                 * @return Type of node
                                                 */
-        types::NodeTypeEnum                            getNodeType         () const;
+        types::nodeTypeEnum                            getNodeType         () const;
         
                                                 /**
                                                 * Overloaded output operator

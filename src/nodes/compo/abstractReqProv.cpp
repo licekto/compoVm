@@ -6,7 +6,7 @@ namespace nodes {
 
         CAbstractReqProv::CAbstractReqProv(   types::visibilityType type,
                                                         const std::vector<CPort*>& ports)
-        : CNode(types::NodeTypeEnum::PROVISION), m_visibilityType(type), m_ports(ports)
+        : CNode(types::nodeTypeEnum::PROVISION), m_visibilityType(type), m_ports(ports)
         {}
 
         CAbstractReqProv::CAbstractReqProv(const CAbstractReqProv& other)
@@ -35,11 +35,13 @@ namespace nodes {
         }
 
         CAbstractReqProv& CAbstractReqProv::operator =(CAbstractReqProv&& other) noexcept {
-            this->m_nodeType = other.m_nodeType;
-            this->m_visibilityType = other.m_visibilityType;
-            this->m_ports.clear();
+            if (&other != this) {
+                this->m_nodeType = other.m_nodeType;
+                this->m_visibilityType = other.m_visibilityType;
+                this->m_ports.clear();
 
-            this->m_ports = std::move(other.m_ports);
+                this->m_ports = std::move(other.m_ports);
+            }
 
             return *this;
         }

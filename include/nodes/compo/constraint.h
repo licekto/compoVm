@@ -7,7 +7,7 @@ namespace nodes {
     namespace compo {
 
         /**
-         * \class CCompoConstraint
+         * \class CConstraint
          * \brief Class for Compo constraint representation.
          */
         class CConstraint : public CAbstractServConstr {

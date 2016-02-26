@@ -8,7 +8,7 @@ namespace nodes {
     namespace compo {
 
         /**
-         * \class CCompoDescriptor
+         * \class CDescriptor
          * \brief Class for Compo descriptor representation.
          */
         class CDescriptor : public CNode {

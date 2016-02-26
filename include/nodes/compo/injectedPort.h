@@ -7,7 +7,7 @@ namespace nodes {
     namespace compo {
 
         /**
-         * \class CCompoInjectedPort
+         * \class CInjectedPort
          * \brief Class for Compo injected port representation
          */
         class CInjectedPort : public CPort {

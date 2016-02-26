@@ -16,47 +16,47 @@
 #include "nodes/procedural/parens.h"
 
 void testDescriptor(const nodes::compo::CDescriptor& descriptor, const std::string& name, const std::string& extends, int bodySize) {
-    BOOST_CHECK_EQUAL(nodes::types::NodeTypeEnum::DESCRIPTOR, descriptor.getNodeType());
+    BOOST_CHECK_EQUAL(nodes::types::nodeTypeEnum::DESCRIPTOR, descriptor.getNodeType());
     BOOST_CHECK_EQUAL(name, descriptor.getName());
     BOOST_CHECK_EQUAL(extends, descriptor.getExtends());
     BOOST_CHECK_EQUAL(bodySize, descriptor.getBodySize());
 }
 
-void testReqProv(const nodes::compo::CAbstractReqProv *reqProv, nodes::types::NodeTypeEnum type, nodes::types::visibilityType visibility, const std::vector<std::string>& portNames) {
+void testReqProv(const nodes::compo::CAbstractReqProv *reqProv, nodes::types::nodeTypeEnum type, nodes::types::visibilityType visibility, const std::vector<std::string>& portNames) {
     BOOST_CHECK_EQUAL(type, reqProv->getNodeType());
     BOOST_CHECK_EQUAL(visibility, reqProv->getVisibilityType());
     BOOST_CHECK_EQUAL(portNames.size(), reqProv->getNumberOfPorts());
     
     for (unsigned int i = 0; i < portNames.size(); ++i) {
-        BOOST_CHECK_EQUAL(nodes::types::NodeTypeEnum::PORT, reqProv->getPortAt(i)->getNodeType());
+        BOOST_CHECK_EQUAL(nodes::types::nodeTypeEnum::PORT, reqProv->getPortAt(i)->getNodeType());
         BOOST_CHECK_EQUAL(portNames.at(i), reqProv->getPortAt(i)->getName());
     }
 }
 
-void testServConstr(const nodes::compo::CAbstractServConstr *servConstr, nodes::types::NodeTypeEnum type, const std::string& name, const std::vector<std::string>& paramNames, int bodySize) {
+void testServConstr(const nodes::compo::CAbstractServConstr *servConstr, nodes::types::nodeTypeEnum type, const std::string& name, const std::vector<std::string>& paramNames, int bodySize) {
     BOOST_CHECK_EQUAL(type, servConstr->getNodeType());
     BOOST_CHECK_EQUAL(name, servConstr->getName());
     BOOST_CHECK_EQUAL(paramNames.size(), servConstr->getParamsSize());
     BOOST_CHECK_EQUAL(bodySize, servConstr->getBodySize());
     
     for (unsigned int i = 0; i < paramNames.size(); ++i) {
-        BOOST_CHECK_EQUAL(nodes::types::NodeTypeEnum::SYMBOL, servConstr->getParamAt(i)->getNodeType());
+        BOOST_CHECK_EQUAL(nodes::types::nodeTypeEnum::SYMBOL, servConstr->getParamAt(i)->getNodeType());
         BOOST_CHECK_EQUAL(paramNames.at(i), servConstr->getParamAt(i)->getStringValue());
     }
 }
 
 void testSymbol(const nodes::procedural::CSymbol& symbol, const std::string& name) {
-    BOOST_CHECK_EQUAL(nodes::types::NodeTypeEnum::SYMBOL, symbol.getNodeType());
+    BOOST_CHECK_EQUAL(nodes::types::nodeTypeEnum::SYMBOL, symbol.getNodeType());
     BOOST_CHECK_EQUAL(name, symbol.getStringValue());
 }
 
 void testConstant(const nodes::procedural::CConstant& constant, int value) {
-    BOOST_CHECK_EQUAL(nodes::types::NodeTypeEnum::CONSTANT, constant.getNodeType());
+    BOOST_CHECK_EQUAL(nodes::types::nodeTypeEnum::CONSTANT, constant.getNodeType());
     BOOST_CHECK_EQUAL(value, constant.getValue());
 }
 
 void testStringLiteral(const nodes::procedural::CStringLiteral& stringLiteral, std::string value) {
-    BOOST_CHECK_EQUAL(nodes::types::NodeTypeEnum::STRING_LITERAL, stringLiteral.getNodeType());
+    BOOST_CHECK_EQUAL(nodes::types::nodeTypeEnum::STRING_LITERAL, stringLiteral.getNodeType());
     BOOST_CHECK_EQUAL(value, stringLiteral.getValue());
 }
 
@@ -93,19 +93,19 @@ BOOST_AUTO_TEST_CASE(compoBasicStructure) {
     
     // Check provision
     nodes::compo::CProvision *provision = dynamic_cast<nodes::compo::CProvision*>(descriptor->getBodyNodeAt(0));    
-    testReqProv(provision, nodes::types::NodeTypeEnum::PROVISION, nodes::types::visibilityType::EXTERNAL, portNames);
+    testReqProv(provision, nodes::types::nodeTypeEnum::PROVISION, nodes::types::visibilityType::EXTERNAL, portNames);
     
     // Check requirement
     nodes::compo::CRequirement *requirement = dynamic_cast<nodes::compo::CRequirement*>(descriptor->getBodyNodeAt(1));
-    testReqProv(requirement, nodes::types::NodeTypeEnum::REQUIREMENT, nodes::types::visibilityType::EXTERNAL, portNames);
+    testReqProv(requirement, nodes::types::nodeTypeEnum::REQUIREMENT, nodes::types::visibilityType::EXTERNAL, portNames);
     
     // Check service
     nodes::compo::CService *service = dynamic_cast<nodes::compo::CService *>(descriptor->getBodyNodeAt(2));
-    testServConstr(service, nodes::types::NodeTypeEnum::SERVICE, "create", std::vector<std::string>(0), 0);
+    testServConstr(service, nodes::types::nodeTypeEnum::SERVICE, "create", std::vector<std::string>(0), 0);
     
     // Check constraint
     nodes::compo::CConstraint *constraint = dynamic_cast<nodes::compo::CConstraint *>(descriptor->getBodyNodeAt(3));
-    testServConstr(constraint, nodes::types::NodeTypeEnum::CONSTRAINT, "httpOnly", std::vector<std::string>(0), 0);
+    testServConstr(constraint, nodes::types::nodeTypeEnum::CONSTRAINT, "httpOnly", std::vector<std::string>(0), 0);
     
     // Clear AST for next test
     parser.clear();
@@ -134,19 +134,19 @@ BOOST_AUTO_TEST_CASE(compoServiceParams) {
     
     // Check service
     service = dynamic_cast<nodes::compo::CService *>(descriptor->getBodyNodeAt(0));
-    testServConstr(service, nodes::types::NodeTypeEnum::SERVICE, "noparams", params, 0);
+    testServConstr(service, nodes::types::nodeTypeEnum::SERVICE, "noparams", params, 0);
     
     // Check service
     service = dynamic_cast<nodes::compo::CService *>(descriptor->getBodyNodeAt(1));
     params.push_back("param1");
-    testServConstr(service, nodes::types::NodeTypeEnum::SERVICE, "oneparam", params, 0);
+    testServConstr(service, nodes::types::nodeTypeEnum::SERVICE, "oneparam", params, 0);
     
     // Check service
     service = dynamic_cast<nodes::compo::CService *>(descriptor->getBodyNodeAt(2));
     params.clear();
     params.push_back("param2");
     params.push_back("param1");
-    testServConstr(service, nodes::types::NodeTypeEnum::SERVICE, "twoparams", params, 0);
+    testServConstr(service, nodes::types::nodeTypeEnum::SERVICE, "twoparams", params, 0);
     
     // Check service
     service = dynamic_cast<nodes::compo::CService *>(descriptor->getBodyNodeAt(3));
@@ -154,7 +154,7 @@ BOOST_AUTO_TEST_CASE(compoServiceParams) {
     params.push_back("param3");
     params.push_back("param2");
     params.push_back("param1");
-    testServConstr(service, nodes::types::NodeTypeEnum::SERVICE, "threeparams", params, 0);
+    testServConstr(service, nodes::types::nodeTypeEnum::SERVICE, "threeparams", params, 0);
     
     // Clear AST for next test
     parser.clear();
@@ -177,7 +177,7 @@ BOOST_AUTO_TEST_CASE(compoServiceBody) {
     
     // Check service
     nodes::compo::CService *service = dynamic_cast<nodes::compo::CService*>(descriptor->getBodyNodeAt(0));
-    testServConstr(service, nodes::types::NodeTypeEnum::SERVICE, "body1", std::vector<std::string>(0), 1);
+    testServConstr(service, nodes::types::nodeTypeEnum::SERVICE, "body1", std::vector<std::string>(0), 1);
     
     // Check symbol
     nodes::procedural::CSymbol *symbol = dynamic_cast<nodes::procedural::CSymbol*>(service->getBodyNodeAt(0));
@@ -185,11 +185,11 @@ BOOST_AUTO_TEST_CASE(compoServiceBody) {
     
     // Check service
     service = dynamic_cast<nodes::compo::CService*>(descriptor->getBodyNodeAt(1));
-    testServConstr(service, nodes::types::NodeTypeEnum::SERVICE, "body2", std::vector<std::string>(0), 1);
+    testServConstr(service, nodes::types::nodeTypeEnum::SERVICE, "body2", std::vector<std::string>(0), 1);
     
     // Check assignment
     nodes::procedural::CAssignment *assignment = dynamic_cast<nodes::procedural::CAssignment*>(service->getBodyNodeAt(0));
-    BOOST_CHECK_EQUAL(nodes::types::NodeTypeEnum::ASSIGNMENT, assignment->getNodeType());
+    BOOST_CHECK_EQUAL(nodes::types::nodeTypeEnum::ASSIGNMENT, assignment->getNodeType());
     
     // Check symbol
     symbol = dynamic_cast<nodes::procedural::CSymbol*>(assignment->getVariable());
@@ -224,7 +224,7 @@ BOOST_AUTO_TEST_CASE(compoProcedural) {
     
     // Check service
     nodes::compo::CService *service = dynamic_cast<nodes::compo::CService*>(descriptor->getBodyNodeAt(0));
-    testServConstr(service, nodes::types::NodeTypeEnum::SERVICE, "procedural", std::vector<std::string>(0), 4);
+    testServConstr(service, nodes::types::nodeTypeEnum::SERVICE, "procedural", std::vector<std::string>(0), 4);
     
     // Check symbol
     nodes::procedural::CSymbol *symbol = dynamic_cast<nodes::procedural::CSymbol*>(service->getBodyNodeAt(0));
@@ -232,7 +232,7 @@ BOOST_AUTO_TEST_CASE(compoProcedural) {
     
     // Check assignment
     nodes::procedural::CAssignment *assignment = dynamic_cast<nodes::procedural::CAssignment*>(service->getBodyNodeAt(1));
-    BOOST_CHECK_EQUAL(nodes::types::NodeTypeEnum::ASSIGNMENT, assignment->getNodeType());
+    BOOST_CHECK_EQUAL(nodes::types::nodeTypeEnum::ASSIGNMENT, assignment->getNodeType());
     
     // Check symbol
     symbol = dynamic_cast<nodes::procedural::CSymbol*>(assignment->getVariable());
@@ -244,7 +244,7 @@ BOOST_AUTO_TEST_CASE(compoProcedural) {
     
     // Check assignment
     assignment = dynamic_cast<nodes::procedural::CAssignment*>(service->getBodyNodeAt(2));
-    BOOST_CHECK_EQUAL(nodes::types::NodeTypeEnum::ASSIGNMENT, assignment->getNodeType());
+    BOOST_CHECK_EQUAL(nodes::types::nodeTypeEnum::ASSIGNMENT, assignment->getNodeType());
     
     // Check symbol
     symbol = dynamic_cast<nodes::procedural::CSymbol*>(assignment->getVariable());
@@ -256,7 +256,7 @@ BOOST_AUTO_TEST_CASE(compoProcedural) {
     
     // Check assignment
     assignment = dynamic_cast<nodes::procedural::CAssignment*>(service->getBodyNodeAt(3));
-    BOOST_CHECK_EQUAL(nodes::types::NodeTypeEnum::ASSIGNMENT, assignment->getNodeType());
+    BOOST_CHECK_EQUAL(nodes::types::nodeTypeEnum::ASSIGNMENT, assignment->getNodeType());
     
     // Check symbol
     symbol = dynamic_cast<nodes::procedural::CSymbol*>(assignment->getVariable());
@@ -264,7 +264,7 @@ BOOST_AUTO_TEST_CASE(compoProcedural) {
     
     // Check parens
     nodes::procedural::CParens *parens = dynamic_cast<nodes::procedural::CParens*>(assignment->getRValue());
-    BOOST_CHECK_EQUAL(nodes::types::NodeTypeEnum::PARENS, parens->getNodeType());
+    BOOST_CHECK_EQUAL(nodes::types::nodeTypeEnum::PARENS, parens->getNodeType());
     
     // Check constant
     constant = dynamic_cast<nodes::procedural::CConstant*>(parens->getExpression());

@@ -4,23 +4,23 @@ namespace nodes {
 
     namespace types {
 
-        std::map<types::NodeTypeEnum, const char *> typeNames = {
-            {types::NodeTypeEnum::END, "End"},
-            {types::NodeTypeEnum::DESCRIPTOR, "Descriptor"},
-            {types::NodeTypeEnum::SYMBOL, "Symbol"},
-            {types::NodeTypeEnum::SERVICE, "service"},
-            {types::NodeTypeEnum::PORT, "port"},
-            {types::NodeTypeEnum::PROVISION, "provides"},
-            {types::NodeTypeEnum::REQUIREMENT, "requires"},
-            {types::NodeTypeEnum::CONSTRAINT, "constraint"},
-            {types::NodeTypeEnum::INTERFACE, "interface"},
-            {types::NodeTypeEnum::ARCHITECTURE, "architecture"},
-            {types::NodeTypeEnum::CONNECTION, "connection"},
-            {types::NodeTypeEnum::DISCONNECTION, "disconnection"},
-            {types::NodeTypeEnum::INJECTED_PORT, "inject-with"},
+        std::map<types::nodeTypeEnum, const char *> typeNames = {
+            {types::nodeTypeEnum::END, "End"},
+            {types::nodeTypeEnum::DESCRIPTOR, "Descriptor"},
+            {types::nodeTypeEnum::SYMBOL, "Symbol"},
+            {types::nodeTypeEnum::SERVICE, "service"},
+            {types::nodeTypeEnum::PORT, "port"},
+            {types::nodeTypeEnum::PROVISION, "provides"},
+            {types::nodeTypeEnum::REQUIREMENT, "requires"},
+            {types::nodeTypeEnum::CONSTRAINT, "constraint"},
+            {types::nodeTypeEnum::INTERFACE, "interface"},
+            {types::nodeTypeEnum::ARCHITECTURE, "architecture"},
+            {types::nodeTypeEnum::CONNECTION, "connection"},
+            {types::nodeTypeEnum::DISCONNECTION, "disconnection"},
+            {types::nodeTypeEnum::INJECTED_PORT, "inject-with"},
         };
 
-        const char * typeName(types::NodeTypeEnum type) {
+        const char * typeName(types::nodeTypeEnum type) {
             return typeNames[type];
         }
 

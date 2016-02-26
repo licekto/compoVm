@@ -8,10 +8,18 @@
 
 namespace nodes {
 
+    /**
+     *  \addtogroup compo
+     *  @{
+     */
+
+    /**
+     * compo Namespace to uniquely identify compo AST nodes.
+     */
     namespace compo {
 
         /**
-         * \class CCompoAbstractReqProv
+         * \class CAbstractReqProv
          * \brief Abstract base class for requirement and provision nodes.
          * 
          * Abstract base class for requirement and provision nodes. Class inherits virtually from nodes::CNode prevent diamond problem.

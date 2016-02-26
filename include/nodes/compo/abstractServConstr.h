@@ -8,7 +8,7 @@ namespace nodes {
     namespace compo {
 
         /**
-         * \class CCompoAbstractServConstr
+         * \class CAbstractServConstr
          * \brief Abstract base class for service and constraint nodes.
          * 
          * Abstract base class for service and constraint nodes. Class inherits virtually from CCompoNode prevent diamond problem.

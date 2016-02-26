@@ -2,7 +2,7 @@
 
 namespace nodes {
     
-    CNode::CNode(types::NodeTypeEnum type)
+    CNode::CNode(types::nodeTypeEnum type)
     : m_nodeType(type)
     {}
     
@@ -31,7 +31,7 @@ namespace nodes {
     CNode::~CNode() {
     }
     
-    types::NodeTypeEnum CNode::getNodeType() const {
+    types::nodeTypeEnum CNode::getNodeType() const {
         return m_nodeType;
     }
 

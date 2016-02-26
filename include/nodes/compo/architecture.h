@@ -7,7 +7,7 @@ namespace nodes {
     namespace compo {
 
         /**
-         * \class CCompoArchitecture
+         * \class CArchitecture
          * \brief Class for Compo architecture representation.
          */
         class CArchitecture : public CNode {

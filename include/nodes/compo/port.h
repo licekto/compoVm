@@ -8,15 +8,15 @@ namespace nodes {
     namespace compo {
 
         /**
-         * \class CCompoPort
+         * \class CPort
          * \brief Class for port and inherited injected port nodes.
          * 
          * Class for port and inherited injected port nodes. Class inherits virtually from nodes::CNode prevent diamond problem.
          * This class was designed because of the similar structure of port a injected port nodes thus to prevent code repetition.
          */
-        class CPort : public virtual nodes::CNode {
+        class CPort : public virtual CNode {
         protected:
-                    nodes::procedural::CSymbol                  * m_name;         /**< Name symbol of port */
+                    procedural::CSymbol                  * m_name;         /**< Name symbol of port */
                     bool                            m_atomic;       /**< Is atomic? */
 
         public:
@@ -25,7 +25,7 @@ namespace nodes {
                                                     * @param name: Name of port
                                                     * @param atomic: Is atomic?
                                                     */
-                                                    CPort          (nodes::procedural::CSymbol *name = nullptr, bool atomic = false);
+                                                    CPort          (procedural::CSymbol *name = nullptr, bool atomic = false);
 
                                                     /**
                                                     * Copy constructor
@@ -57,7 +57,7 @@ namespace nodes {
                                                      * Clone method for copy-construction of polymorphic objects
                                                      * @return pointer to newly copied object.
                                                      */
-            virtual nodes::CNode *                    clone                   () const;
+            virtual CNode *                    clone                   () const;
 
                                                     /**
                                                     * Virtual destructor

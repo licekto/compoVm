@@ -6,7 +6,7 @@ namespace nodes {
     
         CRequirement::CRequirement(   types::visibilityType type,
                                                 const std::vector<CPort*>& ports)
-        :   CNode(types::NodeTypeEnum::REQUIREMENT),
+        :   CNode(types::nodeTypeEnum::REQUIREMENT),
             CAbstractReqProv(type, ports)
         {}
 
