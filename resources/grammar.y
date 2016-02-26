@@ -18,18 +18,18 @@
 #define yylex()                  parser->getLexer()->yylex()
 #define yyerror(parser, message) parser->error(message)
 
-typedef struct sequence {
+typedef struct block {
     std::vector<compo::CCompoNode*>    temporaries;
     std::vector<compo::CCompoNode*>    statements;
 
     void                        clear()     {temporaries.clear(); statements.clear();}
-} TSEQUENCE;
+} TBLOCK;
 
 std::vector<compo::CCompoNode*>     currentBody;
 compo::CCompoService              * currentService      = nullptr;
 std::vector<compo::CCompoSymbol*>   currentServiceParams;
 std::vector<compo::CCompoNode*>     currentServiceBody;
-TSEQUENCE                           currentSequence;
+TBLOCK                              currentBlock;
 
 compo::visibilityType               visType             = compo::visibilityType::EXTERNAL;
 bool                                atomicPresent       = false;
@@ -86,25 +86,46 @@ array
 
 primary_expression
                 :   IDENTIFIER
+                    {
+                        $$ = $1;
+                    }
                 |   CONSTANT
+                    {
+                        $$ = $1;
+                    }
                 |   STRING_LITERAL
+                    {
+                        $$ = $1;
+                    }
                 |   '(' expression ')'
+                    {
+                        $$ = $1;
+                    }
                 ;
 
 multiplicative_expression
-                : primary_expression
-                | multiplicative_expression '*' primary_expression
-                | multiplicative_expression '/' primary_expression
+                :   primary_expression
+                    {
+                        $$ = $1;
+                    }
+                |   multiplicative_expression '*' primary_expression
+                |   multiplicative_expression '/' primary_expression
                 ;
 
 additive_expression
-                : multiplicative_expression
-                | additive_expression '+' multiplicative_expression
-                | additive_expression '-' multiplicative_expression
+                :   multiplicative_expression
+                    {
+                        $$ = $1;
+                    }
+                |   additive_expression '+' multiplicative_expression
+                |   additive_expression '-' multiplicative_expression
                 ;
 
 assignment_expression
                 :   additive_expression
+                    {
+                        $$ = $1;
+                    }
                 |   primary_expression assignment_operator expression
                     {
                         compo::CCompoAssignment *assignment = new compo::CCompoAssignment(dynamic_cast<compo::CCompoSymbol*>($1), $3);
@@ -112,8 +133,8 @@ assignment_expression
                     }
 
 assignment_operator
-                : ASSIGNMENT
-                | ADD_ASSIGNMENT
+                :   ASSIGNMENT
+                |   ADD_ASSIGNMENT
                 ;
 
 expression      
@@ -126,13 +147,15 @@ expression
 
 declaration
                 :   assignment_expression
+                    {
+                        $$ = $1;
+                    }
                 ;
 
 
 
 statement
-                :   compound_statement
-                |   expression_statement
+                :   expression_statement
                 |   selection_statement
                 |   iteration_statement
                 |   jump_statement
@@ -141,15 +164,30 @@ statement
 compound_statement
                 :   '{' '}'
                 |   '{' block_item_list '}'
+                    {
+                        $$ = $1;
+                    }
 
 block_item_list
-                : block_item
-                | block_item_list block_item
+                :   block_item
+                    {
+                        currentBlock.statements.push_back($1);
+                    }
+                |   block_item_list block_item
+                    {
+                        currentBlock.statements.push_back($2);
+                    }
                 ;
 
 block_item
-                : declaration
-                | statement
+                :   declaration
+                    {
+                        $$ = $1;
+                    }
+                |   statement
+                    {
+                        $$ = $1;
+                    }
                 ;
 
 expression_statement
@@ -163,14 +201,14 @@ selection_statement
                 ;
 
 iteration_statement
-                : FOR '(' expression_statement expression_statement ')' statement
-                | FOR '(' expression_statement expression_statement expression ')' statement
-                | FOR '(' declaration expression_statement ')' statement
-                | FOR '(' declaration expression_statement expression ')' statement
+                :   FOR '(' expression_statement expression_statement ')' statement
+                |   FOR '(' expression_statement expression_statement expression ')' statement
+                |   FOR '(' declaration expression_statement ')' statement
+                |   FOR '(' declaration expression_statement expression ')' statement
                 ;
 
 jump_statement
-                : RETURN expression ';'
+                :   RETURN expression ';'
                 ;
 
 /*---------------------------- grammar-compo ---------------------------------*/
@@ -298,11 +336,11 @@ ofKind
                 ;
 
 service         
-                :   SERVICE serviceSign block_item_list
+                :   SERVICE serviceSign compound_statement
                     {
-                        currentBody.push_back(new compo::CCompoService(dynamic_cast<compo::CCompoSymbol*>($2), std::move(currentServiceParams), std::move(currentSequence.statements), std::move(currentSequence.temporaries)));
+                        currentBody.push_back(new compo::CCompoService(dynamic_cast<compo::CCompoSymbol*>($2), std::move(currentServiceParams), std::move(currentBlock.statements), std::move(currentBlock.temporaries)));
                         currentServiceParams.clear();
-                        currentSequence.clear();
+                        currentBlock.clear();
                     }
                 ;
 
