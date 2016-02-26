@@ -2,7 +2,7 @@
 
 namespace compo {
     CCompoStringLiteral::CCompoStringLiteral(const std::string& val)
-    : CCompoNode(NodeTypeEnum::INTEGER_LITERAL),
+    : CCompoNode(NodeTypeEnum::STRING_LITERAL),
       m_stringValue(val) 
     {}
     

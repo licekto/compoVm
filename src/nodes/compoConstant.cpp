@@ -2,7 +2,7 @@
 
 namespace compo {
     CCompoConstant::CCompoConstant(i32 val)
-    : CCompoNode(NodeTypeEnum::INTEGER_LITERAL),
+    : CCompoNode(NodeTypeEnum::CONSTANT),
       m_intValue(val) 
     {}
     
