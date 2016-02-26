@@ -2,43 +2,43 @@
 #include <iostream>
 #include "parser/parserWrapper.h"
 #include "parser/lexer.h"
-#include "nodes/compoNode.h"
-#include "nodes/proceduralNodes/compoSymbol.h"
-#include "nodes/compoNodes/compoService.h"
-#include "nodes/compoNodes/compoConstraint.h"
-#include "nodes/compoNodes/compoPort.h"
-#include "nodes/compoNodes/compoDescriptor.h"
-#include "nodes/compoNodes/compoProvision.h"
-#include "nodes/compoNodes/compoRequirement.h"
-#include "nodes/proceduralNodes/compoFor.h"
-#include "nodes/proceduralNodes/compoAssignment.h"
-#include "nodes/compoTypes/visibilityType.h"
-#include "nodes/proceduralNodes/compoConstant.h"
-#include "nodes/proceduralNodes/compoParens.h"
+#include "nodes/node.h"
+#include "nodes/types/visibilityType.h"
+#include "nodes/procedural/symbol.h"
+#include "nodes/compo/service.h"
+#include "nodes/compo/constraint.h"
+#include "nodes/compo/port.h"
+#include "nodes/compo/descriptor.h"
+#include "nodes/compo/provision.h"
+#include "nodes/compo/requirement.h"
+#include "nodes/procedural/for.h"
+#include "nodes/procedural/assignment.h"
+#include "nodes/procedural/constant.h"
+#include "nodes/procedural/parens.h"
 
 #define yylex()                  parser->getLexer()->yylex()
 #define yyerror(parser, message) parser->error(message)
 
 typedef struct block {
-    std::vector<compo::CCompoNode*>    temporaries;
-    std::vector<compo::CCompoNode*>    statements;
+    std::vector<nodes::CNode*>    temporaries;
+    std::vector<nodes::CNode*>    statements;
 
     void                        clear()     {temporaries.clear(); statements.clear();}
 } TBLOCK;
 
-std::vector<compo::CCompoNode*>     currentBody;
-compo::CCompoService              * currentService      = nullptr;
-std::vector<compo::CCompoSymbol*>   currentServiceParams;
-std::vector<compo::CCompoNode*>     currentServiceBody;
+std::vector<nodes::CNode*>     currentBody;
+nodes::compo::CService              * currentService      = nullptr;
+std::vector<nodes::procedural::CSymbol*>   currentServiceParams;
+std::vector<nodes::CNode*>     currentServiceBody;
 TBLOCK                              currentBlock;
 
-compo::visibilityType               visType             = compo::visibilityType::EXTERNAL;
+nodes::types::visibilityType               visType             = nodes::types::visibilityType::EXTERNAL;
 bool                                atomicPresent       = false;
-std::vector<compo::CCompoPort*>     currentPorts;
+std::vector<nodes::compo::CPort*>     currentPorts;
 
 %}
 
-%define api.value.type {compo::CCompoNode*}
+%define api.value.type {nodes::CNode*}
 %define parse.error verbose
 %define parse.lac full
 
@@ -100,7 +100,7 @@ primary_expression
                     }
                 |   '(' expression ')'
                     {
-                        $$ = new compo::CCompoParens($2);
+                        $$ = new nodes::procedural::CParens($2);
                     }
                 ;
 
@@ -129,7 +129,7 @@ assignment_expression
                     }
                 |   primary_expression assignment_operator expression
                     {
-                        $$ = new compo::CCompoAssignment(dynamic_cast<compo::CCompoSymbol*>($1), $3);
+                        $$ = new nodes::procedural::CAssignment(dynamic_cast<nodes::procedural::CSymbol*>($1), $3);
                     }
 
 assignment_operator
@@ -237,9 +237,9 @@ descriptors
 descriptor      
                 :   DESCRIPTOR IDENTIFIER inheritance '{' compoExprs '}'
                     {
-                        compo::CCompoDescriptor *descriptor = new compo::CCompoDescriptor(dynamic_cast<compo::CCompoSymbol*>($2), nullptr, std::move(currentBody));
+                        nodes::compo::CDescriptor *descriptor = new nodes::compo::CDescriptor(dynamic_cast<nodes::procedural::CSymbol*>($2), nullptr, std::move(currentBody));
                         if ($3) {
-                            descriptor->setExtends(dynamic_cast<compo::CCompoSymbol*>($3));
+                            descriptor->setExtends(dynamic_cast<nodes::procedural::CSymbol*>($3));
                         }
                         currentBody.clear();
                         $$ = descriptor;
@@ -277,7 +277,7 @@ compoExpr
 exProvision     
                 :   externally PROVIDES provReqSign
 		    {
-			currentBody.push_back(new compo::CCompoProvision(visType, std::move(currentPorts)));
+			currentBody.push_back(new nodes::compo::CProvision(visType, std::move(currentPorts)));
 			currentPorts.clear();
 		    }
                 ;
@@ -285,7 +285,7 @@ exProvision
 exRequirement   
                 :   externally REQUIRES provReqSign
                     {
-			currentBody.push_back(new compo::CCompoRequirement(visType, std::move(currentPorts)));
+			currentBody.push_back(new nodes::compo::CRequirement(visType, std::move(currentPorts)));
 			currentPorts.clear();
 		    }
                 ;
@@ -296,7 +296,7 @@ provReqSign
 
 externally      
                 :   EXTERNALLY
-                    {visType = compo::visibilityType::EXTERNAL;}
+                    {visType = nodes::types::visibilityType::EXTERNAL;}
                 |   /* epsilon */
                 ;
 
@@ -308,7 +308,7 @@ ports
 port		
                 :   atomic IDENTIFIER brackets ':' portSign ofKind
 		    {
-			currentPorts.push_back(new compo::CCompoPort(dynamic_cast<compo::CCompoSymbol*>($2), atomicPresent));
+			currentPorts.push_back(new nodes::compo::CPort(dynamic_cast<nodes::procedural::CSymbol*>($2), atomicPresent));
 		    }
 		;
 
@@ -338,7 +338,7 @@ ofKind
 service         
                 :   SERVICE serviceSign compound_statement
                     {
-                        currentBody.push_back(new compo::CCompoService(dynamic_cast<compo::CCompoSymbol*>($2), std::move(currentServiceParams), std::move(currentBlock.statements), std::move(currentBlock.temporaries)));
+                        currentBody.push_back(new nodes::compo::CService(dynamic_cast<nodes::procedural::CSymbol*>($2), std::move(currentServiceParams), std::move(currentBlock.statements), std::move(currentBlock.temporaries)));
                         currentServiceParams.clear();
                         currentBlock.clear();
                     }
@@ -362,11 +362,11 @@ servicesSignsList
 serviceParams   
                 :   IDENTIFIER
                     {
-                        currentServiceParams.push_back(dynamic_cast<compo::CCompoSymbol*>($1));
+                        currentServiceParams.push_back(dynamic_cast<nodes::procedural::CSymbol*>($1));
                     }
                 |   IDENTIFIER ',' serviceParams
                     {
-                        currentServiceParams.push_back(dynamic_cast<compo::CCompoSymbol*>($1));
+                        currentServiceParams.push_back(dynamic_cast<nodes::procedural::CSymbol*>($1));
                     }
                 |   /* epsilon */
                 ;
@@ -374,7 +374,7 @@ serviceParams
 constraint	
                 :   CONSTRAINT serviceSign '{' '}'
                     {
-                        currentBody.push_back(new compo::CCompoConstraint(dynamic_cast<compo::CCompoSymbol*>($2), std::move(currentServiceParams), currentServiceBody));
+                        currentBody.push_back(new nodes::compo::CConstraint(dynamic_cast<nodes::procedural::CSymbol*>($2), std::move(currentServiceParams), currentServiceBody));
                         currentServiceParams.clear();
                     }
 		;
@@ -386,9 +386,9 @@ inRequirement
 inProvision	
                 :   internally PROVIDES provReqSign
                     {
-			currentBody.push_back(new compo::CCompoRequirement(visType, std::move(currentPorts)));
+			currentBody.push_back(new nodes::compo::CRequirement(visType, std::move(currentPorts)));
 			currentPorts.clear();
-                        visType = compo::visibilityType::EXTERNAL;
+                        visType = nodes::types::visibilityType::EXTERNAL;
 		    }
 		;
 
@@ -408,7 +408,7 @@ inject
 
 internally      
                 :   INTERNALLY
-                    {visType = compo::visibilityType::INTERNAL;}
+                    {visType = nodes::types::visibilityType::INTERNAL;}
                 |   /* epsilon */
                 ;
 

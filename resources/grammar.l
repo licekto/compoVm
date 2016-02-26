@@ -10,10 +10,10 @@
 #include <cstdlib>
 #include "parser/parserWrapper.h"
 #include "generated/parser.h"
-#include "nodes/compoNode.h"
-#include "nodes/proceduralNodes/compoSymbol.h"
-#include "nodes/proceduralNodes/compoConstant.h"
-#include "nodes/proceduralNodes/compoStringLiteral.h"
+#include "nodes/node.h"
+#include "nodes/procedural/symbol.h"
+#include "nodes/procedural/constant.h"
+#include "nodes/procedural/stringLiteral.h"
 
 std::string buffer;
 %}
@@ -44,7 +44,7 @@ Identifier                  ({Letter}|[_]){LetterOrDigit}*
 <STRING>\\.?                            {buffer.append(yytext+1);} // skip backslash
 
 <STRING>\'                              {
-                                            yylval = new compo::CCompoStringLiteral(buffer);
+                                            yylval = new nodes::procedural::CStringLiteral(buffer);
                                             BEGIN(INITIAL);
                                             return STRING_LITERAL;
                                         }
@@ -138,12 +138,12 @@ Identifier                  ({Letter}|[_]){LetterOrDigit}*
 <INITIAL>"}"                            {return '}';}
 
 <INITIAL>{Identifier}                   {
-                                            yylval = new compo::CCompoSymbol(std::string(yytext, yyleng));
+                                            yylval = new nodes::procedural::CSymbol(std::string(yytext, yyleng));
                                             return IDENTIFIER;
                                         }
 
 <INITIAL>{IntegerLiteral}               {
-                                            yylval = new compo::CCompoConstant(atoll(yytext));
+                                            yylval = new nodes::procedural::CConstant(atoll(yytext));
                                             return CONSTANT;
                                         }
 
