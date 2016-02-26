@@ -27,7 +27,8 @@ namespace compo {
         WHILE,
         IF,
         ELSE,
-        INTEGER_LITERAL
+        CONSTANT,
+        STRING_LITERAL
     };
 
     /**
