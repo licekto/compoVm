@@ -28,7 +28,8 @@ namespace compo {
         IF,
         ELSE,
         CONSTANT,
-        STRING_LITERAL
+        STRING_LITERAL,
+        PARENS
     };
 
     /**
