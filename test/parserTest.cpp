@@ -9,6 +9,8 @@
 #include "compoRequirement.h"
 #include "compoService.h"
 #include "compoConstraint.h"
+#include "compoAssignment.h"
+#include "compoConstant.h"
 
 
 BOOST_AUTO_TEST_SUITE(parser)
@@ -113,14 +115,14 @@ BOOST_AUTO_TEST_CASE(compoServiceBody) {
     std::stringstream input;
     input.str("descriptor test {\
         service body1() {a;}\
-        service body2() {a := 1;}\
+        service body2() {b := 1;}\
     }");
     
     parser.parse(input);    
     
     BOOST_CHECK_EQUAL(compo::NodeTypeEnum::DESCRIPTOR, parser.getRootNodeAt(0)->getNodeType());
     
-    compo::CCompoDescriptor *descriptor = (compo::CCompoDescriptor*) parser.getRootNodeAt(0);
+    compo::CCompoDescriptor *descriptor = dynamic_cast<compo::CCompoDescriptor*>(parser.getRootNodeAt(0));
     
     BOOST_CHECK_EQUAL(2, descriptor->getBodySize());
     
@@ -130,9 +132,25 @@ BOOST_AUTO_TEST_CASE(compoServiceBody) {
     BOOST_CHECK_EQUAL(0, service->getParamsSize());
     BOOST_CHECK_EQUAL(1, service->getBodySize());
     BOOST_CHECK_EQUAL(compo::NodeTypeEnum::SYMBOL, service->getBodyNodeAt(0)->getNodeType());
-    
     compo::CCompoSymbol *symbol = dynamic_cast<compo::CCompoSymbol*>(service->getBodyNodeAt(0));
     BOOST_CHECK_EQUAL("a", symbol->getStringValue());
+    
+    service = dynamic_cast<compo::CCompoService*>(descriptor->getBodyNodeAt(1));
+    BOOST_CHECK_EQUAL(compo::NodeTypeEnum::SERVICE, service->getNodeType());
+    BOOST_CHECK_EQUAL(std::string("body2"), service->getName());
+    BOOST_CHECK_EQUAL(0, service->getParamsSize());
+    BOOST_CHECK_EQUAL(1, service->getBodySize());
+    
+    compo::CCompoAssignment *assignment = dynamic_cast<compo::CCompoAssignment*>(service->getBodyNodeAt(0));
+    BOOST_CHECK_EQUAL(compo::NodeTypeEnum::ASSIGNMENT, assignment->getNodeType());
+    
+    symbol = dynamic_cast<compo::CCompoSymbol*>(assignment->getVariable());
+    BOOST_CHECK_EQUAL(compo::NodeTypeEnum::SYMBOL, symbol->getNodeType());
+    BOOST_CHECK_EQUAL("b", symbol->getStringValue());
+    
+    compo::CCompoConstant *constant = dynamic_cast<compo::CCompoConstant*>(assignment->getRValue());
+    BOOST_CHECK_EQUAL(compo::NodeTypeEnum::CONSTANT, constant->getNodeType());
+    BOOST_CHECK_EQUAL(1, constant->getValue());
 }
 
 BOOST_AUTO_TEST_SUITE_END()
