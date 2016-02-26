@@ -81,7 +81,7 @@ namespace compo {
                                                 * visibilityType getter
                                                 * @return Type of visibility
                                                 */
-                visibilityType                  getVisibilityType       ();
+                visibilityType                  getVisibilityType       () const;
                 
                                                 /**
                                                 * Number of ports getter

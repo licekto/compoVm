@@ -71,7 +71,7 @@ namespace compo {
         outstream << "}" << std::endl;
     }
 
-    visibilityType CCompoAbstractReqProv::getVisibilityType() {
+    visibilityType CCompoAbstractReqProv::getVisibilityType() const {
         return m_visibilityType;
     }
 
