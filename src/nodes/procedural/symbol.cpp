@@ -5,17 +5,23 @@ namespace nodes {
     namespace procedural {
     
         CSymbol::CSymbol(const std::string& name)
-        :   CNode(types::NodeTypeEnum::SYMBOL),
+        : CNode(types::nodeTypeEnum::SYMBOL),
+          CAbstractExpression(),
+          CAbstractPrimaryExpression(),
             m_name(name)
         {}
 
         CSymbol::CSymbol(const CSymbol& other)
         : CNode(other),
+          CAbstractExpression(),
+          CAbstractPrimaryExpression(),
           m_name(other.m_name)
         {}
 
         CSymbol::CSymbol(CSymbol&& other) noexcept
         : CNode(std::move(other)),
+          CAbstractExpression(),
+          CAbstractPrimaryExpression(),
           m_name(std::move(other.m_name))
         {
             other.m_name.clear();

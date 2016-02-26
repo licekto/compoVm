@@ -5,17 +5,23 @@ namespace nodes {
     namespace procedural {
         
         CConstant::CConstant(i32 val)
-        : CNode(types::NodeTypeEnum::CONSTANT),
+        : CNode(types::nodeTypeEnum::CONSTANT),
+          CAbstractExpression(),
+          CAbstractPrimaryExpression(),
           m_intValue(val) 
         {}
 
         CConstant::CConstant(const CConstant& other)
         : CNode(other),
+          CAbstractExpression(),
+          CAbstractPrimaryExpression(),
           m_intValue(other.m_intValue)
         {}
 
         CConstant::CConstant(CConstant&& other) noexcept
         : CNode(std::move(other)),
+          CAbstractExpression(),
+          CAbstractPrimaryExpression(),
           m_intValue(std::move(other.m_intValue))
         {}
 

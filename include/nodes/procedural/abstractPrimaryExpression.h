@@ -1,80 +1,73 @@
 #pragma once
 
 #include "nodes/node.h"
-#include "types.h"
-#include "abstractPrimaryExpression.h"
+#include "nodes/procedural/abstractExpression.h"
 
 namespace nodes {
 
     namespace procedural {
 
         /**
-         * \class CConstant
-         * \brief Class for integer literal representation.
-         * 
-         * Class contains positive or negative 4B integer value.
+         * \class CAbstractPrimaryExpression
+         * \brief Class for expression in parentheses.
          */
-        class CConstant : public CAbstractPrimaryExpression {
-        private:
-                    i32                             m_intValue;         /**< Integer 4B value */
-
-        public:
+        class CAbstractPrimaryExpression : public virtual CAbstractExpression {        
+        protected:
                                                     /**
                                                     * Parametric constructor with default values
                                                     * @param type: type of node
                                                     * @param val: integer value
                                                     */
-                                                    CConstant           (i32 val = 0);
+                                                    CAbstractPrimaryExpression             ();
 
                                                     /**
                                                     * Copy constructor
+                                                    * Copy constructor is made protected to prevent from copying of object of this (abstract) type.
                                                     * @param other: reference to another object of same type
                                                     */
-                                                    CConstant           (const CConstant& other);
+                                                    CAbstractPrimaryExpression             (const CAbstractPrimaryExpression& other);
 
                                                     /**
                                                     * Move constructor
+                                                    * Move constructor is made protected to prevent from moving of object of this (abstract) type.
                                                     * @param other: rvalue-reference to another object of same type
                                                     */
-                                                    CConstant           (CConstant&& other) noexcept;
+                                                    CAbstractPrimaryExpression             (CAbstractPrimaryExpression&& other) noexcept;
 
                                                     /**
                                                     * Copy assignment operator
+                                                    * Copy assignment operator is made protected to prevent from assigning of object of this (abstract) type.
                                                     * @param other: reference to another object of same type
                                                     * @return reference to assigned object
                                                     */
-                    CConstant&                      operator =          (const CConstant& other);
+                    CAbstractPrimaryExpression&                    operator =              (const CAbstractPrimaryExpression& other);
 
                                                     /**
                                                     * Move assignment operator
+                                                    * Move assignment operator is made protected to prevent from assigning of object of this (abstract) type.
                                                     * @param other: rvalue-reference to another object of same type
                                                     * @return reference to assigned object
                                                     */
-                    CConstant&                      operator =          (CConstant&& other) noexcept;
+                    CAbstractPrimaryExpression&                    operator =              (CAbstractPrimaryExpression&& other) noexcept;
 
                                                     /**
                                                      * Clone method for copy-construction of polymorphic objects
                                                      * @return pointer to newly copied object.
                                                      */
-            virtual CNode *                    clone               () const;
+            virtual CNode *                    clone                   () const;
 
+        public:
                                                     /**
                                                     * Virtual destructor
                                                     */
-            virtual                                 ~CConstant          ();
+            virtual                                 ~CAbstractPrimaryExpression            ();
 
                                                     /**
                                                     * Virtual print function to call from operator <<
                                                     * @param os: output stream
                                                     * @see operator <<()
                                                     */
-            virtual void                            print               (std::ostream& outStr) const;
-
-                                                    /**
-                                                     * Integer value getter
-                                                     * @return integer value
-                                                     */
-                    i32                             getValue            () const;
+            virtual void                            print                   (std::ostream& outStr) const;
         };
 
     }

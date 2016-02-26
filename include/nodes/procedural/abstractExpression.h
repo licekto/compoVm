@@ -4,34 +4,42 @@
 
 namespace nodes {
 
+    /**
+     *  \addtogroup procedural
+     *  @{
+     */
+
+    /**
+     * procedural Namespace to uniquely identify compo AST nodes.
+     */
     namespace procedural {
 
         /**
-         * \class CCompoParens
-         * \brief Class for expression in parentheses.
+         * \class CAbstractExpression
+         * \brief Class for abstract expression representation.
          */
-        class CExpression : public CCompoNode {        
-        public:
+        class CAbstractExpression : public virtual CNode {        
+        protected:
                                                     /**
                                                     * Parametric constructor with default values
                                                     * @param type: type of node
                                                     * @param val: integer value
                                                     */
-                                                    CExpression             ();
+                                                    CAbstractExpression             ();
 
                                                     /**
                                                     * Copy constructor
                                                     * Copy constructor is made protected to prevent from copying of object of this (abstract) type.
                                                     * @param other: reference to another object of same type
                                                     */
-                                                    CExpression             (const CExpression& other);
+                                                    CAbstractExpression             (const CAbstractExpression& other);
 
                                                     /**
                                                     * Move constructor
                                                     * Move constructor is made protected to prevent from moving of object of this (abstract) type.
                                                     * @param other: rvalue-reference to another object of same type
                                                     */
-                                                    CExpression             (CExpression&& other) noexcept;
+                                                    CAbstractExpression             (CAbstractExpression&& other) noexcept;
 
                                                     /**
                                                     * Copy assignment operator
@@ -39,7 +47,7 @@ namespace nodes {
                                                     * @param other: reference to another object of same type
                                                     * @return reference to assigned object
                                                     */
-                    CExpression&                    operator =              (const CExpression& other);
+                    CAbstractExpression&                    operator =              (const CAbstractExpression& other);
 
                                                     /**
                                                     * Move assignment operator
@@ -47,18 +55,19 @@ namespace nodes {
                                                     * @param other: rvalue-reference to another object of same type
                                                     * @return reference to assigned object
                                                     */
-                    CExpression&                    operator =              (CExpression&& other) noexcept;
+                    CAbstractExpression&                    operator =              (CAbstractExpression&& other) noexcept;
 
                                                     /**
                                                      * Clone method for copy-construction of polymorphic objects
                                                      * @return pointer to newly copied object.
                                                      */
-            virtual CCompoNode *                    clone                   () const;
+            virtual CNode *                    clone                   () const;
 
+        public:
                                                     /**
                                                     * Virtual destructor
                                                     */
-            virtual                                 ~CExpression            ();
+            virtual                                 ~CAbstractExpression            ();
 
                                                     /**
                                                     * Virtual print function to call from operator <<
@@ -66,12 +75,6 @@ namespace nodes {
                                                     * @see operator <<()
                                                     */
             virtual void                            print                   (std::ostream& outStr) const;
-
-                                                    /**
-                                                     * Integer value getter
-                                                     * @return integer value
-                                                     */
-                    CCompoNode *                    getExpression           () const;
         };
 
     }

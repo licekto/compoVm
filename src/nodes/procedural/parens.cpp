@@ -5,17 +5,23 @@ namespace nodes {
     namespace procedural {
         
         CParens::CParens(CNode *expr)
-        : CNode(types::NodeTypeEnum::PARENS),
+        : CNode(types::nodeTypeEnum::PARENS),
+          CAbstractExpression(),
+          CAbstractPrimaryExpression(),
           m_expression(expr)
         {}
 
         CParens::CParens(const CParens& other)
         : CNode(other),
+          CAbstractExpression(),
+          CAbstractPrimaryExpression(),
           m_expression(other.m_expression)
         {}
 
         CParens::CParens(CParens&& other) noexcept
         : CNode(std::move(other)),
+          CAbstractExpression(),
+          CAbstractPrimaryExpression(),
           m_expression(std::move(other.m_expression))
         {}
 

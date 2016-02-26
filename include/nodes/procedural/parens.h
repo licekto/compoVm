@@ -1,6 +1,7 @@
 #pragma once
 
 #include "nodes/node.h"
+#include "abstractPrimaryExpression.h"
 
 
 namespace nodes {
@@ -8,10 +9,10 @@ namespace nodes {
     namespace procedural {
 
         /**
-         * \class CCompoParens
+         * \class CParens
          * \brief Class for expression in parentheses.
          */
-        class CParens : public CNode {
+        class CParens : public CAbstractPrimaryExpression {
         private:
                     CNode                       * m_expression;         /**< Expression in parentheses */
 
@@ -25,21 +26,18 @@ namespace nodes {
 
                                                     /**
                                                     * Copy constructor
-                                                    * Copy constructor is made protected to prevent from copying of object of this (abstract) type.
                                                     * @param other: reference to another object of same type
                                                     */
                                                     CParens         (const CParens& other);
 
                                                     /**
                                                     * Move constructor
-                                                    * Move constructor is made protected to prevent from moving of object of this (abstract) type.
                                                     * @param other: rvalue-reference to another object of same type
                                                     */
                                                     CParens         (CParens&& other) noexcept;
 
                                                     /**
                                                     * Copy assignment operator
-                                                    * Copy assignment operator is made protected to prevent from assigning of object of this (abstract) type.
                                                     * @param other: reference to another object of same type
                                                     * @return reference to assigned object
                                                     */
@@ -47,7 +45,6 @@ namespace nodes {
 
                                                     /**
                                                     * Move assignment operator
-                                                    * Move assignment operator is made protected to prevent from assigning of object of this (abstract) type.
                                                     * @param other: rvalue-reference to another object of same type
                                                     * @return reference to assigned object
                                                     */
@@ -75,7 +72,7 @@ namespace nodes {
                                                      * Expression getter
                                                      * @return nodes::CNode pointer
                                                      */
-                    nodes::CNode *                    getExpression   () const;
+                    CNode *                    getExpression   () const;
         };
 
     }

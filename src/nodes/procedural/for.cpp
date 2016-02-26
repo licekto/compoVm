@@ -8,7 +8,7 @@ namespace nodes {
                                 CNode* endCond,
                                 CNode* step,
                                 const std::vector<CNode*>& body)
-        :   CNode(types::NodeTypeEnum::FOR),
+        :   CNode(types::nodeTypeEnum::FOR),
             m_startCondition(startCond),
             m_endCondition(endCond),
             m_step(step),

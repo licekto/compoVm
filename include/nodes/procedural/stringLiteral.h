@@ -7,7 +7,7 @@ namespace nodes {
     namespace procedural {
 
         /**
-         * \class CCompoIntegerLiteral
+         * \class CStringLiteral
          * \brief Class for integer literal representation.
          * 
          * Class contains positive or negative 4B integer value.
@@ -26,21 +26,18 @@ namespace nodes {
 
                                                     /**
                                                     * Copy constructor
-                                                    * Copy constructor is made protected to prevent from copying of object of this (abstract) type.
                                                     * @param other: reference to another object of same type
                                                     */
                                                     CStringLiteral         (const CStringLiteral& other);
 
                                                     /**
                                                     * Move constructor
-                                                    * Move constructor is made protected to prevent from moving of object of this (abstract) type.
                                                     * @param other: rvalue-reference to another object of same type
                                                     */
                                                     CStringLiteral         (CStringLiteral&& other) noexcept;
 
                                                     /**
                                                     * Copy assignment operator
-                                                    * Copy assignment operator is made protected to prevent from assigning of object of this (abstract) type.
                                                     * @param other: reference to another object of same type
                                                     * @return reference to assigned object
                                                     */
@@ -48,7 +45,6 @@ namespace nodes {
 
                                                     /**
                                                     * Move assignment operator
-                                                    * Move assignment operator is made protected to prevent from assigning of object of this (abstract) type.
                                                     * @param other: rvalue-reference to another object of same type
                                                     * @return reference to assigned object
                                                     */

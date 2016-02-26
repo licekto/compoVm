@@ -1,6 +1,7 @@
 #pragma once
 
 #include "nodes/node.h"
+#include "abstractPrimaryExpression.h"
 
 
 namespace nodes {
@@ -11,7 +12,7 @@ namespace nodes {
          * \class CSymbol
          * \brief Class for Compo symbol node representation.
          */
-        class CSymbol : public CNode {
+        class CSymbol : public CAbstractPrimaryExpression {
         private:
                     std::string                     m_name;         /**< Name of symbol */
 

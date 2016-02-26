@@ -5,7 +5,7 @@ namespace nodes {
     namespace procedural {
     
         CAssignment::CAssignment(CSymbol * variable, CNode * rVal)
-        :   CNode(types::NodeTypeEnum::ASSIGNMENT),
+        :   CNode(types::nodeTypeEnum::ASSIGNMENT),
             m_variable(variable), m_rValue(rVal)
         {}
 
