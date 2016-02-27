@@ -2,6 +2,7 @@
 
 #include <memory>
 #include "nodes/node.h"
+#include "abstractStatement.h"
 
 namespace nodes {
 
@@ -19,7 +20,7 @@ namespace nodes {
 		 * \class CAbstractExpression
 		 * \brief Class for abstract expression representation.
 		 */
-		class CAbstractExpression : public virtual CNode {
+		class CAbstractExpression : public virtual CAbstractStatement {
 		  public:
 
 			/**
