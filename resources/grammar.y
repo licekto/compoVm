@@ -12,7 +12,7 @@
 #include "nodes/compo/provision.h"
 #include "nodes/compo/requirement.h"
 #include "nodes/procedural/for.h"
-#include "nodes/procedural/assignment.h"
+#include "nodes/procedural/assignmentExpression.h"
 #include "nodes/procedural/constant.h"
 #include "nodes/procedural/parens.h"
 
@@ -26,15 +26,15 @@ typedef struct block {
     void                        clear()     {temporaries.clear(); statements.clear();}
 } TBLOCK;
 
-std::vector<nodes::CNode*>     currentBody;
-nodes::compo::CService              * currentService      = nullptr;
-std::vector<nodes::procedural::CSymbol*>   currentServiceParams;
-std::vector<nodes::CNode*>     currentServiceBody;
-TBLOCK                              currentBlock;
+std::vector<nodes::CNode*>                  currentBody;
+nodes::compo::CService                    * currentService      = nullptr;
+std::vector<nodes::procedural::CSymbol*>    currentServiceParams;
+std::vector<nodes::CNode*>                  currentServiceBody;
+TBLOCK                                      currentBlock;
 
-nodes::types::visibilityType               visType             = nodes::types::visibilityType::EXTERNAL;
-bool                                atomicPresent       = false;
-std::vector<nodes::compo::CPort*>     currentPorts;
+nodes::types::visibilityType                visType             = nodes::types::visibilityType::EXTERNAL;
+bool                                        atomicPresent       = false;
+std::vector<nodes::compo::CPort*>           currentPorts;
 
 %}
 
@@ -129,7 +129,7 @@ assignment_expression
                     }
                 |   primary_expression assignment_operator expression
                     {
-                        $$ = new nodes::procedural::CAssignment(dynamic_cast<nodes::procedural::CSymbol*>($1), $3);
+                        $$ = new nodes::procedural::CAssignmentExpression(dynamic_cast<nodes::procedural::CSymbol*>($1), $3);
                     }
 
 assignment_operator
