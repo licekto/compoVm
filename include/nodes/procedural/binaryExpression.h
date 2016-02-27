@@ -12,7 +12,7 @@ namespace nodes {
 
 		/**
 		 * \class CBinaryExpression
-		 * \brief Class for assignment representation.
+		 * \brief Class for binary expression representation.
 		 */
 		class CBinaryExpression : public virtual CAbstractExpression {
 		  protected:

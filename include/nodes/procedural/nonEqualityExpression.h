@@ -10,8 +10,8 @@ namespace nodes {
 	namespace procedural {
 
 		/**
-		 * \class CAdditiveExpression
-		 * \brief Class for assignment representation.
+		 * \class CNonEqualityExpression
+		 * \brief Class for non-equality representation.
 		 */
 		class CNonEqualityExpression : public CBinaryExpression {
 		  public:

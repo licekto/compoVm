@@ -10,7 +10,7 @@ namespace nodes {
 
 		/**
 		 * \class CAbstractPrimaryExpression
-		 * \brief Class for expression in parentheses.
+		 * \brief Class for primary expression like string literal, constant, identifier or expression in parentheses.
 		 */
 		class CAbstractPrimaryExpression : public virtual CAbstractExpression {
 		  public:

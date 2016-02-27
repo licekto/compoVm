@@ -10,8 +10,8 @@ namespace nodes {
 	namespace procedural {
 
 		/**
-		 * \class CAdditiveExpression
-		 * \brief Class for assignment representation.
+		 * \class CSubtractionExpression
+		 * \brief Class for subtraction representation.
 		 */
 		class CSubtractionExpression : public CBinaryExpression {
 		  public:
