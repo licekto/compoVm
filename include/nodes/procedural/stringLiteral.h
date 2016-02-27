@@ -2,6 +2,7 @@
 
 #include <memory>
 #include "nodes/node.h"
+#include "abstractPrimaryExpression.h"
 
 namespace nodes {
 
@@ -13,7 +14,7 @@ namespace nodes {
 		 *
 		 * Class contains positive or negative 4B integer value.
 		 */
-		class CStringLiteral : public CNode {
+		class CStringLiteral : public CAbstractPrimaryExpression {
 		  private:
 			std::string                     m_stringValue;         /**< String value */
 
