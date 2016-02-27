@@ -24,6 +24,10 @@
 #include "nodes/procedural/nonEqualityExpression.h"
 #include "nodes/procedural/logicalAndExpression.h"
 #include "nodes/procedural/logicalOrExpression.h"
+#include "nodes/procedural/lessExpression.h"
+#include "nodes/procedural/lessOrEqualExpression.h"
+#include "nodes/procedural/greaterExpression.h"
+#include "nodes/procedural/greaterOrEqualExpression.h"
 
 #include "nodes/procedural/constant.h"
 #include "nodes/procedural/parens.h"
@@ -89,8 +93,12 @@ std::vector<std::shared_ptr<nodes::compo::CPort>>           currentPorts;
 %token STRING_LITERAL
 %token EQ_OP
 %token NE_OP
+%token GE_OP
+%token LE_OP
 %token AND_OP
 %token OR_OP
+%token BREAK
+%token CONTINUE
 %token END
 
 %%
@@ -150,8 +158,31 @@ additive_expression
                     }
                 ;
 
-equality_expression
+relational_expression
                 :   additive_expression
+                    {
+                        $$ = $1;
+                    }
+                |   relational_expression '<' additive_expression
+                    {
+                        $$ = std::make_shared<nodes::procedural::CLessExpression>(std::dynamic_pointer_cast<nodes::procedural::CAbstractExpression>($1), std::dynamic_pointer_cast<nodes::procedural::CAbstractExpression>($3));
+                    }
+                |   relational_expression '>' additive_expression
+                    {
+                        $$ = std::make_shared<nodes::procedural::CGreaterExpression>(std::dynamic_pointer_cast<nodes::procedural::CAbstractExpression>($1), std::dynamic_pointer_cast<nodes::procedural::CAbstractExpression>($3));
+                    }
+                |   relational_expression LE_OP additive_expression
+                    {
+                        $$ = std::make_shared<nodes::procedural::CLessOrEqualExpression>(std::dynamic_pointer_cast<nodes::procedural::CAbstractExpression>($1), std::dynamic_pointer_cast<nodes::procedural::CAbstractExpression>($3));
+                    }
+                |   relational_expression GE_OP additive_expression
+                    {
+                        $$ = std::make_shared<nodes::procedural::CGreaterOrEqualExpression>(std::dynamic_pointer_cast<nodes::procedural::CAbstractExpression>($1), std::dynamic_pointer_cast<nodes::procedural::CAbstractExpression>($3));
+                    }
+                ;
+
+equality_expression
+                :   relational_expression
                     {
                         $$ = $1;
                     }
@@ -189,19 +220,14 @@ logical_or_expression
 
 
 assignment_expression
-                :   logical_and_expression
+                :   logical_or_expression
                     {
                         $$ = $1;
                     }
-                |   primary_expression assignment_operator expression
+                |   primary_expression ASSIGNMENT expression
                     {
                         $$ = std::make_shared<nodes::procedural::CAssignmentExpression>(std::dynamic_pointer_cast<nodes::procedural::CSymbol>($1), $3);
                     }
-
-assignment_operator
-                :   ASSIGNMENT
-                |   ADD_ASSIGNMENT
-                ;
 
 expression      
                 :   assignment_expression
@@ -210,15 +236,6 @@ expression
                     }
                 |   expression ',' assignment_expression
                 ;
-
-declaration
-                :   assignment_expression
-                    {
-                        $$ = $1;
-                    }
-                ;
-
-
 
 statement
                 :   expression_statement
@@ -246,7 +263,7 @@ block_item_list
                 ;
 
 block_item
-                :   declaration
+                :   expression
                     {
                         $$ = $1;
                     }
@@ -267,14 +284,13 @@ selection_statement
                 ;
 
 iteration_statement
-                :   FOR '(' expression_statement expression_statement ')' statement
-                |   FOR '(' expression_statement expression_statement expression ')' statement
-                |   FOR '(' declaration expression_statement ')' statement
-                |   FOR '(' declaration expression_statement expression ')' statement
+                :   FOR '(' assignment_expression expression_statement expression ')' statement
                 ;
 
 jump_statement
-                :   RETURN expression ';'
+                :   CONTINUE ';'
+                |   BREAK ';'
+                |   RETURN expression ';'
                 ;
 
 /*---------------------------- grammar-compo ---------------------------------*/

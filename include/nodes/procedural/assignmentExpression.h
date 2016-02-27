@@ -12,8 +12,8 @@ namespace nodes {
 		 * \class CAssignmentExpression
 		 * \brief Class for assignment representation.
 		 */
-		class CAssignmentExpression : public CNode {
-		  private:
+		class CAssignmentExpression : public CAbstractExpression {
+		  protected:
 			std::shared_ptr<nodes::procedural::CSymbol> m_variable;     /**< Variable to assign to */
 			std::shared_ptr<nodes::CNode> m_rValue;       /**< Right-hand side of assignment expression */
 

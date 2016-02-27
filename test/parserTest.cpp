@@ -19,6 +19,14 @@
 #include "nodes/procedural/subtractionExpression.h"
 #include "nodes/procedural/multiplicationExpression.h"
 #include "nodes/procedural/divisionExpression.h"
+#include "nodes/procedural/equalityExpression.h"
+#include "nodes/procedural/nonEqualityExpression.h"
+#include "nodes/procedural/logicalOrExpression.h"
+#include "nodes/procedural/logicalAndExpression.h"
+#include "nodes/procedural/greaterExpression.h"
+#include "nodes/procedural/greaterOrEqualExpression.h"
+#include "nodes/procedural/lessExpression.h"
+#include "nodes/procedural/lessOrEqualExpression.h"
 
 void testDescriptor(std::shared_ptr<nodes::compo::CDescriptor> descriptor, const std::string& name, const std::string& extends, int bodySize) {
     BOOST_CHECK_EQUAL(nodes::types::nodeType::DESCRIPTOR, descriptor->getNodeType());
@@ -209,7 +217,7 @@ BOOST_AUTO_TEST_CASE(compoServiceBody) {
     parser.clear();
 }
 
-BOOST_AUTO_TEST_CASE(compoProcedural) {
+BOOST_AUTO_TEST_CASE(compoProceduralBinary) {
     // Testing input
     std::stringstream input;
     input.str("descriptor test {\
@@ -222,6 +230,14 @@ BOOST_AUTO_TEST_CASE(compoProcedural) {
             f := 18 - 2;\
             g := 5 * 3;\
             h := 10 / 5;\
+            i := 5 == 6;\
+            j := 1 != 1;\
+            k := 0 || 1;\
+            l := 1 && 1;\
+            m := 0 < 1;\
+            n := 5 > 1;\
+            o := 0 <= 1;\
+            p := 84 >= 1;\
         }\
     }");
     
@@ -235,13 +251,13 @@ BOOST_AUTO_TEST_CASE(compoProcedural) {
     
     // Check service
     std::shared_ptr<nodes::compo::CService> service = std::dynamic_pointer_cast<nodes::compo::CService>(descriptor->getBodyNodeAt(0));
-    testServConstr(service, nodes::types::nodeType::SERVICE, "procedural", std::vector<std::string>(0), 8);
+    testServConstr(service, nodes::types::nodeType::SERVICE, "procedural", std::vector<std::string>(0), 16);
     
     // Check symbol
     std::shared_ptr<nodes::procedural::CSymbol> symbol = std::dynamic_pointer_cast<nodes::procedural::CSymbol>(service->getBodyNodeAt(0));
     testSymbol(symbol, "a");
     
-    
+    // -------------------------------------------------------------------------
     // Check assignment
     std::shared_ptr<nodes::procedural::CAssignmentExpression> assignment = std::dynamic_pointer_cast<nodes::procedural::CAssignmentExpression>(service->getBodyNodeAt(1));
     BOOST_CHECK_EQUAL(nodes::types::nodeType::ASSIGNMENT_EXPRESSION, assignment->getNodeType());
@@ -255,7 +271,7 @@ BOOST_AUTO_TEST_CASE(compoProcedural) {
     std::shared_ptr<nodes::procedural::CConstant> constant = std::dynamic_pointer_cast<nodes::procedural::CConstant>(assignment->getRValue());
     testConstant(constant, 1);
     
-    
+    // -------------------------------------------------------------------------
     // Check assignment
     assignment = std::dynamic_pointer_cast<nodes::procedural::CAssignmentExpression>(service->getBodyNodeAt(2));
     BOOST_CHECK_EQUAL(nodes::types::nodeType::ASSIGNMENT_EXPRESSION, assignment->getNodeType());
@@ -268,7 +284,7 @@ BOOST_AUTO_TEST_CASE(compoProcedural) {
     std::shared_ptr<nodes::procedural::CStringLiteral> stringLiteral = std::dynamic_pointer_cast<nodes::procedural::CStringLiteral>(assignment->getRValue());
     testStringLiteral(stringLiteral, "testString");
     
-    
+    // -------------------------------------------------------------------------
     // Check assignment
     assignment = std::dynamic_pointer_cast<nodes::procedural::CAssignmentExpression>(service->getBodyNodeAt(3));
     BOOST_CHECK_EQUAL(nodes::types::nodeType::ASSIGNMENT_EXPRESSION, assignment->getNodeType());
@@ -285,7 +301,7 @@ BOOST_AUTO_TEST_CASE(compoProcedural) {
     constant = std::dynamic_pointer_cast<nodes::procedural::CConstant>(parens->getExpression());
     testConstant(constant, 55);
     
-    
+    // -------------------------------------------------------------------------
     // Check assignment
     assignment = std::dynamic_pointer_cast<nodes::procedural::CAssignmentExpression>(service->getBodyNodeAt(4));
     BOOST_CHECK_EQUAL(nodes::types::nodeType::ASSIGNMENT_EXPRESSION, assignment->getNodeType());
@@ -307,7 +323,7 @@ BOOST_AUTO_TEST_CASE(compoProcedural) {
     std::shared_ptr<nodes::procedural::CConstant> op2 = std::dynamic_pointer_cast<nodes::procedural::CConstant>(addition->getOperand2());
     testConstant(op2, 64);
     
-    
+    // -------------------------------------------------------------------------
     // Check assignment
     assignment = std::dynamic_pointer_cast<nodes::procedural::CAssignmentExpression>(service->getBodyNodeAt(5));
     BOOST_CHECK_EQUAL(nodes::types::nodeType::ASSIGNMENT_EXPRESSION, assignment->getNodeType());
@@ -329,7 +345,7 @@ BOOST_AUTO_TEST_CASE(compoProcedural) {
     op2 = std::dynamic_pointer_cast<nodes::procedural::CConstant>(subtraction->getOperand2());
     testConstant(op2, 2);
     
-    
+    // -------------------------------------------------------------------------
     // Check assignment
     assignment = std::dynamic_pointer_cast<nodes::procedural::CAssignmentExpression>(service->getBodyNodeAt(6));
     BOOST_CHECK_EQUAL(nodes::types::nodeType::ASSIGNMENT_EXPRESSION, assignment->getNodeType());
@@ -351,7 +367,7 @@ BOOST_AUTO_TEST_CASE(compoProcedural) {
     op2 = std::dynamic_pointer_cast<nodes::procedural::CConstant>(multiplication->getOperand2());
     testConstant(op2, 3);
     
-    
+    // -------------------------------------------------------------------------
     // Check assignment
     assignment = std::dynamic_pointer_cast<nodes::procedural::CAssignmentExpression>(service->getBodyNodeAt(7));
     BOOST_CHECK_EQUAL(nodes::types::nodeType::ASSIGNMENT_EXPRESSION, assignment->getNodeType());
@@ -372,6 +388,182 @@ BOOST_AUTO_TEST_CASE(compoProcedural) {
     // Check constant
     op2 = std::dynamic_pointer_cast<nodes::procedural::CConstant>(division->getOperand2());
     testConstant(op2, 5);
+    
+    // -------------------------------------------------------------------------
+    // Check assignment
+    assignment = std::dynamic_pointer_cast<nodes::procedural::CAssignmentExpression>(service->getBodyNodeAt(8));
+    BOOST_CHECK_EQUAL(nodes::types::nodeType::ASSIGNMENT_EXPRESSION, assignment->getNodeType());
+    
+    // Check symbol
+    symbol = std::dynamic_pointer_cast<nodes::procedural::CSymbol>(assignment->getVariable());
+    testSymbol(symbol, "i");
+    
+    // Check parens
+    std::shared_ptr<nodes::procedural::CEqualityExpression> equality = std::dynamic_pointer_cast<nodes::procedural::CEqualityExpression>(assignment->getRValue());
+    BOOST_CHECK_EQUAL(nodes::types::nodeType::EQUALITY_EXPRESSION, equality->getNodeType());
+    BOOST_CHECK_EQUAL(nodes::types::operatorType::EQUALITY, equality->getOperator());
+    
+    // Check constant
+    op1 = std::dynamic_pointer_cast<nodes::procedural::CConstant>(equality->getOperand1());
+    testConstant(op1, 5);
+    
+    // Check constant
+    op2 = std::dynamic_pointer_cast<nodes::procedural::CConstant>(equality->getOperand2());
+    testConstant(op2, 6);
+    
+    // -------------------------------------------------------------------------
+    // Check assignment
+    assignment = std::dynamic_pointer_cast<nodes::procedural::CAssignmentExpression>(service->getBodyNodeAt(9));
+    BOOST_CHECK_EQUAL(nodes::types::nodeType::ASSIGNMENT_EXPRESSION, assignment->getNodeType());
+    
+    // Check symbol
+    symbol = std::dynamic_pointer_cast<nodes::procedural::CSymbol>(assignment->getVariable());
+    testSymbol(symbol, "j");
+    
+    // Check parens
+    std::shared_ptr<nodes::procedural::CNonEqualityExpression> nonEquality = std::dynamic_pointer_cast<nodes::procedural::CNonEqualityExpression>(assignment->getRValue());
+    BOOST_CHECK_EQUAL(nodes::types::nodeType::NON_EQUALITY_EXPRESSION, nonEquality->getNodeType());
+    BOOST_CHECK_EQUAL(nodes::types::operatorType::NON_EQUALITY, nonEquality->getOperator());
+    
+    // Check constant
+    op1 = std::dynamic_pointer_cast<nodes::procedural::CConstant>(nonEquality->getOperand1());
+    testConstant(op1, 1);
+    
+    // Check constant
+    op2 = std::dynamic_pointer_cast<nodes::procedural::CConstant>(nonEquality->getOperand2());
+    testConstant(op2, 1);
+    
+    // -------------------------------------------------------------------------
+    // Check assignment
+    assignment = std::dynamic_pointer_cast<nodes::procedural::CAssignmentExpression>(service->getBodyNodeAt(10));
+    BOOST_CHECK_EQUAL(nodes::types::nodeType::ASSIGNMENT_EXPRESSION, assignment->getNodeType());
+    
+    // Check symbol
+    symbol = std::dynamic_pointer_cast<nodes::procedural::CSymbol>(assignment->getVariable());
+    testSymbol(symbol, "k");
+    
+    // Check parens
+    std::shared_ptr<nodes::procedural::CLogicalOrExpression> logicalOr = std::dynamic_pointer_cast<nodes::procedural::CLogicalOrExpression>(assignment->getRValue());
+    BOOST_CHECK_EQUAL(nodes::types::nodeType::LOGICAL_OR_EXPRESSION, logicalOr->getNodeType());
+    BOOST_CHECK_EQUAL(nodes::types::operatorType::LOGICAL_OR, logicalOr->getOperator());
+    
+    // Check constant
+    op1 = std::dynamic_pointer_cast<nodes::procedural::CConstant>(logicalOr->getOperand1());
+    testConstant(op1, 0);
+    
+    // Check constant
+    op2 = std::dynamic_pointer_cast<nodes::procedural::CConstant>(logicalOr->getOperand2());
+    testConstant(op2, 1);
+    
+    // -------------------------------------------------------------------------
+    // Check assignment
+    assignment = std::dynamic_pointer_cast<nodes::procedural::CAssignmentExpression>(service->getBodyNodeAt(11));
+    BOOST_CHECK_EQUAL(nodes::types::nodeType::ASSIGNMENT_EXPRESSION, assignment->getNodeType());
+    
+    // Check symbol
+    symbol = std::dynamic_pointer_cast<nodes::procedural::CSymbol>(assignment->getVariable());
+    testSymbol(symbol, "l");
+    
+    // Check parens
+    std::shared_ptr<nodes::procedural::CLogicalAndExpression> logicalAnd = std::dynamic_pointer_cast<nodes::procedural::CLogicalAndExpression>(assignment->getRValue());
+    BOOST_CHECK_EQUAL(nodes::types::nodeType::LOGICAL_AND_EXPRESSION, logicalAnd->getNodeType());
+    BOOST_CHECK_EQUAL(nodes::types::operatorType::LOGICAL_AND, logicalAnd->getOperator());
+    
+    // Check constant
+    op1 = std::dynamic_pointer_cast<nodes::procedural::CConstant>(logicalAnd->getOperand1());
+    testConstant(op1, 1);
+    
+    // Check constant
+    op2 = std::dynamic_pointer_cast<nodes::procedural::CConstant>(logicalAnd->getOperand2());
+    testConstant(op2, 1);
+    
+    // -------------------------------------------------------------------------
+    // Check assignment
+    assignment = std::dynamic_pointer_cast<nodes::procedural::CAssignmentExpression>(service->getBodyNodeAt(12));
+    BOOST_CHECK_EQUAL(nodes::types::nodeType::ASSIGNMENT_EXPRESSION, assignment->getNodeType());
+    
+    // Check symbol
+    symbol = std::dynamic_pointer_cast<nodes::procedural::CSymbol>(assignment->getVariable());
+    testSymbol(symbol, "m");
+    
+    // Check parens
+    std::shared_ptr<nodes::procedural::CLessExpression> less = std::dynamic_pointer_cast<nodes::procedural::CLessExpression>(assignment->getRValue());
+    BOOST_CHECK_EQUAL(nodes::types::nodeType::LESS_EXPRESSION, less->getNodeType());
+    BOOST_CHECK_EQUAL(nodes::types::operatorType::LESS, less->getOperator());
+    
+    // Check constant
+    op1 = std::dynamic_pointer_cast<nodes::procedural::CConstant>(less->getOperand1());
+    testConstant(op1, 0);
+    
+    // Check constant
+    op2 = std::dynamic_pointer_cast<nodes::procedural::CConstant>(less->getOperand2());
+    testConstant(op2, 1);
+    
+    // -------------------------------------------------------------------------
+    // Check assignment
+    assignment = std::dynamic_pointer_cast<nodes::procedural::CAssignmentExpression>(service->getBodyNodeAt(13));
+    BOOST_CHECK_EQUAL(nodes::types::nodeType::ASSIGNMENT_EXPRESSION, assignment->getNodeType());
+    
+    // Check symbol
+    symbol = std::dynamic_pointer_cast<nodes::procedural::CSymbol>(assignment->getVariable());
+    testSymbol(symbol, "n");
+    
+    // Check parens
+    std::shared_ptr<nodes::procedural::CGreaterExpression> greater = std::dynamic_pointer_cast<nodes::procedural::CGreaterExpression>(assignment->getRValue());
+    BOOST_CHECK_EQUAL(nodes::types::nodeType::GREATER_EXPRESSION, greater->getNodeType());
+    BOOST_CHECK_EQUAL(nodes::types::operatorType::GREATER, greater->getOperator());
+    
+    // Check constant
+    op1 = std::dynamic_pointer_cast<nodes::procedural::CConstant>(greater->getOperand1());
+    testConstant(op1, 5);
+    
+    // Check constant
+    op2 = std::dynamic_pointer_cast<nodes::procedural::CConstant>(greater->getOperand2());
+    testConstant(op2, 1);
+    
+    // -------------------------------------------------------------------------
+    // Check assignment
+    assignment = std::dynamic_pointer_cast<nodes::procedural::CAssignmentExpression>(service->getBodyNodeAt(14));
+    BOOST_CHECK_EQUAL(nodes::types::nodeType::ASSIGNMENT_EXPRESSION, assignment->getNodeType());
+    
+    // Check symbol
+    symbol = std::dynamic_pointer_cast<nodes::procedural::CSymbol>(assignment->getVariable());
+    testSymbol(symbol, "o");
+    
+    // Check parens
+    std::shared_ptr<nodes::procedural::CLessOrEqualExpression> lessOrEqual = std::dynamic_pointer_cast<nodes::procedural::CLessOrEqualExpression>(assignment->getRValue());
+    BOOST_CHECK_EQUAL(nodes::types::nodeType::LESS_OR_EQUAL_EXPRESSION, lessOrEqual->getNodeType());
+    BOOST_CHECK_EQUAL(nodes::types::operatorType::LESS_OR_EQUAL, lessOrEqual->getOperator());
+    
+    // Check constant
+    op1 = std::dynamic_pointer_cast<nodes::procedural::CConstant>(lessOrEqual->getOperand1());
+    testConstant(op1, 0);
+    
+    // Check constant
+    op2 = std::dynamic_pointer_cast<nodes::procedural::CConstant>(lessOrEqual->getOperand2());
+    testConstant(op2, 1);
+    
+    // -------------------------------------------------------------------------
+    // Check assignment
+    assignment = std::dynamic_pointer_cast<nodes::procedural::CAssignmentExpression>(service->getBodyNodeAt(15));
+    BOOST_CHECK_EQUAL(nodes::types::nodeType::ASSIGNMENT_EXPRESSION, assignment->getNodeType());
+    
+    // Check symbol
+    symbol = std::dynamic_pointer_cast<nodes::procedural::CSymbol>(assignment->getVariable());
+    testSymbol(symbol, "p");
+    
+    // Check parens
+    std::shared_ptr<nodes::procedural::CGreaterOrEqualExpression> greaterOrEqual = std::dynamic_pointer_cast<nodes::procedural::CGreaterOrEqualExpression>(assignment->getRValue());
+    BOOST_CHECK_EQUAL(nodes::types::nodeType::GREATER_OR_EQUAL_EXPRESSION, greaterOrEqual->getNodeType());
+    BOOST_CHECK_EQUAL(nodes::types::operatorType::GREATER_OR_EQUAL, greaterOrEqual->getOperator());
+    
+    // Check constant
+    op1 = std::dynamic_pointer_cast<nodes::procedural::CConstant>(greaterOrEqual->getOperand1());
+    testConstant(op1, 84);
+    
+    // Check constant
+    op2 = std::dynamic_pointer_cast<nodes::procedural::CConstant>(greaterOrEqual->getOperand2());
+    testConstant(op2, 1);
     
     parser.clear();
 }

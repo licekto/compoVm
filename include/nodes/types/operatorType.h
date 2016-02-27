@@ -18,7 +18,11 @@ namespace nodes {
 			EQUALITY,
 			NON_EQUALITY,
 			LOGICAL_OR,
-			LOGICAL_AND
+			LOGICAL_AND,
+                        LESS,
+                        LESS_OR_EQUAL,
+                        GREATER,
+                        GREATER_OR_EQUAL
 		};
 
 		/**

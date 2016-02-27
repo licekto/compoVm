@@ -93,6 +93,10 @@ Identifier                  ({Letter}|[_]){LetterOrDigit}*
 
 <INITIAL>while				{return WHILE;}
 
+<INITIAL>break				{return BREAK;}
+
+<INITIAL>continue                       {return CONTINUE;}
+
 <INITIAL>":="				{return ASSIGNMENT;}
 
 <INITIAL>"*"				{return '*';}
@@ -124,6 +128,10 @@ Identifier                  ({Letter}|[_]){LetterOrDigit}*
 <INITIAL>"<"                            {return '<';}
 
 <INITIAL>">"                            {return '>';}
+
+<INITIAL>"<="                           {return LE_OP;}
+
+<INITIAL>">="                           {return GE_OP;}
 
 <INITIAL>"("                            {return '(';}
 

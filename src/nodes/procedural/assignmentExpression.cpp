@@ -6,6 +6,7 @@ namespace nodes {
 
 		CAssignmentExpression::CAssignmentExpression(std::shared_ptr<nodes::procedural::CSymbol> variable, std::shared_ptr<nodes::CNode> rVal)
 			:   CNode(types::nodeType::ASSIGNMENT_EXPRESSION),
+                            CAbstractExpression(),
 			    m_variable(variable), m_rValue(rVal) {
 		}
 

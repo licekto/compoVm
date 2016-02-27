@@ -47,7 +47,11 @@ namespace nodes {
 			LOGICAL_OR_EXPRESSION,
 			LOGICAL_AND_EXPRESSION,
 			EQUALITY_EXPRESSION,
-			NON_EQUALITY_EXPRESSION
+			NON_EQUALITY_EXPRESSION,
+                        LESS_EXPRESSION,
+                        LESS_OR_EQUAL_EXPRESSION,
+                        GREATER_EXPRESSION,
+                        GREATER_OR_EQUAL_EXPRESSION
 		};
 
 		/**
