@@ -11,7 +11,7 @@ namespace nodes {
 		 * \class CAssignment
 		 * \brief Class for assignment representation.
 		 */
-		class CAssignment : public CNode {
+		class CAssignmentExpression : public CNode {
 		  private:
 			CSymbol                  * m_variable;     /**< Variable to assign to */
 			CNode                    * m_rValue;       /**< Right-hand side of assignment expression */
@@ -22,33 +22,33 @@ namespace nodes {
 			* @param variable: name of variable
 			* @param rval: right-hand side of assignment
 			*/
-			CAssignment         (CSymbol * variable = nullptr, CNode * rVal = nullptr);
+			CAssignmentExpression         (CSymbol * variable = nullptr, CNode * rVal = nullptr);
 
 			/**
 			* Copy constructor
 			* @param other: reference to another object of same type
 			*/
-			CAssignment         (const CAssignment& other);
+			CAssignmentExpression         (const CAssignmentExpression& other);
 
 			/**
 			* Move constructor
 			* @param other: rvalue-reference to another object of same type
 			*/
-			CAssignment         (CAssignment&& other) noexcept;
+			CAssignmentExpression         (CAssignmentExpression&& other) noexcept;
 
 			/**
 			* Copy assignment operator
 			* @param other: reference to another object of same type
 			* @return reference to assigned object
 			*/
-			CAssignment&                    operator =          (const CAssignment& other);
+			CAssignmentExpression&                    operator =          (const CAssignmentExpression& other);
 
 			/**
 			* Move assignment operator
 			* @param other: rvalue-reference to another object of same type
 			* @return reference to assigned object
 			*/
-			CAssignment&                    operator =          (CAssignment&& other) noexcept;
+			CAssignmentExpression&                    operator =          (CAssignmentExpression&& other) noexcept;
 
 			/**
 			 * Clone method for copy-construction of polymorphic objects
@@ -59,7 +59,7 @@ namespace nodes {
 			/**
 			* Virtual destructor
 			*/
-			virtual                                 ~CAssignment        ();
+			virtual                                 ~CAssignmentExpression        ();
 
 			/**
 			* Virtual print function to call from operator <<
