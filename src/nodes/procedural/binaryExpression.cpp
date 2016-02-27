@@ -5,9 +5,9 @@ namespace nodes {
 	namespace procedural {
 
 		CBinaryExpression::CBinaryExpression(types::operatorType type,
-		                                     CAbstractPrimaryExpression * op1,
-		                                     CAbstractPrimaryExpression * op2)
-			:   CNode(types::nodeType::ASSIGNMENT),
+		                                     CAbstractExpression * op1,
+		                                     CAbstractExpression * op2)
+			:   CNode(types::nodeType::ASSIGNMENT_EXPRESSION),
 			    CAbstractExpression(),
 			    m_operator(type),
 			    m_operand1(op1),
@@ -71,11 +71,11 @@ namespace nodes {
 			return m_operator;
 		}
 
-		CAbstractPrimaryExpression * CBinaryExpression::getOperand1() const {
+		CAbstractExpression * CBinaryExpression::getOperand1() const {
 			return m_operand1;
 		}
 
-		CAbstractPrimaryExpression * CBinaryExpression::getOperand2() const {
+		CAbstractExpression * CBinaryExpression::getOperand2() const {
 			return m_operand2;
 		}
 	}

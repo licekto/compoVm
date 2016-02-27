@@ -1,6 +1,7 @@
 #pragma once
 
 #include "nodes/node.h"
+#include "nodes/procedural/abstractExpression.h"
 #include "nodes/procedural/symbol.h"
 #include "nodes/types/operatorType.h"
 
@@ -13,20 +14,19 @@ namespace nodes {
 		 * \brief Class for assignment representation.
 		 */
 		class CBinaryExpression : public virtual CAbstractExpression {
-		  private:
-			types::operatorType             m_operator;         /**< Operator */
-			CAbstractPrimaryExpression    * m_operand1;         /**< First operand */
-			CAbstractPrimaryExpression    * m_operand2;         /**< Second operand */
+		  protected:
+			types::operatorType      m_operator;         /**< Operator */
+			CAbstractExpression    * m_operand1;         /**< First operand */
+			CAbstractExpression    * m_operand2;         /**< Second operand */
 
-		  public:
 			/**
 			* Parametric constructor with default values
 			* @param variable: name of variable
 			* @param rval: right-hand side of assignment
 			*/
 			CBinaryExpression         ( types::operatorType type = types::operatorType::PLUS,
-			                            CAbstractPrimaryExpression * op1 = nullptr,
-			                            CAbstractPrimaryExpression * op2 = nullptr);
+			                            CAbstractExpression * op1 = nullptr,
+			                            CAbstractExpression * op2 = nullptr);
 
 			/**
 			* Copy constructor
@@ -60,6 +60,7 @@ namespace nodes {
 			 */
 			virtual CNode *                    clone               () const;
 
+                public:
 			/**
 			* Virtual destructor
 			*/
@@ -82,13 +83,13 @@ namespace nodes {
 			* First operand getter
 			* @return Operand expression pointer
 			*/
-			CAbstractPrimaryExpression *            getOperand1         () const;
+			CAbstractExpression *            getOperand1         () const;
 
 			/**
 			* Second operand getter
 			* @return Operand expression pointer
 			*/
-			CAbstractPrimaryExpression *            getOperand2         () const;
+			CAbstractExpression *            getOperand2         () const;
 		};
 
 	}
