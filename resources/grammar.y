@@ -238,38 +238,44 @@ expression
                 ;
 
 statement
-                :   expression_statement
+                :   compound_statement
+                    {
+                        $$ = $1;
+                    }
+                |   expression_statement
+                    {
+                        $$ = $1;
+                    }
                 |   selection_statement
+                    {
+                        $$ = $1;
+                    }
                 |   iteration_statement
+                    {
+                        $$ = $1;
+                    }
                 |   jump_statement
+                    {
+                        $$ = $1;
+                    }
                 ;
 
 compound_statement
                 :   '{' '}'
-                |   '{' block_item_list '}'
+                |   '{' statement_list '}'
                     {
                         $$ = $1;
-                    }
-
-block_item_list
-                :   block_item
-                    {
-                        currentBlock.statements.push_back($1);
-                    }
-                |   block_item_list block_item
-                    {
-                        currentBlock.statements.push_back($2);
                     }
                 ;
 
-block_item
-                :   expression
+statement_list
+                :   statement
                     {
-                        $$ = $1;
+                        currentBlock.statements.push_back($1);
                     }
-                |   statement
+                |   statement_list statement
                     {
-                        $$ = $1;
+                        currentBlock.statements.push_back($2);
                     }
                 ;
 
@@ -284,7 +290,13 @@ selection_statement
                 ;
 
 iteration_statement
-                :   FOR '(' assignment_expression expression_statement expression ')' statement
+                :   WHILE '(' expression ')' statement
+                |   FOR '(' assignment_expression expression_statement expression ')' statement
+                    {
+                        $$ = std::make_shared<nodes::procedural::CFor>( std::dynamic_pointer_cast<nodes::procedural::CAssignmentExpression>($3),
+                                                                        std::dynamic_pointer_cast<nodes::procedural::CAbstractExpression>($4),
+                                                                        std::dynamic_pointer_cast<nodes::procedural::CAbstractExpression>($5));
+                    }
                 ;
 
 jump_statement
