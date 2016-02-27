@@ -8,7 +8,7 @@ use File::Copy;
 use File::Path qw(make_path remove_tree);
 
 my $testCommand = "ctest -T Test -D ExperimentalBuild -D ExperimentalTest -D ExperimentalMemCheck";
-my $oclintCommand = "oclint-json-compilation-database -e ../src/generated/parser.cpp -e ../src/generated/lexer.cpp -- -rc=LONG_LINE=150 -report-type html -o oclint.html";
+my $oclintCommand = "oclint-json-compilation-database -e ../src/generated/parser.cpp -e ../src/generated/lexer.cpp -- -rc=LONG_LINE=200 -report-type html -o oclint.html";
 my $doxygenCommand = "doxygen Doxyfile";
 my $cppcheckCommand = "cppcheck -j 4 -i src/generated/ -i include/generated/ src/ include/ --force --enable=warning,performance,information,style --xml 2> cppcheck.xml";
 
