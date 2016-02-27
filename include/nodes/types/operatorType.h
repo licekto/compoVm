@@ -19,10 +19,10 @@ namespace nodes {
 			NON_EQUALITY,
 			LOGICAL_OR,
 			LOGICAL_AND,
-                        LESS,
-                        LESS_OR_EQUAL,
-                        GREATER,
-                        GREATER_OR_EQUAL
+			LESS,
+			LESS_OR_EQUAL,
+			GREATER,
+			GREATER_OR_EQUAL
 		};
 
 		/**

@@ -21,7 +21,7 @@ namespace nodes {
 			* @param rval: right-hand side of assignment
 			*/
 			CGreaterExpression         ( std::shared_ptr<nodes::procedural::CAbstractExpression> op1 = nullptr,
-			                              std::shared_ptr<nodes::procedural::CAbstractExpression> op2 = nullptr);
+			                             std::shared_ptr<nodes::procedural::CAbstractExpression> op2 = nullptr);
 		};
 
 	}
