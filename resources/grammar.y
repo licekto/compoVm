@@ -17,6 +17,14 @@
 #include "nodes/procedural/abstractExpression.h"
 #include "nodes/procedural/assignmentExpression.h"
 #include "nodes/procedural/additionExpression.h"
+#include "nodes/procedural/subtractionExpression.h"
+#include "nodes/procedural/multiplicationExpression.h"
+#include "nodes/procedural/divisionExpression.h"
+#include "nodes/procedural/equalityExpression.h"
+#include "nodes/procedural/nonEqualityExpression.h"
+#include "nodes/procedural/logicalAndExpression.h"
+#include "nodes/procedural/logicalOrExpression.h"
+
 #include "nodes/procedural/constant.h"
 #include "nodes/procedural/parens.h"
 
@@ -118,7 +126,13 @@ multiplicative_expression
                         $$ = $1;
                     }
                 |   multiplicative_expression '*' primary_expression
+                    {
+                        $$ = std::make_shared<nodes::procedural::CMultiplicationExpression>(std::dynamic_pointer_cast<nodes::procedural::CAbstractExpression>($1), std::dynamic_pointer_cast<nodes::procedural::CAbstractExpression>($3));
+                    }
                 |   multiplicative_expression '/' primary_expression
+                    {
+                        $$ = std::make_shared<nodes::procedural::CDivisionExpression>(std::dynamic_pointer_cast<nodes::procedural::CAbstractExpression>($1), std::dynamic_pointer_cast<nodes::procedural::CAbstractExpression>($3));
+                    }
                 ;
 
 additive_expression
@@ -131,6 +145,9 @@ additive_expression
                         $$ = std::make_shared<nodes::procedural::CAdditionExpression>(std::dynamic_pointer_cast<nodes::procedural::CAbstractExpression>($1), std::dynamic_pointer_cast<nodes::procedural::CAbstractExpression>($3));
                     }
                 |   additive_expression '-' multiplicative_expression
+                    {
+                        $$ = std::make_shared<nodes::procedural::CSubtractionExpression>(std::dynamic_pointer_cast<nodes::procedural::CAbstractExpression>($1), std::dynamic_pointer_cast<nodes::procedural::CAbstractExpression>($3));
+                    }
                 ;
 
 equality_expression
@@ -139,7 +156,13 @@ equality_expression
                         $$ = $1;
                     }
                 |   equality_expression EQ_OP additive_expression
+                    {
+                        $$ = std::make_shared<nodes::procedural::CEqualityExpression>(std::dynamic_pointer_cast<nodes::procedural::CAbstractExpression>($1), std::dynamic_pointer_cast<nodes::procedural::CAbstractExpression>($3));
+                    }
                 |   equality_expression NE_OP additive_expression
+                    {
+                        $$ = std::make_shared<nodes::procedural::CNonEqualityExpression>(std::dynamic_pointer_cast<nodes::procedural::CAbstractExpression>($1), std::dynamic_pointer_cast<nodes::procedural::CAbstractExpression>($3));
+                    }
                 ;
 
 logical_and_expression
@@ -148,6 +171,9 @@ logical_and_expression
                         $$ = $1;
                     }
                 |   logical_and_expression AND_OP equality_expression
+                    {
+                        $$ = std::make_shared<nodes::procedural::CLogicalAndExpression>(std::dynamic_pointer_cast<nodes::procedural::CAbstractExpression>($1), std::dynamic_pointer_cast<nodes::procedural::CAbstractExpression>($3));
+                    }
                 ;
 
 logical_or_expression
@@ -156,6 +182,9 @@ logical_or_expression
                         $$ = $1;
                     }
                 |   logical_or_expression OR_OP logical_and_expression
+                    {
+                        $$ = std::make_shared<nodes::procedural::CLogicalOrExpression>(std::dynamic_pointer_cast<nodes::procedural::CAbstractExpression>($1), std::dynamic_pointer_cast<nodes::procedural::CAbstractExpression>($3));
+                    }
                 ;
 
 

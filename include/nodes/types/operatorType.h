@@ -14,7 +14,11 @@ namespace nodes {
 			PLUS,
 			MINUS,
 			TIMES,
-			DIVISION
+			DIVISION,
+			EQUALITY,
+			NON_EQUALITY,
+			LOGICAL_OR,
+			LOGICAL_AND
 		};
 
 		/**

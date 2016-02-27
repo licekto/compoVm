@@ -1,4 +1,3 @@
-#include <iostream>
 #include <memory>
 
 #include <boost/test/unit_test.hpp>
@@ -12,9 +11,9 @@
 #include "nodes/compo/injectedPort.h"
 #include "nodes/compo/descriptor.h"
 
-BOOST_AUTO_TEST_SUITE(nodes)
+BOOST_AUTO_TEST_SUITE(nodesCompo)
 
-BOOST_AUTO_TEST_CASE(compoSymbol) {
+BOOST_AUTO_TEST_CASE(symbolTest) {
     // Original symbol creation
     nodes::procedural::CSymbol symbol("Symbol");
     BOOST_CHECK_EQUAL(nodes::types::nodeType::SYMBOL, symbol.getNodeType());
@@ -49,7 +48,7 @@ BOOST_AUTO_TEST_CASE(compoSymbol) {
     BOOST_CHECK_EQUAL("Symbol", symbolNew2.getStringValue());
 }
 
-BOOST_AUTO_TEST_CASE(compoPort) {
+BOOST_AUTO_TEST_CASE(portTest) {
     // Original port creation
     nodes::compo::CPort port(std::make_shared<nodes::procedural::CSymbol>("port"), true);
     BOOST_CHECK_EQUAL(nodes::types::nodeType::PORT, port.getNodeType());
@@ -85,7 +84,7 @@ BOOST_AUTO_TEST_CASE(compoPort) {
     BOOST_CHECK(portMoved2.getAtomic());
 }
 
-BOOST_AUTO_TEST_CASE(compoInjectedPort) {
+BOOST_AUTO_TEST_CASE(injectedPortTest) {
     // Original port creation
     nodes::compo::CInjectedPort port(std::make_shared<nodes::procedural::CSymbol>("port"), true, std::make_shared<nodes::procedural::CSymbol>("injectingPort"));
     BOOST_CHECK_EQUAL(nodes::types::nodeType::INJECTED_PORT, port.getNodeType());
@@ -130,7 +129,7 @@ BOOST_AUTO_TEST_CASE(compoInjectedPort) {
     BOOST_CHECK_EQUAL("injectingPort", portMoved2.getInjectedWith());
 }
 
-BOOST_AUTO_TEST_CASE(compoProvision) {
+BOOST_AUTO_TEST_CASE(provisionTest) {
     // Port vector preparation
     std::vector<std::shared_ptr<nodes::compo::CPort>> portVec;
     portVec.push_back(std::make_shared<nodes::compo::CPort>(std::make_shared<nodes::procedural::CSymbol>("port1"), true));
@@ -198,7 +197,7 @@ BOOST_AUTO_TEST_CASE(compoProvision) {
     BOOST_CHECK_EQUAL("port2", provisionNew2.getPortAt(1)->getName());
 }
 
-BOOST_AUTO_TEST_CASE(compoRequirement) {
+BOOST_AUTO_TEST_CASE(requirementTest) {
     // Port vector preparation
     std::vector<std::shared_ptr<nodes::compo::CPort>> portVec;
     portVec.push_back(std::make_shared<nodes::compo::CPort>(std::make_shared<nodes::procedural::CSymbol>("port1"), true));
@@ -266,7 +265,7 @@ BOOST_AUTO_TEST_CASE(compoRequirement) {
     BOOST_CHECK_EQUAL("port2", requirementNew2.getPortAt(1)->getName());
 }
 
-BOOST_AUTO_TEST_CASE(compoService) {
+BOOST_AUTO_TEST_CASE(serviceTest) {
     // Params vector preparation
     std::vector<std::shared_ptr<nodes::procedural::CSymbol>> params;
     params.push_back(std::make_shared<nodes::procedural::CSymbol>("param1"));
@@ -373,7 +372,7 @@ BOOST_AUTO_TEST_CASE(compoService) {
     BOOST_CHECK_EQUAL(0, serviceNew1.getTemporariesSize());
 }
 
-BOOST_AUTO_TEST_CASE(compoConstraint) {
+BOOST_AUTO_TEST_CASE(constraintTest) {
     // Params vector preparation
     std::vector<std::shared_ptr<nodes::procedural::CSymbol>> params;
     params.push_back(std::make_shared<nodes::procedural::CSymbol>("param1"));
@@ -460,7 +459,7 @@ BOOST_AUTO_TEST_CASE(compoConstraint) {
     BOOST_CHECK_EQUAL(0, constraintNew1.getBodySize());
 }
 
-BOOST_AUTO_TEST_CASE(compoDescriptor) {
+BOOST_AUTO_TEST_CASE(descriptorTest) {
     // Descriptor body preparation
     std::vector<std::shared_ptr<nodes::CNode>> body;
     body.push_back(std::make_shared<nodes::procedural::CSymbol>("Expr1"));

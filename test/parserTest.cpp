@@ -16,6 +16,9 @@
 #include "nodes/procedural/stringLiteral.h"
 #include "nodes/procedural/parens.h"
 #include "nodes/procedural/additionExpression.h"
+#include "nodes/procedural/subtractionExpression.h"
+#include "nodes/procedural/multiplicationExpression.h"
+#include "nodes/procedural/divisionExpression.h"
 
 void testDescriptor(std::shared_ptr<nodes::compo::CDescriptor> descriptor, const std::string& name, const std::string& extends, int bodySize) {
     BOOST_CHECK_EQUAL(nodes::types::nodeType::DESCRIPTOR, descriptor->getNodeType());
@@ -216,6 +219,9 @@ BOOST_AUTO_TEST_CASE(compoProcedural) {
             c := 'testString';\
             d := (55);\
             e := 15 + 64;\
+            f := 18 - 2;\
+            g := 5 * 3;\
+            h := 10 / 5;\
         }\
     }");
     
@@ -229,7 +235,7 @@ BOOST_AUTO_TEST_CASE(compoProcedural) {
     
     // Check service
     std::shared_ptr<nodes::compo::CService> service = std::dynamic_pointer_cast<nodes::compo::CService>(descriptor->getBodyNodeAt(0));
-    testServConstr(service, nodes::types::nodeType::SERVICE, "procedural", std::vector<std::string>(0), 5);
+    testServConstr(service, nodes::types::nodeType::SERVICE, "procedural", std::vector<std::string>(0), 8);
     
     // Check symbol
     std::shared_ptr<nodes::procedural::CSymbol> symbol = std::dynamic_pointer_cast<nodes::procedural::CSymbol>(service->getBodyNodeAt(0));
@@ -289,17 +295,83 @@ BOOST_AUTO_TEST_CASE(compoProcedural) {
     testSymbol(symbol, "e");
     
     // Check parens
-    std::shared_ptr<nodes::procedural::CAdditionExpression> additive = std::dynamic_pointer_cast<nodes::procedural::CAdditionExpression>(assignment->getRValue());
-    BOOST_CHECK_EQUAL(nodes::types::nodeType::ADDITIVE_EXPRESSION, additive->getNodeType());
-    BOOST_CHECK_EQUAL(nodes::types::operatorType::PLUS, additive->getOperator());
+    std::shared_ptr<nodes::procedural::CAdditionExpression> addition = std::dynamic_pointer_cast<nodes::procedural::CAdditionExpression>(assignment->getRValue());
+    BOOST_CHECK_EQUAL(nodes::types::nodeType::ADDITION_EXPRESSION, addition->getNodeType());
+    BOOST_CHECK_EQUAL(nodes::types::operatorType::PLUS, addition->getOperator());
     
     // Check constant
-    std::shared_ptr<nodes::procedural::CConstant> op1 = std::dynamic_pointer_cast<nodes::procedural::CConstant>(additive->getOperand1());
+    std::shared_ptr<nodes::procedural::CConstant> op1 = std::dynamic_pointer_cast<nodes::procedural::CConstant>(addition->getOperand1());
     testConstant(op1, 15);
     
     // Check constant
-    std::shared_ptr<nodes::procedural::CConstant> op2 = std::dynamic_pointer_cast<nodes::procedural::CConstant>(additive->getOperand2());
+    std::shared_ptr<nodes::procedural::CConstant> op2 = std::dynamic_pointer_cast<nodes::procedural::CConstant>(addition->getOperand2());
     testConstant(op2, 64);
+    
+    
+    // Check assignment
+    assignment = std::dynamic_pointer_cast<nodes::procedural::CAssignmentExpression>(service->getBodyNodeAt(5));
+    BOOST_CHECK_EQUAL(nodes::types::nodeType::ASSIGNMENT_EXPRESSION, assignment->getNodeType());
+    
+    // Check symbol
+    symbol = std::dynamic_pointer_cast<nodes::procedural::CSymbol>(assignment->getVariable());
+    testSymbol(symbol, "f");
+    
+    // Check parens
+    std::shared_ptr<nodes::procedural::CSubtractionExpression> subtraction = std::dynamic_pointer_cast<nodes::procedural::CSubtractionExpression>(assignment->getRValue());
+    BOOST_CHECK_EQUAL(nodes::types::nodeType::SUBTRACTION_EXPRESSION, subtraction->getNodeType());
+    BOOST_CHECK_EQUAL(nodes::types::operatorType::MINUS, subtraction->getOperator());
+    
+    // Check constant
+    op1 = std::dynamic_pointer_cast<nodes::procedural::CConstant>(subtraction->getOperand1());
+    testConstant(op1, 18);
+    
+    // Check constant
+    op2 = std::dynamic_pointer_cast<nodes::procedural::CConstant>(subtraction->getOperand2());
+    testConstant(op2, 2);
+    
+    
+    // Check assignment
+    assignment = std::dynamic_pointer_cast<nodes::procedural::CAssignmentExpression>(service->getBodyNodeAt(6));
+    BOOST_CHECK_EQUAL(nodes::types::nodeType::ASSIGNMENT_EXPRESSION, assignment->getNodeType());
+    
+    // Check symbol
+    symbol = std::dynamic_pointer_cast<nodes::procedural::CSymbol>(assignment->getVariable());
+    testSymbol(symbol, "g");
+    
+    // Check parens
+    std::shared_ptr<nodes::procedural::CMultiplicationExpression> multiplication = std::dynamic_pointer_cast<nodes::procedural::CMultiplicationExpression>(assignment->getRValue());
+    BOOST_CHECK_EQUAL(nodes::types::nodeType::MULTIPLICATION_EXPRESSION, multiplication->getNodeType());
+    BOOST_CHECK_EQUAL(nodes::types::operatorType::TIMES, multiplication->getOperator());
+    
+    // Check constant
+    op1 = std::dynamic_pointer_cast<nodes::procedural::CConstant>(multiplication->getOperand1());
+    testConstant(op1, 5);
+    
+    // Check constant
+    op2 = std::dynamic_pointer_cast<nodes::procedural::CConstant>(multiplication->getOperand2());
+    testConstant(op2, 3);
+    
+    
+    // Check assignment
+    assignment = std::dynamic_pointer_cast<nodes::procedural::CAssignmentExpression>(service->getBodyNodeAt(7));
+    BOOST_CHECK_EQUAL(nodes::types::nodeType::ASSIGNMENT_EXPRESSION, assignment->getNodeType());
+    
+    // Check symbol
+    symbol = std::dynamic_pointer_cast<nodes::procedural::CSymbol>(assignment->getVariable());
+    testSymbol(symbol, "h");
+    
+    // Check parens
+    std::shared_ptr<nodes::procedural::CDivisionExpression> division = std::dynamic_pointer_cast<nodes::procedural::CDivisionExpression>(assignment->getRValue());
+    BOOST_CHECK_EQUAL(nodes::types::nodeType::DIVISION_EXPRESSION, division->getNodeType());
+    BOOST_CHECK_EQUAL(nodes::types::operatorType::DIVISION, division->getOperator());
+    
+    // Check constant
+    op1 = std::dynamic_pointer_cast<nodes::procedural::CConstant>(division->getOperand1());
+    testConstant(op1, 10);
+    
+    // Check constant
+    op2 = std::dynamic_pointer_cast<nodes::procedural::CConstant>(division->getOperand2());
+    testConstant(op2, 5);
     
     parser.clear();
 }
