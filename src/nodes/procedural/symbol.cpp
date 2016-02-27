@@ -2,63 +2,62 @@
 
 namespace nodes {
 
-    namespace procedural {
-    
-        CSymbol::CSymbol(const std::string& name)
-        : CNode(types::nodeType::SYMBOL),
-          CAbstractExpression(),
-          CAbstractPrimaryExpression(),
-            m_name(name)
-        {}
+	namespace procedural {
 
-        CSymbol::CSymbol(const CSymbol& other)
-        : CNode(other),
-          CAbstractExpression(),
-          CAbstractPrimaryExpression(),
-          m_name(other.m_name)
-        {}
+		CSymbol::CSymbol(const std::string& name)
+			: CNode(types::nodeType::SYMBOL),
+			  CAbstractExpression(),
+			  CAbstractPrimaryExpression(),
+			  m_name(name) {
+		}
 
-        CSymbol::CSymbol(CSymbol&& other) noexcept
-        : CNode(std::move(other)),
-          CAbstractExpression(),
-          CAbstractPrimaryExpression(),
-          m_name(std::move(other.m_name))
-        {
-            other.m_name.clear();
-        }
+		CSymbol::CSymbol(const CSymbol& other)
+			: CNode(other),
+			  CAbstractExpression(),
+			  CAbstractPrimaryExpression(),
+			  m_name(other.m_name) {
+		}
 
-        CSymbol& CSymbol::operator= (const CSymbol& other) {
-             if (&other != this) {
-                this->m_nodeType = other.m_nodeType;
-                this->m_name = other.m_name;
-             }
-             return *this;
-        }
+		CSymbol::CSymbol(CSymbol&& other) noexcept
+			: CNode(std::move(other)),
+			  CAbstractExpression(),
+			  CAbstractPrimaryExpression(),
+			  m_name(std::move(other.m_name)) {
+			other.m_name.clear();
+		}
 
-        CSymbol& CSymbol::operator= (CSymbol&& other) noexcept {
-             if (&other != this) {
-                this->m_nodeType = std::move(other.m_nodeType);
-                this->m_name = std::move(other.m_name);
-                other.m_name.clear();
-             }
-             return *this;
-        }
+		CSymbol& CSymbol::operator= (const CSymbol& other) {
+			if (&other != this) {
+				this->m_nodeType = other.m_nodeType;
+				this->m_name = other.m_name;
+			}
+			return *this;
+		}
 
-        CNode * CSymbol::clone() const {
-            return new CSymbol(*this);
-        }
+		CSymbol& CSymbol::operator= (CSymbol&& other) noexcept {
+			if (&other != this) {
+				this->m_nodeType = std::move(other.m_nodeType);
+				this->m_name = std::move(other.m_name);
+				other.m_name.clear();
+			}
+			return *this;
+		}
 
-        CSymbol::~CSymbol() {
-        }
+		CNode * CSymbol::clone() const {
+			return new CSymbol(*this);
+		}
 
-        void CSymbol::print(std::ostream& outstream) const {
-            outstream << m_name;
-        }
+		CSymbol::~CSymbol() {
+		}
 
-        std::string CSymbol::getStringValue() const {
-            return m_name;
-        }
+		void CSymbol::print(std::ostream& outstream) const {
+			outstream << m_name;
+		}
 
-    }
-    
+		std::string CSymbol::getStringValue() const {
+			return m_name;
+		}
+
+	}
+
 }
