@@ -4,15 +4,17 @@
 #include "parser/lexer.h"
 #include "nodes/node.h"
 #include "nodes/types/visibilityType.h"
-#include "nodes/procedural/symbol.h"
 #include "nodes/compo/service.h"
 #include "nodes/compo/constraint.h"
 #include "nodes/compo/port.h"
 #include "nodes/compo/descriptor.h"
 #include "nodes/compo/provision.h"
 #include "nodes/compo/requirement.h"
+#include "nodes/procedural/symbol.h"
 #include "nodes/procedural/for.h"
+#include "nodes/procedural/abstractExpression.h"
 #include "nodes/procedural/assignmentExpression.h"
+#include "nodes/procedural/additiveExpression.h"
 #include "nodes/procedural/constant.h"
 #include "nodes/procedural/parens.h"
 
@@ -123,22 +125,34 @@ additive_expression
                         $$ = $1;
                     }
                 |   additive_expression '+' multiplicative_expression
+                    {
+                        $$ = new nodes::procedural::CAdditiveExpression(dynamic_cast<nodes::procedural::CAbstractExpression*>($1), dynamic_cast<nodes::procedural::CAbstractExpression*>($3));
+                    }
                 |   additive_expression '-' multiplicative_expression
                 ;
 
 equality_expression
                 :   additive_expression
+                    {
+                        $$ = $1;
+                    }
                 |   equality_expression EQ_OP additive_expression
                 |   equality_expression NE_OP additive_expression
                 ;
 
 logical_and_expression
                 :   equality_expression
+                    {
+                        $$ = $1;
+                    }
                 |   logical_and_expression AND_OP equality_expression
                 ;
 
 logical_or_expression
                 :   logical_and_expression
+                    {
+                        $$ = $1;
+                    }
                 |   logical_or_expression OR_OP logical_and_expression
                 ;
 
