@@ -14,6 +14,7 @@
 #include "nodes/procedural/constant.h"
 #include "nodes/procedural/stringLiteral.h"
 #include "nodes/procedural/parens.h"
+#include "nodes/procedural/additiveExpression.h"
 
 void testDescriptor(const nodes::compo::CDescriptor& descriptor, const std::string& name, const std::string& extends, int bodySize) {
     BOOST_CHECK_EQUAL(nodes::types::nodeType::DESCRIPTOR, descriptor.getNodeType());
@@ -189,7 +190,7 @@ BOOST_AUTO_TEST_CASE(compoServiceBody) {
     
     // Check assignment
     nodes::procedural::CAssignmentExpression *assignment = dynamic_cast<nodes::procedural::CAssignmentExpression*>(service->getBodyNodeAt(0));
-    BOOST_CHECK_EQUAL(nodes::types::nodeType::ASSIGNMENT, assignment->getNodeType());
+    BOOST_CHECK_EQUAL(nodes::types::nodeType::ASSIGNMENT_EXPRESSION, assignment->getNodeType());
     
     // Check symbol
     symbol = dynamic_cast<nodes::procedural::CSymbol*>(assignment->getVariable());
@@ -212,11 +213,13 @@ BOOST_AUTO_TEST_CASE(compoProcedural) {
             b := 1;\
             c := 'testString';\
             d := (55);\
+            e := 15 + 64;\
         }\
     }");
     
     // Parse input and create AST
     parser.parse(input);    
+    
     
     // Check descriptor
     nodes::compo::CDescriptor *descriptor = dynamic_cast<nodes::compo::CDescriptor*>(parser.getRootNodeAt(0));
@@ -224,27 +227,30 @@ BOOST_AUTO_TEST_CASE(compoProcedural) {
     
     // Check service
     nodes::compo::CService *service = dynamic_cast<nodes::compo::CService*>(descriptor->getBodyNodeAt(0));
-    testServConstr(service, nodes::types::nodeType::SERVICE, "procedural", std::vector<std::string>(0), 4);
+    testServConstr(service, nodes::types::nodeType::SERVICE, "procedural", std::vector<std::string>(0), 5);
     
     // Check symbol
     nodes::procedural::CSymbol *symbol = dynamic_cast<nodes::procedural::CSymbol*>(service->getBodyNodeAt(0));
     testSymbol(*symbol, "a");
     
+    
     // Check assignment
     nodes::procedural::CAssignmentExpression *assignment = dynamic_cast<nodes::procedural::CAssignmentExpression*>(service->getBodyNodeAt(1));
-    BOOST_CHECK_EQUAL(nodes::types::nodeType::ASSIGNMENT, assignment->getNodeType());
+    BOOST_CHECK_EQUAL(nodes::types::nodeType::ASSIGNMENT_EXPRESSION, assignment->getNodeType());
     
     // Check symbol
     symbol = dynamic_cast<nodes::procedural::CSymbol*>(assignment->getVariable());
     testSymbol(*symbol, "b");
     
+    
     // Check constant
     nodes::procedural::CConstant *constant = dynamic_cast<nodes::procedural::CConstant*>(assignment->getRValue());
     testConstant(*constant, 1);
     
+    
     // Check assignment
     assignment = dynamic_cast<nodes::procedural::CAssignmentExpression*>(service->getBodyNodeAt(2));
-    BOOST_CHECK_EQUAL(nodes::types::nodeType::ASSIGNMENT, assignment->getNodeType());
+    BOOST_CHECK_EQUAL(nodes::types::nodeType::ASSIGNMENT_EXPRESSION, assignment->getNodeType());
     
     // Check symbol
     symbol = dynamic_cast<nodes::procedural::CSymbol*>(assignment->getVariable());
@@ -254,9 +260,10 @@ BOOST_AUTO_TEST_CASE(compoProcedural) {
     nodes::procedural::CStringLiteral *stringLiteral = dynamic_cast<nodes::procedural::CStringLiteral*>(assignment->getRValue());
     testStringLiteral(*stringLiteral, "testString");
     
+    
     // Check assignment
     assignment = dynamic_cast<nodes::procedural::CAssignmentExpression*>(service->getBodyNodeAt(3));
-    BOOST_CHECK_EQUAL(nodes::types::nodeType::ASSIGNMENT, assignment->getNodeType());
+    BOOST_CHECK_EQUAL(nodes::types::nodeType::ASSIGNMENT_EXPRESSION, assignment->getNodeType());
     
     // Check symbol
     symbol = dynamic_cast<nodes::procedural::CSymbol*>(assignment->getVariable());
@@ -269,6 +276,28 @@ BOOST_AUTO_TEST_CASE(compoProcedural) {
     // Check constant
     constant = dynamic_cast<nodes::procedural::CConstant*>(parens->getExpression());
     testConstant(*constant, 55);
+    
+    
+    // Check assignment
+    assignment = dynamic_cast<nodes::procedural::CAssignmentExpression*>(service->getBodyNodeAt(4));
+    BOOST_CHECK_EQUAL(nodes::types::nodeType::ASSIGNMENT_EXPRESSION, assignment->getNodeType());
+    
+    // Check symbol
+    symbol = dynamic_cast<nodes::procedural::CSymbol*>(assignment->getVariable());
+    testSymbol(*symbol, "e");
+    
+    // Check parens
+    nodes::procedural::CAdditiveExpression *additive = dynamic_cast<nodes::procedural::CAdditiveExpression*>(assignment->getRValue());
+    BOOST_CHECK_EQUAL(nodes::types::nodeType::ADDITIVE_EXPRESSION, additive->getNodeType());
+    BOOST_CHECK_EQUAL(nodes::types::operatorType::PLUS, additive->getOperator());
+    
+    // Check constant
+    nodes::procedural::CConstant *op1 = dynamic_cast<nodes::procedural::CConstant*>(additive->getOperand1());
+    testConstant(*op1, 15);
+    
+    // Check constant
+    nodes::procedural::CConstant *op2 = dynamic_cast<nodes::procedural::CConstant*>(additive->getOperand2());
+    testConstant(*op2, 64);
     
     parser.clear();
 }
