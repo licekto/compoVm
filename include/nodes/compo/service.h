@@ -1,5 +1,6 @@
 #pragma once
 
+#include <memory>
 #include "nodes/compo/abstractServConstr.h"
 
 namespace nodes {
@@ -12,7 +13,7 @@ namespace nodes {
 		 */
 		class CService : public CAbstractServConstr {
 		  private:
-			std::vector<CNode*>        m_temporaries;      /**< Type of node */
+			std::vector<std::shared_ptr<nodes::CNode>>        m_temporaries;      /**< Type of node */
 		  public:
 			/**
 			* Parametric constructor with default value
@@ -21,51 +22,10 @@ namespace nodes {
 			* @param body: Vector of body nodes
 			* @param temporaries: Vector of temporaries
 			*/
-			CService       ( procedural::CSymbol* name = nullptr,
-			                 const std::vector<procedural::CSymbol*>& params = std::vector<procedural::CSymbol*>(0),
-			                 const std::vector<CNode*>& body = std::vector<CNode*>(0),
-			                 const std::vector<CNode*>& temporaries = std::vector<CNode*>(0)  );
-
-			/**
-			* Copy constructor
-			* Copy constructor is made protected to prevent from copying of object of this (abstract) type.
-			* @param other: reference to another object of same type
-			*/
-			CService       (const CService& other);
-
-			/**
-			* Move constructor
-			* Move constructor is made protected to prevent from moving of object of this (abstract) type.
-			* @param other: rvalue-reference to another object of same type
-			*/
-			CService       (CService&& other) noexcept;
-
-			/**
-			* Copy assignment operator
-			* Copy assignment operator is made protected to prevent from assigning of object of this (abstract) type.
-			* @param other: reference to another object of same type
-			* @return reference to assigned object
-			*/
-			CService&                  operator =          (const CService& other);
-
-			/**
-			* Move assignment operator
-			* Move assignment operator is made protected to prevent from assigning of object of this (abstract) type.
-			* @param other: rvalue-reference to another object of same type
-			* @return reference to assigned object
-			*/
-			CService&                  operator =          (CService&& other) noexcept;
-
-			/**
-			 * Clone method for copy-construction of polymorphic objects
-			 * @return pointer to newly copied object.
-			 */
-			virtual CNode *                    clone               () const;
-
-			/**
-			 * Virtual destructor
-			 */
-			virtual                                 ~CService      ();
+			CService       ( std::shared_ptr<nodes::procedural::CSymbol> name = nullptr,
+			                 const std::vector<std::shared_ptr<nodes::procedural::CSymbol>>& params = std::vector<std::shared_ptr<nodes::procedural::CSymbol>>(0),
+			                 const std::vector<std::shared_ptr<nodes::CNode>>& body = std::vector<std::shared_ptr<nodes::CNode>>(0),
+			                 const std::vector<std::shared_ptr<nodes::CNode>>& temporaries = std::vector<std::shared_ptr<nodes::CNode>>(0)  );
 
 			/**
 			 * Number of temporaries getter
@@ -76,7 +36,7 @@ namespace nodes {
 			 * Temporaries getter
 			 * @return constant pointer to temporaries
 			 */
-			CNode *                    getTemporaryAt      (int index) const;
+			std::shared_ptr<nodes::CNode>                    getTemporaryAt      (int index) const;
 
 			virtual void                            print               (std::ostream& os) const;
 		};

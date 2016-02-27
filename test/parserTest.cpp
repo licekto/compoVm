@@ -1,5 +1,6 @@
 #include <iostream>
 #include <vector>
+#include <memory>
 
 #include <boost/test/unit_test.hpp>
 
@@ -16,14 +17,14 @@
 #include "nodes/procedural/parens.h"
 #include "nodes/procedural/additiveExpression.h"
 
-void testDescriptor(const nodes::compo::CDescriptor& descriptor, const std::string& name, const std::string& extends, int bodySize) {
-    BOOST_CHECK_EQUAL(nodes::types::nodeType::DESCRIPTOR, descriptor.getNodeType());
-    BOOST_CHECK_EQUAL(name, descriptor.getName());
-    BOOST_CHECK_EQUAL(extends, descriptor.getExtends());
-    BOOST_CHECK_EQUAL(bodySize, descriptor.getBodySize());
+void testDescriptor(std::shared_ptr<nodes::compo::CDescriptor> descriptor, const std::string& name, const std::string& extends, int bodySize) {
+    BOOST_CHECK_EQUAL(nodes::types::nodeType::DESCRIPTOR, descriptor->getNodeType());
+    BOOST_CHECK_EQUAL(name, descriptor->getName());
+    BOOST_CHECK_EQUAL(extends, descriptor->getExtends());
+    BOOST_CHECK_EQUAL(bodySize, descriptor->getBodySize());
 }
 
-void testReqProv(const nodes::compo::CAbstractReqProv *reqProv, nodes::types::nodeType type, nodes::types::visibilityType visibility, const std::vector<std::string>& portNames) {
+void testReqProv(std::shared_ptr<nodes::compo::CAbstractReqProv> reqProv, nodes::types::nodeType type, nodes::types::visibilityType visibility, const std::vector<std::string>& portNames) {
     BOOST_CHECK_EQUAL(type, reqProv->getNodeType());
     BOOST_CHECK_EQUAL(visibility, reqProv->getVisibilityType());
     BOOST_CHECK_EQUAL(portNames.size(), reqProv->getNumberOfPorts());
@@ -34,7 +35,7 @@ void testReqProv(const nodes::compo::CAbstractReqProv *reqProv, nodes::types::no
     }
 }
 
-void testServConstr(const nodes::compo::CAbstractServConstr *servConstr, nodes::types::nodeType type, const std::string& name, const std::vector<std::string>& paramNames, int bodySize) {
+void testServConstr(std::shared_ptr<nodes::compo::CAbstractServConstr> servConstr, nodes::types::nodeType type, const std::string& name, const std::vector<std::string>& paramNames, int bodySize) {
     BOOST_CHECK_EQUAL(type, servConstr->getNodeType());
     BOOST_CHECK_EQUAL(name, servConstr->getName());
     BOOST_CHECK_EQUAL(paramNames.size(), servConstr->getParamsSize());
@@ -46,19 +47,19 @@ void testServConstr(const nodes::compo::CAbstractServConstr *servConstr, nodes::
     }
 }
 
-void testSymbol(const nodes::procedural::CSymbol& symbol, const std::string& name) {
-    BOOST_CHECK_EQUAL(nodes::types::nodeType::SYMBOL, symbol.getNodeType());
-    BOOST_CHECK_EQUAL(name, symbol.getStringValue());
+void testSymbol(std::shared_ptr<nodes::procedural::CSymbol> symbol, const std::string& name) {
+    BOOST_CHECK_EQUAL(nodes::types::nodeType::SYMBOL, symbol->getNodeType());
+    BOOST_CHECK_EQUAL(name, symbol->getStringValue());
 }
 
-void testConstant(const nodes::procedural::CConstant& constant, int value) {
-    BOOST_CHECK_EQUAL(nodes::types::nodeType::CONSTANT, constant.getNodeType());
-    BOOST_CHECK_EQUAL(value, constant.getValue());
+void testConstant(std::shared_ptr<nodes::procedural::CConstant> constant, int value) {
+    BOOST_CHECK_EQUAL(nodes::types::nodeType::CONSTANT, constant->getNodeType());
+    BOOST_CHECK_EQUAL(value, constant->getValue());
 }
 
-void testStringLiteral(const nodes::procedural::CStringLiteral& stringLiteral, std::string value) {
-    BOOST_CHECK_EQUAL(nodes::types::nodeType::STRING_LITERAL, stringLiteral.getNodeType());
-    BOOST_CHECK_EQUAL(value, stringLiteral.getValue());
+void testStringLiteral(std::shared_ptr<nodes::procedural::CStringLiteral> stringLiteral, std::string value) {
+    BOOST_CHECK_EQUAL(nodes::types::nodeType::STRING_LITERAL, stringLiteral->getNodeType());
+    BOOST_CHECK_EQUAL(value, stringLiteral->getValue());
 }
 
 BOOST_AUTO_TEST_SUITE(parser)
@@ -85,32 +86,33 @@ BOOST_AUTO_TEST_CASE(compoBasicStructure) {
     parser.parse(input);
     
     // Check descriptor
-    nodes::compo::CDescriptor *descriptor = dynamic_cast<nodes::compo::CDescriptor*>(parser.getRootNodeAt(0));
-    testDescriptor(*descriptor, "HTTPServer", "server", 4);
+    std::shared_ptr<nodes::compo::CDescriptor> descriptor = std::dynamic_pointer_cast<nodes::compo::CDescriptor>(parser.getRootNodeAt(0));
+    testDescriptor(descriptor, "HTTPServer", "server", 4);
     
     // Port names vector
     std::vector<std::string> portNames;
     portNames.push_back("default");
     
     // Check provision
-    nodes::compo::CProvision *provision = dynamic_cast<nodes::compo::CProvision*>(descriptor->getBodyNodeAt(0));    
+    std::shared_ptr<nodes::compo::CProvision> provision = std::dynamic_pointer_cast<nodes::compo::CProvision>(descriptor->getBodyNodeAt(0));    
     testReqProv(provision, nodes::types::nodeType::PROVISION, nodes::types::visibilityType::EXTERNAL, portNames);
     
     // Check requirement
-    nodes::compo::CRequirement *requirement = dynamic_cast<nodes::compo::CRequirement*>(descriptor->getBodyNodeAt(1));
+    std::shared_ptr<nodes::compo::CRequirement> requirement = std::dynamic_pointer_cast<nodes::compo::CRequirement>(descriptor->getBodyNodeAt(1));
     testReqProv(requirement, nodes::types::nodeType::REQUIREMENT, nodes::types::visibilityType::EXTERNAL, portNames);
     
     // Check service
-    nodes::compo::CService *service = dynamic_cast<nodes::compo::CService *>(descriptor->getBodyNodeAt(2));
+    std::shared_ptr<nodes::compo::CService> service = std::dynamic_pointer_cast<nodes::compo::CService>(descriptor->getBodyNodeAt(2));
     testServConstr(service, nodes::types::nodeType::SERVICE, "create", std::vector<std::string>(0), 0);
     
     // Check constraint
-    nodes::compo::CConstraint *constraint = dynamic_cast<nodes::compo::CConstraint *>(descriptor->getBodyNodeAt(3));
+    std::shared_ptr<nodes::compo::CConstraint> constraint = std::dynamic_pointer_cast<nodes::compo::CConstraint>(descriptor->getBodyNodeAt(3));
     testServConstr(constraint, nodes::types::nodeType::CONSTRAINT, "httpOnly", std::vector<std::string>(0), 0);
     
     // Clear AST for next test
     parser.clear();
 }
+
 
 BOOST_AUTO_TEST_CASE(compoServiceParams) {
     // Testing input
@@ -126,31 +128,31 @@ BOOST_AUTO_TEST_CASE(compoServiceParams) {
     parser.parse(input);
     
     // Check descriptor
-    nodes::compo::CDescriptor *descriptor = dynamic_cast<nodes::compo::CDescriptor*>(parser.getRootNodeAt(0));
-    testDescriptor(*descriptor, "test", "", 4);
+    std::shared_ptr<nodes::compo::CDescriptor> descriptor = std::dynamic_pointer_cast<nodes::compo::CDescriptor>(parser.getRootNodeAt(0));
+    testDescriptor(descriptor, "test", "", 4);
     
     // Parameters vector
     std::vector<std::string> params;
-    nodes::compo::CService *service;
+    std::shared_ptr<nodes::compo::CService> service;
     
     // Check service
-    service = dynamic_cast<nodes::compo::CService *>(descriptor->getBodyNodeAt(0));
+    service = std::dynamic_pointer_cast<nodes::compo::CService>(descriptor->getBodyNodeAt(0));
     testServConstr(service, nodes::types::nodeType::SERVICE, "noparams", params, 0);
     
     // Check service
-    service = dynamic_cast<nodes::compo::CService *>(descriptor->getBodyNodeAt(1));
+    service = std::dynamic_pointer_cast<nodes::compo::CService>(descriptor->getBodyNodeAt(1));
     params.push_back("param1");
     testServConstr(service, nodes::types::nodeType::SERVICE, "oneparam", params, 0);
     
     // Check service
-    service = dynamic_cast<nodes::compo::CService *>(descriptor->getBodyNodeAt(2));
+    service = std::dynamic_pointer_cast<nodes::compo::CService>(descriptor->getBodyNodeAt(2));
     params.clear();
     params.push_back("param2");
     params.push_back("param1");
     testServConstr(service, nodes::types::nodeType::SERVICE, "twoparams", params, 0);
     
     // Check service
-    service = dynamic_cast<nodes::compo::CService *>(descriptor->getBodyNodeAt(3));
+    service = std::dynamic_pointer_cast<nodes::compo::CService>(descriptor->getBodyNodeAt(3));
     params.clear();
     params.push_back("param3");
     params.push_back("param2");
@@ -173,32 +175,32 @@ BOOST_AUTO_TEST_CASE(compoServiceBody) {
     parser.parse(input);    
     
     // Check descriptor
-    nodes::compo::CDescriptor *descriptor = dynamic_cast<nodes::compo::CDescriptor*>(parser.getRootNodeAt(0));
-    testDescriptor(*descriptor, "test", "", 2);
+    std::shared_ptr<nodes::compo::CDescriptor> descriptor = std::dynamic_pointer_cast<nodes::compo::CDescriptor>(parser.getRootNodeAt(0));
+    testDescriptor(descriptor, "test", "", 2);
     
     // Check service
-    nodes::compo::CService *service = dynamic_cast<nodes::compo::CService*>(descriptor->getBodyNodeAt(0));
+    std::shared_ptr<nodes::compo::CService> service = std::dynamic_pointer_cast<nodes::compo::CService>(descriptor->getBodyNodeAt(0));
     testServConstr(service, nodes::types::nodeType::SERVICE, "body1", std::vector<std::string>(0), 1);
     
     // Check symbol
-    nodes::procedural::CSymbol *symbol = dynamic_cast<nodes::procedural::CSymbol*>(service->getBodyNodeAt(0));
-    testSymbol(*symbol, "a");
+    std::shared_ptr<nodes::procedural::CSymbol> symbol = std::dynamic_pointer_cast<nodes::procedural::CSymbol>(service->getBodyNodeAt(0));
+    testSymbol(symbol, "a");
     
     // Check service
-    service = dynamic_cast<nodes::compo::CService*>(descriptor->getBodyNodeAt(1));
+    service = std::dynamic_pointer_cast<nodes::compo::CService>(descriptor->getBodyNodeAt(1));
     testServConstr(service, nodes::types::nodeType::SERVICE, "body2", std::vector<std::string>(0), 1);
     
     // Check assignment
-    nodes::procedural::CAssignmentExpression *assignment = dynamic_cast<nodes::procedural::CAssignmentExpression*>(service->getBodyNodeAt(0));
+    std::shared_ptr<nodes::procedural::CAssignmentExpression> assignment = std::dynamic_pointer_cast<nodes::procedural::CAssignmentExpression>(service->getBodyNodeAt(0));
     BOOST_CHECK_EQUAL(nodes::types::nodeType::ASSIGNMENT_EXPRESSION, assignment->getNodeType());
     
     // Check symbol
-    symbol = dynamic_cast<nodes::procedural::CSymbol*>(assignment->getVariable());
-    testSymbol(*symbol, "b");
+    symbol = std::dynamic_pointer_cast<nodes::procedural::CSymbol>(assignment->getVariable());
+    testSymbol(symbol, "b");
     
     // Check constant
-    nodes::procedural::CConstant *constant = dynamic_cast<nodes::procedural::CConstant*>(assignment->getRValue());
-    testConstant(*constant, 1);
+    std::shared_ptr<nodes::procedural::CConstant> constant = std::dynamic_pointer_cast<nodes::procedural::CConstant>(assignment->getRValue());
+    testConstant(constant, 1);
     
     // Clear AST for next test
     parser.clear();
@@ -222,82 +224,82 @@ BOOST_AUTO_TEST_CASE(compoProcedural) {
     
     
     // Check descriptor
-    nodes::compo::CDescriptor *descriptor = dynamic_cast<nodes::compo::CDescriptor*>(parser.getRootNodeAt(0));
-    testDescriptor(*descriptor, "test", "", 1);
+    std::shared_ptr<nodes::compo::CDescriptor> descriptor = std::dynamic_pointer_cast<nodes::compo::CDescriptor>(parser.getRootNodeAt(0));
+    testDescriptor(descriptor, "test", "", 1);
     
     // Check service
-    nodes::compo::CService *service = dynamic_cast<nodes::compo::CService*>(descriptor->getBodyNodeAt(0));
+    std::shared_ptr<nodes::compo::CService> service = std::dynamic_pointer_cast<nodes::compo::CService>(descriptor->getBodyNodeAt(0));
     testServConstr(service, nodes::types::nodeType::SERVICE, "procedural", std::vector<std::string>(0), 5);
     
     // Check symbol
-    nodes::procedural::CSymbol *symbol = dynamic_cast<nodes::procedural::CSymbol*>(service->getBodyNodeAt(0));
-    testSymbol(*symbol, "a");
+    std::shared_ptr<nodes::procedural::CSymbol> symbol = std::dynamic_pointer_cast<nodes::procedural::CSymbol>(service->getBodyNodeAt(0));
+    testSymbol(symbol, "a");
     
     
     // Check assignment
-    nodes::procedural::CAssignmentExpression *assignment = dynamic_cast<nodes::procedural::CAssignmentExpression*>(service->getBodyNodeAt(1));
+    std::shared_ptr<nodes::procedural::CAssignmentExpression> assignment = std::dynamic_pointer_cast<nodes::procedural::CAssignmentExpression>(service->getBodyNodeAt(1));
     BOOST_CHECK_EQUAL(nodes::types::nodeType::ASSIGNMENT_EXPRESSION, assignment->getNodeType());
     
     // Check symbol
-    symbol = dynamic_cast<nodes::procedural::CSymbol*>(assignment->getVariable());
-    testSymbol(*symbol, "b");
+    symbol = std::dynamic_pointer_cast<nodes::procedural::CSymbol>(assignment->getVariable());
+    testSymbol(symbol, "b");
     
     
     // Check constant
-    nodes::procedural::CConstant *constant = dynamic_cast<nodes::procedural::CConstant*>(assignment->getRValue());
-    testConstant(*constant, 1);
+    std::shared_ptr<nodes::procedural::CConstant> constant = std::dynamic_pointer_cast<nodes::procedural::CConstant>(assignment->getRValue());
+    testConstant(constant, 1);
     
     
     // Check assignment
-    assignment = dynamic_cast<nodes::procedural::CAssignmentExpression*>(service->getBodyNodeAt(2));
+    assignment = std::dynamic_pointer_cast<nodes::procedural::CAssignmentExpression>(service->getBodyNodeAt(2));
     BOOST_CHECK_EQUAL(nodes::types::nodeType::ASSIGNMENT_EXPRESSION, assignment->getNodeType());
     
     // Check symbol
-    symbol = dynamic_cast<nodes::procedural::CSymbol*>(assignment->getVariable());
-    testSymbol(*symbol, "c");
+    symbol = std::dynamic_pointer_cast<nodes::procedural::CSymbol>(assignment->getVariable());
+    testSymbol(symbol, "c");
     
     // Check string literal
-    nodes::procedural::CStringLiteral *stringLiteral = dynamic_cast<nodes::procedural::CStringLiteral*>(assignment->getRValue());
-    testStringLiteral(*stringLiteral, "testString");
+    std::shared_ptr<nodes::procedural::CStringLiteral> stringLiteral = std::dynamic_pointer_cast<nodes::procedural::CStringLiteral>(assignment->getRValue());
+    testStringLiteral(stringLiteral, "testString");
     
     
     // Check assignment
-    assignment = dynamic_cast<nodes::procedural::CAssignmentExpression*>(service->getBodyNodeAt(3));
+    assignment = std::dynamic_pointer_cast<nodes::procedural::CAssignmentExpression>(service->getBodyNodeAt(3));
     BOOST_CHECK_EQUAL(nodes::types::nodeType::ASSIGNMENT_EXPRESSION, assignment->getNodeType());
     
     // Check symbol
-    symbol = dynamic_cast<nodes::procedural::CSymbol*>(assignment->getVariable());
-    testSymbol(*symbol, "d");
+    symbol = std::dynamic_pointer_cast<nodes::procedural::CSymbol>(assignment->getVariable());
+    testSymbol(symbol, "d");
     
     // Check parens
-    nodes::procedural::CParens *parens = dynamic_cast<nodes::procedural::CParens*>(assignment->getRValue());
+    std::shared_ptr<nodes::procedural::CParens> parens = std::dynamic_pointer_cast<nodes::procedural::CParens>(assignment->getRValue());
     BOOST_CHECK_EQUAL(nodes::types::nodeType::PARENS, parens->getNodeType());
     
     // Check constant
-    constant = dynamic_cast<nodes::procedural::CConstant*>(parens->getExpression());
-    testConstant(*constant, 55);
+    constant = std::dynamic_pointer_cast<nodes::procedural::CConstant>(parens->getExpression());
+    testConstant(constant, 55);
     
     
     // Check assignment
-    assignment = dynamic_cast<nodes::procedural::CAssignmentExpression*>(service->getBodyNodeAt(4));
+    assignment = std::dynamic_pointer_cast<nodes::procedural::CAssignmentExpression>(service->getBodyNodeAt(4));
     BOOST_CHECK_EQUAL(nodes::types::nodeType::ASSIGNMENT_EXPRESSION, assignment->getNodeType());
     
     // Check symbol
-    symbol = dynamic_cast<nodes::procedural::CSymbol*>(assignment->getVariable());
-    testSymbol(*symbol, "e");
+    symbol = std::dynamic_pointer_cast<nodes::procedural::CSymbol>(assignment->getVariable());
+    testSymbol(symbol, "e");
     
     // Check parens
-    nodes::procedural::CAdditiveExpression *additive = dynamic_cast<nodes::procedural::CAdditiveExpression*>(assignment->getRValue());
+    std::shared_ptr<nodes::procedural::CAdditiveExpression> additive = std::dynamic_pointer_cast<nodes::procedural::CAdditiveExpression>(assignment->getRValue());
     BOOST_CHECK_EQUAL(nodes::types::nodeType::ADDITIVE_EXPRESSION, additive->getNodeType());
     BOOST_CHECK_EQUAL(nodes::types::operatorType::PLUS, additive->getOperator());
     
     // Check constant
-    nodes::procedural::CConstant *op1 = dynamic_cast<nodes::procedural::CConstant*>(additive->getOperand1());
-    testConstant(*op1, 15);
+    std::shared_ptr<nodes::procedural::CConstant> op1 = std::dynamic_pointer_cast<nodes::procedural::CConstant>(additive->getOperand1());
+    testConstant(op1, 15);
     
     // Check constant
-    nodes::procedural::CConstant *op2 = dynamic_cast<nodes::procedural::CConstant*>(additive->getOperand2());
-    testConstant(*op2, 64);
+    std::shared_ptr<nodes::procedural::CConstant> op2 = std::dynamic_pointer_cast<nodes::procedural::CConstant>(additive->getOperand2());
+    testConstant(op2, 64);
     
     parser.clear();
 }

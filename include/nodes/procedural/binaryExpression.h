@@ -1,5 +1,6 @@
 #pragma once
 
+#include <memory>
 #include "nodes/node.h"
 #include "nodes/procedural/abstractExpression.h"
 #include "nodes/procedural/symbol.h"
@@ -16,8 +17,8 @@ namespace nodes {
 		class CBinaryExpression : public virtual CAbstractExpression {
 		  protected:
 			types::operatorType      m_operator;         /**< Operator */
-			CAbstractExpression    * m_operand1;         /**< First operand */
-			CAbstractExpression    * m_operand2;         /**< Second operand */
+			std::shared_ptr<nodes::procedural::CAbstractExpression>  m_operand1;         /**< First operand */
+			std::shared_ptr<nodes::procedural::CAbstractExpression>  m_operand2;         /**< Second operand */
 
 			/**
 			* Parametric constructor with default values
@@ -25,47 +26,10 @@ namespace nodes {
 			* @param rval: right-hand side of assignment
 			*/
 			CBinaryExpression         ( types::operatorType type = types::operatorType::PLUS,
-			                            CAbstractExpression * op1 = nullptr,
-			                            CAbstractExpression * op2 = nullptr);
-
-			/**
-			* Copy constructor
-			* @param other: reference to another object of same type
-			*/
-			CBinaryExpression         (const CBinaryExpression& other);
-
-			/**
-			* Move constructor
-			* @param other: rvalue-reference to another object of same type
-			*/
-			CBinaryExpression         (CBinaryExpression&& other) noexcept;
-
-			/**
-			* Copy assignment operator
-			* @param other: reference to another object of same type
-			* @return reference to assigned object
-			*/
-			CBinaryExpression&                    operator =          (const CBinaryExpression& other);
-
-			/**
-			* Move assignment operator
-			* @param other: rvalue-reference to another object of same type
-			* @return reference to assigned object
-			*/
-			CBinaryExpression&                    operator =          (CBinaryExpression&& other) noexcept;
-
-			/**
-			 * Clone method for copy-construction of polymorphic objects
-			 * @return pointer to newly copied object.
-			 */
-			virtual CNode *                    clone               () const;
+			                            std::shared_ptr<nodes::procedural::CAbstractExpression> op1 = nullptr,
+			                            std::shared_ptr<nodes::procedural::CAbstractExpression> op2 = nullptr);
 
                 public:
-			/**
-			* Virtual destructor
-			*/
-			virtual                                 ~CBinaryExpression        ();
-
 			/**
 			* Virtual print function to call from operator <<
 			* @param os: output stream
@@ -83,13 +47,13 @@ namespace nodes {
 			* First operand getter
 			* @return Operand expression pointer
 			*/
-			CAbstractExpression *            getOperand1         () const;
+			std::shared_ptr<nodes::procedural::CAbstractExpression>            getOperand1         () const;
 
 			/**
 			* Second operand getter
 			* @return Operand expression pointer
 			*/
-			CAbstractExpression *            getOperand2         () const;
+			std::shared_ptr<nodes::procedural::CAbstractExpression>            getOperand2         () const;
 		};
 
 	}

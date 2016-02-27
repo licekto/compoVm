@@ -1,5 +1,6 @@
 #pragma once
 
+#include <memory>
 #include "nodes/node.h"
 #include "nodes/procedural/symbol.h"
 
@@ -16,9 +17,9 @@ namespace nodes {
 		 */
 		class CAbstractServConstr : public virtual CNode {
 		  protected:
-			nodes::procedural::CSymbol                  * m_name;         /**< Name */
-			std::vector<nodes::procedural::CSymbol*>      m_params;       /**< Vector of parameter names */
-			std::vector<nodes::CNode*>        m_body;         /**< Vector of body expressions */
+			std::shared_ptr<nodes::procedural::CSymbol>                  m_name;         /**< Name */
+			std::vector<std::shared_ptr<nodes::procedural::CSymbol>>      m_params;       /**< Vector of parameter names */
+			std::vector<std::shared_ptr<nodes::CNode>>        m_body;         /**< Vector of body expressions */
 
 			/**
 			* Parametric constructor with default values
@@ -27,51 +28,11 @@ namespace nodes {
 			* @param params: Vector of parameter names
 			* @param body: Vector of body expressions
 			*/
-			CAbstractServConstr    ( nodes::procedural::CSymbol *name = nullptr,
-			                         const std::vector<nodes::procedural::CSymbol*>& params = std::vector<nodes::procedural::CSymbol*>(0),
-			                         const std::vector<nodes::CNode*>& body = std::vector<nodes::CNode*>(0)         );
-
-			/**
-			* Copy constructor
-			* Copy constructor is made protected to prevent from copying of object of this (abstract) type.
-			* @param other: reference to another object of same type
-			*/
-			CAbstractServConstr    (const CAbstractServConstr& other);
-
-			/**
-			* Move constructor
-			* Move constructor is made protected to prevent from moving of object of this (abstract) type.
-			* @param other: rvalue-reference to another object of same type
-			*/
-			CAbstractServConstr    (CAbstractServConstr&& other) noexcept;
-
-			/**
-			* Copy assignment operator
-			* Copy assignment operator is made protected to prevent from assigning of object of this (abstract) type.
-			* @param other: reference to another object of same type
-			* @return reference to assigned object
-			*/
-			CAbstractServConstr&       operator =                  (const CAbstractServConstr& other);
-
-			/**
-			* Move assignment operator
-			* Move assignment operator is made protected to prevent from assigning of object of this (abstract) type.
-			* @param other: rvalue-reference to another object of same type
-			* @return reference to assigned object
-			*/
-			CAbstractServConstr&       operator =                  (CAbstractServConstr&& other) noexcept;
+			CAbstractServConstr    ( std::shared_ptr<nodes::procedural::CSymbol> name = nullptr,
+			                         const std::vector<std::shared_ptr<nodes::procedural::CSymbol>>& params = std::vector<std::shared_ptr<nodes::procedural::CSymbol>>(0),
+			                         const std::vector<std::shared_ptr<nodes::CNode>>& body = std::vector<std::shared_ptr<nodes::CNode>>(0)         );
 
 		  public:
-			/**
-			 * Clone method for copy-construction of polymorphic objects
-			 * @return pointer to newly copied object.
-			 */
-			virtual CNode *                    clone                       () const;
-
-			/**
-			* Virtual destructor
-			*/
-			virtual                                 ~CAbstractServConstr  ();
 
 			/**
 			* Virtual print function to call from operator <<
@@ -96,13 +57,13 @@ namespace nodes {
 			* Body getter
 			* @return Constant pointer to vector with body expressions.
 			*/
-			nodes::CNode *                    getBodyNodeAt           (int index) const;
+			std::shared_ptr<nodes::CNode>                    getBodyNodeAt           (int index) const;
 
 			/**
 			* Body setter
 			* @param Constant pointer to vector with body expressions.
 			*/
-			void                            setBodyNode             (nodes::CNode* bodyNode);
+			void                            setBodyNode             (std::shared_ptr<nodes::CNode> bodyNode);
 
 			/**
 			 * Parameter size vector size
@@ -114,13 +75,13 @@ namespace nodes {
 			* Parameters getter
 			* @return Constant pointer to vector with parameters.
 			*/
-			nodes::procedural::CSymbol *                  getParamAt              (int index) const;
+			std::shared_ptr<nodes::procedural::CSymbol>                  getParamAt              (int index) const;
 
 			/**
 			* Parameters setter
 			* @param Constant pointer to pointer to parameter.
 			*/
-			void                            setParam                (nodes::procedural::CSymbol *param);
+			void                            setParam                (std::shared_ptr<nodes::procedural::CSymbol> param);
 		};
 
 	}

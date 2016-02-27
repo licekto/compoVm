@@ -44,7 +44,7 @@ Identifier                  ({Letter}|[_]){LetterOrDigit}*
 <STRING>\\.?                            {buffer.append(yytext+1);} // skip backslash
 
 <STRING>\'                              {
-                                            yylval = new nodes::procedural::CStringLiteral(buffer);
+                                            yylval = std::make_shared<nodes::procedural::CStringLiteral>(buffer);
                                             BEGIN(INITIAL);
                                             return STRING_LITERAL;
                                         }
@@ -146,12 +146,12 @@ Identifier                  ({Letter}|[_]){LetterOrDigit}*
 <INITIAL>"||"                           {return OR_OP;}
 
 <INITIAL>{Identifier}                   {
-                                            yylval = new nodes::procedural::CSymbol(std::string(yytext, yyleng));
+                                            yylval = std::make_shared<nodes::procedural::CSymbol>(std::string(yytext, yyleng));
                                             return IDENTIFIER;
                                         }
 
 <INITIAL>{IntegerLiteral}               {
-                                            yylval = new nodes::procedural::CConstant(atoll(yytext));
+                                            yylval = std::make_shared<nodes::procedural::CConstant>(atoll(yytext));
                                             return CONSTANT;
                                         }
 

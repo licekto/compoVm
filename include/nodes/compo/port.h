@@ -1,5 +1,6 @@
 #pragma once
 
+#include <memory>
 #include "nodes/node.h"
 #include "nodes/procedural/symbol.h"
 
@@ -16,7 +17,7 @@ namespace nodes {
 		 */
 		class CPort : public virtual CNode {
 		  protected:
-			procedural::CSymbol                  * m_name;         /**< Name symbol of port */
+			std::shared_ptr<nodes::procedural::CSymbol>                      m_name;         /**< Name symbol of port */
 			bool                            m_atomic;       /**< Is atomic? */
 
 		  public:
@@ -25,44 +26,7 @@ namespace nodes {
 			* @param name: Name of port
 			* @param atomic: Is atomic?
 			*/
-			CPort          (procedural::CSymbol *name = nullptr, bool atomic = false);
-
-			/**
-			* Copy constructor
-			* @param other: reference to another object of same type
-			*/
-			CPort          (const CPort& other);
-
-			/**
-			* Move constructor
-			* @param other: rvalue-reference to another object of same type
-			*/
-			CPort          (CPort&& other) noexcept;
-
-			/**
-			* Copy assignment operator
-			* @param other: reference to another object of same type
-			* @return reference to assigned object
-			*/
-			CPort&                     operator=           (const CPort& other);
-
-			/**
-			* Move assignment operator
-			* @param other: rvalue-reference to another object of same type
-			* @return reference to assigned object
-			*/
-			CPort&                     operator=           (CPort&& other) noexcept;
-
-			/**
-			 * Clone method for copy-construction of polymorphic objects
-			 * @return pointer to newly copied object.
-			 */
-			virtual CNode *                    clone                   () const;
-
-			/**
-			* Virtual destructor
-			*/
-			virtual                                 ~CPort         ();
+			CPort          (std::shared_ptr<nodes::procedural::CSymbol> name = nullptr, bool atomic = false);
 
 			/**
 			* Virtual print function to call from operator <<

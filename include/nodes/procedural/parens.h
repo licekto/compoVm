@@ -1,5 +1,6 @@
 #pragma once
 
+#include <memory>
 #include "nodes/node.h"
 #include "abstractPrimaryExpression.h"
 
@@ -14,7 +15,7 @@ namespace nodes {
 		 */
 		class CParens : public CAbstractPrimaryExpression {
 		  private:
-			CNode                       * m_expression;         /**< Expression in parentheses */
+			std::shared_ptr<nodes::CNode>    m_expression;         /**< Expression in parentheses */
 
 		  public:
 			/**
@@ -22,44 +23,7 @@ namespace nodes {
 			* @param type: type of node
 			* @param val: integer value
 			*/
-			CParens         (CNode *expr = nullptr);
-
-			/**
-			* Copy constructor
-			* @param other: reference to another object of same type
-			*/
-			CParens         (const CParens& other);
-
-			/**
-			* Move constructor
-			* @param other: rvalue-reference to another object of same type
-			*/
-			CParens         (CParens&& other) noexcept;
-
-			/**
-			* Copy assignment operator
-			* @param other: reference to another object of same type
-			* @return reference to assigned object
-			*/
-			CParens&                        operator =      (const CParens& other);
-
-			/**
-			* Move assignment operator
-			* @param other: rvalue-reference to another object of same type
-			* @return reference to assigned object
-			*/
-			CParens&                        operator =      (CParens&& other) noexcept;
-
-			/**
-			 * Clone method for copy-construction of polymorphic objects
-			 * @return pointer to newly copied object.
-			 */
-			virtual CNode *                    clone           () const;
-
-			/**
-			* Virtual destructor
-			*/
-			virtual                                 ~CParens        ();
+			CParens         (std::shared_ptr<nodes::CNode> expr = nullptr);
 
 			/**
 			* Virtual print function to call from operator <<
@@ -72,7 +36,7 @@ namespace nodes {
 			 * Expression getter
 			 * @return nodes::CNode pointer
 			 */
-			CNode *                    getExpression   () const;
+			std::shared_ptr<nodes::CNode>                    getExpression   () const;
 		};
 
 	}

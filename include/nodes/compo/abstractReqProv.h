@@ -1,6 +1,7 @@
 #pragma once
 
 #include <exception>
+#include <memory>
 
 #include "nodes/node.h"
 #include "nodes/compo/port.h"
@@ -28,7 +29,7 @@ namespace nodes {
 		class CAbstractReqProv : public virtual nodes::CNode {
 		  protected:
 			nodes::types::visibilityType                  m_visibilityType;   /**< Type of visibility */
-			std::vector<compo::CPort*> m_ports;            /**< Vector of ports */
+			std::vector<std::shared_ptr<nodes::compo::CPort> >  m_ports;            /**< Vector of ports */
 
 			/**
 			* Parametric constructor with default values
@@ -37,48 +38,9 @@ namespace nodes {
 			* @param ports: vector of ports
 			*/
 			CAbstractReqProv   (   nodes::types::visibilityType type = nodes::types::visibilityType::EXTERNAL,
-			                       const std::vector<CPort*>& ports = std::vector<CPort*>(0));
-			/**
-			* Copy constructor
-			* Copy constructor is made protected to prevent from copying of object of this (abstract) type.
-			* @param other: reference to another object of same type
-			*/
-			CAbstractReqProv   (const CAbstractReqProv& other);
-
-			/**
-			* Move constructor
-			* Move constructor is made protected to prevent from moving of object of this (abstract) type.
-			* @param other: rvalue-reference to another object of same type
-			*/
-			CAbstractReqProv   (CAbstractReqProv&& other) noexcept;
-
-			/**
-			* Copy assignment operator
-			* Copy assignment operator is made protected to prevent from assigning of object of this (abstract) type.
-			* @param other: reference to another object of same type
-			* @return reference to assigned object
-			*/
-			CAbstractReqProv&          operator =              (const CAbstractReqProv& other);
-
-			/**
-			* Move assignment operator
-			* Move assignment operator is made protected to prevent from assigning of object of this (abstract) type.
-			* @param other: rvalue-reference to another object of same type
-			* @return reference to assigned object
-			*/
-			CAbstractReqProv&          operator =              (CAbstractReqProv&& other) noexcept;
+			                       const std::vector<std::shared_ptr<compo::CPort> >& ports = std::vector<std::shared_ptr<nodes::compo::CPort>>(0));
 
 		  public:
-			/**
-			 * Clone method for copy-construction of polymorphic objects
-			 * @return pointer to newly copied object.
-			 */
-			virtual nodes::CNode *                    clone                   () const;
-
-			/**
-			* Virtual destructor
-			*/
-			virtual                                 ~CAbstractReqProv  ();
 
 			/**
 			* Virtual print function to call from operator <<
@@ -103,7 +65,7 @@ namespace nodes {
 			* Ports getter
 			* @return Port at given index
 			*/
-			CPort *                    getPortAt               (unsigned int index) const;
+			std::shared_ptr<nodes::compo::CPort>                    getPortAt               (unsigned int index) const;
 		};
 
 	}

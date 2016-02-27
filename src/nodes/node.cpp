@@ -6,31 +6,6 @@ namespace nodes {
 		: m_nodeType(type) {
 	}
 
-	CNode::CNode(const CNode& other)
-		: m_nodeType(other.m_nodeType) {
-	}
-
-	CNode::CNode(CNode&& other) noexcept
-		: m_nodeType(std::move(other.m_nodeType)) {
-	}
-
-	CNode& CNode::operator =(const CNode& other) {
-		if (&other != this) {
-			this->m_nodeType = other.m_nodeType;
-		}
-		return *this;
-	}
-
-	CNode& CNode::operator =(CNode&& other) noexcept {
-		if (&other != this) {
-			this->m_nodeType = std::move(other.m_nodeType);
-		}
-		return *this;
-	}
-
-	CNode::~CNode() {
-	}
-
 	types::nodeType CNode::getNodeType() const {
 		return m_nodeType;
 	}

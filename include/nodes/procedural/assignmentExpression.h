@@ -1,5 +1,6 @@
 #pragma once
 
+#include <memory>
 #include "nodes/node.h"
 #include "nodes/procedural/symbol.h"
 
@@ -13,8 +14,8 @@ namespace nodes {
 		 */
 		class CAssignmentExpression : public CNode {
 		  private:
-			CSymbol                  * m_variable;     /**< Variable to assign to */
-			CNode                    * m_rValue;       /**< Right-hand side of assignment expression */
+			std::shared_ptr<nodes::procedural::CSymbol> m_variable;     /**< Variable to assign to */
+			std::shared_ptr<nodes::CNode> m_rValue;       /**< Right-hand side of assignment expression */
 
 		  public:
 			/**
@@ -22,44 +23,7 @@ namespace nodes {
 			* @param variable: name of variable
 			* @param rval: right-hand side of assignment
 			*/
-			CAssignmentExpression         (CSymbol * variable = nullptr, CNode * rVal = nullptr);
-
-			/**
-			* Copy constructor
-			* @param other: reference to another object of same type
-			*/
-			CAssignmentExpression         (const CAssignmentExpression& other);
-
-			/**
-			* Move constructor
-			* @param other: rvalue-reference to another object of same type
-			*/
-			CAssignmentExpression         (CAssignmentExpression&& other) noexcept;
-
-			/**
-			* Copy assignment operator
-			* @param other: reference to another object of same type
-			* @return reference to assigned object
-			*/
-			CAssignmentExpression&                    operator =          (const CAssignmentExpression& other);
-
-			/**
-			* Move assignment operator
-			* @param other: rvalue-reference to another object of same type
-			* @return reference to assigned object
-			*/
-			CAssignmentExpression&                    operator =          (CAssignmentExpression&& other) noexcept;
-
-			/**
-			 * Clone method for copy-construction of polymorphic objects
-			 * @return pointer to newly copied object.
-			 */
-			virtual CNode *                    clone               () const;
-
-			/**
-			* Virtual destructor
-			*/
-			virtual                                 ~CAssignmentExpression        ();
+			CAssignmentExpression         (std::shared_ptr<nodes::procedural::CSymbol> variable = nullptr, std::shared_ptr<nodes::CNode> rVal = nullptr);
 
 			/**
 			* Virtual print function to call from operator <<
@@ -72,13 +36,13 @@ namespace nodes {
 			* Variable name getter
 			* @return Variable name
 			*/
-			CSymbol *                          getVariable         () const;
+			std::shared_ptr<nodes::procedural::CSymbol>                          getVariable         () const;
 
 			/**
 			* Right-hand side expression getter
 			* @return Expression node
 			*/
-			CNode *                            getRValue           () const;
+			std::shared_ptr<nodes::CNode>                            getRValue           () const;
 		};
 
 	}

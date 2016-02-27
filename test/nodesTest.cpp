@@ -1,4 +1,5 @@
 #include <iostream>
+#include <memory>
 
 #include <boost/test/unit_test.hpp>
 
@@ -50,7 +51,7 @@ BOOST_AUTO_TEST_CASE(compoSymbol) {
 
 BOOST_AUTO_TEST_CASE(compoPort) {
     // Original port creation
-    nodes::compo::CPort port(new nodes::procedural::CSymbol("port"), true);
+    nodes::compo::CPort port(std::make_shared<nodes::procedural::CSymbol>("port"), true);
     BOOST_CHECK_EQUAL(nodes::types::nodeType::PORT, port.getNodeType());
     BOOST_CHECK_EQUAL("port", port.getName());
     BOOST_CHECK(port.getAtomic());
@@ -86,7 +87,7 @@ BOOST_AUTO_TEST_CASE(compoPort) {
 
 BOOST_AUTO_TEST_CASE(compoInjectedPort) {
     // Original port creation
-    nodes::compo::CInjectedPort port(new nodes::procedural::CSymbol("port"), true, new nodes::procedural::CSymbol("injectingPort"));
+    nodes::compo::CInjectedPort port(std::make_shared<nodes::procedural::CSymbol>("port"), true, std::make_shared<nodes::procedural::CSymbol>("injectingPort"));
     BOOST_CHECK_EQUAL(nodes::types::nodeType::INJECTED_PORT, port.getNodeType());
     BOOST_CHECK_EQUAL("port", port.getName());
     BOOST_CHECK(port.getAtomic());
@@ -131,9 +132,9 @@ BOOST_AUTO_TEST_CASE(compoInjectedPort) {
 
 BOOST_AUTO_TEST_CASE(compoProvision) {
     // Port vector preparation
-    std::vector<nodes::compo::CPort*> portVec;
-    portVec.push_back(new nodes::compo::CPort(new nodes::procedural::CSymbol("port1"), true));
-    portVec.push_back(new nodes::compo::CPort(new nodes::procedural::CSymbol("port2"), false));
+    std::vector<std::shared_ptr<nodes::compo::CPort>> portVec;
+    portVec.push_back(std::make_shared<nodes::compo::CPort>(std::make_shared<nodes::procedural::CSymbol>("port1"), true));
+    portVec.push_back(std::make_shared<nodes::compo::CPort>(std::make_shared<nodes::procedural::CSymbol>("port2"), false));
     
     // Original provision creation
     nodes::compo::CProvision provision(nodes::types::visibilityType::EXTERNAL, portVec);
@@ -199,9 +200,9 @@ BOOST_AUTO_TEST_CASE(compoProvision) {
 
 BOOST_AUTO_TEST_CASE(compoRequirement) {
     // Port vector preparation
-    std::vector<nodes::compo::CPort*> portVec;
-    portVec.push_back(new nodes::compo::CPort(new nodes::procedural::CSymbol("port1"), true));
-    portVec.push_back(new nodes::compo::CPort(new nodes::procedural::CSymbol("port2"), false));
+    std::vector<std::shared_ptr<nodes::compo::CPort>> portVec;
+    portVec.push_back(std::make_shared<nodes::compo::CPort>(std::make_shared<nodes::procedural::CSymbol>("port1"), true));
+    portVec.push_back(std::make_shared<nodes::compo::CPort>(std::make_shared<nodes::procedural::CSymbol>("port2"), false));
     
     // Original requirement creation
     nodes::compo::CRequirement requirement(nodes::types::visibilityType::EXTERNAL, portVec);
@@ -267,29 +268,29 @@ BOOST_AUTO_TEST_CASE(compoRequirement) {
 
 BOOST_AUTO_TEST_CASE(compoService) {
     // Params vector preparation
-    std::vector<nodes::procedural::CSymbol*> params;
-    params.push_back(new nodes::procedural::CSymbol("param1"));
-    params.push_back(new nodes::procedural::CSymbol("param2"));
+    std::vector<std::shared_ptr<nodes::procedural::CSymbol>> params;
+    params.push_back(std::make_shared<nodes::procedural::CSymbol>("param1"));
+    params.push_back(std::make_shared<nodes::procedural::CSymbol>("param2"));
     
     // Body vector preparation
-    std::vector<nodes::CNode*> body;
-    body.push_back(new nodes::procedural::CSymbol("Expr1"));
+    std::vector<std::shared_ptr<nodes::CNode>> body;
+    body.push_back(std::make_shared<nodes::procedural::CSymbol>("Expr1"));
     
     // Temporaries vector preparation
-    std::vector<nodes::CNode*> temporaries;
-    temporaries.push_back(new nodes::procedural::CSymbol("Temp1"));
+    std::vector<std::shared_ptr<nodes::CNode>> temporaries;
+    temporaries.push_back(std::make_shared<nodes::procedural::CSymbol>("Temp1"));
     
     // Service creation
-    nodes::compo::CService service(new nodes::procedural::CSymbol("service"), params, body, temporaries);
+    nodes::compo::CService service(std::make_shared<nodes::procedural::CSymbol>("service"), params, body, temporaries);
     BOOST_CHECK_EQUAL(nodes::types::nodeType::SERVICE, service.getNodeType());
     BOOST_CHECK_EQUAL("service", service.getName());
     BOOST_CHECK_EQUAL(2, service.getParamsSize());
     BOOST_CHECK_EQUAL("param1", service.getParamAt(0)->getStringValue());
     BOOST_CHECK_EQUAL("param2", service.getParamAt(1)->getStringValue());
     BOOST_CHECK_EQUAL(1, service.getBodySize());
-    BOOST_CHECK_EQUAL("Expr1", dynamic_cast<nodes::procedural::CSymbol*>(service.getBodyNodeAt(0))->getStringValue());
+    BOOST_CHECK_EQUAL("Expr1", std::dynamic_pointer_cast<nodes::procedural::CSymbol>(service.getBodyNodeAt(0))->getStringValue());
     BOOST_CHECK_EQUAL(1, service.getTemporariesSize());
-    BOOST_CHECK_EQUAL("Temp1", dynamic_cast<nodes::procedural::CSymbol*>(service.getTemporaryAt(0))->getStringValue());
+    BOOST_CHECK_EQUAL("Temp1", std::dynamic_pointer_cast<nodes::procedural::CSymbol>(service.getTemporaryAt(0))->getStringValue());
     
     // Copy constructor test
     nodes::compo::CService serviceCopy1(service);
@@ -299,9 +300,9 @@ BOOST_AUTO_TEST_CASE(compoService) {
     BOOST_CHECK_EQUAL("param1", serviceCopy1.getParamAt(0)->getStringValue());
     BOOST_CHECK_EQUAL("param2", serviceCopy1.getParamAt(1)->getStringValue());
     BOOST_CHECK_EQUAL(1, serviceCopy1.getBodySize());
-    BOOST_CHECK_EQUAL("Expr1", dynamic_cast<nodes::procedural::CSymbol*>(serviceCopy1.getBodyNodeAt(0))->getStringValue());
+    BOOST_CHECK_EQUAL("Expr1", std::dynamic_pointer_cast<nodes::procedural::CSymbol>(serviceCopy1.getBodyNodeAt(0))->getStringValue());
     BOOST_CHECK_EQUAL(1, serviceCopy1.getTemporariesSize());
-    BOOST_CHECK_EQUAL("Temp1", dynamic_cast<nodes::procedural::CSymbol*>(serviceCopy1.getTemporaryAt(0))->getStringValue());
+    BOOST_CHECK_EQUAL("Temp1", std::dynamic_pointer_cast<nodes::procedural::CSymbol>(serviceCopy1.getTemporaryAt(0))->getStringValue());
     // Check if original object remains untouched
     BOOST_CHECK_EQUAL(nodes::types::nodeType::SERVICE, service.getNodeType());
     BOOST_CHECK_EQUAL("service", service.getName());
@@ -309,9 +310,9 @@ BOOST_AUTO_TEST_CASE(compoService) {
     BOOST_CHECK_EQUAL("param1", service.getParamAt(0)->getStringValue());
     BOOST_CHECK_EQUAL("param2", service.getParamAt(1)->getStringValue());
     BOOST_CHECK_EQUAL(1, service.getBodySize());
-    BOOST_CHECK_EQUAL("Expr1", dynamic_cast<nodes::procedural::CSymbol*>(service.getBodyNodeAt(0))->getStringValue());
+    BOOST_CHECK_EQUAL("Expr1", std::dynamic_pointer_cast<nodes::procedural::CSymbol>(service.getBodyNodeAt(0))->getStringValue());
     BOOST_CHECK_EQUAL(1, service.getTemporariesSize());
-    BOOST_CHECK_EQUAL("Temp1", dynamic_cast<nodes::procedural::CSymbol*>(service.getTemporaryAt(0))->getStringValue());
+    BOOST_CHECK_EQUAL("Temp1", std::dynamic_pointer_cast<nodes::procedural::CSymbol>(service.getTemporaryAt(0))->getStringValue());
     
     // Copy assignment operator test
     nodes::compo::CService serviceCopy2 = service;
@@ -321,9 +322,9 @@ BOOST_AUTO_TEST_CASE(compoService) {
     BOOST_CHECK_EQUAL("param1", serviceCopy2.getParamAt(0)->getStringValue());
     BOOST_CHECK_EQUAL("param2", serviceCopy2.getParamAt(1)->getStringValue());
     BOOST_CHECK_EQUAL(1, serviceCopy2.getBodySize());
-    BOOST_CHECK_EQUAL("Expr1", dynamic_cast<nodes::procedural::CSymbol*>(serviceCopy2.getBodyNodeAt(0))->getStringValue());
+    BOOST_CHECK_EQUAL("Expr1", std::dynamic_pointer_cast<nodes::procedural::CSymbol>(serviceCopy2.getBodyNodeAt(0))->getStringValue());
     BOOST_CHECK_EQUAL(1, serviceCopy2.getTemporariesSize());
-    BOOST_CHECK_EQUAL("Temp1", dynamic_cast<nodes::procedural::CSymbol*>(serviceCopy2.getTemporaryAt(0))->getStringValue());
+    BOOST_CHECK_EQUAL("Temp1", std::dynamic_pointer_cast<nodes::procedural::CSymbol>(serviceCopy2.getTemporaryAt(0))->getStringValue());
     // Check if original object remains untouched
     BOOST_CHECK_EQUAL(nodes::types::nodeType::SERVICE, service.getNodeType());
     BOOST_CHECK_EQUAL("service", service.getName());
@@ -331,9 +332,9 @@ BOOST_AUTO_TEST_CASE(compoService) {
     BOOST_CHECK_EQUAL("param1", service.getParamAt(0)->getStringValue());
     BOOST_CHECK_EQUAL("param2", service.getParamAt(1)->getStringValue());
     BOOST_CHECK_EQUAL(1, service.getBodySize());
-    BOOST_CHECK_EQUAL("Expr1", dynamic_cast<nodes::procedural::CSymbol*>(service.getBodyNodeAt(0))->getStringValue());
+    BOOST_CHECK_EQUAL("Expr1", std::dynamic_pointer_cast<nodes::procedural::CSymbol>(service.getBodyNodeAt(0))->getStringValue());
     BOOST_CHECK_EQUAL(1, service.getTemporariesSize());
-    BOOST_CHECK_EQUAL("Temp1", dynamic_cast<nodes::procedural::CSymbol*>(service.getTemporaryAt(0))->getStringValue());
+    BOOST_CHECK_EQUAL("Temp1", std::dynamic_pointer_cast<nodes::procedural::CSymbol>(service.getTemporaryAt(0))->getStringValue());
     
     // Move constructor test
     nodes::compo::CService serviceNew1(std::move(service));
@@ -343,9 +344,9 @@ BOOST_AUTO_TEST_CASE(compoService) {
     BOOST_CHECK_EQUAL("param1", serviceNew1.getParamAt(0)->getStringValue());
     BOOST_CHECK_EQUAL("param2", serviceNew1.getParamAt(1)->getStringValue());
     BOOST_CHECK_EQUAL(1, serviceNew1.getBodySize());
-    BOOST_CHECK_EQUAL("Expr1", dynamic_cast<nodes::procedural::CSymbol*>(serviceNew1.getBodyNodeAt(0))->getStringValue());
+    BOOST_CHECK_EQUAL("Expr1", std::dynamic_pointer_cast<nodes::procedural::CSymbol>(serviceNew1.getBodyNodeAt(0))->getStringValue());
     BOOST_CHECK_EQUAL(1, serviceNew1.getTemporariesSize());
-    BOOST_CHECK_EQUAL("Temp1", dynamic_cast<nodes::procedural::CSymbol*>(serviceNew1.getTemporaryAt(0))->getStringValue());
+    BOOST_CHECK_EQUAL("Temp1", std::dynamic_pointer_cast<nodes::procedural::CSymbol>(serviceNew1.getTemporaryAt(0))->getStringValue());
     // Check if original object is emptied
     BOOST_CHECK_EQUAL(nodes::types::nodeType::SERVICE, service.getNodeType());
     BOOST_CHECK_EQUAL("", service.getName());
@@ -361,9 +362,9 @@ BOOST_AUTO_TEST_CASE(compoService) {
     BOOST_CHECK_EQUAL("param1", serviceNew2.getParamAt(0)->getStringValue());
     BOOST_CHECK_EQUAL("param2", serviceNew2.getParamAt(1)->getStringValue());
     BOOST_CHECK_EQUAL(1, serviceNew2.getBodySize());
-    BOOST_CHECK_EQUAL("Expr1", dynamic_cast<nodes::procedural::CSymbol*>(serviceNew2.getBodyNodeAt(0))->getStringValue());
+    BOOST_CHECK_EQUAL("Expr1", std::dynamic_pointer_cast<nodes::procedural::CSymbol>(serviceNew2.getBodyNodeAt(0))->getStringValue());
     BOOST_CHECK_EQUAL(1, serviceNew2.getTemporariesSize());
-    BOOST_CHECK_EQUAL("Temp1", dynamic_cast<nodes::procedural::CSymbol*>(serviceNew2.getTemporaryAt(0))->getStringValue());
+    BOOST_CHECK_EQUAL("Temp1", std::dynamic_pointer_cast<nodes::procedural::CSymbol>(serviceNew2.getTemporaryAt(0))->getStringValue());
     // Check if original object is emptied
     BOOST_CHECK_EQUAL(nodes::types::nodeType::SERVICE, serviceNew1.getNodeType());
     BOOST_CHECK_EQUAL("", serviceNew1.getName());
@@ -374,23 +375,23 @@ BOOST_AUTO_TEST_CASE(compoService) {
 
 BOOST_AUTO_TEST_CASE(compoConstraint) {
     // Params vector preparation
-    std::vector<nodes::procedural::CSymbol*> params;
-    params.push_back(new nodes::procedural::CSymbol("param1"));
-    params.push_back(new nodes::procedural::CSymbol("param2"));
+    std::vector<std::shared_ptr<nodes::procedural::CSymbol>> params;
+    params.push_back(std::make_shared<nodes::procedural::CSymbol>("param1"));
+    params.push_back(std::make_shared<nodes::procedural::CSymbol>("param2"));
     
     // Body vector preparation
-    std::vector<nodes::CNode*> body;
-    body.push_back(new nodes::procedural::CSymbol("Expr1"));
+    std::vector<std::shared_ptr<nodes::CNode>> body;
+    body.push_back(std::make_shared<nodes::procedural::CSymbol>("Expr1"));
     
     // Service creation
-    nodes::compo::CConstraint constraint(new nodes::procedural::CSymbol("service"), params, body);
+    nodes::compo::CConstraint constraint(std::make_shared<nodes::procedural::CSymbol>("service"), params, body);
     BOOST_CHECK_EQUAL(nodes::types::nodeType::CONSTRAINT, constraint.getNodeType());
     BOOST_CHECK_EQUAL("service", constraint.getName());
     BOOST_CHECK_EQUAL(2, constraint.getParamsSize());
     BOOST_CHECK_EQUAL("param1", constraint.getParamAt(0)->getStringValue());
     BOOST_CHECK_EQUAL("param2", constraint.getParamAt(1)->getStringValue());
     BOOST_CHECK_EQUAL(1, constraint.getBodySize());
-    BOOST_CHECK_EQUAL("Expr1", dynamic_cast<nodes::procedural::CSymbol*>(constraint.getBodyNodeAt(0))->getStringValue());
+    BOOST_CHECK_EQUAL("Expr1", std::dynamic_pointer_cast<nodes::procedural::CSymbol>(constraint.getBodyNodeAt(0))->getStringValue());
     
     // Copy constructor test
     nodes::compo::CConstraint constraintCopy1(constraint);
@@ -400,7 +401,7 @@ BOOST_AUTO_TEST_CASE(compoConstraint) {
     BOOST_CHECK_EQUAL("param1", constraintCopy1.getParamAt(0)->getStringValue());
     BOOST_CHECK_EQUAL("param2", constraintCopy1.getParamAt(1)->getStringValue());
     BOOST_CHECK_EQUAL(1, constraintCopy1.getBodySize());
-    BOOST_CHECK_EQUAL("Expr1", dynamic_cast<nodes::procedural::CSymbol*>(constraintCopy1.getBodyNodeAt(0))->getStringValue());
+    BOOST_CHECK_EQUAL("Expr1", std::dynamic_pointer_cast<nodes::procedural::CSymbol>(constraintCopy1.getBodyNodeAt(0))->getStringValue());
     // Check if original object remains untouched
     BOOST_CHECK_EQUAL(nodes::types::nodeType::CONSTRAINT, constraint.getNodeType());
     BOOST_CHECK_EQUAL("service", constraint.getName());
@@ -408,7 +409,7 @@ BOOST_AUTO_TEST_CASE(compoConstraint) {
     BOOST_CHECK_EQUAL("param1", constraint.getParamAt(0)->getStringValue());
     BOOST_CHECK_EQUAL("param2", constraint.getParamAt(1)->getStringValue());
     BOOST_CHECK_EQUAL(1, constraint.getBodySize());
-    BOOST_CHECK_EQUAL("Expr1", dynamic_cast<nodes::procedural::CSymbol*>(constraint.getBodyNodeAt(0))->getStringValue());
+    BOOST_CHECK_EQUAL("Expr1", std::dynamic_pointer_cast<nodes::procedural::CSymbol>(constraint.getBodyNodeAt(0))->getStringValue());
     
     // Copy assignment operator test
     nodes::compo::CConstraint constraingCopy2 = constraint;
@@ -418,7 +419,7 @@ BOOST_AUTO_TEST_CASE(compoConstraint) {
     BOOST_CHECK_EQUAL("param1", constraingCopy2.getParamAt(0)->getStringValue());
     BOOST_CHECK_EQUAL("param2", constraingCopy2.getParamAt(1)->getStringValue());
     BOOST_CHECK_EQUAL(1, constraingCopy2.getBodySize());
-    BOOST_CHECK_EQUAL("Expr1", dynamic_cast<nodes::procedural::CSymbol*>(constraingCopy2.getBodyNodeAt(0))->getStringValue());
+    BOOST_CHECK_EQUAL("Expr1", std::dynamic_pointer_cast<nodes::procedural::CSymbol>(constraingCopy2.getBodyNodeAt(0))->getStringValue());
     // Check if original object remains untouched
     BOOST_CHECK_EQUAL(nodes::types::nodeType::CONSTRAINT, constraint.getNodeType());
     BOOST_CHECK_EQUAL("service", constraint.getName());
@@ -426,7 +427,7 @@ BOOST_AUTO_TEST_CASE(compoConstraint) {
     BOOST_CHECK_EQUAL("param1", constraint.getParamAt(0)->getStringValue());
     BOOST_CHECK_EQUAL("param2", constraint.getParamAt(1)->getStringValue());
     BOOST_CHECK_EQUAL(1, constraint.getBodySize());
-    BOOST_CHECK_EQUAL("Expr1", dynamic_cast<nodes::procedural::CSymbol*>(constraint.getBodyNodeAt(0))->getStringValue());
+    BOOST_CHECK_EQUAL("Expr1", std::dynamic_pointer_cast<nodes::procedural::CSymbol>(constraint.getBodyNodeAt(0))->getStringValue());
     
     // Move constructor test
     nodes::compo::CConstraint constraintNew1(std::move(constraint));
@@ -436,7 +437,7 @@ BOOST_AUTO_TEST_CASE(compoConstraint) {
     BOOST_CHECK_EQUAL("param1", constraintNew1.getParamAt(0)->getStringValue());
     BOOST_CHECK_EQUAL("param2", constraintNew1.getParamAt(1)->getStringValue());
     BOOST_CHECK_EQUAL(1, constraintNew1.getBodySize());
-    BOOST_CHECK_EQUAL("Expr1", dynamic_cast<nodes::procedural::CSymbol*>(constraintNew1.getBodyNodeAt(0))->getStringValue());
+    BOOST_CHECK_EQUAL("Expr1", std::dynamic_pointer_cast<nodes::procedural::CSymbol>(constraintNew1.getBodyNodeAt(0))->getStringValue());
     // Check if original object is emptied
     BOOST_CHECK_EQUAL(nodes::types::nodeType::CONSTRAINT, constraint.getNodeType());
     BOOST_CHECK_EQUAL("", constraint.getName());
@@ -451,7 +452,7 @@ BOOST_AUTO_TEST_CASE(compoConstraint) {
     BOOST_CHECK_EQUAL("param1", constraintNew2.getParamAt(0)->getStringValue());
     BOOST_CHECK_EQUAL("param2", constraintNew2.getParamAt(1)->getStringValue());
     BOOST_CHECK_EQUAL(1, constraintNew2.getBodySize());
-    BOOST_CHECK_EQUAL("Expr1", dynamic_cast<nodes::procedural::CSymbol*>(constraintNew2.getBodyNodeAt(0))->getStringValue());
+    BOOST_CHECK_EQUAL("Expr1", std::dynamic_pointer_cast<nodes::procedural::CSymbol>(constraintNew2.getBodyNodeAt(0))->getStringValue());
     // Check if original object is emptied
     BOOST_CHECK_EQUAL(nodes::types::nodeType::CONSTRAINT, constraintNew1.getNodeType());
     BOOST_CHECK_EQUAL("", constraintNew1.getName());
@@ -461,53 +462,53 @@ BOOST_AUTO_TEST_CASE(compoConstraint) {
 
 BOOST_AUTO_TEST_CASE(compoDescriptor) {
     // Descriptor body preparation
-    std::vector<nodes::CNode*> body;
-    body.push_back(new nodes::procedural::CSymbol("Expr1"));
-    body.push_back(new nodes::procedural::CSymbol("Expr2"));
+    std::vector<std::shared_ptr<nodes::CNode>> body;
+    body.push_back(std::make_shared<nodes::procedural::CSymbol>("Expr1"));
+    body.push_back(std::make_shared<nodes::procedural::CSymbol>("Expr2"));
     
     // Descriptor creation
-    nodes::compo::CDescriptor descriptor(new nodes::procedural::CSymbol("descriptorName"), new nodes::procedural::CSymbol("descriptorExtends"), body);
+    nodes::compo::CDescriptor descriptor(std::make_shared<nodes::procedural::CSymbol>("descriptorName"), std::make_shared<nodes::procedural::CSymbol>("descriptorExtends"), body);
     BOOST_CHECK_EQUAL("descriptorName", descriptor.getName());
     BOOST_CHECK_EQUAL("descriptorExtends", descriptor.getExtends());
     BOOST_CHECK_EQUAL(2, descriptor.getBodySize());
-    BOOST_CHECK_EQUAL("Expr1", dynamic_cast<nodes::procedural::CSymbol*>(descriptor.getBodyNodeAt(0))->getStringValue());
-    BOOST_CHECK_EQUAL("Expr2", dynamic_cast<nodes::procedural::CSymbol*>(descriptor.getBodyNodeAt(1))->getStringValue());
+    BOOST_CHECK_EQUAL("Expr1", std::dynamic_pointer_cast<nodes::procedural::CSymbol>(descriptor.getBodyNodeAt(0))->getStringValue());
+    BOOST_CHECK_EQUAL("Expr2", std::dynamic_pointer_cast<nodes::procedural::CSymbol>(descriptor.getBodyNodeAt(1))->getStringValue());
     
     // Copy constructor test
     nodes::compo::CDescriptor descriptorCopy1(descriptor);
     BOOST_CHECK_EQUAL("descriptorName", descriptorCopy1.getName());
     BOOST_CHECK_EQUAL("descriptorExtends", descriptorCopy1.getExtends());
     BOOST_CHECK_EQUAL(2, descriptorCopy1.getBodySize());
-    BOOST_CHECK_EQUAL("Expr1", dynamic_cast<nodes::procedural::CSymbol*>(descriptorCopy1.getBodyNodeAt(0))->getStringValue());
-    BOOST_CHECK_EQUAL("Expr2", dynamic_cast<nodes::procedural::CSymbol*>(descriptorCopy1.getBodyNodeAt(1))->getStringValue());
+    BOOST_CHECK_EQUAL("Expr1", std::dynamic_pointer_cast<nodes::procedural::CSymbol>(descriptorCopy1.getBodyNodeAt(0))->getStringValue());
+    BOOST_CHECK_EQUAL("Expr2", std::dynamic_pointer_cast<nodes::procedural::CSymbol>(descriptorCopy1.getBodyNodeAt(1))->getStringValue());
     // Check if original object remains untouched
     BOOST_CHECK_EQUAL("descriptorName", descriptor.getName());
     BOOST_CHECK_EQUAL("descriptorExtends", descriptor.getExtends());
     BOOST_CHECK_EQUAL(2, descriptor.getBodySize());
-    BOOST_CHECK_EQUAL("Expr1", dynamic_cast<nodes::procedural::CSymbol*>(descriptor.getBodyNodeAt(0))->getStringValue());
-    BOOST_CHECK_EQUAL("Expr2", dynamic_cast<nodes::procedural::CSymbol*>(descriptor.getBodyNodeAt(1))->getStringValue());
+    BOOST_CHECK_EQUAL("Expr1", std::dynamic_pointer_cast<nodes::procedural::CSymbol>(descriptor.getBodyNodeAt(0))->getStringValue());
+    BOOST_CHECK_EQUAL("Expr2", std::dynamic_pointer_cast<nodes::procedural::CSymbol>(descriptor.getBodyNodeAt(1))->getStringValue());
     
     // Copy assignment operator test
     nodes::compo::CDescriptor descriptorCopy2 = descriptor;
     BOOST_CHECK_EQUAL("descriptorName", descriptorCopy2.getName());
     BOOST_CHECK_EQUAL("descriptorExtends", descriptorCopy2.getExtends());
     BOOST_CHECK_EQUAL(2, descriptorCopy2.getBodySize());
-    BOOST_CHECK_EQUAL("Expr1", dynamic_cast<nodes::procedural::CSymbol*>(descriptorCopy2.getBodyNodeAt(0))->getStringValue());
-    BOOST_CHECK_EQUAL("Expr2", dynamic_cast<nodes::procedural::CSymbol*>(descriptorCopy2.getBodyNodeAt(1))->getStringValue());
+    BOOST_CHECK_EQUAL("Expr1", std::dynamic_pointer_cast<nodes::procedural::CSymbol>(descriptorCopy2.getBodyNodeAt(0))->getStringValue());
+    BOOST_CHECK_EQUAL("Expr2", std::dynamic_pointer_cast<nodes::procedural::CSymbol>(descriptorCopy2.getBodyNodeAt(1))->getStringValue());
     // Check if original object remains untouched
     BOOST_CHECK_EQUAL("descriptorName", descriptor.getName());
     BOOST_CHECK_EQUAL("descriptorExtends", descriptor.getExtends());
     BOOST_CHECK_EQUAL(2, descriptor.getBodySize());
-    BOOST_CHECK_EQUAL("Expr1", dynamic_cast<nodes::procedural::CSymbol*>(descriptor.getBodyNodeAt(0))->getStringValue());
-    BOOST_CHECK_EQUAL("Expr2", dynamic_cast<nodes::procedural::CSymbol*>(descriptor.getBodyNodeAt(1))->getStringValue());
+    BOOST_CHECK_EQUAL("Expr1", std::dynamic_pointer_cast<nodes::procedural::CSymbol>(descriptor.getBodyNodeAt(0))->getStringValue());
+    BOOST_CHECK_EQUAL("Expr2", std::dynamic_pointer_cast<nodes::procedural::CSymbol>(descriptor.getBodyNodeAt(1))->getStringValue());
     
     // Move constructor test
     nodes::compo::CDescriptor descriptorNew1(std::move(descriptor));
     BOOST_CHECK_EQUAL("descriptorName", descriptorNew1.getName());
     BOOST_CHECK_EQUAL("descriptorExtends", descriptorNew1.getExtends());
     BOOST_CHECK_EQUAL(2, descriptorNew1.getBodySize());
-    BOOST_CHECK_EQUAL("Expr1", dynamic_cast<nodes::procedural::CSymbol*>(descriptorNew1.getBodyNodeAt(0))->getStringValue());
-    BOOST_CHECK_EQUAL("Expr2", dynamic_cast<nodes::procedural::CSymbol*>(descriptorNew1.getBodyNodeAt(1))->getStringValue());
+    BOOST_CHECK_EQUAL("Expr1", std::dynamic_pointer_cast<nodes::procedural::CSymbol>(descriptorNew1.getBodyNodeAt(0))->getStringValue());
+    BOOST_CHECK_EQUAL("Expr2", std::dynamic_pointer_cast<nodes::procedural::CSymbol>(descriptorNew1.getBodyNodeAt(1))->getStringValue());
     // Check if original object remains untouched
     BOOST_CHECK_EQUAL("", descriptor.getName());
     BOOST_CHECK_EQUAL("", descriptor.getExtends());
@@ -518,8 +519,8 @@ BOOST_AUTO_TEST_CASE(compoDescriptor) {
     BOOST_CHECK_EQUAL("descriptorName", descriptorNew2.getName());
     BOOST_CHECK_EQUAL("descriptorExtends", descriptorNew2.getExtends());
     BOOST_CHECK_EQUAL(2, descriptorNew2.getBodySize());
-    BOOST_CHECK_EQUAL("Expr1", dynamic_cast<nodes::procedural::CSymbol*>(descriptorNew2.getBodyNodeAt(0))->getStringValue());
-    BOOST_CHECK_EQUAL("Expr2", dynamic_cast<nodes::procedural::CSymbol*>(descriptorNew2.getBodyNodeAt(1))->getStringValue());
+    BOOST_CHECK_EQUAL("Expr1", std::dynamic_pointer_cast<nodes::procedural::CSymbol>(descriptorNew2.getBodyNodeAt(0))->getStringValue());
+    BOOST_CHECK_EQUAL("Expr2", std::dynamic_pointer_cast<nodes::procedural::CSymbol>(descriptorNew2.getBodyNodeAt(1))->getStringValue());
     // Check if original object remains untouched
     BOOST_CHECK_EQUAL("", descriptorNew1.getName());
     BOOST_CHECK_EQUAL("", descriptorNew1.getExtends());

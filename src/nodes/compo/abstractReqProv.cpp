@@ -5,55 +5,8 @@ namespace nodes {
 	namespace compo {
 
 		CAbstractReqProv::CAbstractReqProv(   types::visibilityType type,
-		                                      const std::vector<CPort*>& ports)
+		                                      const std::vector<std::shared_ptr<nodes::compo::CPort>>& ports)
 			: CNode(types::nodeType::PROVISION), m_visibilityType(type), m_ports(ports) {
-		}
-
-		CAbstractReqProv::CAbstractReqProv(const CAbstractReqProv& other)
-			: CNode(other), m_visibilityType(other.m_visibilityType) {
-			*this = other;
-		}
-
-		CAbstractReqProv::CAbstractReqProv(CAbstractReqProv&& other) noexcept
-			: CNode(std::move(other)),
-			  m_visibilityType(std::move(other.m_visibilityType)),
-			  m_ports(std::move(other.m_ports)) {
-		}
-
-		CAbstractReqProv& CAbstractReqProv::operator =(const CAbstractReqProv& other) {
-			if (&other != this) {
-				this->m_nodeType = other.m_nodeType;
-				this->m_visibilityType = other.m_visibilityType;
-				this->m_ports.clear();
-
-				for (CPort *port : other.m_ports) {
-					this->m_ports.push_back(new CPort(*port));     // Create whole new instance of ports
-				}
-			}
-
-			return *this;
-		}
-
-		CAbstractReqProv& CAbstractReqProv::operator =(CAbstractReqProv&& other) noexcept {
-			if (&other != this) {
-				this->m_nodeType = other.m_nodeType;
-				this->m_visibilityType = other.m_visibilityType;
-				this->m_ports.clear();
-
-				this->m_ports = std::move(other.m_ports);
-			}
-
-			return *this;
-		}
-
-		CNode * CAbstractReqProv::clone() const {
-			return new CAbstractReqProv(*this);
-		}
-
-		CAbstractReqProv::~CAbstractReqProv() {
-			for (CPort *port : m_ports) {
-				delete port;
-			}
 		}
 
 		void CAbstractReqProv::print(std::ostream& outstream) const {
@@ -66,7 +19,7 @@ namespace nodes {
 
 			outstream << "provides {" << std::endl;
 
-			for (CPort *port : m_ports) {
+			for (std::shared_ptr<nodes::compo::CPort> port : m_ports) {
 				outstream << "\t";;
 				outstream << *port << std::endl;
 			}
@@ -83,8 +36,8 @@ namespace nodes {
 			return m_ports.size();
 		}
 
-		CPort * CAbstractReqProv::getPortAt(unsigned int index) const {
-			CPort * port = nullptr;
+		std::shared_ptr<nodes::compo::CPort> CAbstractReqProv::getPortAt(unsigned int index) const {
+			std::shared_ptr<nodes::compo::CPort> port = nullptr;
 			try {
 				port = m_ports.at(index);
 			} catch (std::out_of_range ex) {

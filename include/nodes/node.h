@@ -33,47 +33,7 @@ namespace nodes {
 		*/
 		CNode          (types::nodeType type = types::nodeType::END);
 
-		/**
-		* Copy constructor
-		* Copy constructor is made protected to prevent from copying of object of this (abstract) type.
-		* @param other: reference to another object of same type
-		*/
-		CNode          (const CNode& other);
-
-		/**
-		* Move constructor
-		* Move constructor is made protected to prevent from moving of object of this (abstract) type.
-		* @param other: rvalue-reference to another object of same type
-		*/
-		CNode          (CNode&& other) noexcept;
-
-		/**
-		* Copy assignment operator
-		* Copy assignment operator is made protected to prevent from assigning of object of this (abstract) type.
-		* @param other: reference to another object of same type
-		* @return reference to assigned object
-		*/
-		CNode&                     operator =          (const CNode& other);
-
-		/**
-		* Move assignment operator
-		* Move assignment operator is made protected to prevent from assigning of object of this (abstract) type.
-		* @param other: rvalue-reference to another object of same type
-		* @return reference to assigned object
-		*/
-		CNode&                     operator =          (CNode&& other) noexcept;
-
 	  public:
-		/**
-		 * Clone method for copy-construction of polymorphic objects
-		 * @return pointer to newly copied object.
-		 */
-		virtual CNode *                    clone               () const = 0;
-
-		/**
-		* Virtual destructor
-		*/
-		virtual                                 ~CNode         ();
 
 		/**
 		* Virtual print function to call from operator <<

@@ -1,5 +1,6 @@
 #pragma once
 
+#include <memory>
 #include "nodes/node.h"
 
 namespace nodes {
@@ -12,10 +13,10 @@ namespace nodes {
 		 */
 		class CFor : public CNode {
 		  private:
-			CNode                    * m_startCondition;           /**< Start condition node */
-			CNode                    * m_endCondition;             /**< Start condition node */
-			CNode                    * m_step;                     /**< Step node */
-			std::vector<CNode*>        m_body;                     /**< Body nodes vector */
+			std::shared_ptr<nodes::CNode>    m_startCondition;           /**< Start condition node */
+			std::shared_ptr<nodes::CNode>    m_endCondition;             /**< Start condition node */
+			std::shared_ptr<nodes::CNode>    m_step;                     /**< Step node */
+			std::vector<std::shared_ptr<nodes::CNode>>        m_body;                     /**< Body nodes vector */
 
 		  public:
 			/**
@@ -25,47 +26,10 @@ namespace nodes {
 			* @param step: Step node pointer
 			* @param body: Reference to vector of body nodes
 			*/
-			CFor                ( CNode *startCond = nullptr,
-			                      CNode *endCond = nullptr,
-			                      CNode *step = nullptr,
-			                      const std::vector<CNode*>& body = std::vector<CNode*>(0));
-			\
-			/**
-			* Copy constructor
-			* @param other: reference to another object of same type
-			*/
-			CFor                (const CFor& other);
-
-			/**
-			* Move constructor
-			* @param other: rvalue-reference to another object of same type
-			*/
-			CFor                (CFor&& other) noexcept;
-
-			/**
-			* Copy assignment operator
-			* @param other: reference to another object of same type
-			* @return reference to assigned object
-			*/
-			CFor&                           operator =          (const CFor& other);
-
-			/**
-			* Move assignment operator
-			* @param other: rvalue-reference to another object of same type
-			* @return reference to assigned object
-			*/
-			CFor&                           operator =          (CFor&& other) noexcept;
-
-			/**
-			 * Clone method for copy-construction of polymorphic objects
-			 * @return pointer to newly copied object.
-			 */
-			virtual CNode *                    clone               () const;
-
-			/**
-			* Virtual destructor
-			*/
-			virtual                                 ~CFor               ();
+			CFor                ( std::shared_ptr<nodes::CNode> startCond = nullptr,
+			                      std::shared_ptr<nodes::CNode> endCond = nullptr,
+			                      std::shared_ptr<nodes::CNode> step = nullptr,
+			                      const std::vector<std::shared_ptr<nodes::CNode>>& body = std::vector<std::shared_ptr<nodes::CNode>>(0));
 
 			/**
 			* Virtual print function to call from operator <<
@@ -78,25 +42,25 @@ namespace nodes {
 			* Body getter
 			* @return Constant pointer to body vector
 			*/
-			CNode *                    getBodyNodeAt       (int index) const;
+			std::shared_ptr<nodes::CNode>                    getBodyNodeAt       (int index) const;
 
 			/**
 			* Start condition getter
 			* @return Pointer to start condition node
 			*/
-			CNode *                    getStartCond        () const;
+			std::shared_ptr<nodes::CNode>                    getStartCond        () const;
 
 			/**
 			* End condition getter
 			* @return Pointer to end condition node
 			*/
-			CNode *                    getEndCond          () const;
+			std::shared_ptr<nodes::CNode>                    getEndCond          () const;
 
 			/**
 			* Step getter
 			* @return Pointer to step node
 			*/
-			CNode *                    getStep             () const;
+			std::shared_ptr<nodes::CNode>                    getStep             () const;
 		};
 
 	}
