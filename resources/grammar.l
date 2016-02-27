@@ -137,6 +137,14 @@ Identifier                  ({Letter}|[_]){LetterOrDigit}*
 
 <INITIAL>"}"                            {return '}';}
 
+<INITIAL>"=="                           {return EQ_OP;}
+
+<INITIAL>"!="                           {return NE_OP;}
+
+<INITIAL>"&&"                           {return AND_OP;}
+
+<INITIAL>"||"                           {return OR_OP;}
+
 <INITIAL>{Identifier}                   {
                                             yylval = new nodes::procedural::CSymbol(std::string(yytext, yyleng));
                                             return IDENTIFIER;

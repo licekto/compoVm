@@ -75,6 +75,10 @@ std::vector<nodes::compo::CPort*>           currentPorts;
 %token IDENTIFIER
 %token CONSTANT
 %token STRING_LITERAL
+%token EQ_OP
+%token NE_OP
+%token AND_OP
+%token OR_OP
 %token END
 
 %%
@@ -122,8 +126,25 @@ additive_expression
                 |   additive_expression '-' multiplicative_expression
                 ;
 
-assignment_expression
+equality_expression
                 :   additive_expression
+                |   equality_expression EQ_OP additive_expression
+                |   equality_expression NE_OP additive_expression
+                ;
+
+logical_and_expression
+                :   equality_expression
+                |   logical_and_expression AND_OP equality_expression
+                ;
+
+logical_or_expression
+                :   logical_and_expression
+                |   logical_or_expression OR_OP logical_and_expression
+                ;
+
+
+assignment_expression
+                :   logical_and_expression
                     {
                         $$ = $1;
                     }
