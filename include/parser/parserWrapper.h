@@ -20,52 +20,52 @@ class ParserWrapper {
 	* @param lexer: pointer to lexer
 	*/
 	ParserWrapper               (Lexer *lexer = nullptr);
-        
-        /**
-        * Destructor
+
+	/**
+	* Destructor
 	*/
-        ~ParserWrapper              ();
-        
+	~ParserWrapper              ();
+
 	/**
 	* Launch parsing
 	* @param is: input stream
 	*/
 	int                                     parse                       (std::istream& is);
-        
+
 	/**
 	* Parse whole input
 	* @param is: input stream
 	*/
 	void                                    parseAll                    (std::istream& is);
-        
+
 	/**
 	* Clears root nodes vector
 	*/
 	void                                    clear                       ();
-        
+
 	/**
 	* Handle errors
 	*/
 	void                                    error                       (const std::string& message);
-        
+
 	/**
 	* Lexer getter
 	* @return Lexer pointer
 	*/
 	Lexer *                                 getLexer                    () const;
-        
+
 	/**
 	* Root node setter
 	* @param node pointer
 	*/
 	void                                    setRootNode                 (std::shared_ptr<nodes::CNode> node);
-        
+
 	/**
 	* Root node vector size getter
 	* @return size of node vector
 	*/
 	size_t                                  getRootNodesSize            () const;
-        
+
 	/**
 	* Root node getter
 	* @param index: index of wanted node

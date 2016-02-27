@@ -30,7 +30,7 @@ namespace nodes {
 			* @see operator <<()
 			*/
 			virtual void                            print               (std::ostream& os) const;
-                        
+
 			/**
 			* StringValue getter
 			* @return name string object

@@ -29,7 +29,7 @@ namespace nodes {
 			                            std::shared_ptr<nodes::procedural::CAbstractExpression> op1 = nullptr,
 			                            std::shared_ptr<nodes::procedural::CAbstractExpression> op2 = nullptr);
 
-                public:
+		  public:
 			/**
 			* Virtual print function to call from operator <<
 			* @param os: output stream

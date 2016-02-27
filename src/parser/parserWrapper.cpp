@@ -31,7 +31,7 @@ std::shared_ptr<nodes::CNode> ParserWrapper::getRootNodeAt(unsigned int index) {
 
 void ParserWrapper::clear() {
 	for (std::shared_ptr<nodes::CNode> node : m_rootNodes) {
-            node.reset();
+		node.reset();
 	}
 	m_rootNodes.clear();
 }

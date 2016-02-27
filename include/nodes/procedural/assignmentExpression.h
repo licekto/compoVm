@@ -9,7 +9,7 @@ namespace nodes {
 	namespace procedural {
 
 		/**
-		 * \class CAssignment
+		 * \class CAssignmentExpression
 		 * \brief Class for assignment representation.
 		 */
 		class CAssignmentExpression : public CNode {

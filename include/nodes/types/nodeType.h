@@ -39,12 +39,12 @@ namespace nodes {
 			CONSTANT,
 			STRING_LITERAL,
 			PARENS,
-                        ASSIGNMENT_EXPRESSION,
-                        ADDITIVE_EXPRESSION,
-                        MULTIPLICATIVE_EXPRESSION,
-                        LOGICAL_OR_EXPRESSION,
-                        LOGICAL_AND_EXPRESSION,
-                        EQUALITY_EXPRESSION
+			ASSIGNMENT_EXPRESSION,
+			ADDITIVE_EXPRESSION,
+			MULTIPLICATIVE_EXPRESSION,
+			LOGICAL_OR_EXPRESSION,
+			LOGICAL_AND_EXPRESSION,
+			EQUALITY_EXPRESSION
 		};
 
 		/**
