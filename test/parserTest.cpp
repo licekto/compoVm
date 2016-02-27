@@ -10,7 +10,7 @@
 #include "nodes/compo/requirement.h"
 #include "nodes/compo/service.h"
 #include "nodes/compo/constraint.h"
-#include "nodes/procedural/assignment.h"
+#include "nodes/procedural/assignmentExpression.h"
 #include "nodes/procedural/constant.h"
 #include "nodes/procedural/stringLiteral.h"
 #include "nodes/procedural/parens.h"
@@ -188,7 +188,7 @@ BOOST_AUTO_TEST_CASE(compoServiceBody) {
     testServConstr(service, nodes::types::nodeType::SERVICE, "body2", std::vector<std::string>(0), 1);
     
     // Check assignment
-    nodes::procedural::CAssignment *assignment = dynamic_cast<nodes::procedural::CAssignment*>(service->getBodyNodeAt(0));
+    nodes::procedural::CAssignmentExpression *assignment = dynamic_cast<nodes::procedural::CAssignmentExpression*>(service->getBodyNodeAt(0));
     BOOST_CHECK_EQUAL(nodes::types::nodeType::ASSIGNMENT, assignment->getNodeType());
     
     // Check symbol
@@ -231,7 +231,7 @@ BOOST_AUTO_TEST_CASE(compoProcedural) {
     testSymbol(*symbol, "a");
     
     // Check assignment
-    nodes::procedural::CAssignment *assignment = dynamic_cast<nodes::procedural::CAssignment*>(service->getBodyNodeAt(1));
+    nodes::procedural::CAssignmentExpression *assignment = dynamic_cast<nodes::procedural::CAssignmentExpression*>(service->getBodyNodeAt(1));
     BOOST_CHECK_EQUAL(nodes::types::nodeType::ASSIGNMENT, assignment->getNodeType());
     
     // Check symbol
@@ -243,7 +243,7 @@ BOOST_AUTO_TEST_CASE(compoProcedural) {
     testConstant(*constant, 1);
     
     // Check assignment
-    assignment = dynamic_cast<nodes::procedural::CAssignment*>(service->getBodyNodeAt(2));
+    assignment = dynamic_cast<nodes::procedural::CAssignmentExpression*>(service->getBodyNodeAt(2));
     BOOST_CHECK_EQUAL(nodes::types::nodeType::ASSIGNMENT, assignment->getNodeType());
     
     // Check symbol
@@ -255,7 +255,7 @@ BOOST_AUTO_TEST_CASE(compoProcedural) {
     testStringLiteral(*stringLiteral, "testString");
     
     // Check assignment
-    assignment = dynamic_cast<nodes::procedural::CAssignment*>(service->getBodyNodeAt(3));
+    assignment = dynamic_cast<nodes::procedural::CAssignmentExpression*>(service->getBodyNodeAt(3));
     BOOST_CHECK_EQUAL(nodes::types::nodeType::ASSIGNMENT, assignment->getNodeType());
     
     // Check symbol
