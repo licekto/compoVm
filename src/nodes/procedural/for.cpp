@@ -4,9 +4,9 @@ namespace nodes {
 
 	namespace procedural {
 
-		CFor::CFor(   std::shared_ptr<nodes::CNode> startCond,
-		              std::shared_ptr<nodes::CNode> endCond,
-		              std::shared_ptr<nodes::CNode> step,
+		CFor::CFor(   std::shared_ptr<nodes::procedural::CAssignmentExpression> startCond,
+		              std::shared_ptr<nodes::procedural::CAbstractExpression> endCond,
+		              std::shared_ptr<nodes::procedural::CAbstractExpression> step,
 		              const std::vector<std::shared_ptr<nodes::CNode>>& body)
 			:   CNode(types::nodeType::FOR),
 			    m_startCondition(startCond),
@@ -40,15 +40,15 @@ namespace nodes {
 			return node;
 		}
 
-		std::shared_ptr<nodes::CNode> CFor::getStartCond() const {
+		std::shared_ptr<nodes::procedural::CAssignmentExpression> CFor::getStartCond() const {
 			return m_startCondition;
 		}
 
-		std::shared_ptr<nodes::CNode> CFor::getEndCond() const {
+		std::shared_ptr<nodes::procedural::CAbstractExpression> CFor::getEndCond() const {
 			return m_endCondition;
 		}
 
-		std::shared_ptr<nodes::CNode> CFor::getStep() const  {
+		std::shared_ptr<nodes::procedural::CAbstractExpression> CFor::getStep() const  {
 			return m_step;
 		}
 

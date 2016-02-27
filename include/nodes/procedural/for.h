@@ -2,6 +2,8 @@
 
 #include <memory>
 #include "nodes/node.h"
+#include "abstractStatement.h"
+#include "assignmentExpression.h"
 
 namespace nodes {
 
@@ -11,11 +13,11 @@ namespace nodes {
 		 * \class CFor
 		 * \brief Class for for-loop representation
 		 */
-		class CFor : public CNode {
+		class CFor : public CAbstractStatement {
 		  private:
-			std::shared_ptr<nodes::CNode>    m_startCondition;           /**< Start condition node */
-			std::shared_ptr<nodes::CNode>    m_endCondition;             /**< Start condition node */
-			std::shared_ptr<nodes::CNode>    m_step;                     /**< Step node */
+			std::shared_ptr<nodes::procedural::CAssignmentExpression>    m_startCondition;           /**< Start condition node */
+			std::shared_ptr<nodes::procedural::CAbstractExpression>    m_endCondition;             /**< Start condition node */
+			std::shared_ptr<nodes::procedural::CAbstractExpression>    m_step;                     /**< Step node */
 			std::vector<std::shared_ptr<nodes::CNode>>        m_body;                     /**< Body nodes vector */
 
 		  public:
@@ -26,9 +28,9 @@ namespace nodes {
 			* @param step: Step node pointer
 			* @param body: Reference to vector of body nodes
 			*/
-			CFor                ( std::shared_ptr<nodes::CNode> startCond = nullptr,
-			                      std::shared_ptr<nodes::CNode> endCond = nullptr,
-			                      std::shared_ptr<nodes::CNode> step = nullptr,
+			CFor                ( std::shared_ptr<nodes::procedural::CAssignmentExpression> startCond = nullptr,
+			                      std::shared_ptr<nodes::procedural::CAbstractExpression> endCond = nullptr,
+			                      std::shared_ptr<nodes::procedural::CAbstractExpression> step = nullptr,
 			                      const std::vector<std::shared_ptr<nodes::CNode>>& body = std::vector<std::shared_ptr<nodes::CNode>>(0));
 
 			/**
@@ -48,19 +50,19 @@ namespace nodes {
 			* Start condition getter
 			* @return Pointer to start condition node
 			*/
-			std::shared_ptr<nodes::CNode>                    getStartCond        () const;
+			std::shared_ptr<nodes::procedural::CAssignmentExpression>                    getStartCond        () const;
 
 			/**
 			* End condition getter
 			* @return Pointer to end condition node
 			*/
-			std::shared_ptr<nodes::CNode>                    getEndCond          () const;
+			std::shared_ptr<nodes::procedural::CAbstractExpression>                    getEndCond          () const;
 
 			/**
 			* Step getter
 			* @return Pointer to step node
 			*/
-			std::shared_ptr<nodes::CNode>                    getStep             () const;
+			std::shared_ptr<nodes::procedural::CAbstractExpression>                    getStep             () const;
 		};
 
 	}
