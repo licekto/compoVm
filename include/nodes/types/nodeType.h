@@ -32,14 +32,19 @@ namespace nodes {
 			CONNECTION,
 			DISCONNECTION,
 			INJECTED_PORT,
-			ASSIGNMENT,
 			FOR,
 			WHILE,
 			IF,
 			ELSE,
 			CONSTANT,
 			STRING_LITERAL,
-			PARENS
+			PARENS,
+                        ASSIGNMENT_EXPRESSION,
+                        ADDITIVE_EXPRESSION,
+                        MULTIPLICATIVE_EXPRESSION,
+                        LOGICAL_OR_EXPRESSION,
+                        LOGICAL_AND_EXPRESSION,
+                        EQUALITY_EXPRESSION
 		};
 
 		/**
