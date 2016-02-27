@@ -16,7 +16,7 @@
 #include "nodes/procedural/for.h"
 #include "nodes/procedural/abstractExpression.h"
 #include "nodes/procedural/assignmentExpression.h"
-#include "nodes/procedural/additiveExpression.h"
+#include "nodes/procedural/additionExpression.h"
 #include "nodes/procedural/constant.h"
 #include "nodes/procedural/parens.h"
 
@@ -128,7 +128,7 @@ additive_expression
                     }
                 |   additive_expression '+' multiplicative_expression
                     {
-                        $$ = std::make_shared<nodes::procedural::CAdditiveExpression>(std::dynamic_pointer_cast<nodes::procedural::CAbstractExpression>($1), std::dynamic_pointer_cast<nodes::procedural::CAbstractExpression>($3));
+                        $$ = std::make_shared<nodes::procedural::CAdditionExpression>(std::dynamic_pointer_cast<nodes::procedural::CAbstractExpression>($1), std::dynamic_pointer_cast<nodes::procedural::CAbstractExpression>($3));
                     }
                 |   additive_expression '-' multiplicative_expression
                 ;

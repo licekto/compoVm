@@ -14,14 +14,14 @@ namespace nodes {
 		 * \class CAdditiveExpression
 		 * \brief Class for assignment representation.
 		 */
-		class CAdditiveExpression : public CBinaryExpression {
+		class CAdditionExpression : public CBinaryExpression {
 		  public:
 			/**
 			* Parametric constructor with default values
 			* @param variable: name of variable
 			* @param rval: right-hand side of assignment
 			*/
-			CAdditiveExpression         ( std::shared_ptr<nodes::procedural::CAbstractExpression> op1 = nullptr,
+			CAdditionExpression         ( std::shared_ptr<nodes::procedural::CAbstractExpression> op1 = nullptr,
 			                              std::shared_ptr<nodes::procedural::CAbstractExpression> op2 = nullptr);
 		};
 

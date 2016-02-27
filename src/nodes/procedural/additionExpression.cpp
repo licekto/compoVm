@@ -1,11 +1,11 @@
-#include "nodes/procedural/additiveExpression.h"
+#include "nodes/procedural/additionExpression.h"
 #include "nodes/procedural/binaryExpression.h"
 
 namespace nodes {
 
 	namespace procedural {
 
-		CAdditiveExpression::CAdditiveExpression( std::shared_ptr<nodes::procedural::CAbstractExpression> op1,
+		CAdditionExpression::CAdditionExpression( std::shared_ptr<nodes::procedural::CAbstractExpression> op1,
 		        std::shared_ptr<nodes::procedural::CAbstractExpression> op2)
 			:   CNode(types::nodeType::ADDITIVE_EXPRESSION),
 			    CAbstractExpression(),

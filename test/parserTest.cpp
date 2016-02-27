@@ -15,7 +15,7 @@
 #include "nodes/procedural/constant.h"
 #include "nodes/procedural/stringLiteral.h"
 #include "nodes/procedural/parens.h"
-#include "nodes/procedural/additiveExpression.h"
+#include "nodes/procedural/additionExpression.h"
 
 void testDescriptor(std::shared_ptr<nodes::compo::CDescriptor> descriptor, const std::string& name, const std::string& extends, int bodySize) {
     BOOST_CHECK_EQUAL(nodes::types::nodeType::DESCRIPTOR, descriptor->getNodeType());
@@ -289,7 +289,7 @@ BOOST_AUTO_TEST_CASE(compoProcedural) {
     testSymbol(symbol, "e");
     
     // Check parens
-    std::shared_ptr<nodes::procedural::CAdditiveExpression> additive = std::dynamic_pointer_cast<nodes::procedural::CAdditiveExpression>(assignment->getRValue());
+    std::shared_ptr<nodes::procedural::CAdditionExpression> additive = std::dynamic_pointer_cast<nodes::procedural::CAdditionExpression>(assignment->getRValue());
     BOOST_CHECK_EQUAL(nodes::types::nodeType::ADDITIVE_EXPRESSION, additive->getNodeType());
     BOOST_CHECK_EQUAL(nodes::types::operatorType::PLUS, additive->getOperator());
     
