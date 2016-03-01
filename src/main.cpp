@@ -27,7 +27,7 @@ int main(int argc, char **argv) {
 		std::cout << *parser.getRootNodeAt(i) << std::endl;
 	}
 
-	parser.clear();
+	parser.clearRootNodes();
 
 	return 0;
 }

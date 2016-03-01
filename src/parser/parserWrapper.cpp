@@ -7,7 +7,7 @@ ParserWrapper::ParserWrapper(Lexer *lexer)
 }
 
 ParserWrapper::~ParserWrapper() {
-	this->clear();
+	this->clearRootNodes();
 }
 
 Lexer * ParserWrapper::getLexer() const {
@@ -29,7 +29,7 @@ std::shared_ptr<nodes::CNode> ParserWrapper::getRootNodeAt(unsigned int index) {
 	return nullptr;
 }
 
-void ParserWrapper::clear() {
+void ParserWrapper::clearRootNodes() {
 	for (std::shared_ptr<nodes::CNode> node : m_rootNodes) {
 		node.reset();
 	}
@@ -50,7 +50,7 @@ bool ParserWrapper::isStackEmpty() const {
     return m_blockStack.empty();
 }
 
-void ParserWrapper::setDescriptorBodyNode(std::shared_ptr<nodes::CNode> node) {
+void ParserWrapper::addDescriptorBodyNode(std::shared_ptr<nodes::CNode> node) {
     m_currentDescritporBody.push_back(node);
 }
 
@@ -58,12 +58,20 @@ std::vector<std::shared_ptr<nodes::CNode>>* ParserWrapper::getDescriptorBody() {
     return &m_currentDescritporBody;
 }
 
-void ParserWrapper::setServiceParam(std::shared_ptr<nodes::procedural::CSymbol> param) {
+void ParserWrapper::clearDescriptorBody() {
+    m_currentDescritporBody.clear();
+}
+
+void ParserWrapper::addServiceParam(std::shared_ptr<nodes::procedural::CSymbol> param) {
     m_currentServiceParams.push_back(param);
 }
 
 std::vector<std::shared_ptr<nodes::procedural::CSymbol>>* ParserWrapper::getServiceParams() {
     return &m_currentServiceParams;
+}
+
+void ParserWrapper::clearServiceParams() {
+    m_currentServiceParams.clear();
 }
 
 void ParserWrapper::setVisibility(nodes::types::visibilityType type) {
@@ -82,10 +90,20 @@ bool ParserWrapper::getAtomicity() const {
     return m_atomicity;
 }
 
-void ParserWrapper::setPort(std::shared_ptr<nodes::compo::CPort> port) {
+void ParserWrapper::addPort(std::shared_ptr<nodes::compo::CPort> port) {
     m_currentPorts.push_back(port);
 }
 
 std::vector<std::shared_ptr<nodes::compo::CPort>>* ParserWrapper::getPorts() {
     return &m_currentPorts;
+}
+
+void ParserWrapper::clearPorts() {
+    m_currentPorts.clear();
+}
+
+void ParserWrapper::clearAll() {
+    clearDescriptorBody();
+    clearServiceParams();
+    clearPorts();
 }

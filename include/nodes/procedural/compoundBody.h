@@ -16,8 +16,8 @@ namespace nodes {
 		 */
 		class CCompoundBody : public CNode {
 		  private:
-			std::vector<std::shared_ptr<nodes::procedural::CSymbol>>  m_temporaries;              /**< Temporaries vector */
-			std::vector<std::shared_ptr<nodes::CNode>>              m_body;                     /**< Body nodes vector */
+			std::vector<std::shared_ptr<nodes::procedural::CSymbol>> m_temporaries; /**< Temporaries vector */
+			std::vector<std::shared_ptr<nodes::CNode>> m_body; /**< Body nodes vector */
 
 		  public:
 			/**
@@ -25,27 +25,51 @@ namespace nodes {
 			* @param startCond: Star condition node pointer
 			* @param endCond: Star condition node pointer
 			*/
-			CCompoundBody                ( const std::vector<std::shared_ptr<nodes::procedural::CSymbol>>& temporaries = std::vector<std::shared_ptr<nodes::procedural::CSymbol>>(0),
-			                               const std::vector<std::shared_ptr<nodes::CNode>>& body = std::vector<std::shared_ptr<nodes::CNode>>(0));
+			CCompoundBody(const std::vector<std::shared_ptr<nodes::procedural::CSymbol>>& temporaries = std::vector<std::shared_ptr<nodes::procedural::CSymbol>>(0),
+			              const std::vector<std::shared_ptr<nodes::CNode>>& body = std::vector<std::shared_ptr<nodes::CNode>>(0));
 
 			/**
 			* Virtual print function to call from operator <<
 			* @param os: output stream
 			* @see operator <<()
 			*/
-			virtual void                            print               (std::ostream& os) const;
+			virtual void print(std::ostream& os) const;
 
+                        /**
+			* Body size getter
+                        * @return size of body vector
+                        */
+                        size_t getBodySize() const;
+                        
+                        /**
+                         * Body node setter
+                         * @param node: shared pointer to node
+                         */
+                        void addBodyNode(std::shared_ptr<nodes::CNode> node);
+                        
 			/**
 			* Body getter
 			* @return Constant pointer to body vector
 			*/
-			std::shared_ptr<nodes::CNode>                    getBodyNodeAt       (int index) const;
+			std::shared_ptr<nodes::CNode> getBodyNodeAt(int index) const;
 
+                        /**
+			* Temporaries size getter
+                        * @return size of temporaries vector
+                        */
+                        size_t getTemporariesSize() const;
+                        
+                        /**
+                         * Temporary setter
+                         * @param node: shared pointer to temporary
+                         */
+                        void addTemporary(std::shared_ptr<nodes::procedural::CSymbol> temporary);
+                        
 			/**
 			* Body getter
-					* @return Constant pointer to body vector
-					*/
-			std::shared_ptr<nodes::procedural::CSymbol>                    getTemporaryAt       (int index) const;
+                        * @return Constant pointer to body vector
+                        */
+			std::shared_ptr<nodes::procedural::CSymbol> getTemporaryAt(int index) const;
 		};
 
 	}

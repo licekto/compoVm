@@ -37,6 +37,8 @@
 #define yyerror(parser, message) parser->error(message)
 
 std::shared_ptr<TBLOCK> currentBlock = std::make_shared<TBLOCK>();
+
+std::shared_ptr<nodes::procedural::CCompoundBody> currentBody = std::make_shared<nodes::procedural::CCompoundBody>();
 %}
 
 %define api.value.type {std::shared_ptr<nodes::CNode>}
@@ -223,11 +225,7 @@ expression
                 ;
 
 statement
-                :   compound_statement
-                    {
-                        $$ = $1;
-                    }
-                |   expression_statement
+                :   expression_statement
                     {
                         $$ = $1;
                     }
@@ -243,15 +241,20 @@ statement
                     {
                         $$ = $1;
                     }
+/* Nested code blocks not allowed */
+/*
+                |   compound_statement
+                    {
+                        $$ = $1;
+                    }
+*/
                 ;
 
 compound_statement
                 :   '{' '}'
                 |   '{' temporaries statement_list '}'
                     {
-                        parser->pushBlock(currentBlock);
-                        currentBlock.reset();
-                        currentBlock = std::make_shared<TBLOCK>();
+                        $$ = currentBody;
                     }
                 ;
 
@@ -263,22 +266,22 @@ temporaries
 temporaries_list
                 :   IDENTIFIER
                     {
-                        currentBlock->temporaries.push_back(std::dynamic_pointer_cast<nodes::procedural::CSymbol>($1));
+                        currentBody->addTemporary(std::dynamic_pointer_cast<nodes::procedural::CSymbol>($1));
                     }
                 |   temporaries_list IDENTIFIER
                     {
-                        currentBlock->temporaries.push_back(std::dynamic_pointer_cast<nodes::procedural::CSymbol>($2));
+                        currentBody->addTemporary(std::dynamic_pointer_cast<nodes::procedural::CSymbol>($2));
                     }
                 ;
 
 statement_list
                 :   statement
                     {
-                        currentBlock.statements.push_back($1);
+                        currentBody->addBodyNode($1);
                     }
                 |   statement_list statement
                     {
-                        currentBlock.statements.push_back($2);
+                        currentBody->addBodyNode($2);
                     }
                 ;
 
@@ -298,17 +301,21 @@ selection_statement
 iteration_statement
                 :   WHILE '(' expression ')' statement
                     {
+/*
                         $$ = std::make_shared<nodes::procedural::CWhileStatement>(  std::dynamic_pointer_cast<nodes::procedural::CAbstractExpression>($3),
                                                                                     std::make_shared<nodes::procedural::CCompoundBody>(currentBlock.temporaries, currentBlock.statements));
                         currentBlock.clear();
+*/
                     }
                 |   FOR '(' assignment_expression expression_statement expression ')' statement
                     {
+/*
                         $$ = std::make_shared<nodes::procedural::CForStatement>(std::dynamic_pointer_cast<nodes::procedural::CAssignmentExpression>($3),
                                                                                 std::dynamic_pointer_cast<nodes::procedural::CAbstractExpression>($4),
                                                                                 std::dynamic_pointer_cast<nodes::procedural::CAbstractExpression>($5),
                                                                                 std::make_shared<nodes::procedural::CCompoundBody>(currentBlock.temporaries, currentBlock.statements));
                         currentBlock.clear();
+*/
                     }
                 ;
 
@@ -344,8 +351,9 @@ descriptors
 descriptor      
                 :   DESCRIPTOR IDENTIFIER inheritance '{' compoExprs '}'
                     {
-                        $$ = std::make_shared<nodes::compo::CDescriptor>(std::dynamic_pointer_cast<nodes::procedural::CSymbol>($2), std::dynamic_pointer_cast<nodes::procedural::CSymbol>($3), std::move(currentBody));
-                        currentBody.clear();
+                        $$ = std::make_shared<nodes::compo::CDescriptor>(std::dynamic_pointer_cast<nodes::procedural::CSymbol>($2),
+                                                                         std::dynamic_pointer_cast<nodes::procedural::CSymbol>($3),
+                                                                         std::move(*(parser->getDescriptorBody())));
                     }
 
 interface       
@@ -380,31 +388,31 @@ compoExpr
 provision     
                 :   visibility PROVIDES provReqSign
 		    {
-			currentBody.push_back(std::make_shared<nodes::compo::CProvision>(visType, std::move(currentPorts)));
-			currentPorts.clear();
+			parser->addDescriptorBodyNode(std::make_shared<nodes::compo::CProvision>(parser->getVisibility(), *parser->getPorts()));
+                        parser->clearPorts();
 		    }
                 ;
 
 requirement   
                 :   visibility REQUIRES provReqSign
                     {
-			currentBody.push_back(std::make_shared<nodes::compo::CRequirement>(visType, std::move(currentPorts)));
-			currentPorts.clear();
+			parser->addDescriptorBodyNode(std::make_shared<nodes::compo::CRequirement>(parser->getVisibility(), *parser->getPorts()));
+                        parser->clearPorts();
 		    }
                 ;
 
 visibility
                 :   EXTERNALLY
                     {
-                        visType = nodes::types::visibilityType::EXTERNAL;
+                        parser->setVisibility(nodes::types::visibilityType::EXTERNAL);
                     }
                 |   INTERNALLY
                     {
-                        visType = nodes::types::visibilityType::INTERNAL;
+                        parser->setVisibility(nodes::types::visibilityType::INTERNAL);
                     }
                 |   /* epsilon */
                     {
-                        visType = nodes::types::visibilityType::EXTERNAL;
+                        parser->setVisibility(nodes::types::visibilityType::EXTERNAL);
                     }
                 ;
 
@@ -418,24 +426,24 @@ ports
 		;
 
 port		
-                :   atomic IDENTIFIER brackets ':' portSign ofKind
+                :   atomic IDENTIFIER collection ':' portSign ofKind
 		    {
-			currentPorts.push_back(std::make_shared<nodes::compo::CPort>(std::dynamic_pointer_cast<nodes::procedural::CSymbol>($2), atomicPresent));
+			parser->addPort(std::make_shared<nodes::compo::CPort>(std::dynamic_pointer_cast<nodes::procedural::CSymbol>($2), parser->getAtomicity()));
 		    }
 		;
 
 atomic		
                 :   ATOMIC
                     {
-                        atomicPresent = true;
+                        parser->setAtomicity(true);
                     }
 		|   /* epsilon */
                     {
-                        atomicPresent = false;
+                        parser->setAtomicity(false);
                     }
 		;
 
-brackets        
+collection        
                 :   '[' ']'
                 |   /* epsilon */
                 ;
@@ -454,9 +462,9 @@ ofKind
 service         
                 :   SERVICE serviceSign compound_statement
                     {
-                        //currentBody.push_back(std::make_shared<nodes::compo::CService>(std::dynamic_pointer_cast<nodes::procedural::CSymbol>($2), std::move(currentServiceParams), std::move(currentBlock.statements), std::move(currentBlock.temporaries)));
-                        //currentServiceParams.clear();
-                        //currentBlock.clear();
+                        parser->addDescriptorBodyNode(std::make_shared<nodes::compo::CService>(std::dynamic_pointer_cast<nodes::procedural::CSymbol>($2),
+                                                                                               std::move(*parser->getServiceParams()),
+                                                                                               std::move(currentBody)));
                     }
                 ;
 
@@ -478,11 +486,11 @@ servicesSignsList
 serviceParams   
                 :   IDENTIFIER
                     {
-                        //currentServiceParams.push_back(std::dynamic_pointer_cast<nodes::procedural::CSymbol>($1));
+                        parser->addServiceParam(std::dynamic_pointer_cast<nodes::procedural::CSymbol>($1));
                     }
                 |   IDENTIFIER ',' serviceParams
                     {
-                        //currentServiceParams.push_back(std::dynamic_pointer_cast<nodes::procedural::CSymbol>($1));
+                        parser->addServiceParam(std::dynamic_pointer_cast<nodes::procedural::CSymbol>($1));
                     }
                 |   /* epsilon */
                 ;
@@ -490,8 +498,9 @@ serviceParams
 constraint	
                 :   CONSTRAINT serviceSign '{' '}'
                     {
-                        //currentBody.push_back(std::make_shared<nodes::compo::CConstraint>(std::dynamic_pointer_cast<nodes::procedural::CSymbol>($2), std::move(currentServiceParams), currentServiceBody));
-                        //currentServiceParams.clear();
+                        parser->addDescriptorBodyNode(std::make_shared<nodes::compo::CConstraint>(std::dynamic_pointer_cast<nodes::procedural::CSymbol>($2),
+                                                                                                  std::move(*parser->getServiceParams()),
+                                                                                                  std::move(currentBody)));
                     }
 		;
 

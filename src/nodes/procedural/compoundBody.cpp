@@ -49,6 +49,22 @@ namespace nodes {
 			}
 			return symbol;
 		}
+                
+                void CCompoundBody::addBodyNode(std::shared_ptr<nodes::CNode> node) {
+                    m_body.push_back(node);
+                }
+                
+                void CCompoundBody::addTemporary(std::shared_ptr<nodes::procedural::CSymbol> temporary) {
+                    m_temporaries.push_back(temporary);
+                }
+                
+                size_t CCompoundBody::getBodySize() const {
+                    return m_body.size();
+                }
+                
+                size_t CCompoundBody::getTemporariesSize() const {
+                    return m_temporaries.size();
+                }
 	}
 
 }

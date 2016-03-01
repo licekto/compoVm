@@ -4,9 +4,9 @@ namespace nodes {
 
 	namespace compo {
 
-		CAbstractServConstr::CAbstractServConstr(   std::shared_ptr<nodes::procedural::CSymbol> name,
-		        const std::vector<std::shared_ptr<nodes::procedural::CSymbol>>& params,
-		        const std::vector<std::shared_ptr<nodes::CNode>>& body)
+		CAbstractServConstr::CAbstractServConstr(std::shared_ptr<nodes::procedural::CSymbol> name,
+                                                         const std::vector<std::shared_ptr<nodes::procedural::CSymbol>>& params,
+                                                         std::shared_ptr<nodes::procedural::CCompoundBody> body)
 			: CNode(types::nodeType::SERVICE), m_name(name), m_params(params), m_body(body) {
 		}
 
@@ -39,24 +39,30 @@ namespace nodes {
 			return "";
 		}
 
-		size_t CAbstractServConstr::getBodySize() const {
-			return m_body.size();
-		}
-
+                size_t CAbstractServConstr::getBodySize() const {
+                    return m_body->getBodySize();
+                }
+                
+                size_t CAbstractServConstr::getTemporariesSize() const {
+                    return m_body->getTemporariesSize();
+                }
+                
 		std::shared_ptr<nodes::CNode> CAbstractServConstr::getBodyNodeAt(int index) const {
-			std::shared_ptr<nodes::CNode> node = nullptr;
-			try {
-				node = m_body.at(index);
-			} catch (std::out_of_range ex) {
-				// log error message
-			}
-			return node;
+                    return m_body->getBodyNodeAt(index);
 		}
 
-		void CAbstractServConstr::setBodyNode(std::shared_ptr<nodes::CNode> bodyNode) {
-			m_body.push_back(bodyNode);
+		void CAbstractServConstr::addBodyNode(std::shared_ptr<nodes::CNode> node) {
+			m_body->addBodyNode(node);
 		}
 
+                void CAbstractServConstr::addTemporary(std::shared_ptr<nodes::procedural::CSymbol> temporary) {
+                    m_body->addTemporary(temporary);
+                }
+                
+                std::shared_ptr<nodes::procedural::CSymbol> CAbstractServConstr::getTemporaryAt(int index) const {
+                    return m_body->getTemporaryAt(index);
+                }
+                
 		size_t CAbstractServConstr::getParamsSize() const {
 			return m_params.size();
 		}
@@ -74,7 +80,7 @@ namespace nodes {
 		void CAbstractServConstr::setParam(std::shared_ptr<nodes::procedural::CSymbol> param) {
 			m_params.push_back(param);
 		}
-
+                
 	}
 
 }

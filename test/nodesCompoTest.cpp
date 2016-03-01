@@ -12,7 +12,7 @@
 #include "nodes/compo/descriptor.h"
 
 BOOST_AUTO_TEST_SUITE(nodesCompo)
-
+/*
 BOOST_AUTO_TEST_CASE(symbolTest) {
     // Original symbol creation
     nodes::procedural::CSymbol symbol("Symbol");
@@ -525,5 +525,5 @@ BOOST_AUTO_TEST_CASE(descriptorTest) {
     BOOST_CHECK_EQUAL("", descriptorNew1.getExtends());
     BOOST_CHECK_EQUAL(0, descriptorNew1.getBodySize());
 }
-
+*/
 BOOST_AUTO_TEST_SUITE_END()

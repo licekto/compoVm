@@ -16,16 +16,14 @@
  */
 class ParserWrapper {
   private:
-	Lexer * m_lexer;            /**< Lexer pointer */
-	std::vector<std::shared_ptr<nodes::CNode>> m_rootNodes;        /**< Vector of root nodes */
-	std::stack<std::shared_ptr<TBLOCK>> m_blockStack;      /**< Stack of nested blocks */
-	std::vector<std::shared_ptr<nodes::CNode>> m_currentDescritporBody;  /**< Body of currently parsed descriptor */
-
+	Lexer *m_lexer;/**< Lexer pointer */
+	std::vector<std::shared_ptr<nodes::CNode>> m_rootNodes; /**< Vector of root nodes */
+	std::stack<std::shared_ptr<TBLOCK>> m_blockStack; /**< Stack of nested blocks */
+	std::vector<std::shared_ptr<nodes::CNode>> m_currentDescritporBody; /**< Body of currently parsed descriptor */
 	std::vector<std::shared_ptr<nodes::procedural::CSymbol>> m_currentServiceParams; /**< Parameters of currently parsed service */
-
-	nodes::types::visibilityType m_visibilityType;   /**< Visibility type of current requirement/provision */
-	bool m_atomicity;    /**< Is current port atomic? */
-	std::vector<std::shared_ptr<nodes::compo::CPort>> m_currentPorts;     /**< Currently parsed ports */
+	nodes::types::visibilityType m_visibilityType;/**< Visibility type of current requirement/provision */
+	bool m_atomicity; /**< Is current port atomic? */
+	std::vector<std::shared_ptr<nodes::compo::CPort>> m_currentPorts;/**< Currently parsed ports */
 
   public:
 	/**
@@ -49,48 +47,48 @@ class ParserWrapper {
 	* Parse whole input
 	* @param is: input stream
 	*/
-	void                                    parseAll                    (std::istream& is);
+	void parseAll(std::istream& is);
 
 	/**
 	* Clears root nodes vector
 	*/
-	void                                    clear                       ();
+	void clearRootNodes();
 
 	/**
 	* Handle errors
 	*/
-	void                                    error                       (const std::string& message);
+	void error(const std::string& message);
 
 	/**
 	* Lexer getter
 	* @return Lexer pointer
 	*/
-	Lexer *                                 getLexer                    () const;
+	Lexer * getLexer() const;
 
 	/**
 	* Root node setter
 	* @param node pointer
 	*/
-	void                                    setRootNode                 (std::shared_ptr<nodes::CNode> node);
+	void setRootNode(std::shared_ptr<nodes::CNode> node);
 
 	/**
 	* Root node vector size getter
 	* @return size of node vector
 	*/
-	size_t                                  getRootNodesSize            () const;
+	size_t getRootNodesSize() const;
 
 	/**
 	* Root node getter
 	* @param index: index of wanted node
 	* @return root node at given index
 	*/
-	std::shared_ptr<nodes::CNode>                     getRootNodeAt               (unsigned int index);
+	std::shared_ptr<nodes::CNode> getRootNodeAt(unsigned int index);
 
 	/**
 	 * Pushes new block context on the stack
 	 * @param block: block smart pointer to push
 	 */
-	void    pushBlock    (std::shared_ptr<TBLOCK> block);
+	void pushBlock(std::shared_ptr<TBLOCK> block);
 
 	/**
 	 * Pops block from top of the stack
@@ -98,43 +96,53 @@ class ParserWrapper {
 	 *
 	 * No "top" method implemented. Pop actually gets the top, removes data on the top and returns poped content.
 	 */
-	std::shared_ptr<TBLOCK> popBlock    ();
+	std::shared_ptr<TBLOCK> popBlock();
 
         /**
          * Is stack empty?
          * @return bool value
          */
-        bool isStackEmpty () const;
+        bool isStackEmpty() const;
         
 	/**
 	 * Sets node of currently parsed descriptor
 	 * @param node: smart pointer to body node
 	 */
-	void    setDescriptorBodyNode   (std::shared_ptr<nodes::CNode> node);
+	void addDescriptorBodyNode(std::shared_ptr<nodes::CNode> node);
 
         /**
          * Returns vector of body nodes
          * @return reference to vector
          */
-        std::vector<std::shared_ptr<nodes::CNode>>* getDescriptorBody();
+        std::vector<std::shared_ptr<nodes::CNode>> * getDescriptorBody();
+        
+        /**
+         * Clears vector of body nodes
+         */
+        void clearDescriptorBody();
         
 	/**
 	 * Sets parameter of currently parsed service
 	 * @param param: smart pointer to parameter name symbol
 	 */
-	void setServiceParam    (std::shared_ptr<nodes::procedural::CSymbol> param);
+	void addServiceParam(std::shared_ptr<nodes::procedural::CSymbol> param);
 
         /**
          * Returns vector of service parameters
          * @return reference to vector
          */
-        std::vector<std::shared_ptr<nodes::procedural::CSymbol>>* getServiceParams();
+        std::vector<std::shared_ptr<nodes::procedural::CSymbol>> * getServiceParams();
+        
+        /**
+         * Clears vector of service parameters
+         */
+        void clearServiceParams();
         
 	/**
 	 * Sets visibility type of currently parsed provision/requirement
 	 * @param type: visibility type
 	 */
-	void    setVisibility   (nodes::types::visibilityType type);
+	void setVisibility(nodes::types::visibilityType type);
         
         /**
          * Visibility getter
@@ -146,7 +154,7 @@ class ParserWrapper {
 	 * Sets atomicity of currently parsed port
 	 * @param atomicity
 	 */
-	void    setAtomicity   (bool atomicity);
+	void setAtomicity(bool atomicity);
         
         /**
          * Atomicity getter
@@ -158,11 +166,21 @@ class ParserWrapper {
 	 * Adds currently parsed port
 	 * @param port: smart pointer to port
 	 */
-	void setPort    (std::shared_ptr<nodes::compo::CPort> port);
+	void addPort(std::shared_ptr<nodes::compo::CPort> port);
 
         /**
          * Returns vector of ports
          * @return reference to vector
          */        
-        std::vector<std::shared_ptr<nodes::compo::CPort>>* getPorts();
+        std::vector<std::shared_ptr<nodes::compo::CPort>> * getPorts();
+        
+        /**
+         * Clears vector of ports
+         */
+        void clearPorts();
+        
+        /**
+         * Clears all vectors
+         */
+        void clearAll();
 };
