@@ -1,9 +1,14 @@
 #pragma once
 
 #include <memory>
+#include <stack>
 
 #include "parser/lexer.h"
+#include "parser/block.h"
 #include "nodes/node.h"
+#include "nodes/procedural/symbol.h"
+#include "nodes/compo/port.h"
+#include "nodes/types/visibilityType.h"
 
 /**
  * \class ParserWrapper
@@ -11,26 +16,34 @@
  */
 class ParserWrapper {
   private:
-	Lexer                         * m_lexer;            /**< Lexer pointer */
+	Lexer * m_lexer;            /**< Lexer pointer */
 	std::vector<std::shared_ptr<nodes::CNode>> m_rootNodes;        /**< Vector of root nodes */
+	std::stack<std::shared_ptr<TBLOCK>> m_blockStack;      /**< Stack of nested blocks */
+	std::vector<std::shared_ptr<nodes::CNode>> m_currentDescritporBody;  /**< Body of currently parsed descriptor */
+
+	std::vector<std::shared_ptr<nodes::procedural::CSymbol>> m_currentServiceParams; /**< Parameters of currently parsed service */
+
+	nodes::types::visibilityType m_visibilityType;   /**< Visibility type of current requirement/provision */
+	bool m_atomicity;    /**< Is current port atomic? */
+	std::vector<std::shared_ptr<nodes::compo::CPort>> m_currentPorts;     /**< Currently parsed ports */
 
   public:
 	/**
 	* Parametric constructor with default value
 	* @param lexer: pointer to lexer
 	*/
-	ParserWrapper               (Lexer *lexer = nullptr);
+	ParserWrapper(Lexer *lexer = nullptr);
 
 	/**
 	* Destructor
 	*/
-	~ParserWrapper              ();
+	~ParserWrapper();
 
 	/**
 	* Launch parsing
 	* @param is: input stream
 	*/
-	int                                     parse                       (std::istream& is);
+	int parse(std::istream& is);
 
 	/**
 	* Parse whole input
@@ -72,4 +85,84 @@ class ParserWrapper {
 	* @return root node at given index
 	*/
 	std::shared_ptr<nodes::CNode>                     getRootNodeAt               (unsigned int index);
+
+	/**
+	 * Pushes new block context on the stack
+	 * @param block: block smart pointer to push
+	 */
+	void    pushBlock    (std::shared_ptr<TBLOCK> block);
+
+	/**
+	 * Pops block from top of the stack
+	 * @return smart pointer to block
+	 *
+	 * No "top" method implemented. Pop actually gets the top, removes data on the top and returns poped content.
+	 */
+	std::shared_ptr<TBLOCK> popBlock    ();
+
+        /**
+         * Is stack empty?
+         * @return bool value
+         */
+        bool isStackEmpty () const;
+        
+	/**
+	 * Sets node of currently parsed descriptor
+	 * @param node: smart pointer to body node
+	 */
+	void    setDescriptorBodyNode   (std::shared_ptr<nodes::CNode> node);
+
+        /**
+         * Returns vector of body nodes
+         * @return reference to vector
+         */
+        std::vector<std::shared_ptr<nodes::CNode>>* getDescriptorBody();
+        
+	/**
+	 * Sets parameter of currently parsed service
+	 * @param param: smart pointer to parameter name symbol
+	 */
+	void setServiceParam    (std::shared_ptr<nodes::procedural::CSymbol> param);
+
+        /**
+         * Returns vector of service parameters
+         * @return reference to vector
+         */
+        std::vector<std::shared_ptr<nodes::procedural::CSymbol>>* getServiceParams();
+        
+	/**
+	 * Sets visibility type of currently parsed provision/requirement
+	 * @param type: visibility type
+	 */
+	void    setVisibility   (nodes::types::visibilityType type);
+        
+        /**
+         * Visibility getter
+         * @return visibilityType
+         */
+        nodes::types::visibilityType getVisibility() const;
+
+	/**
+	 * Sets atomicity of currently parsed port
+	 * @param atomicity
+	 */
+	void    setAtomicity   (bool atomicity);
+        
+        /**
+         * Atomicity getter
+         * @return bool value
+         */
+        bool getAtomicity() const;
+
+	/**
+	 * Adds currently parsed port
+	 * @param port: smart pointer to port
+	 */
+	void setPort    (std::shared_ptr<nodes::compo::CPort> port);
+
+        /**
+         * Returns vector of ports
+         * @return reference to vector
+         */        
+        std::vector<std::shared_ptr<nodes::compo::CPort>>* getPorts();
 };

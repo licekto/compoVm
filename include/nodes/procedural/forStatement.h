@@ -4,6 +4,7 @@
 #include "nodes/node.h"
 #include "abstractStatement.h"
 #include "assignmentExpression.h"
+#include "compoundBody.h"
 
 namespace nodes {
 
@@ -13,12 +14,12 @@ namespace nodes {
 		 * \class CFor
 		 * \brief Class for for-loop representation
 		 */
-		class CFor : public CAbstractStatement {
+		class CForStatement : public CAbstractStatement {
 		  private:
 			std::shared_ptr<nodes::procedural::CAssignmentExpression>    m_startCondition;           /**< Start condition node */
 			std::shared_ptr<nodes::procedural::CAbstractExpression>    m_endCondition;             /**< Start condition node */
 			std::shared_ptr<nodes::procedural::CAbstractExpression>    m_step;                     /**< Step node */
-			std::vector<std::shared_ptr<nodes::CNode>>        m_body;                     /**< Body nodes vector */
+			std::shared_ptr<nodes::procedural::CCompoundBody> m_body;                     /**< Body */
 
 		  public:
 			/**
@@ -28,10 +29,10 @@ namespace nodes {
 			* @param step: Step node pointer
 			* @param body: Reference to vector of body nodes
 			*/
-			CFor                ( std::shared_ptr<nodes::procedural::CAssignmentExpression> startCond = nullptr,
-			                      std::shared_ptr<nodes::procedural::CAbstractExpression> endCond = nullptr,
-			                      std::shared_ptr<nodes::procedural::CAbstractExpression> step = nullptr,
-			                      const std::vector<std::shared_ptr<nodes::CNode>>& body = std::vector<std::shared_ptr<nodes::CNode>>(0));
+			CForStatement                ( std::shared_ptr<nodes::procedural::CAssignmentExpression> startCond = nullptr,
+			                               std::shared_ptr<nodes::procedural::CAbstractExpression> endCond = nullptr,
+			                               std::shared_ptr<nodes::procedural::CAbstractExpression> step = nullptr,
+			                               std::shared_ptr<nodes::procedural::CCompoundBody> body = nullptr);
 
 			/**
 			* Virtual print function to call from operator <<
@@ -42,9 +43,9 @@ namespace nodes {
 
 			/**
 			* Body getter
-			* @return Constant pointer to body vector
+			* @return Constant pointer to body
 			*/
-			std::shared_ptr<nodes::CNode>                    getBodyNodeAt       (int index) const;
+			std::shared_ptr<nodes::procedural::CCompoundBody>                    getBody () const;
 
 			/**
 			* Start condition getter

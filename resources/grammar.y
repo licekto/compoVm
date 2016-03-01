@@ -13,7 +13,8 @@
 #include "nodes/compo/provision.h"
 #include "nodes/compo/requirement.h"
 #include "nodes/procedural/symbol.h"
-#include "nodes/procedural/for.h"
+#include "nodes/procedural/forStatement.h"
+#include "nodes/procedural/whileStatement.h"
 #include "nodes/procedural/abstractExpression.h"
 #include "nodes/procedural/assignmentExpression.h"
 #include "nodes/procedural/additionExpression.h"
@@ -35,23 +36,7 @@
 #define yylex()                  parser->getLexer()->yylex()
 #define yyerror(parser, message) parser->error(message)
 
-typedef struct block {
-    std::vector<std::shared_ptr<nodes::CNode>>    temporaries;
-    std::vector<std::shared_ptr<nodes::CNode>>    statements;
-
-    void                        clear()     {temporaries.clear(); statements.clear();}
-} TBLOCK;
-
-std::vector<std::shared_ptr<nodes::CNode>>                  currentBody;
-std::shared_ptr<nodes::compo::CService>                     currentService          = nullptr;
-std::vector<std::shared_ptr<nodes::procedural::CSymbol>>    currentServiceParams;
-std::vector<std::shared_ptr<nodes::CNode>>                  currentServiceBody;
-TBLOCK                                                      currentBlock;
-
-nodes::types::visibilityType                                visType                 = nodes::types::visibilityType::EXTERNAL;
-bool                                                        atomicPresent           = false;
-std::vector<std::shared_ptr<nodes::compo::CPort>>           currentPorts;
-
+std::shared_ptr<TBLOCK> currentBlock = std::make_shared<TBLOCK>();
 %}
 
 %define api.value.type {std::shared_ptr<nodes::CNode>}
@@ -262,9 +247,27 @@ statement
 
 compound_statement
                 :   '{' '}'
-                |   '{' statement_list '}'
+                |   '{' temporaries statement_list '}'
                     {
-                        $$ = $1;
+                        parser->pushBlock(currentBlock);
+                        currentBlock.reset();
+                        currentBlock = std::make_shared<TBLOCK>();
+                    }
+                ;
+
+temporaries
+                :   '|' temporaries_list '|'
+                |   /* epsilon */
+                ;
+
+temporaries_list
+                :   IDENTIFIER
+                    {
+                        currentBlock->temporaries.push_back(std::dynamic_pointer_cast<nodes::procedural::CSymbol>($1));
+                    }
+                |   temporaries_list IDENTIFIER
+                    {
+                        currentBlock->temporaries.push_back(std::dynamic_pointer_cast<nodes::procedural::CSymbol>($2));
                     }
                 ;
 
@@ -282,6 +285,9 @@ statement_list
 expression_statement
                 :   ';'
                 |   expression ';'
+                    {
+                        $$ = $1;
+                    }
                 ;
 
 selection_statement
@@ -291,11 +297,18 @@ selection_statement
 
 iteration_statement
                 :   WHILE '(' expression ')' statement
+                    {
+                        $$ = std::make_shared<nodes::procedural::CWhileStatement>(  std::dynamic_pointer_cast<nodes::procedural::CAbstractExpression>($3),
+                                                                                    std::make_shared<nodes::procedural::CCompoundBody>(currentBlock.temporaries, currentBlock.statements));
+                        currentBlock.clear();
+                    }
                 |   FOR '(' assignment_expression expression_statement expression ')' statement
                     {
-                        $$ = std::make_shared<nodes::procedural::CFor>( std::dynamic_pointer_cast<nodes::procedural::CAssignmentExpression>($3),
-                                                                        std::dynamic_pointer_cast<nodes::procedural::CAbstractExpression>($4),
-                                                                        std::dynamic_pointer_cast<nodes::procedural::CAbstractExpression>($5));
+                        $$ = std::make_shared<nodes::procedural::CForStatement>(std::dynamic_pointer_cast<nodes::procedural::CAssignmentExpression>($3),
+                                                                                std::dynamic_pointer_cast<nodes::procedural::CAbstractExpression>($4),
+                                                                                std::dynamic_pointer_cast<nodes::procedural::CAbstractExpression>($5),
+                                                                                std::make_shared<nodes::procedural::CCompoundBody>(currentBlock.temporaries, currentBlock.statements));
+                        currentBlock.clear();
                     }
                 ;
 
@@ -345,54 +358,63 @@ inheritance
                         $$ = $2;
                     }
                 |   /* epsilon */
-                    {$$ = nullptr;}
+                    {
+                        $$ = nullptr;
+                    }
                 ;
 
 compoExprs      
                 :   compoExpr compoExprs
-                |   /* epsilon */
+                |   /* epsilon */           // Empty descriptor allowed
                 ;
 
 
 compoExpr	
-                :   exProvision
-		|   exRequirement
-		|   inProvision
-		|   inRequirement
+                :   provision
+		|   requirement
 		|   constraint
 		|   service
 		|   architecture
                 ;
 
-exProvision     
-                :   externally PROVIDES provReqSign
+provision     
+                :   visibility PROVIDES provReqSign
 		    {
 			currentBody.push_back(std::make_shared<nodes::compo::CProvision>(visType, std::move(currentPorts)));
 			currentPorts.clear();
 		    }
                 ;
 
-exRequirement   
-                :   externally REQUIRES provReqSign
+requirement   
+                :   visibility REQUIRES provReqSign
                     {
 			currentBody.push_back(std::make_shared<nodes::compo::CRequirement>(visType, std::move(currentPorts)));
 			currentPorts.clear();
 		    }
                 ;
 
+visibility
+                :   EXTERNALLY
+                    {
+                        visType = nodes::types::visibilityType::EXTERNAL;
+                    }
+                |   INTERNALLY
+                    {
+                        visType = nodes::types::visibilityType::INTERNAL;
+                    }
+                |   /* epsilon */
+                    {
+                        visType = nodes::types::visibilityType::EXTERNAL;
+                    }
+                ;
+
 provReqSign     
                 :   '{' ports '}'
                 ;
 
-externally      
-                :   EXTERNALLY
-                    {visType = nodes::types::visibilityType::EXTERNAL;}
-                |   /* epsilon */
-                ;
-
 ports		
-                :   port ';' ports
-		|   /* epsilon */
+                :   port ';'
+                |   port ';' ports
 		;
 
 port		
@@ -404,9 +426,13 @@ port
 
 atomic		
                 :   ATOMIC
-                    {atomicPresent = true;}
+                    {
+                        atomicPresent = true;
+                    }
 		|   /* epsilon */
-                    {atomicPresent = false;}
+                    {
+                        atomicPresent = false;
+                    }
 		;
 
 brackets        
@@ -428,9 +454,9 @@ ofKind
 service         
                 :   SERVICE serviceSign compound_statement
                     {
-                        currentBody.push_back(std::make_shared<nodes::compo::CService>(std::dynamic_pointer_cast<nodes::procedural::CSymbol>($2), std::move(currentServiceParams), std::move(currentBlock.statements), std::move(currentBlock.temporaries)));
-                        currentServiceParams.clear();
-                        currentBlock.clear();
+                        //currentBody.push_back(std::make_shared<nodes::compo::CService>(std::dynamic_pointer_cast<nodes::procedural::CSymbol>($2), std::move(currentServiceParams), std::move(currentBlock.statements), std::move(currentBlock.temporaries)));
+                        //currentServiceParams.clear();
+                        //currentBlock.clear();
                     }
                 ;
 
@@ -452,11 +478,11 @@ servicesSignsList
 serviceParams   
                 :   IDENTIFIER
                     {
-                        currentServiceParams.push_back(std::dynamic_pointer_cast<nodes::procedural::CSymbol>($1));
+                        //currentServiceParams.push_back(std::dynamic_pointer_cast<nodes::procedural::CSymbol>($1));
                     }
                 |   IDENTIFIER ',' serviceParams
                     {
-                        currentServiceParams.push_back(std::dynamic_pointer_cast<nodes::procedural::CSymbol>($1));
+                        //currentServiceParams.push_back(std::dynamic_pointer_cast<nodes::procedural::CSymbol>($1));
                     }
                 |   /* epsilon */
                 ;
@@ -464,22 +490,9 @@ serviceParams
 constraint	
                 :   CONSTRAINT serviceSign '{' '}'
                     {
-                        currentBody.push_back(std::make_shared<nodes::compo::CConstraint>(std::dynamic_pointer_cast<nodes::procedural::CSymbol>($2), std::move(currentServiceParams), currentServiceBody));
-                        currentServiceParams.clear();
+                        //currentBody.push_back(std::make_shared<nodes::compo::CConstraint>(std::dynamic_pointer_cast<nodes::procedural::CSymbol>($2), std::move(currentServiceParams), currentServiceBody));
+                        //currentServiceParams.clear();
                     }
-		;
-
-inRequirement   
-                :   internally REQUIRES '{' injectPorts '}'
-		;
-
-inProvision	
-                :   internally PROVIDES provReqSign
-                    {
-			currentBody.push_back(std::make_shared<nodes::compo::CRequirement>(visType, std::move(currentPorts)));
-                        currentPorts.clear();
-                        visType = nodes::types::visibilityType::EXTERNAL;
-		    }
 		;
 
 injectPorts     
@@ -493,14 +506,6 @@ injectPort
 
 inject          
                 :   INJECTWITH IDENTIFIER
-                |   /* epsilon */
-                ;
-
-internally      
-                :   INTERNALLY
-                    {
-                        visType = nodes::types::visibilityType::INTERNAL;
-                    }
                 |   /* epsilon */
                 ;
 

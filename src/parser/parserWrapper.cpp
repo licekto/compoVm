@@ -35,3 +35,57 @@ void ParserWrapper::clear() {
 	}
 	m_rootNodes.clear();
 }
+
+void ParserWrapper::pushBlock(std::shared_ptr<TBLOCK> block) {
+	m_blockStack.push(block);
+}
+
+std::shared_ptr<TBLOCK> ParserWrapper::popBlock() {
+	auto blockPtr = m_blockStack.top();
+	m_blockStack.pop();
+	return blockPtr;
+}
+
+bool ParserWrapper::isStackEmpty() const {
+    return m_blockStack.empty();
+}
+
+void ParserWrapper::setDescriptorBodyNode(std::shared_ptr<nodes::CNode> node) {
+    m_currentDescritporBody.push_back(node);
+}
+
+std::vector<std::shared_ptr<nodes::CNode>>* ParserWrapper::getDescriptorBody() {
+    return &m_currentDescritporBody;
+}
+
+void ParserWrapper::setServiceParam(std::shared_ptr<nodes::procedural::CSymbol> param) {
+    m_currentServiceParams.push_back(param);
+}
+
+std::vector<std::shared_ptr<nodes::procedural::CSymbol>>* ParserWrapper::getServiceParams() {
+    return &m_currentServiceParams;
+}
+
+void ParserWrapper::setVisibility(nodes::types::visibilityType type) {
+    m_visibilityType = type;
+}
+
+nodes::types::visibilityType ParserWrapper::getVisibility() const {
+    return m_visibilityType;
+}
+
+void ParserWrapper::setAtomicity(bool atomicity) {
+    m_atomicity = atomicity;
+}
+
+bool ParserWrapper::getAtomicity() const {
+    return m_atomicity;
+}
+
+void ParserWrapper::setPort(std::shared_ptr<nodes::compo::CPort> port) {
+    m_currentPorts.push_back(port);
+}
+
+std::vector<std::shared_ptr<nodes::compo::CPort>>* ParserWrapper::getPorts() {
+    return &m_currentPorts;
+}
