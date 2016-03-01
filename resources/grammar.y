@@ -354,6 +354,7 @@ descriptor
                         $$ = std::make_shared<nodes::compo::CDescriptor>(std::dynamic_pointer_cast<nodes::procedural::CSymbol>($2),
                                                                          std::dynamic_pointer_cast<nodes::procedural::CSymbol>($3),
                                                                          std::move(*(parser->getDescriptorBody())));
+                        parser->clearAll();
                     }
 
 interface       
@@ -465,6 +466,7 @@ service
                         parser->addDescriptorBodyNode(std::make_shared<nodes::compo::CService>(std::dynamic_pointer_cast<nodes::procedural::CSymbol>($2),
                                                                                                std::move(*parser->getServiceParams()),
                                                                                                std::move(currentBody)));
+                        parser->clearServiceParams();
                     }
                 ;
 
