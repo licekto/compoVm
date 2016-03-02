@@ -411,16 +411,18 @@ compoExpr
 provision     
                 :   visibility PROVIDES provReqSign
 		    {
-			parser->addDescriptorBodyNode(std::make_shared<nodes::compo::CProvision>(parser->getVisibility(), *parser->getPorts()));
+			parser->addDescriptorBodyNode(std::make_shared<nodes::compo::CProvision>(parser->getVisibility(), *parser->getPorts(), parser->getUniversality()));
                         parser->clearPorts();
+                        parser->setUniversality(false);
 		    }
                 ;
 
 requirement   
                 :   visibility REQUIRES provReqSign
                     {
-			parser->addDescriptorBodyNode(std::make_shared<nodes::compo::CRequirement>(parser->getVisibility(), *parser->getPorts()));
+			parser->addDescriptorBodyNode(std::make_shared<nodes::compo::CRequirement>(parser->getVisibility(), *parser->getPorts(), parser->getUniversality()));
                         parser->clearPorts();
+                        parser->setUniversality(false);
 		    }
                 ;
 
@@ -474,6 +476,9 @@ collecting
 portSign        
                 :   IDENTIFIER
                 |   '*'
+                    {
+                        parser->setUniversality(true);
+                    }
                 |   servicesSignsList
                 ;
 
@@ -500,7 +505,13 @@ serviceSign
 
 serviceSigns    
                 :   serviceSign
+                    {
+                        parser->addServiceSignature(std::dynamic_pointer_cast<nodes::compo::CServiceSignature>($1));
+                    }
                 |   serviceSign ',' serviceSigns
+                    {
+                        parser->addServiceSignature(std::dynamic_pointer_cast<nodes::compo::CServiceSignature>($1));
+                    }
                 |   /* epsilon */
                 ;
 
