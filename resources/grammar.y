@@ -39,8 +39,6 @@
 
 #define yylex()                  parser->getLexer()->yylex()
 #define yyerror(parser, message) parser->error(message)
-
-std::shared_ptr<nodes::procedural::CCompoundBody> currentBody = nullptr;
 %}
 
 %define api.value.type {std::shared_ptr<nodes::CNode>}
@@ -255,15 +253,15 @@ statement
 compound_statement
                 :   push_context '{' temporaries statement_list '}'
                     {
-                        $$ = currentBody;
-                        currentBody = parser->popBlock();
+                        $$ = parser->getCurrentCompoundBody();
+                        parser->setCurrentCompoundBody(parser->popBlock());
                     }
                 ;
 
 push_context
                 :   {
-                        parser->pushBlock(currentBody);
-                        currentBody = std::make_shared<nodes::procedural::CCompoundBody>();
+                        parser->pushBlock(parser->getCurrentCompoundBody());
+                        parser->setCurrentCompoundBody(std::make_shared<nodes::procedural::CCompoundBody>());
                     }
                 ;
 
@@ -275,22 +273,22 @@ temporaries
 temporaries_list
                 :   IDENTIFIER
                     {
-                        currentBody->addTemporary(std::dynamic_pointer_cast<nodes::procedural::CSymbol>($1));
+                        parser->getCurrentCompoundBody()->addTemporary(std::dynamic_pointer_cast<nodes::procedural::CSymbol>($1));
                     }
                 |   temporaries_list IDENTIFIER
                     {
-                        currentBody->addTemporary(std::dynamic_pointer_cast<nodes::procedural::CSymbol>($2));
+                        parser->getCurrentCompoundBody()->addTemporary(std::dynamic_pointer_cast<nodes::procedural::CSymbol>($2));
                     }
                 ;
 
 statement_list
                 :   statement
                     {
-                        currentBody->addBodyNode($1);
+                        parser->getCurrentCompoundBody()->addBodyNode($1);
                     }
                 |   statement_list statement
                     {
-                        currentBody->addBodyNode($2);
+                        parser->getCurrentCompoundBody()->addBodyNode($2);
                     }
                 |   /* epsilon */
                 ;
@@ -521,11 +519,11 @@ serviceParams
                 ;
 
 constraint	
-                :   CONSTRAINT serviceSign '{' '}'
+                :   CONSTRAINT serviceSign compound_statement
                     {
                         parser->addDescriptorBodyNode(std::make_shared<nodes::compo::CConstraint>(std::dynamic_pointer_cast<nodes::procedural::CSymbol>($2),
                                                                                                   std::move(*parser->getServiceParams()),
-                                                                                                  std::move(currentBody)));
+                                                                                                  std::dynamic_pointer_cast<nodes::procedural::CCompoundBody>($3)));
                     }
 		;
 
