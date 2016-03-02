@@ -122,13 +122,17 @@ add_library(OBJECT_FILES OBJECT ${SOURCE_FILES_ALL})
 
 # Executables preparation
 #------------------------------
-# Main binary
-add_executable(compoVm ${MAIN_FILE} $<TARGET_OBJECTS:OBJECT_FILES>)
-target_link_libraries(  compoVm
-                        ${Boost_UNIT_TEST_FRAMEWORK_LIBRARY}
-                        ${Boost_LOG_LIBRARY}
-                        ${CMAKE_THREAD_LIBS_INIT} )
-target_compile_definitions(compoVm PRIVATE "BOOST_LOG_DYN_LINK=1")
+OPTION(BuildRelease "BuildRelease" ON)
+
+IF(BuildRelease)
+    # Main binary
+    add_executable(compoVm ${MAIN_FILE} $<TARGET_OBJECTS:OBJECT_FILES>)
+    target_link_libraries(  compoVm
+                            ${Boost_UNIT_TEST_FRAMEWORK_LIBRARY}
+                            ${Boost_LOG_LIBRARY}
+                            ${CMAKE_THREAD_LIBS_INIT} )
+    target_compile_definitions(compoVm PRIVATE "BOOST_LOG_DYN_LINK=1")
+ENDIF()
 
 # Tests
 add_executable(tests ${TEST_FILES} $<TARGET_OBJECTS:OBJECT_FILES>)
