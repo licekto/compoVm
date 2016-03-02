@@ -10,8 +10,8 @@ namespace nodes {
 	namespace procedural {
 
 		/**
-		 * \class CFor
-		 * \brief Class for for-loop representation
+		 * \class CBreakStatement
+		 * \brief Class for break statement representation
 		 */
 		class CBreakStatement : public CAbstractStatement {
 		  public:

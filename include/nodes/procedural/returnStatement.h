@@ -10,8 +10,8 @@ namespace nodes {
 	namespace procedural {
 
 		/**
-		 * \class CFor
-		 * \brief Class for for-loop representation
+		 * \class CReturnStatement
+		 * \brief Class for return statement representation
 		 */
 		class CReturnStatement : public CAbstractStatement {
 		  private:
@@ -21,12 +21,9 @@ namespace nodes {
 		  public:
 			/**
 			* Parametric constructor with default value
-			* @param startCond: Star condition node pointer
-			* @param endCond: Star condition node pointer
-			* @param step: Step node pointer
-			* @param body: Reference to vector of body nodes
+			* @param expression: expression smart pointer
 			*/
-			CReturnStatement(std::shared_ptr<nodes::procedural::CAbstractExpression> condition = nullptr);
+			CReturnStatement(std::shared_ptr<nodes::procedural::CAbstractExpression> expression = nullptr);
 
 			/**
 			* Virtual print function to call from operator <<

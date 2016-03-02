@@ -9,8 +9,8 @@ namespace nodes {
 	namespace procedural {
 
 		/**
-		 * \class CFor
-		 * \brief Class for for-loop representation
+		 * \class CIfStatement
+		 * \brief Class for if statement representation
 		 */
 		class CIfStatement : public CAbstractStatement {
 		  private:
@@ -26,10 +26,9 @@ namespace nodes {
 		  public:
 			/**
 			* Parametric constructor with default value
-			* @param startCond: Star condition node pointer
-			* @param endCond: Star condition node pointer
-			* @param step: Step node pointer
-			* @param body: Reference to vector of body nodes
+			* @param condition: condition node pointer
+			            * @param ifBody: if branch body node
+			            * @param elseBody: else branch body node
 			*/
 			CIfStatement(std::shared_ptr<nodes::procedural::CAbstractExpression> condition = nullptr,
 			             std::shared_ptr<nodes::procedural::CCompoundBody> ifBody = nullptr,

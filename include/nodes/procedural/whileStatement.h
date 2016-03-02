@@ -11,12 +11,12 @@ namespace nodes {
 	namespace procedural {
 
 		/**
-		 * \class CFor
-		 * \brief Class for for-loop representation
+		 * \class CWhileStatement
+		 * \brief Class for while-loop representation
 		 */
 		class CWhileStatement : public CAbstractStatement {
 		  private:
-			/**< Start condition node */
+			/**< Condition node */
 			std::shared_ptr<nodes::procedural::CAbstractExpression> m_condition;
 
 			/**< Body */
@@ -24,11 +24,9 @@ namespace nodes {
 
 		  public:
 			/**
-			* Parametric constructor with default value
-			* @param startCond: Star condition node pointer
-			* @param endCond: Star condition node pointer
-			* @param step: Step node pointer
-			* @param body: Reference to vector of body nodes
+			* Parametric constructor with default values
+			* @param cond: condition node pointer
+			* @param body: reference to vector of body nodes
 			*/
 			CWhileStatement(std::shared_ptr<nodes::procedural::CAbstractExpression> cond = nullptr,
 			                std::shared_ptr<nodes::procedural::CCompoundBody> body = nullptr);

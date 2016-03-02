@@ -10,7 +10,7 @@ namespace nodes {
 	namespace procedural {
 
 		/**
-		 * \class CFor
+		 * \class CForStatement
 		 * \brief Class for for-loop representation
 		 */
 		class CForStatement : public CAbstractStatement {
