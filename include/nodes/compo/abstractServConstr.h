@@ -4,6 +4,7 @@
 #include "nodes/node.h"
 #include "nodes/procedural/symbol.h"
 #include "nodes/procedural/compoundBody.h"
+#include "serviceSignature.h"
 
 namespace nodes {
 
@@ -18,14 +19,11 @@ namespace nodes {
 		 */
 		class CAbstractServConstr : public virtual CNode {
 		  protected:
-                        /**< Name */
-			std::shared_ptr<nodes::procedural::CSymbol> m_name;
-			
-                        /**< Vector of parameter names */
-                        std::vector<std::shared_ptr<nodes::procedural::CSymbol>> m_params;
-                        
-                        /**< Compound body node */
-                        std::shared_ptr<nodes::procedural::CCompoundBody> m_body;
+			/**< Name */
+			std::shared_ptr<nodes::compo::CServiceSignature> m_signature;
+
+			/**< Compound body node */
+			std::shared_ptr<nodes::procedural::CCompoundBody> m_body;
 
 			/**
 			* Parametric constructor with default values
@@ -34,9 +32,8 @@ namespace nodes {
 			* @param params: vector of parameter names
 			* @param body: vector of body expressions
 			*/
-			CAbstractServConstr(std::shared_ptr<nodes::procedural::CSymbol> name = nullptr,
-                                            const std::vector<std::shared_ptr<nodes::procedural::CSymbol>>& params = std::vector<std::shared_ptr<nodes::procedural::CSymbol>>(0),
-                                            std::shared_ptr<nodes::procedural::CCompoundBody> body = nullptr);
+			CAbstractServConstr(std::shared_ptr<nodes::compo::CServiceSignature> signature = nullptr,
+			                    std::shared_ptr<nodes::procedural::CCompoundBody> body = nullptr);
 
 		  public:
 			/**
@@ -52,42 +49,42 @@ namespace nodes {
 			*/
 			std::string getName() const;
 
-                        /**
+			/**
 			* Body size getter
-                        * @return size of body vector
-                        */
-                        size_t getBodySize() const;
-                        
-                        /**
+			                     * @return size of body vector
+			                     */
+			size_t getBodySize() const;
+
+			/**
 			* Adds new body node
-			* @param node: shared pointer to node
-			*/
+					* @param node: shared pointer to node
+					*/
 			void addBodyNode(std::shared_ptr<nodes::CNode> node);
-                        
+
 			/**
 			* Body getter
 			* @return Constant pointer to vector with body expressions.
 			*/
 			std::shared_ptr<nodes::CNode> getBodyNodeAt(int index) const;
-                        
-                        /**
+
+			/**
 			* Temporaries size getter
-                        * @return size of temporaries vector
-                        */
-                        size_t getTemporariesSize() const;
-                        
-                        /**
+			                     * @return size of temporaries vector
+			                     */
+			size_t getTemporariesSize() const;
+
+			/**
 			* Adds new body node
-			* @param node: shared pointer to node
-			*/
-                        void addTemporary(std::shared_ptr<nodes::procedural::CSymbol> temporary);
-                        
-                        /**
-                         * Temporaries getter
-                         * @param index: index of wanted temporary
-                         * @return shared pointer to temporary symbol name
-                         */
-                        std::shared_ptr<nodes::procedural::CSymbol> getTemporaryAt (int index) const;
+					* @param node: shared pointer to node
+					*/
+			void addTemporary(std::shared_ptr<nodes::procedural::CSymbol> temporary);
+
+			/**
+			 * Temporaries getter
+			 * @param index: index of wanted temporary
+			 * @return shared pointer to temporary symbol name
+			 */
+			std::shared_ptr<nodes::procedural::CSymbol> getTemporaryAt (int index) const;
 
 			/**
 			 * Parameter size vector size
@@ -100,7 +97,7 @@ namespace nodes {
 			* @param Constant pointer to pointer to parameter.
 			*/
 			void setParam(std::shared_ptr<nodes::procedural::CSymbol> param);
-                        
+
 			/**
 			* Parameters getter
 			* @return Constant pointer to vector with parameters.

@@ -12,6 +12,7 @@
 #include "nodes/compo/descriptor.h"
 #include "nodes/compo/provision.h"
 #include "nodes/compo/requirement.h"
+#include "nodes/compo/serviceSignature.h"
 #include "nodes/procedural/symbol.h"
 #include "nodes/procedural/ifStatement.h"
 #include "nodes/procedural/forStatement.h"
@@ -448,7 +449,7 @@ ports
 		;
 
 port		
-                :   atomic IDENTIFIER collection ':' portSign ofKind
+                :   atomic IDENTIFIER collecting ':' portSign ofKind
 		    {
 			parser->addPort(std::make_shared<nodes::compo::CPort>(std::dynamic_pointer_cast<nodes::procedural::CSymbol>($2), parser->getAtomicity()));
 		    }
@@ -465,7 +466,7 @@ atomic
                     }
 		;
 
-collection        
+collecting        
                 :   '[' ']'
                 |   /* epsilon */
                 ;
@@ -484,8 +485,7 @@ ofKind
 service         
                 :   SERVICE serviceSign compound_statement
                     {
-                        parser->addDescriptorBodyNode(std::make_shared<nodes::compo::CService>(std::dynamic_pointer_cast<nodes::procedural::CSymbol>($2),
-                                                                                               *parser->getServiceParams(),
+                        parser->addDescriptorBodyNode(std::make_shared<nodes::compo::CService>(std::dynamic_pointer_cast<nodes::compo::CServiceSignature>($2),
                                                                                                std::dynamic_pointer_cast<nodes::procedural::CCompoundBody>($3)));
                         parser->clearServiceParams();
                     }
@@ -494,12 +494,13 @@ service
 serviceSign     
                 :   IDENTIFIER '(' serviceParams ')'
                     {
-                        $$ = $1;
+                        $$ = std::make_shared<nodes::compo::CServiceSignature>(std::dynamic_pointer_cast<nodes::procedural::CSymbol>($1), *parser->getServiceParams());
                     }
                 ;
 
 serviceSigns    
-                :   serviceSign ',' serviceSigns
+                :   serviceSign
+                |   serviceSign ',' serviceSigns
                 |   /* epsilon */
                 ;
 
@@ -521,8 +522,7 @@ serviceParams
 constraint	
                 :   CONSTRAINT serviceSign compound_statement
                     {
-                        parser->addDescriptorBodyNode(std::make_shared<nodes::compo::CConstraint>(std::dynamic_pointer_cast<nodes::procedural::CSymbol>($2),
-                                                                                                  std::move(*parser->getServiceParams()),
+                        parser->addDescriptorBodyNode(std::make_shared<nodes::compo::CConstraint>(std::dynamic_pointer_cast<nodes::compo::CServiceSignature>($2),
                                                                                                   std::dynamic_pointer_cast<nodes::procedural::CCompoundBody>($3)));
                     }
 		;

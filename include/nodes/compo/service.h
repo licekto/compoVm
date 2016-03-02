@@ -20,14 +20,13 @@ namespace nodes {
 			* @param body: Vector of body nodes
 			* @param temporaries: Vector of temporaries
 			*/
-			CService(std::shared_ptr<nodes::procedural::CSymbol> name = nullptr,
-                                            const std::vector<std::shared_ptr<nodes::procedural::CSymbol>>& params = std::vector<std::shared_ptr<nodes::procedural::CSymbol>>(0),
-                                            std::shared_ptr<nodes::procedural::CCompoundBody> body = nullptr);
-                        /**
+			CService(std::shared_ptr<nodes::compo::CServiceSignature> signature = nullptr,
+			         std::shared_ptr<nodes::procedural::CCompoundBody> body = nullptr);
+			/**
 			* Virtual print function to call from operator <<
-			* @param os: output stream
-			* @see operator <<()
-			*/
+					* @param os: output stream
+					* @see operator <<()
+					*/
 			virtual void print(std::ostream& os) const;
 		};
 
