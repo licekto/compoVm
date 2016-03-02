@@ -7,7 +7,11 @@ namespace nodes {
 		CDescriptor::CDescriptor( std::shared_ptr<nodes::procedural::CSymbol> name,
 		                          std::shared_ptr<nodes::procedural::CSymbol> extends,
 		                          const std::vector<std::shared_ptr<nodes::CNode>>& body)
-			: CNode(types::nodeType::DESCRIPTOR), m_name(name), m_extends(extends), m_body(body) {
+			: CNode(types::nodeType::DESCRIPTOR),
+                          m_name(name),
+                          m_extends(extends),
+                          m_body(body),
+                          m_defaultPort(std::make_shared<nodes::compo::CPort>(std::make_shared<nodes::procedural::CSymbol>("default"), false)) {
 		}
 
 		void CDescriptor::print(std::ostream& outstream) const {
@@ -57,6 +61,9 @@ namespace nodes {
 			return node;
 		}
 
+                std::shared_ptr<nodes::compo::CPort> CDescriptor::getDefaultPort() const {
+                    return m_defaultPort;
+                }
 	}
 
 }

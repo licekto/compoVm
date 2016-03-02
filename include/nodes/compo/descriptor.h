@@ -3,6 +3,7 @@
 #include <memory>
 #include "nodes/node.h"
 #include "nodes/procedural/symbol.h"
+#include "port.h"
 
 namespace nodes {
 
@@ -22,6 +23,9 @@ namespace nodes {
                         
                         /**< Vector of descriptor body nodes */
 			std::vector<std::shared_ptr<nodes::CNode>> m_body;
+                        
+                        /**< Every descriptor contains default port */
+                        std::shared_ptr<nodes::compo::CPort> m_defaultPort;
 
 		  public:
 			/**
@@ -64,6 +68,12 @@ namespace nodes {
 			* @return Constant pointer to body vector
 			*/
 			std::shared_ptr<nodes::CNode> getBodyNodeAt (int index) const;
+                        
+                        /**
+			* Default port getter
+			* @return Constant pointer to port
+			*/
+                        std::shared_ptr<nodes::compo::CPort> getDefaultPort() const;
 		};
 
 	}

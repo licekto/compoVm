@@ -33,6 +33,7 @@ do { \
     BOOST_CHECK_EQUAL(nodes::types::nodeType::DESCRIPTOR, descriptor->getNodeType()); \
     BOOST_CHECK_EQUAL(name, descriptor->getName()); \
     BOOST_CHECK_EQUAL(extends, descriptor->getExtends()); \
+    BOOST_CHECK_EQUAL("default", descriptor->getDefaultPort()->getName()); \
     BOOST_CHECK_EQUAL(bodySize, descriptor->getBodySize()); \
 } while(0)
 
