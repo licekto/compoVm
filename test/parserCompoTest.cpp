@@ -73,7 +73,7 @@ BOOST_AUTO_TEST_CASE(compoBasicStructure) {
     
     // Check service
     std::shared_ptr<nodes::compo::CService> service = std::dynamic_pointer_cast<nodes::compo::CService>(descriptor->getBodyNodeAt(2));
-    TEST_SERVICE(service, "create", 0, 0);
+    TEST_SERVICE(service, "create", 0, 0, 0);
     
     // Check constraint
     std::shared_ptr<nodes::compo::CConstraint> constraint = std::dynamic_pointer_cast<nodes::compo::CConstraint>(descriptor->getBodyNodeAt(3));
@@ -102,22 +102,22 @@ BOOST_AUTO_TEST_CASE(compoServiceParams) {
     
     // Check service
     std::shared_ptr<nodes::compo::CService> service = std::dynamic_pointer_cast<nodes::compo::CService>(descriptor->getBodyNodeAt(0));
-    TEST_SERVICE(service, "noparams", 0, 0);
+    TEST_SERVICE(service, "noparams", 0, 0, 0);
     
     // Check service
     service = std::dynamic_pointer_cast<nodes::compo::CService>(descriptor->getBodyNodeAt(1));
-    TEST_SERVICE(service, "oneparam", 1, 0);
+    TEST_SERVICE(service, "oneparam", 1, 0, 0);
     BOOST_CHECK_EQUAL("param1", service->getParamAt(0)->getStringValue());
     
     // Check service
     service = std::dynamic_pointer_cast<nodes::compo::CService>(descriptor->getBodyNodeAt(2));
-    TEST_SERVICE(service, "twoparams", 2, 0);
+    TEST_SERVICE(service, "twoparams", 2, 0, 0);
     BOOST_CHECK_EQUAL("param1", service->getParamAt(1)->getStringValue());
     BOOST_CHECK_EQUAL("param2", service->getParamAt(0)->getStringValue());
     
     // Check service
     service = std::dynamic_pointer_cast<nodes::compo::CService>(descriptor->getBodyNodeAt(3));
-    TEST_SERVICE(service, "threeparams", 3, 0);
+    TEST_SERVICE(service, "threeparams", 3, 0, 0);
     BOOST_CHECK_EQUAL("param1", service->getParamAt(2)->getStringValue());
     BOOST_CHECK_EQUAL("param2", service->getParamAt(1)->getStringValue());
     BOOST_CHECK_EQUAL("param3", service->getParamAt(0)->getStringValue());
@@ -143,7 +143,7 @@ BOOST_AUTO_TEST_CASE(compoServiceBody) {
     
     // Check service
     std::shared_ptr<nodes::compo::CService> service = std::dynamic_pointer_cast<nodes::compo::CService>(descriptor->getBodyNodeAt(0));
-    TEST_SERVICE(service, "body1", 0, 1);
+    TEST_SERVICE(service, "body1", 0, 1, 0);
     
     // Check symbol
     std::shared_ptr<nodes::procedural::CSymbol> symbol = std::dynamic_pointer_cast<nodes::procedural::CSymbol>(service->getBodyNodeAt(0));
@@ -151,7 +151,7 @@ BOOST_AUTO_TEST_CASE(compoServiceBody) {
     
     // Check service
     service = std::dynamic_pointer_cast<nodes::compo::CService>(descriptor->getBodyNodeAt(1));
-    TEST_SERVICE(service, "body2", 0, 1);
+    TEST_SERVICE(service, "body2", 0, 1, 0);
     
     // Check assignment
     std::shared_ptr<nodes::procedural::CAssignmentExpression> assignment = std::dynamic_pointer_cast<nodes::procedural::CAssignmentExpression>(service->getBodyNodeAt(0));
@@ -164,6 +164,38 @@ BOOST_AUTO_TEST_CASE(compoServiceBody) {
     // Check constant
     std::shared_ptr<nodes::procedural::CConstant> constant = std::dynamic_pointer_cast<nodes::procedural::CConstant>(assignment->getRValue());
     TEST_CONSTANT(constant, 1);
+    
+    // Clear AST for next test
+    parser.clearRootNodes();
+}
+
+BOOST_AUTO_TEST_CASE(compoServiceTemporaries) {
+    // Testing input
+    std::stringstream input;
+    input.str("descriptor test {\
+        service temporaries() {\
+            | a b |\
+        }\
+    }");
+    
+    // Parse input and create AST
+    parser.parse(input);    
+    
+    // Check descriptor
+    std::shared_ptr<nodes::compo::CDescriptor> descriptor = std::dynamic_pointer_cast<nodes::compo::CDescriptor>(parser.getRootNodeAt(0));
+    TEST_DESCRIPTOR(descriptor, "test", "", 1);
+    
+    // Check service
+    std::shared_ptr<nodes::compo::CService> service = std::dynamic_pointer_cast<nodes::compo::CService>(descriptor->getBodyNodeAt(0));
+    TEST_SERVICE(service, "temporaries", 0, 0, 2);
+    
+    // Check symbol
+    std::shared_ptr<nodes::procedural::CSymbol> symbol = std::dynamic_pointer_cast<nodes::procedural::CSymbol>(service->getTemporaryAt(0));
+    TEST_SYMBOL(symbol, "a");
+    
+    // Check symbol
+    symbol = std::dynamic_pointer_cast<nodes::procedural::CSymbol>(service->getTemporaryAt(1));
+    TEST_SYMBOL(symbol, "b");    
     
     // Clear AST for next test
     parser.clearRootNodes();

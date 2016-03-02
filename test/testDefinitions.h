@@ -50,12 +50,13 @@ do { \
     BOOST_CHECK_EQUAL(numOfPorts, requirement->getNumberOfPorts()); \
 } while(0)
 
-#define TEST_SERVICE(service, name, numOfParams, bodySize) \
+#define TEST_SERVICE(service, name, numOfParams, bodySize, temporariesSize) \
 do { \
     BOOST_CHECK_EQUAL(nodes::types::nodeType::SERVICE, service->getNodeType()); \
     BOOST_CHECK_EQUAL(name, service->getName()); \
     BOOST_CHECK_EQUAL(numOfParams, service->getParamsSize()); \
     BOOST_CHECK_EQUAL(bodySize, service->getBodySize()); \
+    BOOST_CHECK_EQUAL(temporariesSize, service->getTemporariesSize()); \
 } while(0)
 
 #define TEST_CONSTRAINT(service, name, numOfParams, bodySize) \

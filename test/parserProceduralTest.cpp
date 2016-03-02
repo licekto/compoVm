@@ -74,7 +74,7 @@ BOOST_AUTO_TEST_CASE(nodesProceduralBinary) {
     
     // Check service
     std::shared_ptr<nodes::compo::CService> service = std::dynamic_pointer_cast<nodes::compo::CService>(descriptor->getBodyNodeAt(0));
-    TEST_SERVICE(service, "main", 0, 16);
+    TEST_SERVICE(service, "main", 0, 16, 0);
     
     // Check symbol
     std::shared_ptr<nodes::procedural::CSymbol> symbol = std::dynamic_pointer_cast<nodes::procedural::CSymbol>(service->getBodyNodeAt(0));
@@ -420,7 +420,7 @@ BOOST_AUTO_TEST_CASE(compoCompoundStatement) {
     
     // Check service
     std::shared_ptr<nodes::compo::CService> service = std::dynamic_pointer_cast<nodes::compo::CService>(descriptor->getBodyNodeAt(0));
-    TEST_SERVICE(service, "main", 0, 1);
+    TEST_SERVICE(service, "main", 0, 1, 0);
     
     std::shared_ptr<nodes::procedural::CCompoundBody> compoundBody = std::dynamic_pointer_cast<nodes::procedural::CCompoundBody>(service->getBodyNodeAt(0));
     BOOST_CHECK_EQUAL(nodes::types::nodeType::COMPOUND_BODY, compoundBody->getNodeType());
@@ -461,7 +461,7 @@ BOOST_AUTO_TEST_CASE(nodesForStatement) {
     
     // Check service
     std::shared_ptr<nodes::compo::CService> service = std::dynamic_pointer_cast<nodes::compo::CService>(descriptor->getBodyNodeAt(0));
-    TEST_SERVICE(service, "main", 0, 1);
+    TEST_SERVICE(service, "main", 0, 1, 0);
     
     // Check for statement
     std::shared_ptr<nodes::procedural::CForStatement> forStatement = std::dynamic_pointer_cast<nodes::procedural::CForStatement>(service->getBodyNodeAt(0));
@@ -535,7 +535,7 @@ BOOST_AUTO_TEST_CASE(nodesWhileStatement) {
     
     // Check service
     std::shared_ptr<nodes::compo::CService> service = std::dynamic_pointer_cast<nodes::compo::CService>(descriptor->getBodyNodeAt(0));
-    TEST_SERVICE(service, "main", 0, 1);
+    TEST_SERVICE(service, "main", 0, 1, 0);
     
     // Check for statement
     std::shared_ptr<nodes::procedural::CWhileStatement> whileStatement = std::dynamic_pointer_cast<nodes::procedural::CWhileStatement>(service->getBodyNodeAt(0));
@@ -587,7 +587,7 @@ BOOST_AUTO_TEST_CASE(nodesIfStatement) {
     
     // Check service
     std::shared_ptr<nodes::compo::CService> service = std::dynamic_pointer_cast<nodes::compo::CService>(descriptor->getBodyNodeAt(0));
-    TEST_SERVICE(service, "main", 0, 2);
+    TEST_SERVICE(service, "main", 0, 2, 0);
     
     // Check if statement
     std::shared_ptr<nodes::procedural::CIfStatement> ifStatement = std::dynamic_pointer_cast<nodes::procedural::CIfStatement>(service->getBodyNodeAt(0));
@@ -660,7 +660,7 @@ BOOST_AUTO_TEST_CASE(nodesBreakContinueReturnStatement) {
     
     // Check service
     std::shared_ptr<nodes::compo::CService> service = std::dynamic_pointer_cast<nodes::compo::CService>(descriptor->getBodyNodeAt(0));
-    TEST_SERVICE(service, "main", 0, 3);
+    TEST_SERVICE(service, "main", 0, 3, 0);
     
     // Check if statement
     std::shared_ptr<nodes::procedural::CBreakStatement> breakStatement = std::dynamic_pointer_cast<nodes::procedural::CBreakStatement>(service->getBodyNodeAt(0));
