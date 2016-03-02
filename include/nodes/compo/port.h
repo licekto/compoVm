@@ -17,10 +17,10 @@ namespace nodes {
 		 */
 		class CPort : public virtual CNode {
 		  protected:
-                        /**< Name symbol of port */
+			/**< Name symbol of port */
 			std::shared_ptr<nodes::procedural::CSymbol> m_name;
-                        
-                        /**< Is atomic? */
+
+			/**< Is atomic? */
 			bool m_atomic;
 
 		  public:

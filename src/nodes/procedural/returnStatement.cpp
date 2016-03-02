@@ -14,7 +14,7 @@ namespace nodes {
 			outstream << "return ";
 			outstream << m_expression << "; ";
 		}
-                
+
 		std::shared_ptr<nodes::procedural::CAbstractExpression> CReturnStatement::getExpression() const {
 			return m_expression;
 		}

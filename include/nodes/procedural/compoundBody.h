@@ -16,10 +16,10 @@ namespace nodes {
 		 */
 		class CCompoundBody : public CAbstractStatement {
 		  private:
-                        /**< Temporaries vector */
+			/**< Temporaries vector */
 			std::vector<std::shared_ptr<nodes::procedural::CSymbol>> m_temporaries;
-                        
-                        /**< Body nodes vector */
+
+			/**< Body nodes vector */
 			std::vector<std::shared_ptr<nodes::CNode>> m_body;
 
 		  public:
@@ -38,40 +38,40 @@ namespace nodes {
 			*/
 			virtual void print(std::ostream& os) const;
 
-                        /**
+			/**
 			* Body size getter
-                        * @return size of body vector
-                        */
-                        size_t getBodySize() const;
-                        
-                        /**
-                         * Body node setter
-                         * @param node: shared pointer to node
-                         */
-                        void addBodyNode(std::shared_ptr<nodes::CNode> node);
-                        
+			                     * @return size of body vector
+			                     */
+			size_t getBodySize() const;
+
+			/**
+			 * Body node setter
+			 * @param node: shared pointer to node
+			 */
+			void addBodyNode(std::shared_ptr<nodes::CNode> node);
+
 			/**
 			* Body getter
 			* @return Constant pointer to body vector
 			*/
 			std::shared_ptr<nodes::CNode> getBodyNodeAt(int index) const;
 
-                        /**
+			/**
 			* Temporaries size getter
-                        * @return size of temporaries vector
-                        */
-                        size_t getTemporariesSize() const;
-                        
-                        /**
-                         * Temporary setter
-                         * @param node: shared pointer to temporary
-                         */
-                        void addTemporary(std::shared_ptr<nodes::procedural::CSymbol> temporary);
-                        
+			                     * @return size of temporaries vector
+			                     */
+			size_t getTemporariesSize() const;
+
+			/**
+			 * Temporary setter
+			 * @param node: shared pointer to temporary
+			 */
+			void addTemporary(std::shared_ptr<nodes::procedural::CSymbol> temporary);
+
 			/**
 			* Body getter
-                        * @return Constant pointer to body vector
-                        */
+			            * @return Constant pointer to body vector
+			            */
 			std::shared_ptr<nodes::procedural::CSymbol> getTemporaryAt(int index) const;
 		};
 

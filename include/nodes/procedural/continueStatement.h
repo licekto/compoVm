@@ -15,11 +15,11 @@ namespace nodes {
 		 */
 		class CContinueStatement : public CAbstractStatement {
 		  public:
-                        /**
+			/**
 			* Default constructor
-			*/
+					*/
 			CContinueStatement();
-                      
+
 			/**
 			* Virtual print function to call from operator <<
 			* @param os: output stream

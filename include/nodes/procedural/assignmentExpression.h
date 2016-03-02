@@ -14,10 +14,10 @@ namespace nodes {
 		 */
 		class CAssignmentExpression : public CAbstractExpression {
 		  protected:
-                        /**< Variable to assign to */
+			/**< Variable to assign to */
 			std::shared_ptr<nodes::procedural::CSymbol> m_variable;
-                        
-                        /**< Right-hand side of assignment expression */
+
+			/**< Right-hand side of assignment expression */
 			std::shared_ptr<nodes::CNode> m_rValue;
 
 		  public:
@@ -27,7 +27,7 @@ namespace nodes {
 			* @param rval: right-hand side of assignment
 			*/
 			CAssignmentExpression(std::shared_ptr<nodes::procedural::CSymbol> variable = nullptr,
-                                              std::shared_ptr<nodes::CNode> rVal = nullptr);
+			                      std::shared_ptr<nodes::CNode> rVal = nullptr);
 
 			/**
 			* Virtual print function to call from operator <<

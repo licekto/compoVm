@@ -14,14 +14,14 @@ namespace nodes {
 		 */
 		class CIfStatement : public CAbstractStatement {
 		  private:
-                        /**< Start condition node */
+			/**< Start condition node */
 			std::shared_ptr<nodes::procedural::CAbstractExpression> m_condition;
-                        
-                        /**< If body */
+
+			/**< If body */
 			std::shared_ptr<nodes::procedural::CCompoundBody> m_ifBody;
-                        
-                        /**< Else body */
-                        std::shared_ptr<nodes::procedural::CCompoundBody> m_elseBody;
+
+			/**< Else body */
+			std::shared_ptr<nodes::procedural::CCompoundBody> m_elseBody;
 
 		  public:
 			/**
@@ -33,7 +33,7 @@ namespace nodes {
 			*/
 			CIfStatement(std::shared_ptr<nodes::procedural::CAbstractExpression> condition = nullptr,
 			             std::shared_ptr<nodes::procedural::CCompoundBody> ifBody = nullptr,
-                                     std::shared_ptr<nodes::procedural::CCompoundBody> elseBody = nullptr);
+			             std::shared_ptr<nodes::procedural::CCompoundBody> elseBody = nullptr);
 
 			/**
 			* Virtual print function to call from operator <<
@@ -48,12 +48,12 @@ namespace nodes {
 			*/
 			std::shared_ptr<nodes::procedural::CCompoundBody> getIfBody() const;
 
-                        /**
+			/**
 			* Else body getter
-			* @return Constant pointer to else body
-			*/
+					* @return Constant pointer to else body
+					*/
 			std::shared_ptr<nodes::procedural::CCompoundBody> getElseBody() const;
-                        
+
 			/**
 			* End condition getter
 			* @return Pointer to end condition node

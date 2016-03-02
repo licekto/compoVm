@@ -15,7 +15,7 @@ namespace nodes {
 		 */
 		class CParens : public CAbstractPrimaryExpression {
 		  private:
-                        /**< Expression in parentheses */
+			/**< Expression in parentheses */
 			std::shared_ptr<nodes::CNode> m_expression;
 
 		  public:

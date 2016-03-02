@@ -15,7 +15,7 @@ namespace nodes {
 		 */
 		class CSymbol : public CAbstractPrimaryExpression {
 		  private:
-                        /**< Name of symbol */
+			/**< Name of symbol */
 			std::string m_name;
 
 		  public:

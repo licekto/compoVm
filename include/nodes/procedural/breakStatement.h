@@ -15,11 +15,11 @@ namespace nodes {
 		 */
 		class CBreakStatement : public CAbstractStatement {
 		  public:
-                        /**
+			/**
 			* Default constructor
-			*/
+					*/
 			CBreakStatement();
-                      
+
 			/**
 			* Virtual print function to call from operator <<
 			* @param os: output stream

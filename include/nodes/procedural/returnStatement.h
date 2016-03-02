@@ -15,7 +15,7 @@ namespace nodes {
 		 */
 		class CReturnStatement : public CAbstractStatement {
 		  private:
-                        /**< Start condition node */
+			/**< Start condition node */
 			std::shared_ptr<nodes::procedural::CAbstractExpression> m_expression;
 
 		  public:
@@ -34,7 +34,7 @@ namespace nodes {
 			* @see operator <<()
 			*/
 			virtual void print(std::ostream& os) const;
-                        
+
 			/**
 			* End condition getter
 			* @return Pointer to end condition node

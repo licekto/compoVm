@@ -3,11 +3,11 @@
 namespace nodes {
 
 	namespace procedural {
-            
-                CBreakStatement::CBreakStatement()
+
+		CBreakStatement::CBreakStatement()
 			:   CNode(types::nodeType::BREAK) {
 		}
-            
+
 		void CBreakStatement::print(std::ostream& outstream) const {
 			outstream << "\t";
 			outstream << "break;";

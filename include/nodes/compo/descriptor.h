@@ -15,17 +15,17 @@ namespace nodes {
 		 */
 		class CDescriptor : public CNode {
 		  private:
-                        /**< Descriptor name */
+			/**< Descriptor name */
 			std::shared_ptr<nodes::procedural::CSymbol> m_name;
-                        
-                        /**< Inheritance information */
+
+			/**< Inheritance information */
 			std::shared_ptr<nodes::procedural::CSymbol> m_extends;
-                        
-                        /**< Vector of descriptor body nodes */
+
+			/**< Vector of descriptor body nodes */
 			std::vector<std::shared_ptr<nodes::CNode>> m_body;
-                        
-                        /**< Every descriptor contains default port */
-                        std::shared_ptr<nodes::compo::CPort> m_defaultPort;
+
+			/**< Every descriptor contains default port */
+			std::shared_ptr<nodes::compo::CPort> m_defaultPort;
 
 		  public:
 			/**
@@ -68,12 +68,12 @@ namespace nodes {
 			* @return Constant pointer to body vector
 			*/
 			std::shared_ptr<nodes::CNode> getBodyNodeAt (int index) const;
-                        
-                        /**
+
+			/**
 			* Default port getter
-			* @return Constant pointer to port
-			*/
-                        std::shared_ptr<nodes::compo::CPort> getDefaultPort() const;
+					* @return Constant pointer to port
+					*/
+			std::shared_ptr<nodes::compo::CPort> getDefaultPort() const;
 		};
 
 	}

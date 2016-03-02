@@ -15,16 +15,16 @@ namespace nodes {
 		 */
 		class CForStatement : public CAbstractStatement {
 		  private:
-                        /**< Start condition node */
+			/**< Start condition node */
 			std::shared_ptr<nodes::procedural::CAssignmentExpression> m_initExpression;
-                        
-                        /**< Start condition node */
+
+			/**< Start condition node */
 			std::shared_ptr<nodes::procedural::CAbstractExpression> m_condition;
-                        
-                        /**< Step node */
+
+			/**< Step node */
 			std::shared_ptr<nodes::procedural::CAbstractExpression> m_increment;
-                        
-                        /**< Body */
+
+			/**< Body */
 			std::shared_ptr<nodes::procedural::CCompoundBody> m_body;
 
 		  public:

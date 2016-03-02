@@ -13,7 +13,7 @@ namespace nodes {
 		 */
 		class CInjectedPort : public CPort {
 		  private:
-                        /**< Name symbol of injected port */
+			/**< Name symbol of injected port */
 			std::shared_ptr<nodes::procedural::CSymbol> m_injectedWith;
 
 		  public:

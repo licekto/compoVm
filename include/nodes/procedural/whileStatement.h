@@ -16,10 +16,10 @@ namespace nodes {
 		 */
 		class CWhileStatement : public CAbstractStatement {
 		  private:
-                        /**< Start condition node */
+			/**< Start condition node */
 			std::shared_ptr<nodes::procedural::CAbstractExpression> m_condition;
-                        
-                        /**< Body */
+
+			/**< Body */
 			std::shared_ptr<nodes::procedural::CCompoundBody> m_body;
 
 		  public:
@@ -31,7 +31,7 @@ namespace nodes {
 			* @param body: Reference to vector of body nodes
 			*/
 			CWhileStatement(std::shared_ptr<nodes::procedural::CAbstractExpression> cond = nullptr,
-                                        std::shared_ptr<nodes::procedural::CCompoundBody> body = nullptr);
+			                std::shared_ptr<nodes::procedural::CCompoundBody> body = nullptr);
 
 			/**
 			* Virtual print function to call from operator <<

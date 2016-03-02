@@ -271,6 +271,8 @@ BOOST_AUTO_TEST_CASE(serviceTest) {
     params.push_back(std::make_shared<nodes::procedural::CSymbol>("param1"));
     params.push_back(std::make_shared<nodes::procedural::CSymbol>("param2"));
     
+    std::shared_ptr<nodes::compo::CServiceSignature> signature = std::make_shared<nodes::compo::CServiceSignature>(std::make_shared<nodes::procedural::CSymbol>("service"), params);
+    
     // Body vector preparation
     std::vector<std::shared_ptr<nodes::CNode>> body;
     body.push_back(std::make_shared<nodes::procedural::CSymbol>("Expr1"));
@@ -283,7 +285,7 @@ BOOST_AUTO_TEST_CASE(serviceTest) {
     std::shared_ptr<nodes::procedural::CCompoundBody> compoundBody = std::make_shared<nodes::procedural::CCompoundBody>(temporaries, body);
     
     // Service creation
-    nodes::compo::CService service(std::make_shared<nodes::procedural::CSymbol>("service"), params, compoundBody);
+    nodes::compo::CService service(signature, compoundBody);
     BOOST_CHECK_EQUAL(nodes::types::nodeType::SERVICE, service.getNodeType());
     BOOST_CHECK_EQUAL("service", service.getName());
     BOOST_CHECK_EQUAL(2, service.getParamsSize());
@@ -381,6 +383,8 @@ BOOST_AUTO_TEST_CASE(constraintTest) {
     params.push_back(std::make_shared<nodes::procedural::CSymbol>("param1"));
     params.push_back(std::make_shared<nodes::procedural::CSymbol>("param2"));
     
+    std::shared_ptr<nodes::compo::CServiceSignature> signature = std::make_shared<nodes::compo::CServiceSignature>(std::make_shared<nodes::procedural::CSymbol>("constraint"), params);
+    
     // Body vector preparation
     std::vector<std::shared_ptr<nodes::CNode>> body;
     body.push_back(std::make_shared<nodes::procedural::CSymbol>("Expr1"));
@@ -389,7 +393,7 @@ BOOST_AUTO_TEST_CASE(constraintTest) {
     std::shared_ptr<nodes::procedural::CCompoundBody> compoundBody = std::make_shared<nodes::procedural::CCompoundBody>(std::vector<std::shared_ptr<nodes::procedural::CSymbol>>(0), body);
     
     // Constraint creation
-    nodes::compo::CConstraint constraint(std::make_shared<nodes::procedural::CSymbol>("constraint"), params, compoundBody);
+    nodes::compo::CConstraint constraint(signature, compoundBody);
     BOOST_CHECK_EQUAL(nodes::types::nodeType::CONSTRAINT, constraint.getNodeType());
     BOOST_CHECK_EQUAL("constraint", constraint.getName());
     BOOST_CHECK_EQUAL(2, constraint.getParamsSize());

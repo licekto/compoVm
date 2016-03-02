@@ -28,11 +28,11 @@ namespace nodes {
 		 */
 		class CAbstractReqProv : public virtual nodes::CNode {
 		  protected:
-                        /**< Type of visibility */
+			/**< Type of visibility */
 			nodes::types::visibilityType m_visibilityType;
-			
-                        /**< Vector of ports */
-                        std::vector<std::shared_ptr<nodes::compo::CPort>> m_ports;
+
+			/**< Vector of ports */
+			std::vector<std::shared_ptr<nodes::compo::CPort>> m_ports;
 
 			/**
 			* Parametric constructor with default values
@@ -41,7 +41,7 @@ namespace nodes {
 			* @param ports: vector of ports
 			*/
 			CAbstractReqProv(nodes::types::visibilityType type = nodes::types::visibilityType::EXTERNAL,
-                                         const std::vector<std::shared_ptr<compo::CPort> >& ports = std::vector<std::shared_ptr<nodes::compo::CPort>>(0));
+			                 const std::vector<std::shared_ptr<compo::CPort> >& ports = std::vector<std::shared_ptr<nodes::compo::CPort>>(0));
 
 		  public:
 			/**

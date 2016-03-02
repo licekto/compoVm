@@ -23,6 +23,7 @@ namespace nodes {
 			DESCRIPTOR,
 			SYMBOL,
 			SERVICE,
+			SERVICE_SIGN,
 			PORT,
 			PROVISION,
 			REQUIREMENT,
@@ -52,9 +53,9 @@ namespace nodes {
 			GREATER_EXPRESSION,
 			GREATER_OR_EQUAL_EXPRESSION,
 			COMPOUND_BODY,
-                        RETURN,
-                        BREAK,
-                        CONTINUE
+			RETURN,
+			BREAK,
+			CONTINUE
 		};
 
 		/**

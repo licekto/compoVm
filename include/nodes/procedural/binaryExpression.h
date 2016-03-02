@@ -16,13 +16,13 @@ namespace nodes {
 		 */
 		class CBinaryExpression : public virtual CAbstractExpression {
 		  protected:
-                        /**< Operator */
+			/**< Operator */
 			types::operatorType m_operator;
-			
-                        /**< First operand */
-                        std::shared_ptr<nodes::procedural::CAbstractExpression> m_operand1;
-                        
-                        /**< Second operand */
+
+			/**< First operand */
+			std::shared_ptr<nodes::procedural::CAbstractExpression> m_operand1;
+
+			/**< Second operand */
 			std::shared_ptr<nodes::procedural::CAbstractExpression> m_operand2;
 
 			/**

@@ -16,7 +16,7 @@ namespace nodes {
 		 */
 		class CStringLiteral : public CAbstractPrimaryExpression {
 		  private:
-                        /**< String value */
+			/**< String value */
 			std::string m_stringValue;
 
 		  public:

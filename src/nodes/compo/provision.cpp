@@ -9,11 +9,11 @@ namespace nodes {
 			:   CNode(types::nodeType::PROVISION),
 			    CAbstractReqProv(type, ports) {
 		}
-                
-                void CProvision::print(std::ostream& outstream) const {
+
+		void CProvision::print(std::ostream& outstream) const {
 			outstream << "provides" << std::endl;
 		}
-                
+
 	}
 
 }

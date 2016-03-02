@@ -6,11 +6,11 @@ namespace nodes {
 
 		CIfStatement::CIfStatement(std::shared_ptr<nodes::procedural::CAbstractExpression> condition,
 		                           std::shared_ptr<nodes::procedural::CCompoundBody> ifBody,
-                                           std::shared_ptr<nodes::procedural::CCompoundBody> elseBody)
+		                           std::shared_ptr<nodes::procedural::CCompoundBody> elseBody)
 			:   CNode(types::nodeType::IF),
 			    m_condition(condition),
 			    m_ifBody(ifBody),
-                            m_elseBody(elseBody) {
+			    m_elseBody(elseBody) {
 		}
 
 		void CIfStatement::print(std::ostream& outstream) const {
@@ -25,10 +25,10 @@ namespace nodes {
 			return m_ifBody;
 		}
 
-                std::shared_ptr<nodes::procedural::CCompoundBody> CIfStatement::getElseBody() const {
+		std::shared_ptr<nodes::procedural::CCompoundBody> CIfStatement::getElseBody() const {
 			return m_elseBody;
 		}
-                
+
 		std::shared_ptr<nodes::procedural::CAbstractExpression> CIfStatement::getCondition() const {
 			return m_condition;
 		}

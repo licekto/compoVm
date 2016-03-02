@@ -25,7 +25,7 @@ namespace nodes {
 	 */
 	class CNode {
 	  protected:
-                /**< Type of node */
+		/**< Type of node */
 		types::nodeType m_nodeType;
 
 		/**

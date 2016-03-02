@@ -17,7 +17,7 @@ namespace nodes {
 		 */
 		class CConstant : public CAbstractPrimaryExpression {
 		  private:
-                        /**< Integer 4B value */
+			/**< Integer 4B value */
 			i32 m_intValue;
 
 		  public:
