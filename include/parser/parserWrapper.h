@@ -4,7 +4,6 @@
 #include <stack>
 
 #include "parser/lexer.h"
-#include "parser/block.h"
 #include "nodes/node.h"
 #include "nodes/procedural/symbol.h"
 #include "nodes/compo/port.h"
@@ -47,6 +46,9 @@ class ParserWrapper {
 
 	/**< Current list of signatures (e.g. requirements, provisions) */
 	std::vector<std::shared_ptr<nodes::compo::CServiceSignature>> m_currentSignaturesList;
+        
+        /**< Is current port universal? */
+        bool m_universality;
 
   public:
 	/**
@@ -235,4 +237,16 @@ class ParserWrapper {
 	 * Clears vector of ports
 	 */
 	void clearServiceSignatures();
+        
+        /**
+	 * Sets universality of currently parsed port
+	 * @param universality
+	 */
+	void setUniversality(bool universality);
+
+	/**
+	 * universality getter
+	 * @return bool value
+	 */
+	bool getUniversality() const;
 };
