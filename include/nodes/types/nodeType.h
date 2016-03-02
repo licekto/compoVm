@@ -35,7 +35,6 @@ namespace nodes {
 			FOR,
 			WHILE,
 			IF,
-			ELSE,
 			CONSTANT,
 			STRING_LITERAL,
 			PARENS,
@@ -52,7 +51,10 @@ namespace nodes {
 			LESS_OR_EQUAL_EXPRESSION,
 			GREATER_EXPRESSION,
 			GREATER_OR_EQUAL_EXPRESSION,
-			COMPOUND_BODY
+			COMPOUND_BODY,
+                        RETURN,
+                        BREAK,
+                        CONTINUE
 		};
 
 		/**
