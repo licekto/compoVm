@@ -6,7 +6,7 @@ namespace nodes {
 
 		CRequirement::CRequirement(types::visibilityType type,
 		                           const std::vector<std::shared_ptr<nodes::compo::CPort>>& ports,
-                                           bool universality)
+		                           bool universality)
 			:   CNode(types::nodeType::REQUIREMENT),
 			    CAbstractReqProv(type, ports, universality) {
 		}

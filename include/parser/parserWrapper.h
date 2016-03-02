@@ -46,9 +46,9 @@ class ParserWrapper {
 
 	/**< Current list of signatures (e.g. requirements, provisions) */
 	std::vector<std::shared_ptr<nodes::compo::CServiceSignature>> m_currentSignaturesList;
-        
-        /**< Is current port universal? */
-        bool m_universality;
+
+	/**< Is current port universal? */
+	bool m_universality;
 
   public:
 	/**
@@ -237,9 +237,9 @@ class ParserWrapper {
 	 * Clears vector of ports
 	 */
 	void clearServiceSignatures();
-        
-        /**
-	 * Sets universality of currently parsed port
+
+	/**
+	* Sets universality of currently parsed port
 	 * @param universality
 	 */
 	void setUniversality(bool universality);

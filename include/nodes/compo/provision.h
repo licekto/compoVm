@@ -20,13 +20,13 @@ namespace nodes {
 			*/
 			CProvision(types::visibilityType type = types::visibilityType::EXTERNAL,
 			           const std::vector<std::shared_ptr<nodes::compo::CPort>>& ports = std::vector<std::shared_ptr<nodes::compo::CPort>>(0),
-                                   bool universality = false);
+			           bool universality = false);
 
 			/**
 			* Virtual print function to call from operator <<
-                        * @param os: output stream
-                        * @see operator <<()
-                        */
+			            * @param os: output stream
+			            * @see operator <<()
+			            */
 			virtual void print(std::ostream& os) const;
 		};
 

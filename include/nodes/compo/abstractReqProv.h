@@ -33,9 +33,9 @@ namespace nodes {
 
 			/**< Vector of ports */
 			std::vector<std::shared_ptr<nodes::compo::CPort>> m_ports;
-                        
-                        /**< Univeralisty */
-                        bool m_universality;
+
+			/**< Univeralisty */
+			bool m_universality;
 
 			/**
 			* Parametric constructor with default values
@@ -45,7 +45,7 @@ namespace nodes {
 			*/
 			CAbstractReqProv(nodes::types::visibilityType type = nodes::types::visibilityType::EXTERNAL,
 			                 const std::vector<std::shared_ptr<compo::CPort> >& ports = std::vector<std::shared_ptr<nodes::compo::CPort>>(0),
-                                         bool universality = false);
+			                 bool universality = false);
 
 		  public:
 			/**
@@ -72,12 +72,12 @@ namespace nodes {
 			* @return port at given index
 			*/
 			std::shared_ptr<nodes::compo::CPort> getPortAt(unsigned int index) const;
-                        
-                        /**
-                         * Universality getter
-                         * @return bool value
-                         */
-                        bool getUniversality() const;
+
+			/**
+			 * Universality getter
+			 * @return bool value
+			 */
+			bool getUniversality() const;
 		};
 
 	}
