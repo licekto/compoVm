@@ -40,27 +40,43 @@ namespace nodes {
 		}
 
                 size_t CAbstractServConstr::getBodySize() const {
-                    return m_body->getBodySize();
+                    if (m_body) {
+                        return m_body->getBodySize();
+                    }
+                    return 0;
                 }
                 
                 size_t CAbstractServConstr::getTemporariesSize() const {
-                    return m_body->getTemporariesSize();
+                    if (m_body) {
+                        return m_body->getTemporariesSize();
+                    }
+                    return 0;
                 }
                 
 		std::shared_ptr<nodes::CNode> CAbstractServConstr::getBodyNodeAt(int index) const {
-                    return m_body->getBodyNodeAt(index);
+                    if (m_body) {
+                        return m_body->getBodyNodeAt(index);
+                    }
+                    return nullptr;
 		}
 
 		void CAbstractServConstr::addBodyNode(std::shared_ptr<nodes::CNode> node) {
+                    if (m_body) {
 			m_body->addBodyNode(node);
+                    }
 		}
 
                 void CAbstractServConstr::addTemporary(std::shared_ptr<nodes::procedural::CSymbol> temporary) {
-                    m_body->addTemporary(temporary);
+                    if (m_body) {
+                        m_body->addTemporary(temporary);
+                    }
                 }
                 
                 std::shared_ptr<nodes::procedural::CSymbol> CAbstractServConstr::getTemporaryAt(int index) const {
-                    return m_body->getTemporaryAt(index);
+                    if (m_body) {
+                        return m_body->getTemporaryAt(index);
+                    }
+                    return nullptr;
                 }
                 
 		size_t CAbstractServConstr::getParamsSize() const {
