@@ -18,12 +18,9 @@
 std::string buffer;
 %}
 
-Letter                      [a-zA-Z]
-DecimalDigit                [0-9]
-IntegerLiteral              ([+-]?{DecimalDigit}+)
-LetterOrDigit               ({Letter}|{DecimalDigit})
+IntegerLiteral              ([+-]?[0-9]+)
 Whitespace                  [\n\r\t ]
-Identifier                  ({Letter}|[_]){LetterOrDigit}*
+Identifier                  [a-zA-Z][a-zA-Z_0-9]*
 
 %%
 
@@ -116,8 +113,6 @@ Identifier                  ({Letter}|[_]){LetterOrDigit}*
 <INITIAL>"&"                            {return '&';}
 
 <INITIAL>"|"                            {return '|';}
-
-<INITIAL>"'"                            {return '\'';}
 
 <INITIAL>"+"                            {return '+';}
 
