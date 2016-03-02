@@ -131,3 +131,11 @@ std::vector<std::shared_ptr<nodes::compo::CServiceSignature>>* ParserWrapper::ge
 void ParserWrapper::clearServiceSignatures() {
 	m_currentSignaturesList.clear();
 }
+
+void ParserWrapper::setUniversality(bool universality) {
+	m_universality = universality;
+}
+
+bool ParserWrapper::getUniversality() const {
+	return m_universality;
+}
