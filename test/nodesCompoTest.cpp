@@ -12,7 +12,7 @@
 #include "nodes/compo/descriptor.h"
 
 BOOST_AUTO_TEST_SUITE(nodesCompo)
-/*
+
 BOOST_AUTO_TEST_CASE(symbolTest) {
     // Original symbol creation
     nodes::procedural::CSymbol symbol("Symbol");
@@ -276,11 +276,14 @@ BOOST_AUTO_TEST_CASE(serviceTest) {
     body.push_back(std::make_shared<nodes::procedural::CSymbol>("Expr1"));
     
     // Temporaries vector preparation
-    std::vector<std::shared_ptr<nodes::CNode>> temporaries;
+    std::vector<std::shared_ptr<nodes::procedural::CSymbol>> temporaries;
     temporaries.push_back(std::make_shared<nodes::procedural::CSymbol>("Temp1"));
     
+    // Compound body preparation
+    std::shared_ptr<nodes::procedural::CCompoundBody> compoundBody = std::make_shared<nodes::procedural::CCompoundBody>(temporaries, body);
+    
     // Service creation
-    nodes::compo::CService service(std::make_shared<nodes::procedural::CSymbol>("service"), params, body, temporaries);
+    nodes::compo::CService service(std::make_shared<nodes::procedural::CSymbol>("service"), params, compoundBody);
     BOOST_CHECK_EQUAL(nodes::types::nodeType::SERVICE, service.getNodeType());
     BOOST_CHECK_EQUAL("service", service.getName());
     BOOST_CHECK_EQUAL(2, service.getParamsSize());
@@ -382,10 +385,13 @@ BOOST_AUTO_TEST_CASE(constraintTest) {
     std::vector<std::shared_ptr<nodes::CNode>> body;
     body.push_back(std::make_shared<nodes::procedural::CSymbol>("Expr1"));
     
-    // Service creation
-    nodes::compo::CConstraint constraint(std::make_shared<nodes::procedural::CSymbol>("service"), params, body);
+    // Compound body preparation
+    std::shared_ptr<nodes::procedural::CCompoundBody> compoundBody = std::make_shared<nodes::procedural::CCompoundBody>(std::vector<std::shared_ptr<nodes::procedural::CSymbol>>(0), body);
+    
+    // Constraint creation
+    nodes::compo::CConstraint constraint(std::make_shared<nodes::procedural::CSymbol>("constraint"), params, compoundBody);
     BOOST_CHECK_EQUAL(nodes::types::nodeType::CONSTRAINT, constraint.getNodeType());
-    BOOST_CHECK_EQUAL("service", constraint.getName());
+    BOOST_CHECK_EQUAL("constraint", constraint.getName());
     BOOST_CHECK_EQUAL(2, constraint.getParamsSize());
     BOOST_CHECK_EQUAL("param1", constraint.getParamAt(0)->getStringValue());
     BOOST_CHECK_EQUAL("param2", constraint.getParamAt(1)->getStringValue());
@@ -395,7 +401,7 @@ BOOST_AUTO_TEST_CASE(constraintTest) {
     // Copy constructor test
     nodes::compo::CConstraint constraintCopy1(constraint);
     BOOST_CHECK_EQUAL(nodes::types::nodeType::CONSTRAINT, constraintCopy1.getNodeType());
-    BOOST_CHECK_EQUAL("service", constraintCopy1.getName());
+    BOOST_CHECK_EQUAL("constraint", constraintCopy1.getName());
     BOOST_CHECK_EQUAL(2, constraintCopy1.getParamsSize());
     BOOST_CHECK_EQUAL("param1", constraintCopy1.getParamAt(0)->getStringValue());
     BOOST_CHECK_EQUAL("param2", constraintCopy1.getParamAt(1)->getStringValue());
@@ -403,7 +409,7 @@ BOOST_AUTO_TEST_CASE(constraintTest) {
     BOOST_CHECK_EQUAL("Expr1", std::dynamic_pointer_cast<nodes::procedural::CSymbol>(constraintCopy1.getBodyNodeAt(0))->getStringValue());
     // Check if original object remains untouched
     BOOST_CHECK_EQUAL(nodes::types::nodeType::CONSTRAINT, constraint.getNodeType());
-    BOOST_CHECK_EQUAL("service", constraint.getName());
+    BOOST_CHECK_EQUAL("constraint", constraint.getName());
     BOOST_CHECK_EQUAL(2, constraint.getParamsSize());
     BOOST_CHECK_EQUAL("param1", constraint.getParamAt(0)->getStringValue());
     BOOST_CHECK_EQUAL("param2", constraint.getParamAt(1)->getStringValue());
@@ -413,7 +419,7 @@ BOOST_AUTO_TEST_CASE(constraintTest) {
     // Copy assignment operator test
     nodes::compo::CConstraint constraingCopy2 = constraint;
     BOOST_CHECK_EQUAL(nodes::types::nodeType::CONSTRAINT, constraingCopy2.getNodeType());
-    BOOST_CHECK_EQUAL("service", constraingCopy2.getName());
+    BOOST_CHECK_EQUAL("constraint", constraingCopy2.getName());
     BOOST_CHECK_EQUAL(2, constraingCopy2.getParamsSize());
     BOOST_CHECK_EQUAL("param1", constraingCopy2.getParamAt(0)->getStringValue());
     BOOST_CHECK_EQUAL("param2", constraingCopy2.getParamAt(1)->getStringValue());
@@ -421,7 +427,7 @@ BOOST_AUTO_TEST_CASE(constraintTest) {
     BOOST_CHECK_EQUAL("Expr1", std::dynamic_pointer_cast<nodes::procedural::CSymbol>(constraingCopy2.getBodyNodeAt(0))->getStringValue());
     // Check if original object remains untouched
     BOOST_CHECK_EQUAL(nodes::types::nodeType::CONSTRAINT, constraint.getNodeType());
-    BOOST_CHECK_EQUAL("service", constraint.getName());
+    BOOST_CHECK_EQUAL("constraint", constraint.getName());
     BOOST_CHECK_EQUAL(2, constraint.getParamsSize());
     BOOST_CHECK_EQUAL("param1", constraint.getParamAt(0)->getStringValue());
     BOOST_CHECK_EQUAL("param2", constraint.getParamAt(1)->getStringValue());
@@ -431,7 +437,7 @@ BOOST_AUTO_TEST_CASE(constraintTest) {
     // Move constructor test
     nodes::compo::CConstraint constraintNew1(std::move(constraint));
     BOOST_CHECK_EQUAL(nodes::types::nodeType::CONSTRAINT, constraintNew1.getNodeType());
-    BOOST_CHECK_EQUAL("service", constraintNew1.getName());
+    BOOST_CHECK_EQUAL("constraint", constraintNew1.getName());
     BOOST_CHECK_EQUAL(2, constraintNew1.getParamsSize());
     BOOST_CHECK_EQUAL("param1", constraintNew1.getParamAt(0)->getStringValue());
     BOOST_CHECK_EQUAL("param2", constraintNew1.getParamAt(1)->getStringValue());
@@ -446,7 +452,7 @@ BOOST_AUTO_TEST_CASE(constraintTest) {
     // Copy assignment operator test
     nodes::compo::CConstraint constraintNew2 = std::move(constraintNew1);
     BOOST_CHECK_EQUAL(nodes::types::nodeType::CONSTRAINT, constraintNew2.getNodeType());
-    BOOST_CHECK_EQUAL("service", constraintNew2.getName());
+    BOOST_CHECK_EQUAL("constraint", constraintNew2.getName());
     BOOST_CHECK_EQUAL(2, constraintNew2.getParamsSize());
     BOOST_CHECK_EQUAL("param1", constraintNew2.getParamAt(0)->getStringValue());
     BOOST_CHECK_EQUAL("param2", constraintNew2.getParamAt(1)->getStringValue());
@@ -525,5 +531,5 @@ BOOST_AUTO_TEST_CASE(descriptorTest) {
     BOOST_CHECK_EQUAL("", descriptorNew1.getExtends());
     BOOST_CHECK_EQUAL(0, descriptorNew1.getBodySize());
 }
-*/
+
 BOOST_AUTO_TEST_SUITE_END()
