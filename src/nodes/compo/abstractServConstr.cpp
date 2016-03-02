@@ -5,8 +5,10 @@ namespace nodes {
 	namespace compo {
 
 		CAbstractServConstr::CAbstractServConstr(std::shared_ptr<nodes::compo::CServiceSignature> signature,
-		        std::shared_ptr<nodes::procedural::CCompoundBody> body)
-			: CNode(types::nodeType::SERVICE), m_signature(signature), m_body(body) {
+                                                         std::shared_ptr<nodes::procedural::CCompoundBody> body)
+			: CNode(types::nodeType::SERVICE),
+                          m_signature(signature),
+                          m_body(body) {
 		}
 
 		void CAbstractServConstr::print(std::ostream& outstream) const {
