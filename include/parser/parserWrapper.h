@@ -9,6 +9,7 @@
 #include "nodes/procedural/symbol.h"
 #include "nodes/compo/port.h"
 #include "nodes/types/visibilityType.h"
+#include "nodes/procedural/compoundBody.h"
 
 /**
  * \class ParserWrapper
@@ -18,12 +19,13 @@ class ParserWrapper {
   private:
 	Lexer *m_lexer;/**< Lexer pointer */
 	std::vector<std::shared_ptr<nodes::CNode>> m_rootNodes; /**< Vector of root nodes */
-	std::stack<std::shared_ptr<TBLOCK>> m_blockStack; /**< Stack of nested blocks */
+	std::stack<std::shared_ptr<nodes::procedural::CCompoundBody>> m_blockStack; /**< Stack of nested blocks */
 	std::vector<std::shared_ptr<nodes::CNode>> m_currentDescritporBody; /**< Body of currently parsed descriptor */
 	std::vector<std::shared_ptr<nodes::procedural::CSymbol>> m_currentServiceParams; /**< Parameters of currently parsed service */
-	nodes::types::visibilityType m_visibilityType;/**< Visibility type of current requirement/provision */
+	nodes::types::visibilityType m_visibilityType; /**< Visibility type of current requirement/provision */
 	bool m_atomicity; /**< Is current port atomic? */
-	std::vector<std::shared_ptr<nodes::compo::CPort>> m_currentPorts;/**< Currently parsed ports */
+	std::vector<std::shared_ptr<nodes::compo::CPort>> m_currentPorts; /**< Currently parsed ports */
+        std::shared_ptr<nodes::procedural::CCompoundBody> m_currentCompoundBody; /**< Current body of compound statement */
 
   public:
 	/**
@@ -88,7 +90,7 @@ class ParserWrapper {
 	 * Pushes new block context on the stack
 	 * @param block: block smart pointer to push
 	 */
-	void pushBlock(std::shared_ptr<TBLOCK> block);
+	void pushBlock(std::shared_ptr<nodes::procedural::CCompoundBody> block);
 
 	/**
 	 * Pops block from top of the stack
@@ -96,7 +98,7 @@ class ParserWrapper {
 	 *
 	 * No "top" method implemented. Pop actually gets the top, removes data on the top and returns poped content.
 	 */
-	std::shared_ptr<TBLOCK> popBlock();
+	std::shared_ptr<nodes::procedural::CCompoundBody> popBlock();
 
         /**
          * Is stack empty?
@@ -183,4 +185,16 @@ class ParserWrapper {
          * Clears all vectors
          */
         void clearAll();
+        
+        /**
+         * Current compound statement body setter
+         * @param body: shared pointer to CCompoundBody
+         */
+        void setCurrentCompoundBody(std::shared_ptr<nodes::procedural::CCompoundBody> body);
+        
+        /**
+         * Current compound statement body getter
+         * @return shared pointer to CCompoundBody
+         */
+        std::shared_ptr<nodes::procedural::CCompoundBody> getCurrentCompoundBody();
 };

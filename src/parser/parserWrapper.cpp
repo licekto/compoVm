@@ -7,43 +7,46 @@ ParserWrapper::ParserWrapper(Lexer *lexer)
 }
 
 ParserWrapper::~ParserWrapper() {
-	this->clearRootNodes();
+    this->clearRootNodes();
 }
 
 Lexer * ParserWrapper::getLexer() const {
-	return m_lexer;
+    return m_lexer;
 }
 
 void ParserWrapper::setRootNode(std::shared_ptr<nodes::CNode> node) {
-	m_rootNodes.push_back(node);
+    m_rootNodes.push_back(node);
 }
 
 size_t ParserWrapper::getRootNodesSize() const {
-	return m_rootNodes.size();
+    return m_rootNodes.size();
 }
 
 std::shared_ptr<nodes::CNode> ParserWrapper::getRootNodeAt(unsigned int index) {
-	if (index < m_rootNodes.size()) {
-		return m_rootNodes.at(index);
-	}
-	return nullptr;
+    if (index < m_rootNodes.size()) {
+        return m_rootNodes.at(index);
+    }
+    return nullptr;
 }
 
 void ParserWrapper::clearRootNodes() {
-	for (std::shared_ptr<nodes::CNode> node : m_rootNodes) {
-		node.reset();
-	}
-	m_rootNodes.clear();
+    for (std::shared_ptr<nodes::CNode> node : m_rootNodes) {
+        node.reset();
+    }
+    m_rootNodes.clear();
 }
 
-void ParserWrapper::pushBlock(std::shared_ptr<TBLOCK> block) {
-	m_blockStack.push(block);
+void ParserWrapper::pushBlock(std::shared_ptr<nodes::procedural::CCompoundBody> block) {
+    m_blockStack.push(block);
 }
 
-std::shared_ptr<TBLOCK> ParserWrapper::popBlock() {
-	auto blockPtr = m_blockStack.top();
-	m_blockStack.pop();
-	return blockPtr;
+std::shared_ptr<nodes::procedural::CCompoundBody> ParserWrapper::popBlock() {
+    if (m_blockStack.empty()) {
+        return nullptr;
+    }
+    auto blockPtr = m_blockStack.top();
+    m_blockStack.pop();
+    return blockPtr;
 }
 
 bool ParserWrapper::isStackEmpty() const {
@@ -106,4 +109,12 @@ void ParserWrapper::clearAll() {
     clearDescriptorBody();
     clearServiceParams();
     clearPorts();
+}
+
+void ParserWrapper::setCurrentCompoundBody(std::shared_ptr<nodes::procedural::CCompoundBody> body) {
+    m_currentCompoundBody = body;
+}
+
+std::shared_ptr<nodes::procedural::CCompoundBody> ParserWrapper::getCurrentCompoundBody() {
+    return m_currentCompoundBody;
 }
