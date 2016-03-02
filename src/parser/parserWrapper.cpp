@@ -1,6 +1,7 @@
 #include <memory>
 
 #include "parser/parserWrapper.h"
+#include "nodes/compo/serviceSignature.h"
 
 ParserWrapper::ParserWrapper(Lexer *lexer)
 	: m_lexer(lexer), m_rootNodes(std::vector<std::shared_ptr<nodes::CNode>>()) {
@@ -117,4 +118,16 @@ void ParserWrapper::setCurrentCompoundBody(std::shared_ptr<nodes::procedural::CC
 
 std::shared_ptr<nodes::procedural::CCompoundBody> ParserWrapper::getCurrentCompoundBody() {
 	return m_currentCompoundBody;
+}
+
+void ParserWrapper::addServiceSignature(std::shared_ptr<nodes::compo::CServiceSignature> serviceSignature) {
+	m_currentSignaturesList.push_back(serviceSignature);
+}
+
+std::vector<std::shared_ptr<nodes::compo::CServiceSignature>>* ParserWrapper::getServiceSignatures() {
+	return &m_currentSignaturesList;
+}
+
+void ParserWrapper::clearServiceSignatures() {
+	m_currentSignaturesList.clear();
 }

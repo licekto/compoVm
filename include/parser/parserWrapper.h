@@ -8,6 +8,7 @@
 #include "nodes/node.h"
 #include "nodes/procedural/symbol.h"
 #include "nodes/compo/port.h"
+#include "nodes/compo/serviceSignature.h"
 #include "nodes/types/visibilityType.h"
 #include "nodes/procedural/compoundBody.h"
 
@@ -17,15 +18,35 @@
  */
 class ParserWrapper {
   private:
-	Lexer *m_lexer;/**< Lexer pointer */
-	std::vector<std::shared_ptr<nodes::CNode>> m_rootNodes; /**< Vector of root nodes */
-	std::stack<std::shared_ptr<nodes::procedural::CCompoundBody>> m_blockStack; /**< Stack of nested blocks */
-	std::vector<std::shared_ptr<nodes::CNode>> m_currentDescritporBody; /**< Body of currently parsed descriptor */
-	std::vector<std::shared_ptr<nodes::procedural::CSymbol>> m_currentServiceParams; /**< Parameters of currently parsed service */
-	nodes::types::visibilityType m_visibilityType; /**< Visibility type of current requirement/provision */
-	bool m_atomicity; /**< Is current port atomic? */
-	std::vector<std::shared_ptr<nodes::compo::CPort>> m_currentPorts; /**< Currently parsed ports */
-	std::shared_ptr<nodes::procedural::CCompoundBody> m_currentCompoundBody; /**< Current body of compound statement */
+	/**< Lexer pointer */
+	Lexer *m_lexer;
+
+	/**< Vector of root nodes */
+	std::vector<std::shared_ptr<nodes::CNode>> m_rootNodes;
+
+	/**< Stack of nested blocks */
+	std::stack<std::shared_ptr<nodes::procedural::CCompoundBody>> m_blockStack;
+
+	/**< Body of currently parsed descriptor */
+	std::vector<std::shared_ptr<nodes::CNode>> m_currentDescritporBody;
+
+	/**< Parameters of currently parsed service */
+	std::vector<std::shared_ptr<nodes::procedural::CSymbol>> m_currentServiceParams;
+
+	/**< Visibility type of current requirement/provision */
+	nodes::types::visibilityType m_visibilityType;
+
+	/**< Is current port atomic? */
+	bool m_atomicity;
+
+	/**< Currently parsed ports */
+	std::vector<std::shared_ptr<nodes::compo::CPort>> m_currentPorts;
+
+	/**< Current body of compound statement */
+	std::shared_ptr<nodes::procedural::CCompoundBody> m_currentCompoundBody;
+
+	/**< Current list of signatures (e.g. requirements, provisions) */
+	std::vector<std::shared_ptr<nodes::compo::CServiceSignature>> m_currentSignaturesList;
 
   public:
 	/**
@@ -197,4 +218,21 @@ class ParserWrapper {
 	 * @return shared pointer to CCompoundBody
 	 */
 	std::shared_ptr<nodes::procedural::CCompoundBody> getCurrentCompoundBody();
+
+	/**
+	* Adds currently parsed port
+	 * @param port: smart pointer to port
+	 */
+	void addServiceSignature(std::shared_ptr<nodes::compo::CServiceSignature> serviceSignature);
+
+	/**
+	 * Returns vector of ports
+	 * @return reference to vector
+	 */
+	std::vector<std::shared_ptr<nodes::compo::CServiceSignature>> * getServiceSignatures();
+
+	/**
+	 * Clears vector of ports
+	 */
+	void clearServiceSignatures();
 };
