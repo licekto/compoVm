@@ -10,6 +10,10 @@ namespace nodes {
 			:   CNode(types::nodeType::CONSTRAINT),
 			    CAbstractServConstr(name, params, body) {
 		}
+                
+                void CConstraint::print(std::ostream& outstream) const {
+                    outstream << "constraint()" << std::endl;
+		}
 
 	}
 }

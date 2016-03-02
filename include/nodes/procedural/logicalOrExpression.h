@@ -20,8 +20,8 @@ namespace nodes {
 			* @param variable: name of variable
 			* @param rval: right-hand side of assignment
 			*/
-			CLogicalOrExpression         ( std::shared_ptr<nodes::procedural::CAbstractExpression> op1 = nullptr,
-			                               std::shared_ptr<nodes::procedural::CAbstractExpression> op2 = nullptr);
+			CLogicalOrExpression(std::shared_ptr<nodes::procedural::CAbstractExpression> op1 = nullptr,
+			                     std::shared_ptr<nodes::procedural::CAbstractExpression> op2 = nullptr);
 		};
 
 	}

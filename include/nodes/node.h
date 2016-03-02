@@ -25,13 +25,14 @@ namespace nodes {
 	 */
 	class CNode {
 	  protected:
-		types::nodeType                    m_nodeType;         /**< Type of node */
+                /**< Type of node */
+		types::nodeType m_nodeType;
 
 		/**
 		* Parametric constructor with default value
 		* @param type: type of node
 		*/
-		CNode          (types::nodeType type = types::nodeType::END);
+		CNode(types::nodeType type = types::nodeType::END);
 
 	  public:
 
@@ -40,13 +41,13 @@ namespace nodes {
 		* @param os: output stream
 		* @see operator <<()
 		*/
-		virtual void                            print               (std::ostream& os) const = 0;
+		virtual void print(std::ostream& os) const = 0;
 
 		/**
 		* NodeType getter
 		* @return Type of node
 		*/
-		types::nodeType                            getNodeType         () const;
+		types::nodeType getNodeType() const;
 
 		/**
 		* Overloaded output operator
@@ -56,7 +57,7 @@ namespace nodes {
 		* @see print()
 		* @return Altered output stream
 		*/
-		friend  std::ostream&                   operator <<         (std::ostream& os, const CNode& node);
+		friend  std::ostream& operator <<(std::ostream& os, const CNode& node);
 	};
 
 }

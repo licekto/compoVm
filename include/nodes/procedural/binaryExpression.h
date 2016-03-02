@@ -16,9 +16,14 @@ namespace nodes {
 		 */
 		class CBinaryExpression : public virtual CAbstractExpression {
 		  protected:
-			types::operatorType      m_operator;         /**< Operator */
-			std::shared_ptr<nodes::procedural::CAbstractExpression>  m_operand1;         /**< First operand */
-			std::shared_ptr<nodes::procedural::CAbstractExpression>  m_operand2;         /**< Second operand */
+                        /**< Operator */
+			types::operatorType m_operator;
+			
+                        /**< First operand */
+                        std::shared_ptr<nodes::procedural::CAbstractExpression> m_operand1;
+                        
+                        /**< Second operand */
+			std::shared_ptr<nodes::procedural::CAbstractExpression> m_operand2;
 
 			/**
 			* Parametric constructor with default values
@@ -35,25 +40,25 @@ namespace nodes {
 			* @param os: output stream
 			* @see operator <<()
 			*/
-			virtual void                            print               (std::ostream& os) const;
+			virtual void print(std::ostream& os) const;
 
 			/**
 			* Operator getter
 			* @return Operator type
 			*/
-			types::operatorType                     getOperator         () const;
+			types::operatorType getOperator () const;
 
 			/**
 			* First operand getter
 			* @return Operand expression pointer
 			*/
-			std::shared_ptr<nodes::procedural::CAbstractExpression>            getOperand1         () const;
+			std::shared_ptr<nodes::procedural::CAbstractExpression> getOperand1() const;
 
 			/**
 			* Second operand getter
 			* @return Operand expression pointer
 			*/
-			std::shared_ptr<nodes::procedural::CAbstractExpression>            getOperand2         () const;
+			std::shared_ptr<nodes::procedural::CAbstractExpression> getOperand2() const;
 		};
 
 	}

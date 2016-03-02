@@ -16,8 +16,11 @@ namespace nodes {
 		 */
 		class CCompoundBody : public CAbstractStatement {
 		  private:
-			std::vector<std::shared_ptr<nodes::procedural::CSymbol>> m_temporaries; /**< Temporaries vector */
-			std::vector<std::shared_ptr<nodes::CNode>> m_body; /**< Body nodes vector */
+                        /**< Temporaries vector */
+			std::vector<std::shared_ptr<nodes::procedural::CSymbol>> m_temporaries;
+                        
+                        /**< Body nodes vector */
+			std::vector<std::shared_ptr<nodes::CNode>> m_body;
 
 		  public:
 			/**

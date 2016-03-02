@@ -15,27 +15,28 @@ namespace nodes {
 		 */
 		class CSymbol : public CAbstractPrimaryExpression {
 		  private:
-			std::string                     m_name;         /**< Name of symbol */
+                        /**< Name of symbol */
+			std::string m_name;
 
 		  public:
 			/**
 			* Parametric constructor with default value
 			* @param name: string name
 			*/
-			CSymbol        (const std::string& name);
+			CSymbol(const std::string& name);
 
 			/**
 			* Virtual print function to call from operator <<
 			* @param os: output stream
 			* @see operator <<()
 			*/
-			virtual void                            print               (std::ostream& os) const;
+			virtual void print(std::ostream& os) const;
 
 			/**
 			* StringValue getter
 			* @return name string object
 			*/
-			std::string                     getStringValue      () const;
+			std::string getStringValue() const;
 		};
 
 	}

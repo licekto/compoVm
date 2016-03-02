@@ -19,7 +19,7 @@ namespace nodes {
 			* @param os: output stream
 			* @see operator <<()
 			*/
-			virtual void                            print                   (std::ostream& outStr) const = 0;
+			virtual void print(std::ostream& outStr) const = 0;
 		};
 
 	}

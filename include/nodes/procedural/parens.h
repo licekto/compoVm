@@ -15,7 +15,8 @@ namespace nodes {
 		 */
 		class CParens : public CAbstractPrimaryExpression {
 		  private:
-			std::shared_ptr<nodes::CNode>    m_expression;         /**< Expression in parentheses */
+                        /**< Expression in parentheses */
+			std::shared_ptr<nodes::CNode> m_expression;
 
 		  public:
 			/**
@@ -23,20 +24,20 @@ namespace nodes {
 			* @param type: type of node
 			* @param val: integer value
 			*/
-			CParens         (std::shared_ptr<nodes::CNode> expr = nullptr);
+			CParens(std::shared_ptr<nodes::CNode> expr = nullptr);
 
 			/**
 			* Virtual print function to call from operator <<
 			* @param os: output stream
 			* @see operator <<()
 			*/
-			virtual void                            print           (std::ostream& outStr) const;
+			virtual void print(std::ostream& outStr) const;
 
 			/**
 			 * Expression getter
 			 * @return nodes::CNode pointer
 			 */
-			std::shared_ptr<nodes::CNode>                    getExpression   () const;
+			std::shared_ptr<nodes::CNode> getExpression() const;
 		};
 
 	}

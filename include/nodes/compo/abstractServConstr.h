@@ -18,23 +18,27 @@ namespace nodes {
 		 */
 		class CAbstractServConstr : public virtual CNode {
 		  protected:
-			std::shared_ptr<nodes::procedural::CSymbol> m_name; /**< Name */
-			std::vector<std::shared_ptr<nodes::procedural::CSymbol>> m_params; /**< Vector of parameter names */
-                        std::shared_ptr<nodes::procedural::CCompoundBody> m_body; /**< Compound body node */
+                        /**< Name */
+			std::shared_ptr<nodes::procedural::CSymbol> m_name;
+			
+                        /**< Vector of parameter names */
+                        std::vector<std::shared_ptr<nodes::procedural::CSymbol>> m_params;
+                        
+                        /**< Compound body node */
+                        std::shared_ptr<nodes::procedural::CCompoundBody> m_body;
 
 			/**
 			* Parametric constructor with default values
 			* Constructor is made protected to prevent from creation of object of this (abstract) type.
-			* @param name: Name of entity
-			* @param params: Vector of parameter names
-			* @param body: Vector of body expressions
+			* @param name: name of entity
+			* @param params: vector of parameter names
+			* @param body: vector of body expressions
 			*/
 			CAbstractServConstr(std::shared_ptr<nodes::procedural::CSymbol> name = nullptr,
                                             const std::vector<std::shared_ptr<nodes::procedural::CSymbol>>& params = std::vector<std::shared_ptr<nodes::procedural::CSymbol>>(0),
                                             std::shared_ptr<nodes::procedural::CCompoundBody> body = nullptr);
 
 		  public:
-
 			/**
 			* Virtual print function to call from operator <<
 			* @param os: output stream

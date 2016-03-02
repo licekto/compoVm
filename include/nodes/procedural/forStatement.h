@@ -15,10 +15,17 @@ namespace nodes {
 		 */
 		class CForStatement : public CAbstractStatement {
 		  private:
-			std::shared_ptr<nodes::procedural::CAssignmentExpression>    m_initExpression;           /**< Start condition node */
-			std::shared_ptr<nodes::procedural::CAbstractExpression>    m_condition;             /**< Start condition node */
-			std::shared_ptr<nodes::procedural::CAbstractExpression>    m_increment;                     /**< Step node */
-			std::shared_ptr<nodes::procedural::CCompoundBody> m_body;                     /**< Body */
+                        /**< Start condition node */
+			std::shared_ptr<nodes::procedural::CAssignmentExpression> m_initExpression;
+                        
+                        /**< Start condition node */
+			std::shared_ptr<nodes::procedural::CAbstractExpression> m_condition;
+                        
+                        /**< Step node */
+			std::shared_ptr<nodes::procedural::CAbstractExpression> m_increment;
+                        
+                        /**< Body */
+			std::shared_ptr<nodes::procedural::CCompoundBody> m_body;
 
 		  public:
 			/**

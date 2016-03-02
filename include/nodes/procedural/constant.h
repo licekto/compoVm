@@ -17,28 +17,28 @@ namespace nodes {
 		 */
 		class CConstant : public CAbstractPrimaryExpression {
 		  private:
-			i32                             m_intValue;         /**< Integer 4B value */
+                        /**< Integer 4B value */
+			i32 m_intValue;
 
 		  public:
 			/**
-			* Parametric constructor with default values
-			* @param type: type of node
+			* Parametric constructor with default value
 			* @param val: integer value
 			*/
-			CConstant           (i32 val = 0);
+			CConstant(i32 val = 0);
 
 			/**
 			* Virtual print function to call from operator <<
 			* @param os: output stream
 			* @see operator <<()
 			*/
-			virtual void                            print               (std::ostream& outStr) const;
+			virtual void print(std::ostream& outStr) const;
 
 			/**
 			 * Integer value getter
 			 * @return integer value
 			 */
-			i32                             getValue            () const;
+			i32 getValue() const;
 		};
 
 	}

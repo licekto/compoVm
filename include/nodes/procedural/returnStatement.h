@@ -15,7 +15,8 @@ namespace nodes {
 		 */
 		class CReturnStatement : public CAbstractStatement {
 		  private:
-			std::shared_ptr<nodes::procedural::CAbstractExpression> m_expression; /**< Start condition node */
+                        /**< Start condition node */
+			std::shared_ptr<nodes::procedural::CAbstractExpression> m_expression;
 
 		  public:
 			/**

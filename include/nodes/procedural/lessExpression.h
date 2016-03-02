@@ -20,8 +20,8 @@ namespace nodes {
 			* @param variable: name of variable
 			* @param rval: right-hand side of assignment
 			*/
-			CLessExpression         ( std::shared_ptr<nodes::procedural::CAbstractExpression> op1 = nullptr,
-			                          std::shared_ptr<nodes::procedural::CAbstractExpression> op2 = nullptr);
+			CLessExpression(std::shared_ptr<nodes::procedural::CAbstractExpression> op1 = nullptr,
+			                std::shared_ptr<nodes::procedural::CAbstractExpression> op2 = nullptr);
 		};
 
 	}

@@ -12,20 +12,18 @@ namespace nodes {
 		 * \brief Class for Compo architecture representation.
 		 */
 		class CArchitecture : public CNode {
-		  private:
-
 		  public:
 			/**
-			* Parametric constructor
+			* Default constructor
 			*/
-			CArchitecture      ();
+			CArchitecture();
 
 			/**
 			* Virtual print function to call from operator <<
 			* @param os: output stream
 			* @see operator <<()
 			*/
-			virtual void                            print               (std::ostream& os) const;
+			virtual void print(std::ostream& os) const;
 		};
 
 	}

@@ -14,9 +14,14 @@ namespace nodes {
 		 */
 		class CIfStatement : public CAbstractStatement {
 		  private:
-			std::shared_ptr<nodes::procedural::CAbstractExpression> m_condition; /**< Start condition node */
-			std::shared_ptr<nodes::procedural::CCompoundBody> m_ifBody; /**< If body */
-                        std::shared_ptr<nodes::procedural::CCompoundBody> m_elseBody; /**< Else body */
+                        /**< Start condition node */
+			std::shared_ptr<nodes::procedural::CAbstractExpression> m_condition;
+                        
+                        /**< If body */
+			std::shared_ptr<nodes::procedural::CCompoundBody> m_ifBody;
+                        
+                        /**< Else body */
+                        std::shared_ptr<nodes::procedural::CCompoundBody> m_elseBody;
 
 		  public:
 			/**

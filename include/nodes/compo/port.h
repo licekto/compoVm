@@ -17,8 +17,11 @@ namespace nodes {
 		 */
 		class CPort : public virtual CNode {
 		  protected:
-			std::shared_ptr<nodes::procedural::CSymbol>                      m_name;         /**< Name symbol of port */
-			bool                            m_atomic;       /**< Is atomic? */
+                        /**< Name symbol of port */
+			std::shared_ptr<nodes::procedural::CSymbol> m_name;
+                        
+                        /**< Is atomic? */
+			bool m_atomic;
 
 		  public:
 			/**
@@ -26,26 +29,26 @@ namespace nodes {
 			* @param name: Name of port
 			* @param atomic: Is atomic?
 			*/
-			CPort          (std::shared_ptr<nodes::procedural::CSymbol> name = nullptr, bool atomic = false);
+			CPort(std::shared_ptr<nodes::procedural::CSymbol> name = nullptr, bool atomic = false);
 
 			/**
 			* Virtual print function to call from operator <<
 			* @param os: output stream
 			* @see operator <<()
 			*/
-			virtual void                            print               (std::ostream& os) const;
+			virtual void print(std::ostream& os) const;
 
 			/**
 			* Name getter
 			* @return Name of port
 			*/
-			std::string                     getName             () const;
+			std::string getName() const;
 
 			/**
 			* Atomic getter
 			* @return is atomic?
 			*/
-			bool                            getAtomic           () const;
+			bool getAtomic() const;
 		};
 
 	}

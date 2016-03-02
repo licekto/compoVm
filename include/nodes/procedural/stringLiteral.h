@@ -16,28 +16,28 @@ namespace nodes {
 		 */
 		class CStringLiteral : public CAbstractPrimaryExpression {
 		  private:
-			std::string                     m_stringValue;         /**< String value */
+                        /**< String value */
+			std::string m_stringValue;
 
 		  public:
 			/**
-			* Parametric constructor with default values
-			* @param type: type of node
-			* @param val: integer value
+			* Parametric constructor with default value
+			* @param val: string value
 			*/
-			CStringLiteral         (const std::string& val = "");
+			CStringLiteral(const std::string& val = "");
 
 			/**
 			* Virtual print function to call from operator <<
 			* @param os: output stream
 			* @see operator <<()
 			*/
-			virtual void                            print                       (std::ostream& outStr) const;
+			virtual void print(std::ostream& outStr) const;
 
 			/**
 			 * String value getter
 			 * @return string value
 			 */
-			std::string                     getValue                    () const;
+			std::string getValue() const;
 		};
 
 	}

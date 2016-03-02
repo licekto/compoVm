@@ -16,8 +16,11 @@ namespace nodes {
 		 */
 		class CWhileStatement : public CAbstractStatement {
 		  private:
-			std::shared_ptr<nodes::procedural::CAbstractExpression> m_condition; /**< Start condition node */
-			std::shared_ptr<nodes::procedural::CCompoundBody> m_body; /**< Body */
+                        /**< Start condition node */
+			std::shared_ptr<nodes::procedural::CAbstractExpression> m_condition;
+                        
+                        /**< Body */
+			std::shared_ptr<nodes::procedural::CCompoundBody> m_body;
 
 		  public:
 			/**

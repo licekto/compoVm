@@ -11,7 +11,7 @@ namespace nodes {
 		}
 
 		void CDescriptor::print(std::ostream& outstream) const {
-			outstream << typeName(m_nodeType) << " ";
+			outstream << "descriptor";
 			if (m_name) {
 				outstream << *m_name << " ";
 			}

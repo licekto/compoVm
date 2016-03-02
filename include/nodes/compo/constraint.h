@@ -24,6 +24,13 @@ namespace nodes {
                                     std::shared_ptr<nodes::procedural::CCompoundBody> body = nullptr);
                         
                         /**
+			* Virtual print function to call from operator <<
+			* @param os: output stream
+			* @see operator <<()
+			*/
+			virtual void print(std::ostream& os) const;
+                        
+                        /**
 			* Temporaries size getter
                         * @return size of temporaries vector
                         */

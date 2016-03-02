@@ -14,51 +14,56 @@ namespace nodes {
 		 */
 		class CDescriptor : public CNode {
 		  private:
-			std::shared_ptr<nodes::procedural::CSymbol>  m_name;         /**< Descriptor name */
-			std::shared_ptr<nodes::procedural::CSymbol>  m_extends;      /**< Inheritance information */
-			std::vector<std::shared_ptr<nodes::CNode>>        m_body;         /**< Vector of descriptor body nodes */
+                        /**< Descriptor name */
+			std::shared_ptr<nodes::procedural::CSymbol> m_name;
+                        
+                        /**< Inheritance information */
+			std::shared_ptr<nodes::procedural::CSymbol> m_extends;
+                        
+                        /**< Vector of descriptor body nodes */
+			std::vector<std::shared_ptr<nodes::CNode>> m_body;
 
 		  public:
 			/**
 			* Parametric constructor with default values
-			* @param name: Name of descriptor
-			* @param extends: Name of parent descriptor
-			* @param body: Vector of body nodes
+			* @param name: name of descriptor
+			* @param extends: name of parent descriptor
+			* @param body: vector of body nodes
 			*/
-			CDescriptor    (   std::shared_ptr<nodes::procedural::CSymbol> name = nullptr,
-			                   std::shared_ptr<nodes::procedural::CSymbol> extends = nullptr,
-			                   const std::vector<std::shared_ptr<nodes::CNode>>& body = std::vector<std::shared_ptr<nodes::CNode>>(0));
+			CDescriptor(std::shared_ptr<nodes::procedural::CSymbol> name = nullptr,
+			            std::shared_ptr<nodes::procedural::CSymbol> extends = nullptr,
+			            const std::vector<std::shared_ptr<nodes::CNode>>& body = std::vector<std::shared_ptr<nodes::CNode>>(0));
 
 			/**
 			* Virtual print function to call from operator <<
 			* @param os: output stream
 			* @see operator <<()
 			*/
-			virtual void                            print               (std::ostream& os) const;
+			virtual void print(std::ostream& os) const;
 
 			/**
 			* Name getter
-			* @return Name symbol
+			* @return name symbol
 			*/
-			std::string                     getName             () const;
+			std::string getName() const;
 
 			/**
 			* Extends getter
-			* @return Name of parent class symbol
+			* @return name of parent class symbol
 			*/
-			std::string                     getExtends          () const;
+			std::string getExtends() const;
 
 			/**
 			 * Body vector size getter
 			 * @return number of elements in body
 			 */
-			size_t                          getBodySize         () const;
+			size_t getBodySize () const;
 
 			/**
 			* Body getter
 			* @return Constant pointer to body vector
 			*/
-			std::shared_ptr<nodes::CNode>                    getBodyNodeAt       (int index) const;
+			std::shared_ptr<nodes::CNode> getBodyNodeAt (int index) const;
 		};
 
 	}
