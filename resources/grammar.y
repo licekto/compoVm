@@ -13,8 +13,12 @@
 #include "nodes/compo/provision.h"
 #include "nodes/compo/requirement.h"
 #include "nodes/procedural/symbol.h"
+#include "nodes/procedural/ifStatement.h"
 #include "nodes/procedural/forStatement.h"
 #include "nodes/procedural/whileStatement.h"
+#include "nodes/procedural/breakStatement.h"
+#include "nodes/procedural/continueStatement.h"
+#include "nodes/procedural/returnStatement.h"
 #include "nodes/procedural/abstractExpression.h"
 #include "nodes/procedural/assignmentExpression.h"
 #include "nodes/procedural/additionExpression.h"
@@ -36,9 +40,7 @@
 #define yylex()                  parser->getLexer()->yylex()
 #define yyerror(parser, message) parser->error(message)
 
-std::shared_ptr<TBLOCK> currentBlock = std::make_shared<TBLOCK>();
-
-std::shared_ptr<nodes::procedural::CCompoundBody> currentBody = std::make_shared<nodes::procedural::CCompoundBody>();
+std::shared_ptr<nodes::procedural::CCompoundBody> currentBody = nullptr;
 %}
 
 %define api.value.type {std::shared_ptr<nodes::CNode>}
@@ -222,6 +224,9 @@ expression
                         $$ = $1;
                     }
                 |   expression ',' assignment_expression
+                    {
+                        $$ = $1;
+                    }
                 ;
 
 statement
@@ -241,20 +246,24 @@ statement
                     {
                         $$ = $1;
                     }
-/* Nested code blocks not allowed */
-/*
                 |   compound_statement
                     {
                         $$ = $1;
                     }
-*/
                 ;
 
 compound_statement
-                :   '{' '}'
-                |   '{' temporaries statement_list '}'
+                :   push_context '{' temporaries statement_list '}'
                     {
                         $$ = currentBody;
+                        currentBody = parser->popBlock();
+                    }
+                ;
+
+push_context
+                :   {
+                        parser->pushBlock(currentBody);
+                        currentBody = std::make_shared<nodes::procedural::CCompoundBody>();
                     }
                 ;
 
@@ -283,6 +292,7 @@ statement_list
                     {
                         currentBody->addBodyNode($2);
                     }
+                |   /* epsilon */
                 ;
 
 expression_statement
@@ -295,34 +305,47 @@ expression_statement
 
 selection_statement
                 :   IF '(' expression ')' statement
+                    {
+                        $$ = std::make_shared<nodes::procedural::CIfStatement>(std::dynamic_pointer_cast<nodes::procedural::CAbstractExpression>($3),
+                                                                               std::dynamic_pointer_cast<nodes::procedural::CCompoundBody>($5),
+                                                                               nullptr);
+                    }
                 |   IF '(' expression ')' statement ELSE statement
+                    {
+                        $$ = std::make_shared<nodes::procedural::CIfStatement>(std::dynamic_pointer_cast<nodes::procedural::CAbstractExpression>($3),
+                                                                               std::dynamic_pointer_cast<nodes::procedural::CCompoundBody>($5),
+                                                                               std::dynamic_pointer_cast<nodes::procedural::CCompoundBody>($7));
+                    }
                 ;
 
 iteration_statement
                 :   WHILE '(' expression ')' statement
                     {
-/*
-                        $$ = std::make_shared<nodes::procedural::CWhileStatement>(  std::dynamic_pointer_cast<nodes::procedural::CAbstractExpression>($3),
-                                                                                    std::make_shared<nodes::procedural::CCompoundBody>(currentBlock.temporaries, currentBlock.statements));
-                        currentBlock.clear();
-*/
+                        $$ = std::make_shared<nodes::procedural::CWhileStatement>(std::dynamic_pointer_cast<nodes::procedural::CAbstractExpression>($3),
+                                                                                  std::dynamic_pointer_cast<nodes::procedural::CCompoundBody>($5));
                     }
-                |   FOR '(' assignment_expression expression_statement expression ')' statement
+                |   FOR '(' assignment_expression ';' expression_statement expression ')' statement
                     {
-/*
                         $$ = std::make_shared<nodes::procedural::CForStatement>(std::dynamic_pointer_cast<nodes::procedural::CAssignmentExpression>($3),
-                                                                                std::dynamic_pointer_cast<nodes::procedural::CAbstractExpression>($4),
                                                                                 std::dynamic_pointer_cast<nodes::procedural::CAbstractExpression>($5),
-                                                                                std::make_shared<nodes::procedural::CCompoundBody>(currentBlock.temporaries, currentBlock.statements));
-                        currentBlock.clear();
-*/
+                                                                                std::dynamic_pointer_cast<nodes::procedural::CAbstractExpression>($6),
+                                                                                std::dynamic_pointer_cast<nodes::procedural::CCompoundBody>($8));
                     }
                 ;
 
 jump_statement
                 :   CONTINUE ';'
+                    {
+                        $$ = std::make_shared<nodes::procedural::CContinueStatement>();
+                    }
                 |   BREAK ';'
+                    {
+                        $$ = std::make_shared<nodes::procedural::CBreakStatement>();
+                    }
                 |   RETURN expression ';'
+                    {
+                        $$ = std::make_shared<nodes::procedural::CReturnStatement>(std::dynamic_pointer_cast<nodes::procedural::CAbstractExpression>($2));
+                    }
                 ;
 
 /*---------------------------- grammar-compo ---------------------------------*/
@@ -464,8 +487,8 @@ service
                 :   SERVICE serviceSign compound_statement
                     {
                         parser->addDescriptorBodyNode(std::make_shared<nodes::compo::CService>(std::dynamic_pointer_cast<nodes::procedural::CSymbol>($2),
-                                                                                               std::move(*parser->getServiceParams()),
-                                                                                               std::move(currentBody)));
+                                                                                               *parser->getServiceParams(),
+                                                                                               std::dynamic_pointer_cast<nodes::procedural::CCompoundBody>($3)));
                         parser->clearServiceParams();
                     }
                 ;
