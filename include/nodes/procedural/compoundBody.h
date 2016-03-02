@@ -14,7 +14,7 @@ namespace nodes {
 		         *
 		         * Compound statement contains temporaries (| var1 var2 | syntax) and standard procedural statements. Therefore separate class was made to simplify body handling.
 		 */
-		class CCompoundBody : public CNode {
+		class CCompoundBody : public CAbstractStatement {
 		  private:
 			std::vector<std::shared_ptr<nodes::procedural::CSymbol>> m_temporaries; /**< Temporaries vector */
 			std::vector<std::shared_ptr<nodes::CNode>> m_body; /**< Body nodes vector */
