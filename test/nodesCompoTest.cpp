@@ -11,7 +11,7 @@
 #include "nodes/compo/injectedPort.h"
 #include "nodes/compo/descriptor.h"
 
-BOOST_AUTO_TEST_SUITE(nodesCompo)
+BOOST_AUTO_TEST_SUITE(nodesCompoTest)
 
 BOOST_AUTO_TEST_CASE(symbolTest) {
     // Original symbol creation

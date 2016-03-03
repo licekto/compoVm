@@ -16,7 +16,7 @@
 #include "nodes/procedural/lessOrEqualExpression.h"
 #include "nodes/procedural/constant.h"
 
-BOOST_AUTO_TEST_SUITE(nodesProceduralBinary)
+BOOST_AUTO_TEST_SUITE(nodesProceduralBinaryTest)
 
 BOOST_AUTO_TEST_CASE(additionExpression) {
     nodes::procedural::CAdditionExpression expression(std::make_shared<nodes::procedural::CConstant>(1), std::make_shared<nodes::procedural::CConstant>(2));

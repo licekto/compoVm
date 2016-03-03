@@ -33,7 +33,7 @@
 #include "nodes/compo/namedPort.h"
 #include "nodes/compo/universalPort.h"
 
-BOOST_AUTO_TEST_SUITE(parserCompo)
+BOOST_AUTO_TEST_SUITE(parserCompoTest)
 
 // Global lexer and parser for testing purposes
 Lexer lexer;
@@ -275,6 +275,31 @@ BOOST_AUTO_TEST_CASE(compoProvision) {
     namedPort = std::dynamic_pointer_cast<nodes::compo::CNamedPort>(provision->getPortAt(5));
     TEST_NAMED_PORT(namedPort, "handlers", "RequestHandler");
     BOOST_CHECK(namedPort->getCollectivity());
+    
+    // Clear AST for next test
+    parser.clearRootNodes();
+}
+
+BOOST_AUTO_TEST_CASE(compoArchitecture) {
+    // Testing input
+    std::stringstream input;
+    input.str("descriptor test {\
+	architecture {\
+            connect logger@analyzer to logging@logger;\
+            \
+	}\
+    }");
+    
+    // Parse input and create AST
+    parser.parse(input);
+    
+    // Check descriptor
+    std::shared_ptr<nodes::compo::CDescriptor> descriptor = std::dynamic_pointer_cast<nodes::compo::CDescriptor>(parser.getRootNodeAt(0));
+    TEST_DESCRIPTOR(descriptor, "test", "", 1);
+    
+    // Check architecture
+    std::shared_ptr<nodes::compo::CArchitecture> architecture = std::dynamic_pointer_cast<nodes::compo::CArchitecture>(descriptor->getBodyNodeAt(0));
+    BOOST_CHECK_EQUAL(nodes::types::nodeType::ARCHITECTURE, architecture->getNodeType());
     
     // Clear AST for next test
     parser.clearRootNodes();

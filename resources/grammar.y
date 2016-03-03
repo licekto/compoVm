@@ -573,24 +573,6 @@ constraint
                     }
 		;
 
-/* Future work */
-/*----------------------------------------------------------------------------*/
-injectPorts     
-                :   injectPort ';' injectPorts
-                |   /* epsilon */
-                ;
-
-injectPort      
-                :   port inject
-                ;
-
-inject          
-                :   INJECTWITH IDENTIFIER
-                |   /* epsilon */
-                ;
-/*----------------------------------------------------------------------------*/
-/* Future work */
-
 architecture	
                 :   ARCHITECTURE '{' connectionDisconnection '}'
                     {
@@ -609,7 +591,7 @@ connections
                 ;
 
 connection      
-                :   CONNECT
+                :   CONNECT connectionSign
                 ;
 
 disconnections  
@@ -618,7 +600,11 @@ disconnections
                 ;
 
 disconnection   
-                :
+                :   DISCONNECT connectionSign
+                ;
+
+connectionSign
+                :   portAddressLiteral TO portAddressLiteral
                 ;
 
 /*-------------------------- grammar-literals-compo --------------------------*/
@@ -632,7 +618,7 @@ dereferenceLiteral
                 ;
 
 portAddressLiteral
-                :   IDENTIFIER '@'
+                :   IDENTIFIER '@' portAddress
                 ;
 
 portAddress     :   collectionPortLiteral
