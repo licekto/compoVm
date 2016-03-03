@@ -6,9 +6,14 @@
 #include "parser/lexer.h"
 #include "nodes/node.h"
 #include "nodes/types/visibilityType.h"
+#include "nodes/types/portType.h"
+#include "nodes/compo/architecture.h"
 #include "nodes/compo/service.h"
 #include "nodes/compo/constraint.h"
 #include "nodes/compo/port.h"
+#include "nodes/compo/namedPort.h"
+#include "nodes/compo/signaturesPort.h"
+#include "nodes/compo/universalPort.h"
 #include "nodes/compo/descriptor.h"
 #include "nodes/compo/provision.h"
 #include "nodes/compo/requirement.h"
@@ -92,10 +97,6 @@
 %%
 
 /*-------------------------- grammar-procedural ------------------------------*/
-
-array
-                :   '{' expression '}'
-                ;
 
 primary_expression
                 :   IDENTIFIER
@@ -411,18 +412,16 @@ compoExpr
 provision     
                 :   visibility PROVIDES provReqSign
 		    {
-			parser->addDescriptorBodyNode(std::make_shared<nodes::compo::CProvision>(parser->getVisibility(), *parser->getPorts(), parser->getUniversality()));
+			parser->addDescriptorBodyNode(std::make_shared<nodes::compo::CProvision>(parser->getVisibility(), *parser->getPorts()));
                         parser->clearPorts();
-                        parser->setUniversality(false);
 		    }
                 ;
 
 requirement   
                 :   visibility REQUIRES provReqSign
                     {
-			parser->addDescriptorBodyNode(std::make_shared<nodes::compo::CRequirement>(parser->getVisibility(), *parser->getPorts(), parser->getUniversality()));
+			parser->addDescriptorBodyNode(std::make_shared<nodes::compo::CRequirement>(parser->getVisibility(), *parser->getPorts()));
                         parser->clearPorts();
-                        parser->setUniversality(false);
 		    }
                 ;
 
@@ -451,9 +450,10 @@ ports
 		;
 
 port		
-                :   atomic IDENTIFIER collecting ':' portSign ofKind
+                :   atomic portName collecting ':' portSign ofKind
 		    {
-			parser->addPort(std::make_shared<nodes::compo::CPort>(std::dynamic_pointer_cast<nodes::procedural::CSymbol>($2), parser->getAtomicity()));
+                        std::dynamic_pointer_cast<nodes::compo::CPort>($5)->setKindOf(std::dynamic_pointer_cast<nodes::procedural::CSymbol>($6));
+			parser->addPort(std::dynamic_pointer_cast<nodes::compo::CPort>($5));
 		    }
 		;
 
@@ -468,6 +468,13 @@ atomic
                     }
 		;
 
+portName
+                :   IDENTIFIER
+                    {
+                        parser->setPortName(std::dynamic_pointer_cast<nodes::procedural::CSymbol>($1));
+                    }
+                ;
+
 collecting        
                 :   '[' ']'
                 |   /* epsilon */
@@ -475,16 +482,34 @@ collecting
 
 portSign        
                 :   IDENTIFIER
+                    {
+                        $$ = std::make_shared<nodes::compo::CNamedPort>(parser->getPortName(),
+                                                                        parser->getAtomicity(),
+                                                                        std::dynamic_pointer_cast<nodes::procedural::CSymbol>($1));
+                    }
                 |   '*'
                     {
-                        parser->setUniversality(true);
+                        $$ = std::make_shared<nodes::compo::CUniversalPort>(parser->getPortName(),
+                                                                            parser->getAtomicity());
                     }
                 |   servicesSignsList
+                    {
+                        $$ = std::make_shared<nodes::compo::CSignaturesPort>(parser->getPortName(),
+                                                                             parser->getAtomicity(),
+                                                                             *parser->getServiceSignatures());
+                        parser->clearServiceSignatures();
+                    }
                 ;
 
 ofKind          
                 :   OFKIND IDENTIFIER
+                    {
+                        $$ = $2;
+                    }
                 |   /* epsilon */
+                    {
+                        $$ = nullptr;
+                    }
                 ;
 
 service         
@@ -492,7 +517,6 @@ service
                     {
                         parser->addDescriptorBodyNode(std::make_shared<nodes::compo::CService>(std::dynamic_pointer_cast<nodes::compo::CServiceSignature>($2),
                                                                                                std::dynamic_pointer_cast<nodes::procedural::CCompoundBody>($3)));
-                        parser->clearServiceParams();
                     }
                 ;
 
@@ -500,6 +524,7 @@ serviceSign
                 :   IDENTIFIER '(' serviceParams ')'
                     {
                         $$ = std::make_shared<nodes::compo::CServiceSignature>(std::dynamic_pointer_cast<nodes::procedural::CSymbol>($1), *parser->getServiceParams());
+                        parser->clearServiceParams();
                     }
                 ;
 
@@ -508,7 +533,7 @@ serviceSigns
                     {
                         parser->addServiceSignature(std::dynamic_pointer_cast<nodes::compo::CServiceSignature>($1));
                     }
-                |   serviceSign ',' serviceSigns
+                |   serviceSign ';' serviceSigns
                     {
                         parser->addServiceSignature(std::dynamic_pointer_cast<nodes::compo::CServiceSignature>($1));
                     }
@@ -519,15 +544,16 @@ servicesSignsList
                 :   '{' serviceSigns '}'
 
 serviceParams   
+                :   param
+                |   param ',' serviceParams
+                |   /* epsilon */
+                ;
+
+param
                 :   IDENTIFIER
                     {
                         parser->addServiceParam(std::dynamic_pointer_cast<nodes::procedural::CSymbol>($1));
                     }
-                |   IDENTIFIER ',' serviceParams
-                    {
-                        parser->addServiceParam(std::dynamic_pointer_cast<nodes::procedural::CSymbol>($1));
-                    }
-                |   /* epsilon */
                 ;
 
 constraint	
@@ -538,6 +564,7 @@ constraint
                     }
 		;
 
+/* Future work */
 injectPorts     
                 :   injectPort ';' injectPorts
                 |   /* epsilon */
@@ -551,9 +578,13 @@ inject
                 :   INJECTWITH IDENTIFIER
                 |   /* epsilon */
                 ;
+/* Future work */
 
 architecture	
                 :   ARCHITECTURE '{' connectionDisconnection '}'
+                    {
+                        parser->addDescriptorBodyNode(std::make_shared<nodes::compo::CArchitecture>());
+                    }
 		;
 
 connectionDisconnection

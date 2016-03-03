@@ -132,10 +132,10 @@ void ParserWrapper::clearServiceSignatures() {
 	m_currentSignaturesList.clear();
 }
 
-void ParserWrapper::setUniversality(bool universality) {
-	m_universality = universality;
+void ParserWrapper::setPortName(std::shared_ptr<nodes::procedural::CSymbol> name) {
+	m_currentPortName = name;
 }
 
-bool ParserWrapper::getUniversality() const {
-	return m_universality;
+std::shared_ptr<nodes::procedural::CSymbol> ParserWrapper::getPortName() const {
+	return m_currentPortName;
 }
