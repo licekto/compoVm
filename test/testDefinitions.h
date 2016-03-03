@@ -79,3 +79,16 @@ do { \
     BOOST_CHECK_EQUAL(nodes::types::nodeType::CONSTANT, constant->getNodeType()); \
     BOOST_CHECK_EQUAL(val, constant->getValue()); \
 } while(0)
+
+#define TEST_SIGNATURES_PORT2(signPort, portName, sign1Name, sign2Name) \
+do { \
+    BOOST_CHECK_EQUAL(portName, signPort->getName()); \
+    BOOST_CHECK_EQUAL(sign1Name, signPort->getSignatureAt(1)->getName()); \
+    BOOST_CHECK_EQUAL(sign2Name, signPort->getSignatureAt(0)->getName()); \
+} while(0)
+
+#define TEST_NAMED_PORT(namedPort, portName, paramName) \
+do { \
+    BOOST_CHECK_EQUAL(portName, namedPort->getName()); \
+    BOOST_CHECK_EQUAL(paramName, namedPort->getParamName()->getStringValue()); \
+} while(0)

@@ -19,8 +19,7 @@ namespace nodes {
 			* @param ports: Vector of ports
 			*/
 			CProvision(types::visibilityType type = types::visibilityType::EXTERNAL,
-			           const std::vector<std::shared_ptr<nodes::compo::CPort>>& ports = std::vector<std::shared_ptr<nodes::compo::CPort>>(0),
-			           bool universality = false);
+			           const std::vector<std::shared_ptr<nodes::compo::CPort>>& ports = std::vector<std::shared_ptr<nodes::compo::CPort>>(0));
 
 			/**
 			* Virtual print function to call from operator <<

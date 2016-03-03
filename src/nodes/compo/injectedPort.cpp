@@ -4,11 +4,12 @@ namespace nodes {
 
 	namespace compo {
 
-		CInjectedPort::CInjectedPort( std::shared_ptr<nodes::procedural::CSymbol> name,
+		CInjectedPort::CInjectedPort( nodes::types::portType type,
+		                              std::shared_ptr<nodes::procedural::CSymbol> name,
 		                              bool atomic,
 		                              std::shared_ptr<nodes::procedural::CSymbol> injectedWith  )
 			:   CNode(types::nodeType::INJECTED_PORT),
-			    CPort(name, atomic),
+			    CPort(type, name, atomic),
 			    m_injectedWith(injectedWith) {
 		}
 

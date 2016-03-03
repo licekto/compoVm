@@ -23,7 +23,8 @@ namespace nodes {
 			* @param atomic: is atomic
 			* @param injectedWith: name of injected port
 			*/
-			CInjectedPort(std::shared_ptr<nodes::procedural::CSymbol> name = nullptr,
+			CInjectedPort(nodes::types::portType type = nodes::types::portType::UNIVERSAL,
+			              std::shared_ptr<nodes::procedural::CSymbol> name = nullptr,
 			              bool atomic = false,
 			              std::shared_ptr<nodes::procedural::CSymbol> injectedWith = nullptr);
 

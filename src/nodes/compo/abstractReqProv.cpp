@@ -5,12 +5,10 @@ namespace nodes {
 	namespace compo {
 
 		CAbstractReqProv::CAbstractReqProv(types::visibilityType type,
-		                                   const std::vector<std::shared_ptr<nodes::compo::CPort>>& ports,
-		                                   bool universality)
+		                                   const std::vector<std::shared_ptr<nodes::compo::CPort>>& ports)
 			: CNode(types::nodeType::PROVISION),
 			  m_visibilityType(type),
-			  m_ports(ports),
-			  m_universality(universality) {
+			  m_ports(ports) {
 		}
 
 		void CAbstractReqProv::print(std::ostream& outstream) const {
@@ -48,10 +46,6 @@ namespace nodes {
 				// log error message
 			}
 			return port;
-		}
-
-		bool CAbstractReqProv::getUniversality() const {
-			return m_universality;
 		}
 
 	}

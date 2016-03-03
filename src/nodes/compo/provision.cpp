@@ -5,10 +5,9 @@ namespace nodes {
 	namespace compo {
 
 		CProvision::CProvision(types::visibilityType type,
-		                       const std::vector<std::shared_ptr<nodes::compo::CPort>>& ports,
-		                       bool universality)
+		                       const std::vector<std::shared_ptr<nodes::compo::CPort>>& ports)
 			:   CNode(types::nodeType::PROVISION),
-			    CAbstractReqProv(type, ports, universality) {
+			    CAbstractReqProv(type, ports) {
 		}
 
 		void CProvision::print(std::ostream& outstream) const {

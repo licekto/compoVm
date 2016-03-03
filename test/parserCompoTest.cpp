@@ -29,6 +29,9 @@
 #include "nodes/procedural/lessOrEqualExpression.h"
 
 #include "testDefinitions.h"
+#include "nodes/compo/architecture.h"
+#include "nodes/compo/namedPort.h"
+#include "nodes/compo/universalPort.h"
 
 BOOST_AUTO_TEST_SUITE(parserCompo)
 
@@ -46,8 +49,15 @@ BOOST_AUTO_TEST_CASE(compoBasicStructure) {
         externally requires {\
             default : {};\
         }\
+        internally provides {\
+		default : {};\
+	}\
+        internally requires {\
+            default : {};\
+        }\
 	service create() {}\
         constraint httpOnly() {}\
+        architecture {}\
     }");
     
     // Parse input and create AST
@@ -55,11 +65,7 @@ BOOST_AUTO_TEST_CASE(compoBasicStructure) {
     
     // Check descriptor
     std::shared_ptr<nodes::compo::CDescriptor> descriptor = std::dynamic_pointer_cast<nodes::compo::CDescriptor>(parser.getRootNodeAt(0));
-    TEST_DESCRIPTOR(descriptor, "HTTPServer", "server", 4);
-    
-    // Port names vector
-    std::vector<std::string> portNames;
-    portNames.push_back("default");
+    TEST_DESCRIPTOR(descriptor, "HTTPServer", "server", 7);
     
     // Check provision
     std::shared_ptr<nodes::compo::CProvision> provision = std::dynamic_pointer_cast<nodes::compo::CProvision>(descriptor->getBodyNodeAt(0)); 
@@ -71,13 +77,27 @@ BOOST_AUTO_TEST_CASE(compoBasicStructure) {
     TEST_REQUIREMENT(requirement, nodes::types::visibilityType::EXTERNAL, 1);
     BOOST_CHECK_EQUAL("default", requirement->getPortAt(0)->getName());
     
+    // Check provision
+    provision = std::dynamic_pointer_cast<nodes::compo::CProvision>(descriptor->getBodyNodeAt(2)); 
+    TEST_PROVISION(provision, nodes::types::visibilityType::INTERNAL, 1);
+    BOOST_CHECK_EQUAL("default", provision->getPortAt(0)->getName());
+    
+    // Check requirement
+    requirement = std::dynamic_pointer_cast<nodes::compo::CRequirement>(descriptor->getBodyNodeAt(3));
+    TEST_REQUIREMENT(requirement, nodes::types::visibilityType::INTERNAL, 1);
+    BOOST_CHECK_EQUAL("default", requirement->getPortAt(0)->getName());
+    
     // Check service
-    std::shared_ptr<nodes::compo::CService> service = std::dynamic_pointer_cast<nodes::compo::CService>(descriptor->getBodyNodeAt(2));
+    std::shared_ptr<nodes::compo::CService> service = std::dynamic_pointer_cast<nodes::compo::CService>(descriptor->getBodyNodeAt(4));
     TEST_SERVICE(service, "create", 0, 0, 0);
     
     // Check constraint
-    std::shared_ptr<nodes::compo::CConstraint> constraint = std::dynamic_pointer_cast<nodes::compo::CConstraint>(descriptor->getBodyNodeAt(3));
+    std::shared_ptr<nodes::compo::CConstraint> constraint = std::dynamic_pointer_cast<nodes::compo::CConstraint>(descriptor->getBodyNodeAt(5));
     TEST_CONSTRAINT(constraint, "httpOnly", 0, 0);
+    
+    // Check architecture
+    std::shared_ptr<nodes::compo::CArchitecture> architecture = std::dynamic_pointer_cast<nodes::compo::CArchitecture>(descriptor->getBodyNodeAt(6));
+    BOOST_CHECK_EQUAL(nodes::types::nodeType::ARCHITECTURE, architecture->getNodeType());
     
     // Clear AST for next test
     parser.clearRootNodes();
@@ -112,15 +132,15 @@ BOOST_AUTO_TEST_CASE(compoServiceParams) {
     // Check service
     service = std::dynamic_pointer_cast<nodes::compo::CService>(descriptor->getBodyNodeAt(2));
     TEST_SERVICE(service, "twoparams", 2, 0, 0);
-    BOOST_CHECK_EQUAL("param1", service->getParamAt(1)->getStringValue());
-    BOOST_CHECK_EQUAL("param2", service->getParamAt(0)->getStringValue());
+    BOOST_CHECK_EQUAL("param1", service->getParamAt(0)->getStringValue());
+    BOOST_CHECK_EQUAL("param2", service->getParamAt(1)->getStringValue());
     
     // Check service
     service = std::dynamic_pointer_cast<nodes::compo::CService>(descriptor->getBodyNodeAt(3));
     TEST_SERVICE(service, "threeparams", 3, 0, 0);
-    BOOST_CHECK_EQUAL("param1", service->getParamAt(2)->getStringValue());
+    BOOST_CHECK_EQUAL("param1", service->getParamAt(0)->getStringValue());
     BOOST_CHECK_EQUAL("param2", service->getParamAt(1)->getStringValue());
-    BOOST_CHECK_EQUAL("param3", service->getParamAt(0)->getStringValue());
+    BOOST_CHECK_EQUAL("param3", service->getParamAt(2)->getStringValue());
     
     // Clear AST for next test
     parser.clearRootNodes();
@@ -196,6 +216,59 @@ BOOST_AUTO_TEST_CASE(compoServiceTemporaries) {
     // Check symbol
     symbol = std::dynamic_pointer_cast<nodes::procedural::CSymbol>(service->getTemporaryAt(1));
     TEST_SYMBOL(symbol, "b");    
+    
+    // Clear AST for next test
+    parser.clearRootNodes();
+}
+
+BOOST_AUTO_TEST_CASE(compoProvision) {
+    // Testing input
+    std::stringstream input;
+    input.str("descriptor test {\
+	provides {\
+		default : { run(a, b); stop(c) };\
+                port1 : { start(a, b); close() };\
+                port2 : IPrinting;\
+                fE : FrontEnd;\
+                bE : *;\
+	}\
+    }");
+    
+    // Parse input and create AST
+    parser.parse(input);
+    
+    // Check descriptor
+    std::shared_ptr<nodes::compo::CDescriptor> descriptor = std::dynamic_pointer_cast<nodes::compo::CDescriptor>(parser.getRootNodeAt(0));
+    TEST_DESCRIPTOR(descriptor, "test", "", 1);
+    
+    // Check provision
+    std::shared_ptr<nodes::compo::CProvision> provision = std::dynamic_pointer_cast<nodes::compo::CProvision>(descriptor->getBodyNodeAt(0)); 
+    TEST_PROVISION(provision, nodes::types::visibilityType::EXTERNAL, 5);
+    
+    // Check port
+    std::shared_ptr<nodes::compo::CSignaturesPort> signPort = std::dynamic_pointer_cast<nodes::compo::CSignaturesPort>(provision->getPortAt(0));
+    TEST_SIGNATURES_PORT2(signPort, "default", "run", "stop");
+    BOOST_CHECK_EQUAL("a", signPort->getSignatureAt(1)->getParamAt(0)->getStringValue());
+    BOOST_CHECK_EQUAL("b", signPort->getSignatureAt(1)->getParamAt(1)->getStringValue());
+    BOOST_CHECK_EQUAL("c", signPort->getSignatureAt(0)->getParamAt(0)->getStringValue());
+    
+    // Check port
+    signPort = std::dynamic_pointer_cast<nodes::compo::CSignaturesPort>(provision->getPortAt(1));
+    TEST_SIGNATURES_PORT2(signPort, "port1", "start", "close");
+    BOOST_CHECK_EQUAL("a", signPort->getSignatureAt(1)->getParamAt(0)->getStringValue());
+    BOOST_CHECK_EQUAL("b", signPort->getSignatureAt(1)->getParamAt(1)->getStringValue());
+    
+    // Check port
+    std::shared_ptr<nodes::compo::CNamedPort> namedPort = std::dynamic_pointer_cast<nodes::compo::CNamedPort>(provision->getPortAt(2));
+    TEST_NAMED_PORT(namedPort, "port2", "IPrinting");
+    
+    // Check port
+    namedPort = std::dynamic_pointer_cast<nodes::compo::CNamedPort>(provision->getPortAt(3));
+    TEST_NAMED_PORT(namedPort, "fE", "FrontEnd");
+    
+    // Check port
+    std::shared_ptr<nodes::compo::CUniversalPort> universalPort = std::dynamic_pointer_cast<nodes::compo::CUniversalPort>(provision->getPortAt(4));
+    BOOST_CHECK_EQUAL("bE", universalPort->getName());
     
     // Clear AST for next test
     parser.clearRootNodes();

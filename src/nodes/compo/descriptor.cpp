@@ -11,7 +11,9 @@ namespace nodes {
 			  m_name(name),
 			  m_extends(extends),
 			  m_body(body),
-			  m_defaultPort(std::make_shared<nodes::compo::CPort>(std::make_shared<nodes::procedural::CSymbol>("default"), false)) {
+			  m_defaultPort(std::make_shared<nodes::compo::CSignaturesPort>(std::make_shared<nodes::procedural::CSymbol>("default"),
+			                false,
+			                std::vector<std::shared_ptr<nodes::compo::CServiceSignature>>(0))) {
 		}
 
 		void CDescriptor::print(std::ostream& outstream) const {

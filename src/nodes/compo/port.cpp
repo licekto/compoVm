@@ -4,9 +4,11 @@ namespace nodes {
 
 	namespace compo {
 
-		CPort::CPort(std::shared_ptr<nodes::procedural::CSymbol> name, bool atomic)
+		CPort::CPort(nodes::types::portType type, std::shared_ptr<nodes::procedural::CSymbol> name, bool atomicity)
 			:   CNode(types::nodeType::PORT),
-			    m_name(name), m_atomic(atomic) {
+			    m_portType(type),
+			    m_name(name),
+			    m_atomicity(atomicity) {
 		}
 
 		void CPort::print(std::ostream& outstream) const {
@@ -23,10 +25,21 @@ namespace nodes {
 			return "";
 		}
 
-		bool CPort::getAtomic() const {
-			return m_atomic;
+		bool CPort::getAtomicity() const {
+			return m_atomicity;
 		}
 
+		nodes::types::portType CPort::getPortType() const {
+			return m_portType;
+		}
+
+		void CPort::setKindOf(std::shared_ptr<nodes::procedural::CSymbol> kindOf) {
+			m_kindOf = kindOf;
+		}
+
+		std::shared_ptr<nodes::procedural::CSymbol> CPort::getKindOf() const {
+			return m_kindOf;
+		}
 	}
 
 }

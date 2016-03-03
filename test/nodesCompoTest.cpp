@@ -50,90 +50,90 @@ BOOST_AUTO_TEST_CASE(symbolTest) {
 
 BOOST_AUTO_TEST_CASE(portTest) {
     // Original port creation
-    nodes::compo::CPort port(std::make_shared<nodes::procedural::CSymbol>("port"), true);
+    nodes::compo::CPort port(nodes::types::portType::UNIVERSAL, std::make_shared<nodes::procedural::CSymbol>("port"), true);
     BOOST_CHECK_EQUAL(nodes::types::nodeType::PORT, port.getNodeType());
     BOOST_CHECK_EQUAL("port", port.getName());
-    BOOST_CHECK(port.getAtomic());
+    BOOST_CHECK(port.getAtomicity());
     
     // Copy ctor test
     nodes::compo::CPort portCopy1(port);
     BOOST_CHECK_EQUAL("port", port.getName());
-    BOOST_CHECK(port.getAtomic());
+    BOOST_CHECK(port.getAtomicity());
     BOOST_CHECK_EQUAL("port", portCopy1.getName());
-    BOOST_CHECK(portCopy1.getAtomic());
+    BOOST_CHECK(portCopy1.getAtomicity());
     
     // Copy assignment operator test
     nodes::compo::CPort portCopy2 = port;
     BOOST_CHECK_EQUAL("port", port.getName());
-    BOOST_CHECK(port.getAtomic());
+    BOOST_CHECK(port.getAtomicity());
     BOOST_CHECK_EQUAL("port", portCopy2.getName());
-    BOOST_CHECK(portCopy2.getAtomic());
+    BOOST_CHECK(portCopy2.getAtomicity());
     
     // Move constructor test
     nodes::compo::CPort portMoved1(std::move(port));
     BOOST_CHECK_EQUAL("", port.getName());
-    BOOST_CHECK(port.getAtomic());
+    BOOST_CHECK(port.getAtomicity());
     BOOST_CHECK_EQUAL("port", portMoved1.getName());
-    BOOST_CHECK(portMoved1.getAtomic());
+    BOOST_CHECK(portMoved1.getAtomicity());
     
     // Move assignment operator test
     nodes::compo::CPort portMoved2 = std::move(portMoved1);
     BOOST_CHECK_EQUAL("", portMoved1.getName());
-    BOOST_CHECK(portMoved1.getAtomic());
+    BOOST_CHECK(portMoved1.getAtomicity());
     BOOST_CHECK_EQUAL("port", portMoved2.getName());
-    BOOST_CHECK(portMoved2.getAtomic());
+    BOOST_CHECK(portMoved2.getAtomicity());
 }
 
 BOOST_AUTO_TEST_CASE(injectedPortTest) {
     // Original port creation
-    nodes::compo::CInjectedPort port(std::make_shared<nodes::procedural::CSymbol>("port"), true, std::make_shared<nodes::procedural::CSymbol>("injectingPort"));
+    nodes::compo::CInjectedPort port(nodes::types::portType::UNIVERSAL, std::make_shared<nodes::procedural::CSymbol>("port"), true, std::make_shared<nodes::procedural::CSymbol>("injectingPort"));
     BOOST_CHECK_EQUAL(nodes::types::nodeType::INJECTED_PORT, port.getNodeType());
     BOOST_CHECK_EQUAL("port", port.getName());
-    BOOST_CHECK(port.getAtomic());
+    BOOST_CHECK(port.getAtomicity());
     BOOST_CHECK_EQUAL("injectingPort", port.getInjectedWith());
     
     // Copy ctor test
     nodes::compo::CInjectedPort portCopy1(port);
     BOOST_CHECK_EQUAL("port", port.getName());
-    BOOST_CHECK(port.getAtomic());
+    BOOST_CHECK(port.getAtomicity());
     BOOST_CHECK_EQUAL("injectingPort", port.getInjectedWith());
     BOOST_CHECK_EQUAL("port", portCopy1.getName());
-    BOOST_CHECK(portCopy1.getAtomic());
+    BOOST_CHECK(portCopy1.getAtomicity());
     BOOST_CHECK_EQUAL("injectingPort", portCopy1.getInjectedWith());
     
     // Copy assignment operator test
     nodes::compo::CInjectedPort portCopy2 = port;
     BOOST_CHECK_EQUAL("port", port.getName());
-    BOOST_CHECK(port.getAtomic());
+    BOOST_CHECK(port.getAtomicity());
     BOOST_CHECK_EQUAL("injectingPort", port.getInjectedWith());
     BOOST_CHECK_EQUAL("port", portCopy2.getName());
-    BOOST_CHECK(portCopy2.getAtomic());
+    BOOST_CHECK(portCopy2.getAtomicity());
     BOOST_CHECK_EQUAL("injectingPort", portCopy2.getInjectedWith());
     
     // Move constructor test
     nodes::compo::CInjectedPort portMoved1(std::move(port));
     BOOST_CHECK_EQUAL("", port.getName());
-    BOOST_CHECK(port.getAtomic());
+    BOOST_CHECK(port.getAtomicity());
     BOOST_CHECK_EQUAL("", port.getInjectedWith());
     BOOST_CHECK_EQUAL("port", portMoved1.getName());
-    BOOST_CHECK(portMoved1.getAtomic());
+    BOOST_CHECK(portMoved1.getAtomicity());
     BOOST_CHECK_EQUAL("injectingPort", portMoved1.getInjectedWith());
     
     // Move assignment operator test
     nodes::compo::CInjectedPort portMoved2 = std::move(portMoved1);
     BOOST_CHECK_EQUAL("", portMoved1.getName());
-    BOOST_CHECK(portMoved1.getAtomic());
+    BOOST_CHECK(portMoved1.getAtomicity());
     BOOST_CHECK_EQUAL("", portMoved1.getInjectedWith());
     BOOST_CHECK_EQUAL("port", portMoved2.getName());
-    BOOST_CHECK(portMoved2.getAtomic());
+    BOOST_CHECK(portMoved2.getAtomicity());
     BOOST_CHECK_EQUAL("injectingPort", portMoved2.getInjectedWith());
 }
 
 BOOST_AUTO_TEST_CASE(provisionTest) {
     // Port vector preparation
     std::vector<std::shared_ptr<nodes::compo::CPort>> portVec;
-    portVec.push_back(std::make_shared<nodes::compo::CPort>(std::make_shared<nodes::procedural::CSymbol>("port1"), true));
-    portVec.push_back(std::make_shared<nodes::compo::CPort>(std::make_shared<nodes::procedural::CSymbol>("port2"), false));
+    portVec.push_back(std::make_shared<nodes::compo::CPort>(nodes::types::portType::UNIVERSAL, std::make_shared<nodes::procedural::CSymbol>("port1"), true));
+    portVec.push_back(std::make_shared<nodes::compo::CPort>(nodes::types::portType::UNIVERSAL, std::make_shared<nodes::procedural::CSymbol>("port2"), false));
     
     // Original provision creation
     nodes::compo::CProvision provision(nodes::types::visibilityType::EXTERNAL, portVec);
@@ -141,9 +141,9 @@ BOOST_AUTO_TEST_CASE(provisionTest) {
     BOOST_CHECK_EQUAL(nodes::types::visibilityType::EXTERNAL, provision.getVisibilityType());
     BOOST_CHECK_EQUAL(2, provision.getNumberOfPorts());
     BOOST_CHECK_EQUAL("port1", provision.getPortAt(0)->getName());
-    BOOST_CHECK(provision.getPortAt(0)->getAtomic());
+    BOOST_CHECK(provision.getPortAt(0)->getAtomicity());
     BOOST_CHECK_EQUAL("port2", provision.getPortAt(1)->getName());
-    BOOST_CHECK(!provision.getPortAt(1)->getAtomic());
+    BOOST_CHECK(!provision.getPortAt(1)->getAtomicity());
     
     // Copy constructor test
     nodes::compo::CProvision provisionCopy1(provision);
@@ -200,8 +200,8 @@ BOOST_AUTO_TEST_CASE(provisionTest) {
 BOOST_AUTO_TEST_CASE(requirementTest) {
     // Port vector preparation
     std::vector<std::shared_ptr<nodes::compo::CPort>> portVec;
-    portVec.push_back(std::make_shared<nodes::compo::CPort>(std::make_shared<nodes::procedural::CSymbol>("port1"), true));
-    portVec.push_back(std::make_shared<nodes::compo::CPort>(std::make_shared<nodes::procedural::CSymbol>("port2"), false));
+    portVec.push_back(std::make_shared<nodes::compo::CPort>(nodes::types::portType::UNIVERSAL, std::make_shared<nodes::procedural::CSymbol>("port1"), true));
+    portVec.push_back(std::make_shared<nodes::compo::CPort>(nodes::types::portType::UNIVERSAL, std::make_shared<nodes::procedural::CSymbol>("port2"), false));
     
     // Original requirement creation
     nodes::compo::CRequirement requirement(nodes::types::visibilityType::EXTERNAL, portVec);
@@ -209,9 +209,9 @@ BOOST_AUTO_TEST_CASE(requirementTest) {
     BOOST_CHECK_EQUAL(nodes::types::visibilityType::EXTERNAL, requirement.getVisibilityType());
     BOOST_CHECK_EQUAL(2, requirement.getNumberOfPorts());
     BOOST_CHECK_EQUAL("port1", requirement.getPortAt(0)->getName());
-    BOOST_CHECK(requirement.getPortAt(0)->getAtomic());
+    BOOST_CHECK(requirement.getPortAt(0)->getAtomicity());
     BOOST_CHECK_EQUAL("port2", requirement.getPortAt(1)->getName());
-    BOOST_CHECK(!requirement.getPortAt(1)->getAtomic());
+    BOOST_CHECK(!requirement.getPortAt(1)->getAtomicity());
     
     // Copy constructor test
     nodes::compo::CRequirement requirementCopy1(requirement);

@@ -5,11 +5,12 @@
 
 #include "parser/lexer.h"
 #include "nodes/node.h"
-#include "nodes/procedural/symbol.h"
 #include "nodes/compo/port.h"
 #include "nodes/compo/serviceSignature.h"
-#include "nodes/types/visibilityType.h"
 #include "nodes/procedural/compoundBody.h"
+#include "nodes/procedural/symbol.h"
+#include "nodes/types/visibilityType.h"
+#include "nodes/types/portType.h"
 
 /**
  * \class ParserWrapper
@@ -47,8 +48,8 @@ class ParserWrapper {
 	/**< Current list of signatures (e.g. requirements, provisions) */
 	std::vector<std::shared_ptr<nodes::compo::CServiceSignature>> m_currentSignaturesList;
 
-	/**< Is current port universal? */
-	bool m_universality;
+	/**< Name of currently parsed port */
+	std::shared_ptr<nodes::procedural::CSymbol> m_currentPortName;
 
   public:
 	/**
@@ -239,14 +240,14 @@ class ParserWrapper {
 	void clearServiceSignatures();
 
 	/**
-	* Sets universality of currently parsed port
-	 * @param universality
+	* Sets name of currently parsed port
+	 * @param name
 	 */
-	void setUniversality(bool universality);
+	void setPortName(std::shared_ptr<nodes::procedural::CSymbol> name);
 
 	/**
-	 * universality getter
-	 * @return bool value
+	 * Port name getter
+	 * @return name
 	 */
-	bool getUniversality() const;
+	std::shared_ptr<nodes::procedural::CSymbol> getPortName() const;
 };

@@ -3,6 +3,7 @@
 #include <memory>
 #include "nodes/node.h"
 #include "nodes/procedural/symbol.h"
+#include "nodes/types/portType.h"
 
 namespace nodes {
 
@@ -17,11 +18,17 @@ namespace nodes {
 		 */
 		class CPort : public virtual CNode {
 		  protected:
+			/**< Type of port */
+			nodes::types::portType m_portType;
+
 			/**< Name symbol of port */
 			std::shared_ptr<nodes::procedural::CSymbol> m_name;
 
 			/**< Is atomic? */
-			bool m_atomic;
+			bool m_atomicity;
+
+			/**< Kind name symbol of port */
+			std::shared_ptr<nodes::procedural::CSymbol> m_kindOf;
 
 		  public:
 			/**
@@ -29,7 +36,9 @@ namespace nodes {
 			* @param name: Name of port
 			* @param atomic: Is atomic?
 			*/
-			CPort(std::shared_ptr<nodes::procedural::CSymbol> name = nullptr, bool atomic = false);
+			CPort(nodes::types::portType type = nodes::types::portType::UNIVERSAL,
+			      std::shared_ptr<nodes::procedural::CSymbol> name = nullptr,
+			      bool atomicity = false);
 
 			/**
 			* Virtual print function to call from operator <<
@@ -45,10 +54,28 @@ namespace nodes {
 			std::string getName() const;
 
 			/**
-			* Atomic getter
+			* Atomicity getter
 			* @return is atomic?
 			*/
-			bool getAtomic() const;
+			bool getAtomicity() const;
+
+			/**
+			* Port type getter
+					* @return nodes::types::portType
+					*/
+			nodes::types::portType getPortType() const;
+
+			/**
+			 * Kind of name setter
+			 * @param kindOf
+			 */
+			void setKindOf(std::shared_ptr<nodes::procedural::CSymbol> kindOf);
+
+			/**
+			 * Kind of name getter
+			 * @return symbol of kindOf
+			 */
+			std::shared_ptr<nodes::procedural::CSymbol> getKindOf() const;
 		};
 
 	}
