@@ -12,7 +12,7 @@ file(MAKE_DIRECTORY include/generated)
 
 # C++ flags
 #------------------------------
-set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -std=c++11 -ggdb -pedantic -Wall -Wextra -fno-inline -O0 -Wfloat-equal -Wundef -Wshadow -Wpointer-arith -Wunreachable-code -Wuninitialized")
+set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -std=c++11 -ggdb -pedantic -Wall -Wextra -fno-inline -O0 --coverage -Wfloat-equal -Wundef -Wshadow -Wpointer-arith -Wunreachable-code -Wuninitialized")
 set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} -std=c++11 -pedantic -Wall -Wextra -Weffc++ -O3")
 #------------------------------
 
