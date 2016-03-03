@@ -139,3 +139,11 @@ void ParserWrapper::setPortName(std::shared_ptr<nodes::procedural::CSymbol> name
 std::shared_ptr<nodes::procedural::CSymbol> ParserWrapper::getPortName() const {
 	return m_currentPortName;
 }
+
+void ParserWrapper::setCollectivity(bool collectivity) {
+	m_collectivity = collectivity;
+}
+
+bool ParserWrapper::getCollectivity() const {
+	return m_collectivity;
+}

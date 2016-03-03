@@ -20,7 +20,8 @@ namespace nodes {
 			* @param atomic: Is atomic?
 			*/
 			CUniversalPort(std::shared_ptr<nodes::procedural::CSymbol> name = nullptr,
-			               bool atomicity = false);
+			               bool atomicity = false,
+                                       bool collectivity = false);
 
 			/**
 			* Virtual print function to call from operator <<

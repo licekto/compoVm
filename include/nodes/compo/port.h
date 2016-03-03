@@ -29,6 +29,9 @@ namespace nodes {
 
 			/**< Kind name symbol of port */
 			std::shared_ptr<nodes::procedural::CSymbol> m_kindOf;
+                        
+                        /**< Is atomic? */
+			bool m_collectivity;
 
 		  public:
 			/**
@@ -38,7 +41,8 @@ namespace nodes {
 			*/
 			CPort(nodes::types::portType type = nodes::types::portType::UNIVERSAL,
 			      std::shared_ptr<nodes::procedural::CSymbol> name = nullptr,
-			      bool atomicity = false);
+			      bool atomicity = false,
+                              bool collectivity = false);
 
 			/**
 			* Virtual print function to call from operator <<
@@ -76,6 +80,12 @@ namespace nodes {
 			 * @return symbol of kindOf
 			 */
 			std::shared_ptr<nodes::procedural::CSymbol> getKindOf() const;
+                        
+                        /**
+			* Collectivity getter
+			* @return is collective?
+			*/
+			bool getCollectivity() const;
 		};
 
 	}

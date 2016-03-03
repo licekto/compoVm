@@ -477,7 +477,13 @@ portName
 
 collecting        
                 :   '[' ']'
+                    {
+                        parser->setCollectivity(true);
+                    }
                 |   /* epsilon */
+                    {
+                        parser->setCollectivity(false);
+                    }
                 ;
 
 portSign        
@@ -485,18 +491,21 @@ portSign
                     {
                         $$ = std::make_shared<nodes::compo::CNamedPort>(parser->getPortName(),
                                                                         parser->getAtomicity(),
-                                                                        std::dynamic_pointer_cast<nodes::procedural::CSymbol>($1));
+                                                                        std::dynamic_pointer_cast<nodes::procedural::CSymbol>($1),
+                                                                        parser->getCollectivity());
                     }
                 |   '*'
                     {
                         $$ = std::make_shared<nodes::compo::CUniversalPort>(parser->getPortName(),
-                                                                            parser->getAtomicity());
+                                                                            parser->getAtomicity(),
+                                                                            parser->getCollectivity());
                     }
                 |   servicesSignsList
                     {
                         $$ = std::make_shared<nodes::compo::CSignaturesPort>(parser->getPortName(),
                                                                              parser->getAtomicity(),
-                                                                             *parser->getServiceSignatures());
+                                                                            *parser->getServiceSignatures(),
+                                                                             parser->getCollectivity());
                         parser->clearServiceSignatures();
                     }
                 ;
@@ -565,6 +574,7 @@ constraint
 		;
 
 /* Future work */
+/*----------------------------------------------------------------------------*/
 injectPorts     
                 :   injectPort ';' injectPorts
                 |   /* epsilon */
@@ -578,6 +588,7 @@ inject
                 :   INJECTWITH IDENTIFIER
                 |   /* epsilon */
                 ;
+/*----------------------------------------------------------------------------*/
 /* Future work */
 
 architecture	

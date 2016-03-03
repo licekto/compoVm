@@ -5,9 +5,10 @@ namespace nodes {
 	namespace compo {
 
 		CUniversalPort::CUniversalPort(std::shared_ptr<nodes::procedural::CSymbol> name,
-		                               bool atomicity)
+		                               bool atomicity,
+                                               bool collectivity)
 			:   CNode(types::nodeType::PORT),
-			    CPort(types::portType::UNIVERSAL, name, atomicity) {
+			    CPort(types::portType::UNIVERSAL, name, atomicity, collectivity) {
 		}
 
 		void CUniversalPort::print(std::ostream& outstream) const {

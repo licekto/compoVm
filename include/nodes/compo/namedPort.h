@@ -25,7 +25,8 @@ namespace nodes {
 			*/
 			CNamedPort(std::shared_ptr<nodes::procedural::CSymbol> name = nullptr,
 			           bool atomicity = false,
-			           std::shared_ptr<nodes::procedural::CSymbol> nameParam = nullptr);
+			           std::shared_ptr<nodes::procedural::CSymbol> nameParam = nullptr,
+                                   bool collectivity = false);
 
 			/**
 			* Virtual print function to call from operator <<

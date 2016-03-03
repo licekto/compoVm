@@ -50,6 +50,9 @@ class ParserWrapper {
 
 	/**< Name of currently parsed port */
 	std::shared_ptr<nodes::procedural::CSymbol> m_currentPortName;
+        
+        /**< Is current port collecting port? */
+        bool m_collectivity;
 
   public:
 	/**
@@ -250,4 +253,16 @@ class ParserWrapper {
 	 * @return name
 	 */
 	std::shared_ptr<nodes::procedural::CSymbol> getPortName() const;
+        
+        /**
+	 * Sets collectivity of currently parsed port
+	 * @param atomicity
+	 */
+	void setCollectivity(bool collectivity);
+
+	/**
+	 * Collectivity getter
+	 * @return bool value
+	 */
+	bool getCollectivity() const;
 };

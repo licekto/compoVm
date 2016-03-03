@@ -231,6 +231,7 @@ BOOST_AUTO_TEST_CASE(compoProvision) {
                 port2 : IPrinting;\
                 fE : FrontEnd;\
                 bE : *;\
+                handlers[] : RequestHandler;\
 	}\
     }");
     
@@ -243,7 +244,7 @@ BOOST_AUTO_TEST_CASE(compoProvision) {
     
     // Check provision
     std::shared_ptr<nodes::compo::CProvision> provision = std::dynamic_pointer_cast<nodes::compo::CProvision>(descriptor->getBodyNodeAt(0)); 
-    TEST_PROVISION(provision, nodes::types::visibilityType::EXTERNAL, 5);
+    TEST_PROVISION(provision, nodes::types::visibilityType::EXTERNAL, 6);
     
     // Check port
     std::shared_ptr<nodes::compo::CSignaturesPort> signPort = std::dynamic_pointer_cast<nodes::compo::CSignaturesPort>(provision->getPortAt(0));
@@ -269,6 +270,11 @@ BOOST_AUTO_TEST_CASE(compoProvision) {
     // Check port
     std::shared_ptr<nodes::compo::CUniversalPort> universalPort = std::dynamic_pointer_cast<nodes::compo::CUniversalPort>(provision->getPortAt(4));
     BOOST_CHECK_EQUAL("bE", universalPort->getName());
+    
+    // Check port
+    namedPort = std::dynamic_pointer_cast<nodes::compo::CNamedPort>(provision->getPortAt(5));
+    TEST_NAMED_PORT(namedPort, "handlers", "RequestHandler");
+    BOOST_CHECK(namedPort->getCollectivity());
     
     // Clear AST for next test
     parser.clearRootNodes();
