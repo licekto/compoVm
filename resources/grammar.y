@@ -9,6 +9,8 @@
 #include "nodes/types/portType.h"
 #include "nodes/compo/architecture.h"
 #include "nodes/compo/service.h"
+#include "nodes/compo/dereferenceLiteral.h"
+#include "nodes/compo/collectionPortLiteral.h"
 #include "nodes/compo/constraint.h"
 #include "nodes/compo/port.h"
 #include "nodes/compo/namedPort.h"
@@ -18,6 +20,7 @@
 #include "nodes/compo/provision.h"
 #include "nodes/compo/requirement.h"
 #include "nodes/compo/serviceSignature.h"
+#include "nodes/compo/serviceInvocation.h"
 #include "nodes/procedural/symbol.h"
 #include "nodes/procedural/ifStatement.h"
 #include "nodes/procedural/forStatement.h"
@@ -611,10 +614,17 @@ connectionSign
 
 collectionPortLiteral
                 :   IDENTIFIER '[' expression ']'
+                    {
+                        $$ = std::make_shared<nodes::compo::CCollectionPortLiteral>(std::dynamic_pointer_cast<nodes::procedural::CSymbol>($1),
+                                                                                    std::dynamic_pointer_cast<nodes::procedural::CAbstractExpression>($3));
+                    }
                 ;
 
 dereferenceLiteral
                 :   '&' IDENTIFIER
+                    {
+                        $$ = std::make_shared<nodes::compo::CDereferenceLiteral>(std::dynamic_pointer_cast<nodes::procedural::CSymbol>($2));
+                    }
                 ;
 
 portAddressLiteral
@@ -622,9 +632,24 @@ portAddressLiteral
                 ;
 
 portAddress     :   collectionPortLiteral
-                |   '(' /* cascadeExpression */ ')'
+                |   '(' serviceInvocation ')'
                 |   dereferenceLiteral
                 |   IDENTIFIER
+                ;
+
+serviceInvocation
+                :   IDENTIFIER '.' serviceSign
+                    {
+                        $$ = std::make_shared<nodes::compo::CServiceInvocation>(std::dynamic_pointer_cast<nodes::procedural::CSymbol>($1),
+                                                                               std::dynamic_pointer_cast<nodes::compo::CServiceSignature>($3)->getNameSymbol(),
+                                                                               $3);
+                    }
+                |   IDENTIFIER '.' IDENTIFIER '(' serviceInvocation ')'
+                    {
+                        $$ = std::make_shared<nodes::compo::CServiceInvocation>(std::dynamic_pointer_cast<nodes::procedural::CSymbol>($1),
+                                                                               std::dynamic_pointer_cast<nodes::procedural::CSymbol>($2),
+                                                                               $4);
+                    }
                 ;
 
 /*----------------------------------------------------------------------------*/

@@ -37,7 +37,10 @@ namespace nodes {
 		void CServiceSignature::setParam(std::shared_ptr<nodes::procedural::CSymbol> param) {
 			m_params.push_back(param);
 		}
-
+                
+                std::shared_ptr<nodes::procedural::CSymbol> CServiceSignature::getNameSymbol() const {
+                    return m_name;
+                }
 	}
 
 }

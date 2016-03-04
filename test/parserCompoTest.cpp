@@ -286,7 +286,9 @@ BOOST_AUTO_TEST_CASE(compoArchitecture) {
     input.str("descriptor test {\
 	architecture {\
             connect logger@analyzer to logging@logger;\
-            \
+            connect outReqHa@analyzer to reqHa@handlers[i];\
+            connect handlers@self to default@(RequestHandler.new());\
+            connect logger@&analyzer to logging@&logger;\
 	}\
     }");
     
