@@ -78,6 +78,8 @@ Identifier                  [a-zA-Z][a-zA-Z_0-9]*
 
 <INITIAL>to				{return TO;}
 
+<INITIAL>from                           {return FROM;}
+
 <INITIAL>inject-with                    {return INJECTWITH;}
 
 <INITIAL>of-kind                        {return OFKIND;}

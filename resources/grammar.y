@@ -76,6 +76,7 @@
 %token DELEGATE
 %token RETURN
 %token TO
+%token FROM
 %token INJECTWITH
 %token OFKIND
 %token FOR
@@ -594,7 +595,7 @@ connections
                 ;
 
 connection      
-                :   CONNECT connectionSign
+                :   CONNECT portAddress TO portAddress
                 ;
 
 disconnections  
@@ -603,11 +604,7 @@ disconnections
                 ;
 
 disconnection   
-                :   DISCONNECT connectionSign
-                ;
-
-connectionSign
-                :   portAddressLiteral TO portAddressLiteral
+                :   DISCONNECT portAddress FROM portAddress
                 ;
 
 /*-------------------------- grammar-literals-compo --------------------------*/
@@ -627,14 +624,10 @@ dereferenceLiteral
                     }
                 ;
 
-portAddressLiteral
-                :   IDENTIFIER '@' portAddress
-                ;
-
-portAddress     :   collectionPortLiteral
-                |   '(' serviceInvocation ')'
-                |   dereferenceLiteral
-                |   IDENTIFIER
+portAddress     :   IDENTIFIER '@' collectionPortLiteral
+                |   IDENTIFIER '@' '(' serviceInvocation ')'
+                |   IDENTIFIER '@' dereferenceLiteral
+                |   IDENTIFIER '@' IDENTIFIER
                 ;
 
 serviceInvocation
