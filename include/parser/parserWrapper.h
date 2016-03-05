@@ -51,12 +51,12 @@ class ParserWrapper {
 
 	/**< Name of currently parsed port */
 	std::shared_ptr<nodes::procedural::CSymbol> m_currentPortName;
-        
-        /**< Is current port collecting port? */
-        bool m_collectivity;
-        
-        /**< Vector of current architecture body */
-        std::vector<std::shared_ptr<nodes::compo::CBind>> m_currentArchitectureBody;
+
+	/**< Is current port collecting port? */
+	bool m_collectivity;
+
+	/**< Vector of current architecture body */
+	std::vector<std::shared_ptr<nodes::compo::CBind>> m_currentArchitectureBody;
 
   public:
 	/**
@@ -165,16 +165,16 @@ class ParserWrapper {
 	 * @return reference to vector
 	 */
 	std::vector<std::shared_ptr<nodes::CNode>> * getServiceParams();
-        
-        /**
-         * Push service parameters vector on the stack
-         */
-        void pushServiceParams();
-        
-        /**
-         * Pop service parameters vector from the stack
-         */
-        void popServiceParams();
+
+	/**
+	 * Push service parameters vector on the stack
+	 */
+	void pushServiceParams();
+
+	/**
+	 * Pop service parameters vector from the stack
+	 */
+	void popServiceParams();
 
 	/**
 	 * Sets visibility type of currently parsed provision/requirement
@@ -262,9 +262,9 @@ class ParserWrapper {
 	 * @return name
 	 */
 	std::shared_ptr<nodes::procedural::CSymbol> getPortName() const;
-        
-        /**
-	 * Sets collectivity of currently parsed port
+
+	/**
+	* Sets collectivity of currently parsed port
 	 * @param atomicity
 	 */
 	void setCollectivity(bool collectivity);
@@ -274,8 +274,8 @@ class ParserWrapper {
 	 * @return bool value
 	 */
 	bool getCollectivity() const;
-        
-        /**
+
+	/**
 	* Adds currently parsed bind node
 	 * @param port: smart pointer to bind node
 	 */
@@ -286,9 +286,9 @@ class ParserWrapper {
 	 * @return pointer to vector
 	 */
 	std::vector<std::shared_ptr<nodes::compo::CBind>> * getArchitectureBody();
-        
-        /**
-         * Clears vector of architecture body nodes
-         */
-        void clearArchitectureBody();
+
+	/**
+	 * Clears vector of architecture body nodes
+	 */
+	void clearArchitectureBody();
 };

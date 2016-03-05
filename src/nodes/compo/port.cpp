@@ -9,7 +9,7 @@ namespace nodes {
 			    m_portType(type),
 			    m_name(name),
 			    m_atomicity(atomicity),
-                            m_collectivity(collectivity){
+			    m_collectivity(collectivity) {
 		}
 
 		void CPort::print(std::ostream& outstream) const {
@@ -41,8 +41,8 @@ namespace nodes {
 		std::shared_ptr<nodes::procedural::CSymbol> CPort::getKindOf() const {
 			return m_kindOf;
 		}
-                
-                bool CPort::getCollectivity() const {
+
+		bool CPort::getCollectivity() const {
 			return m_collectivity;
 		}
 	}

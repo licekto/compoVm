@@ -7,7 +7,7 @@ namespace nodes {
 		CNamedPort::CNamedPort(std::shared_ptr<nodes::procedural::CSymbol> name,
 		                       bool atomicity,
 		                       std::shared_ptr<nodes::procedural::CSymbol> nameParam,
-                                       bool collectivity)
+		                       bool collectivity)
 			:   CNode(types::nodeType::PORT),
 			    CPort(types::portType::NAMED, name, atomicity, collectivity),
 			    m_nameParam(nameParam) {

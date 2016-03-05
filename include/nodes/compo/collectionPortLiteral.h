@@ -15,9 +15,9 @@ namespace nodes {
 		  protected:
 			/**< Name parameter symbol of port */
 			std::shared_ptr<nodes::procedural::CSymbol> m_portName;
-                        
-                        /**< Index expression */
-                        std::shared_ptr<nodes::procedural::CAbstractExpression> m_indexExpression;
+
+			/**< Index expression */
+			std::shared_ptr<nodes::procedural::CAbstractExpression> m_indexExpression;
 
 		  public:
 			/**
@@ -26,7 +26,7 @@ namespace nodes {
 			* @param atomic: Is atomic?
 			*/
 			CCollectionPortLiteral(std::shared_ptr<nodes::procedural::CSymbol> portName = nullptr,
-                                               std::shared_ptr<nodes::procedural::CAbstractExpression> indexExpression = nullptr);
+			                       std::shared_ptr<nodes::procedural::CAbstractExpression> indexExpression = nullptr);
 
 			/**
 			* Virtual print function to call from operator <<
@@ -40,12 +40,12 @@ namespace nodes {
 			 * @return shared_ptr to CServiceSignature
 			 */
 			std::shared_ptr<nodes::procedural::CSymbol> getPortName() const;
-                        
-                        /**
-			 * Index expression getter
-			 * @return shared_ptr to CAbstractExpression
-			 */
-                        std::shared_ptr<nodes::procedural::CAbstractExpression> getIndexExpression() const;
+
+			/**
+			* Index expression getter
+					 * @return shared_ptr to CAbstractExpression
+					 */
+			std::shared_ptr<nodes::procedural::CAbstractExpression> getIndexExpression() const;
 		};
 
 	}

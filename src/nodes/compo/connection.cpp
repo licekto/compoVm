@@ -5,7 +5,7 @@ namespace nodes {
 	namespace compo {
 
 		CConnection::CConnection(std::shared_ptr<nodes::compo::CPortAddress> portIdentification1,
-                                         std::shared_ptr<nodes::compo::CPortAddress> portIdentification2)
+		                         std::shared_ptr<nodes::compo::CPortAddress> portIdentification2)
 			:   CNode(types::nodeType::CONNECTION),
 			    CBind(portIdentification1, portIdentification2) {
 		}

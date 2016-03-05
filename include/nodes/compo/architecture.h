@@ -13,10 +13,10 @@ namespace nodes {
 		 * \brief Class for Compo architecture representation.
 		 */
 		class CArchitecture : public CNode {
-                private:
-                    /**< Vector of architecture body nodes */
-                    std::vector<std::shared_ptr<nodes::compo::CBind>> m_architectureBody;
-                    
+		  private:
+			/**< Vector of architecture body nodes */
+			std::vector<std::shared_ptr<nodes::compo::CBind>> m_architectureBody;
+
 		  public:
 			/**
 			* Default constructor
@@ -29,18 +29,18 @@ namespace nodes {
 			* @see operator <<()
 			*/
 			virtual void print(std::ostream& os) const;
-                        
-                        /**
-                         * Body size getter
-                         * @return size_t
-                         */
-                        size_t getBodySize() const;
-                        
-                        /**
-                         * Architecture nodes getter
-                         * @return shared pointer to CBind
-                         */
-                        std::shared_ptr<nodes::compo::CBind> getBodyNodeAt(unsigned int index) const;
+
+			/**
+			 * Body size getter
+			 * @return size_t
+			 */
+			size_t getBodySize() const;
+
+			/**
+			 * Architecture nodes getter
+			 * @return shared pointer to CBind
+			 */
+			std::shared_ptr<nodes::compo::CBind> getBodyNodeAt(unsigned int index) const;
 		};
 
 	}

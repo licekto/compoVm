@@ -17,9 +17,9 @@ namespace nodes {
 			/**< Name symbol of port */
 			std::shared_ptr<nodes::procedural::CSymbol> m_portName;
 
-                        /**< Component node */
+			/**< Component node */
 			std::shared_ptr<nodes::CNode> m_component;
-                        
+
 		  public:
 			/**
 			* Parametric constructor with default values
@@ -42,11 +42,11 @@ namespace nodes {
 			 * @return name symbol of port identification.
 			 */
 			std::shared_ptr<nodes::procedural::CSymbol> getPortName() const;
-                        
-                        /**
-			 * Component node getter
-			 * @return shared pointer to CNode
-			 */
+
+			/**
+			* Component node getter
+					 * @return shared pointer to CNode
+					 */
 			std::shared_ptr<nodes::CNode> getComponent() const;
 		};
 

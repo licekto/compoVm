@@ -21,7 +21,7 @@ namespace nodes {
 			*/
 			CUniversalPort(std::shared_ptr<nodes::procedural::CSymbol> name = nullptr,
 			               bool atomicity = false,
-                                       bool collectivity = false);
+			               bool collectivity = false);
 
 			/**
 			* Virtual print function to call from operator <<

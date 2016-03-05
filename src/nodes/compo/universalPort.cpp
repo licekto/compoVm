@@ -6,7 +6,7 @@ namespace nodes {
 
 		CUniversalPort::CUniversalPort(std::shared_ptr<nodes::procedural::CSymbol> name,
 		                               bool atomicity,
-                                               bool collectivity)
+		                               bool collectivity)
 			:   CNode(types::nodeType::PORT),
 			    CPort(types::portType::UNIVERSAL, name, atomicity, collectivity) {
 		}

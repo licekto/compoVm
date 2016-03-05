@@ -4,7 +4,7 @@
 
 ParserWrapper::ParserWrapper(Lexer *lexer)
 	: m_lexer(lexer), m_rootNodes(std::vector<std::shared_ptr<nodes::CNode>>()) {
-    pushServiceParams();
+	pushServiceParams();
 }
 
 ParserWrapper::~ParserWrapper() {
@@ -68,26 +68,26 @@ void ParserWrapper::clearDescriptorBody() {
 
 void ParserWrapper::addServiceParam(std::shared_ptr<nodes::CNode> param) {
 	//m_currentServiceParams.push_back(param);
-    if (m_currentServiceParamsStack.empty()) {
-        pushServiceParams();
-    }
-    m_currentServiceParamsStack.top().push_back(param);
+	if (m_currentServiceParamsStack.empty()) {
+		pushServiceParams();
+	}
+	m_currentServiceParamsStack.top().push_back(param);
 }
 
 std::vector<std::shared_ptr<nodes::CNode>>* ParserWrapper::getServiceParams() {
 	//return &m_currentServiceParams;
-    if (m_currentServiceParamsStack.empty()) {
-        pushServiceParams();
-    }
-    return &m_currentServiceParamsStack.top();
+	if (m_currentServiceParamsStack.empty()) {
+		pushServiceParams();
+	}
+	return &m_currentServiceParamsStack.top();
 }
 
 void ParserWrapper::pushServiceParams() {
-    m_currentServiceParamsStack.push(std::vector<std::shared_ptr<nodes::CNode>>(0));
+	m_currentServiceParamsStack.push(std::vector<std::shared_ptr<nodes::CNode>>(0));
 }
 
 void ParserWrapper::popServiceParams() {
-    m_currentServiceParamsStack.pop();
+	m_currentServiceParamsStack.pop();
 }
 
 void ParserWrapper::setVisibility(nodes::types::visibilityType type) {
@@ -121,8 +121,8 @@ void ParserWrapper::clearPorts() {
 void ParserWrapper::clearAll() {
 	clearDescriptorBody();
 	clearPorts();
-        clearArchitectureBody();
-        clearServiceSignatures();
+	clearArchitectureBody();
+	clearServiceSignatures();
 }
 
 void ParserWrapper::setCurrentCompoundBody(std::shared_ptr<nodes::procedural::CCompoundBody> body) {
@@ -162,13 +162,13 @@ bool ParserWrapper::getCollectivity() const {
 }
 
 void ParserWrapper::addArchitectureNode(std::shared_ptr<nodes::compo::CBind> bindNode) {
-    m_currentArchitectureBody.push_back(bindNode);
+	m_currentArchitectureBody.push_back(bindNode);
 }
 
 std::vector<std::shared_ptr<nodes::compo::CBind>> * ParserWrapper::getArchitectureBody() {
-    return &m_currentArchitectureBody;
+	return &m_currentArchitectureBody;
 }
 
 void ParserWrapper::clearArchitectureBody() {
-    m_currentArchitectureBody.clear();
+	m_currentArchitectureBody.clear();
 }

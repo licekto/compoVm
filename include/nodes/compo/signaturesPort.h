@@ -26,7 +26,7 @@ namespace nodes {
 			CSignaturesPort(std::shared_ptr<nodes::procedural::CSymbol> name = nullptr,
 			                bool atomicity = false,
 			                std::vector<std::shared_ptr<nodes::compo::CServiceSignature>> list = std::vector<std::shared_ptr<nodes::compo::CServiceSignature>>(0),
-                                        bool collectivity = false);
+			                bool collectivity = false);
 
 			/**
 			* Virtual print function to call from operator <<

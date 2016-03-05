@@ -5,10 +5,10 @@ namespace nodes {
 	namespace compo {
 
 		CCollectionPortLiteral::CCollectionPortLiteral(std::shared_ptr<nodes::procedural::CSymbol> portName,
-                                                               std::shared_ptr<nodes::procedural::CAbstractExpression> indexExpression)
+		        std::shared_ptr<nodes::procedural::CAbstractExpression> indexExpression)
 			:   CNode(types::nodeType::COLLECTION_PORT),
 			    m_portName(portName),
-                            m_indexExpression(indexExpression) {
+			    m_indexExpression(indexExpression) {
 		}
 
 		void CCollectionPortLiteral::print(std::ostream& outstream) const {
@@ -18,10 +18,10 @@ namespace nodes {
 		std::shared_ptr<nodes::procedural::CSymbol> CCollectionPortLiteral::getPortName() const {
 			return m_portName;
 		}
-                
-                std::shared_ptr<nodes::procedural::CAbstractExpression> CCollectionPortLiteral::getIndexExpression() const {
-                    return m_indexExpression;
-                }
+
+		std::shared_ptr<nodes::procedural::CAbstractExpression> CCollectionPortLiteral::getIndexExpression() const {
+			return m_indexExpression;
+		}
 	}
 
 }

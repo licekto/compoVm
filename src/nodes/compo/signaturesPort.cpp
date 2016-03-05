@@ -8,7 +8,7 @@ namespace nodes {
 		CSignaturesPort::CSignaturesPort(std::shared_ptr<nodes::procedural::CSymbol> name,
 		                                 bool atomicity,
 		                                 std::vector<std::shared_ptr<nodes::compo::CServiceSignature>> list,
-                                                 bool collectivity)
+		                                 bool collectivity)
 			:   CNode(types::nodeType::PORT),
 			    CPort(types::portType::EXPLICIT_LIST, name, atomicity, collectivity),
 			    m_signaturesList(list) {
