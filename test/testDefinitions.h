@@ -73,5 +73,32 @@ do { \
 #define TEST_NAMED_PORT(namedPort, portName, paramName) \
 do { \
     BOOST_CHECK_EQUAL(portName, namedPort->getName()); \
-    BOOST_CHECK_EQUAL(paramName, namedPort->getParamName()->getStringValue()); \
+    TEST_SYMBOL(namedPort->getParamName(), paramName); \
+} while(0)
+
+#define TEST_ARCHITECTURE(architecture, bodySize) \
+do { \
+    BOOST_CHECK_EQUAL(nodes::types::nodeType::ARCHITECTURE, architecture->getNodeType()); \
+    BOOST_CHECK_EQUAL(bodySize, architecture->getBodySize()); \
+} while(0)
+
+#define TEST_CONNECTION(connection) \
+do { \
+    BOOST_CHECK_EQUAL(nodes::types::nodeType::CONNECTION, connection->getNodeType()); \
+    BOOST_CHECK_EQUAL(nodes::types::nodeType::PORT_ADDRESS, connection->getPortIdentification1()->getNodeType()); \
+    BOOST_CHECK_EQUAL(nodes::types::nodeType::PORT_ADDRESS, connection->getPortIdentification2()->getNodeType()); \
+} while(0)
+
+#define TEST_PORT_ADDRES_DEREFERENCE(portAddress, portName, componentName) \
+do { \
+    BOOST_CHECK_EQUAL(nodes::types::nodeType::PORT_ADDRESS, portAddress->getNodeType()); \
+    TEST_SYMBOL(portAddress->getPortName(), portName); \
+    TEST_SYMBOL(std::dynamic_pointer_cast<nodes::compo::CDereferenceLiteral>(portAddress->getComponent())->getParamName(), componentName); \
+} while(0)
+
+#define TEST_PORT_ADDRES_IDENTIFIER(portAddress, portName, componentName) \
+do { \
+    BOOST_CHECK_EQUAL(nodes::types::nodeType::PORT_ADDRESS, portAddress->getNodeType()); \
+    TEST_SYMBOL(portAddress->getPortName(), portName); \
+    TEST_SYMBOL(std::dynamic_pointer_cast<nodes::procedural::CSymbol>(portAddress->getComponent()), componentName); \
 } while(0)

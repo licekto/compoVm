@@ -15,6 +15,10 @@ namespace nodes {
 			outStr << std::endl;
 		}
                 
+                size_t CArchitecture::getBodySize() const {
+                    return m_architectureBody.size();
+                }
+                
                 std::shared_ptr<nodes::compo::CBind> CArchitecture::getBodyNodeAt(unsigned int index) const {
                         std::shared_ptr<nodes::compo::CBind> node = nullptr;
 			try {

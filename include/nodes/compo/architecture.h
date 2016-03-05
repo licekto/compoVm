@@ -31,8 +31,14 @@ namespace nodes {
 			virtual void print(std::ostream& os) const;
                         
                         /**
-                         * Archi
-                         * @return 
+                         * Body size getter
+                         * @return size_t
+                         */
+                        size_t getBodySize() const;
+                        
+                        /**
+                         * Architecture nodes getter
+                         * @return shared pointer to CBind
                          */
                         std::shared_ptr<nodes::compo::CBind> getBodyNodeAt(unsigned int index) const;
 		};

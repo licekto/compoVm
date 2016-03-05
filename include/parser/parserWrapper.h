@@ -32,7 +32,7 @@ class ParserWrapper {
 	std::vector<std::shared_ptr<nodes::CNode>> m_currentDescritporBody;
 
 	/**< Parameters of currently parsed service */
-	std::vector<std::shared_ptr<nodes::procedural::CSymbol>> m_currentServiceParams;
+	std::vector<std::shared_ptr<nodes::CNode>> m_currentServiceParams;
 
 	/**< Visibility type of current requirement/provision */
 	nodes::types::visibilityType m_visibilityType;
@@ -158,13 +158,13 @@ class ParserWrapper {
 	 * Sets parameter of currently parsed service
 	 * @param param: smart pointer to parameter name symbol
 	 */
-	void addServiceParam(std::shared_ptr<nodes::procedural::CSymbol> param);
+	void addServiceParam(std::shared_ptr<nodes::CNode> param);
 
 	/**
 	 * Returns vector of service parameters
 	 * @return reference to vector
 	 */
-	std::vector<std::shared_ptr<nodes::procedural::CSymbol>> * getServiceParams();
+	std::vector<std::shared_ptr<nodes::CNode>> * getServiceParams();
 
 	/**
 	 * Clears vector of service parameters

@@ -66,11 +66,11 @@ void ParserWrapper::clearDescriptorBody() {
 	m_currentDescritporBody.clear();
 }
 
-void ParserWrapper::addServiceParam(std::shared_ptr<nodes::procedural::CSymbol> param) {
+void ParserWrapper::addServiceParam(std::shared_ptr<nodes::CNode> param) {
 	m_currentServiceParams.push_back(param);
 }
 
-std::vector<std::shared_ptr<nodes::procedural::CSymbol>>* ParserWrapper::getServiceParams() {
+std::vector<std::shared_ptr<nodes::CNode>>* ParserWrapper::getServiceParams() {
 	return &m_currentServiceParams;
 }
 

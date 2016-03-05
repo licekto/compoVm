@@ -102,7 +102,7 @@ namespace nodes {
 			* Parameters getter
 			* @return Constant pointer to vector with parameters.
 			*/
-			std::shared_ptr<nodes::procedural::CSymbol> getParamAt(int index) const;
+			std::shared_ptr<nodes::CNode> getParamAt(int index) const;
 		};
 
 	}

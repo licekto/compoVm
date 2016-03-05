@@ -74,7 +74,7 @@ namespace nodes {
 			return 0;
 		}
 
-		std::shared_ptr<nodes::procedural::CSymbol> CAbstractServConstr::getParamAt(int index) const {
+		std::shared_ptr<nodes::CNode> CAbstractServConstr::getParamAt(int index) const {
 			if (m_signature) {
 				return m_signature->getParamAt(index);
 			}

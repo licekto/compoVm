@@ -43,6 +43,7 @@ Identifier                  [a-zA-Z][a-zA-Z_0-9]*
 <STRING>\'                              {
                                             yylval = std::make_shared<nodes::procedural::CStringLiteral>(buffer);
                                             BEGIN(INITIAL);
+                                            buffer.clear();
                                             return STRING_LITERAL;
                                         }
 

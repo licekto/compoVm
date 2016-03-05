@@ -23,7 +23,7 @@ namespace nodes {
 			DESCRIPTOR,
 			SYMBOL,
 			SERVICE,
-			SERVICE_SIGN,
+			SERVICE_SIGNATURE,
 			PORT,
 			PROVISION,
 			REQUIREMENT,

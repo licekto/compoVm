@@ -5,8 +5,8 @@ namespace nodes {
 	namespace compo {
 
 		CServiceSignature::CServiceSignature(std::shared_ptr<nodes::procedural::CSymbol> name,
-		                                     const std::vector<std::shared_ptr<nodes::procedural::CSymbol>>& params)
-			: CNode(types::nodeType::SERVICE_SIGN), m_name(name), m_params(params) {
+		                                     const std::vector<std::shared_ptr<nodes::CNode>>& params)
+			: CNode(types::nodeType::SERVICE_SIGNATURE), m_name(name), m_params(params) {
 		}
 
 		void CServiceSignature::print(std::ostream& outstream) const {
@@ -24,8 +24,8 @@ namespace nodes {
 			return m_params.size();
 		}
 
-		std::shared_ptr<nodes::procedural::CSymbol> CServiceSignature::getParamAt(int index) const {
-			std::shared_ptr<nodes::procedural::CSymbol> param = nullptr;
+		std::shared_ptr<nodes::CNode> CServiceSignature::getParamAt(int index) const {
+			std::shared_ptr<nodes::CNode> param = nullptr;
 			try {
 				param = m_params.at(index);
 			} catch (std::out_of_range ex) {
@@ -34,7 +34,7 @@ namespace nodes {
 			return param;
 		}
 
-		void CServiceSignature::setParam(std::shared_ptr<nodes::procedural::CSymbol> param) {
+		void CServiceSignature::setParam(std::shared_ptr<nodes::CNode> param) {
 			m_params.push_back(param);
 		}
                 

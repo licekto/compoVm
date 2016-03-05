@@ -537,8 +537,16 @@ service
                     }
                 ;
 
-serviceSign     
+serviceSign
                 :   IDENTIFIER '(' serviceParams ')'
+                    {
+                        $$ = std::make_shared<nodes::compo::CServiceSignature>(std::dynamic_pointer_cast<nodes::procedural::CSymbol>($1), *parser->getServiceParams());
+                        parser->clearServiceParams();
+                    }
+                ;
+
+serviceSignCall
+                :   IDENTIFIER '(' serviceRuntimeParams ')'
                     {
                         $$ = std::make_shared<nodes::compo::CServiceSignature>(std::dynamic_pointer_cast<nodes::procedural::CSymbol>($1), *parser->getServiceParams());
                         parser->clearServiceParams();
@@ -569,8 +577,26 @@ serviceParams
 param
                 :   IDENTIFIER
                     {
-                        parser->addServiceParam(std::dynamic_pointer_cast<nodes::procedural::CSymbol>($1));
+                        parser->addServiceParam($1);
                     }
+                ;
+
+serviceRuntimeParams
+                :   paramRuntime
+                |   paramRuntime ',' serviceRuntimeParams
+                |   /* epsilon */
+                ;
+
+paramRuntime   
+                :   serviceInvocation
+                    {
+                        parser->addServiceParam($1);
+                    }
+                |   primary_expression
+                    {
+                        parser->addServiceParam($1);
+                    }
+
                 ;
 
 constraint	
@@ -629,7 +655,7 @@ disconnection
 portAddress
                 :   IDENTIFIER '@' componentIdent
                     {
-                        $$ = std::make_shared<nodes::compo::CPortAddress>(std::dynamic_pointer_cast<nodes::procedural::CSymbol>($1), $2);
+                        $$ = std::make_shared<nodes::compo::CPortAddress>(std::dynamic_pointer_cast<nodes::procedural::CSymbol>($1), $3);
                     }
                 ;
 
@@ -640,7 +666,7 @@ componentIdent
                     }
                 |   '(' serviceInvocation ')'
                     {
-                        $$ = $1;
+                        $$ = $2;
                     }
                 |   dereferenceLiteral
                     {
@@ -661,17 +687,17 @@ collectionPortLiteral
                 ;
 
 serviceInvocation
-                :   IDENTIFIER '.' serviceSign
+                :   IDENTIFIER '.' serviceSignCall
                     {
                         $$ = std::make_shared<nodes::compo::CServiceInvocation>(std::dynamic_pointer_cast<nodes::procedural::CSymbol>($1),
-                                                                               std::dynamic_pointer_cast<nodes::compo::CServiceSignature>($3)->getNameSymbol(),
-                                                                               $3);
+                                                                                std::dynamic_pointer_cast<nodes::compo::CServiceSignature>($3)->getNameSymbol(),
+                                                                                $3);
                     }
                 |   IDENTIFIER '.' IDENTIFIER '(' serviceInvocation ')'
                     {
                         $$ = std::make_shared<nodes::compo::CServiceInvocation>(std::dynamic_pointer_cast<nodes::procedural::CSymbol>($1),
-                                                                               std::dynamic_pointer_cast<nodes::procedural::CSymbol>($2),
-                                                                               $4);
+                                                                                std::dynamic_pointer_cast<nodes::procedural::CSymbol>($3),
+                                                                                $5);
                     }
                 ;
 

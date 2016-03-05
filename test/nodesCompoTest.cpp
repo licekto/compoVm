@@ -267,7 +267,7 @@ BOOST_AUTO_TEST_CASE(requirementTest) {
 
 BOOST_AUTO_TEST_CASE(serviceTest) {
     // Params vector preparation
-    std::vector<std::shared_ptr<nodes::procedural::CSymbol>> params;
+    std::vector<std::shared_ptr<nodes::CNode>> params;
     params.push_back(std::make_shared<nodes::procedural::CSymbol>("param1"));
     params.push_back(std::make_shared<nodes::procedural::CSymbol>("param2"));
     
@@ -289,8 +289,8 @@ BOOST_AUTO_TEST_CASE(serviceTest) {
     BOOST_CHECK_EQUAL(nodes::types::nodeType::SERVICE, service.getNodeType());
     BOOST_CHECK_EQUAL("service", service.getName());
     BOOST_CHECK_EQUAL(2, service.getParamsSize());
-    BOOST_CHECK_EQUAL("param1", service.getParamAt(0)->getStringValue());
-    BOOST_CHECK_EQUAL("param2", service.getParamAt(1)->getStringValue());
+    BOOST_CHECK_EQUAL("param1", std::dynamic_pointer_cast<nodes::procedural::CSymbol>(service.getParamAt(0))->getStringValue());
+    BOOST_CHECK_EQUAL("param2", std::dynamic_pointer_cast<nodes::procedural::CSymbol>(service.getParamAt(1))->getStringValue());
     BOOST_CHECK_EQUAL(1, service.getBodySize());
     BOOST_CHECK_EQUAL("Expr1", std::dynamic_pointer_cast<nodes::procedural::CSymbol>(service.getBodyNodeAt(0))->getStringValue());
     BOOST_CHECK_EQUAL(1, service.getTemporariesSize());
@@ -301,8 +301,8 @@ BOOST_AUTO_TEST_CASE(serviceTest) {
     BOOST_CHECK_EQUAL(nodes::types::nodeType::SERVICE, serviceCopy1.getNodeType());
     BOOST_CHECK_EQUAL("service", serviceCopy1.getName());
     BOOST_CHECK_EQUAL(2, serviceCopy1.getParamsSize());
-    BOOST_CHECK_EQUAL("param1", serviceCopy1.getParamAt(0)->getStringValue());
-    BOOST_CHECK_EQUAL("param2", serviceCopy1.getParamAt(1)->getStringValue());
+    BOOST_CHECK_EQUAL("param1", std::dynamic_pointer_cast<nodes::procedural::CSymbol>(serviceCopy1.getParamAt(0))->getStringValue());
+    BOOST_CHECK_EQUAL("param2", std::dynamic_pointer_cast<nodes::procedural::CSymbol>(serviceCopy1.getParamAt(1))->getStringValue());
     BOOST_CHECK_EQUAL(1, serviceCopy1.getBodySize());
     BOOST_CHECK_EQUAL("Expr1", std::dynamic_pointer_cast<nodes::procedural::CSymbol>(serviceCopy1.getBodyNodeAt(0))->getStringValue());
     BOOST_CHECK_EQUAL(1, serviceCopy1.getTemporariesSize());
@@ -311,8 +311,8 @@ BOOST_AUTO_TEST_CASE(serviceTest) {
     BOOST_CHECK_EQUAL(nodes::types::nodeType::SERVICE, service.getNodeType());
     BOOST_CHECK_EQUAL("service", service.getName());
     BOOST_CHECK_EQUAL(2, service.getParamsSize());
-    BOOST_CHECK_EQUAL("param1", service.getParamAt(0)->getStringValue());
-    BOOST_CHECK_EQUAL("param2", service.getParamAt(1)->getStringValue());
+    BOOST_CHECK_EQUAL("param1", std::dynamic_pointer_cast<nodes::procedural::CSymbol>(service.getParamAt(0))->getStringValue());
+    BOOST_CHECK_EQUAL("param2", std::dynamic_pointer_cast<nodes::procedural::CSymbol>(service.getParamAt(1))->getStringValue());
     BOOST_CHECK_EQUAL(1, service.getBodySize());
     BOOST_CHECK_EQUAL("Expr1", std::dynamic_pointer_cast<nodes::procedural::CSymbol>(service.getBodyNodeAt(0))->getStringValue());
     BOOST_CHECK_EQUAL(1, service.getTemporariesSize());
@@ -323,8 +323,8 @@ BOOST_AUTO_TEST_CASE(serviceTest) {
     BOOST_CHECK_EQUAL(nodes::types::nodeType::SERVICE, serviceCopy2.getNodeType());
     BOOST_CHECK_EQUAL("service", serviceCopy2.getName());
     BOOST_CHECK_EQUAL(2, serviceCopy2.getParamsSize());
-    BOOST_CHECK_EQUAL("param1", serviceCopy2.getParamAt(0)->getStringValue());
-    BOOST_CHECK_EQUAL("param2", serviceCopy2.getParamAt(1)->getStringValue());
+    BOOST_CHECK_EQUAL("param1", std::dynamic_pointer_cast<nodes::procedural::CSymbol>(serviceCopy2.getParamAt(0))->getStringValue());
+    BOOST_CHECK_EQUAL("param2", std::dynamic_pointer_cast<nodes::procedural::CSymbol>(serviceCopy2.getParamAt(1))->getStringValue());
     BOOST_CHECK_EQUAL(1, serviceCopy2.getBodySize());
     BOOST_CHECK_EQUAL("Expr1", std::dynamic_pointer_cast<nodes::procedural::CSymbol>(serviceCopy2.getBodyNodeAt(0))->getStringValue());
     BOOST_CHECK_EQUAL(1, serviceCopy2.getTemporariesSize());
@@ -333,8 +333,8 @@ BOOST_AUTO_TEST_CASE(serviceTest) {
     BOOST_CHECK_EQUAL(nodes::types::nodeType::SERVICE, service.getNodeType());
     BOOST_CHECK_EQUAL("service", service.getName());
     BOOST_CHECK_EQUAL(2, service.getParamsSize());
-    BOOST_CHECK_EQUAL("param1", service.getParamAt(0)->getStringValue());
-    BOOST_CHECK_EQUAL("param2", service.getParamAt(1)->getStringValue());
+    BOOST_CHECK_EQUAL("param1", std::dynamic_pointer_cast<nodes::procedural::CSymbol>(service.getParamAt(0))->getStringValue());
+    BOOST_CHECK_EQUAL("param2", std::dynamic_pointer_cast<nodes::procedural::CSymbol>(service.getParamAt(1))->getStringValue());
     BOOST_CHECK_EQUAL(1, service.getBodySize());
     BOOST_CHECK_EQUAL("Expr1", std::dynamic_pointer_cast<nodes::procedural::CSymbol>(service.getBodyNodeAt(0))->getStringValue());
     BOOST_CHECK_EQUAL(1, service.getTemporariesSize());
@@ -345,8 +345,8 @@ BOOST_AUTO_TEST_CASE(serviceTest) {
     BOOST_CHECK_EQUAL(nodes::types::nodeType::SERVICE, serviceNew1.getNodeType());
     BOOST_CHECK_EQUAL("service", serviceNew1.getName());
     BOOST_CHECK_EQUAL(2, serviceNew1.getParamsSize());
-    BOOST_CHECK_EQUAL("param1", serviceNew1.getParamAt(0)->getStringValue());
-    BOOST_CHECK_EQUAL("param2", serviceNew1.getParamAt(1)->getStringValue());
+    BOOST_CHECK_EQUAL("param1", std::dynamic_pointer_cast<nodes::procedural::CSymbol>(serviceNew1.getParamAt(0))->getStringValue());
+    BOOST_CHECK_EQUAL("param2", std::dynamic_pointer_cast<nodes::procedural::CSymbol>(serviceNew1.getParamAt(1))->getStringValue());
     BOOST_CHECK_EQUAL(1, serviceNew1.getBodySize());
     BOOST_CHECK_EQUAL("Expr1", std::dynamic_pointer_cast<nodes::procedural::CSymbol>(serviceNew1.getBodyNodeAt(0))->getStringValue());
     BOOST_CHECK_EQUAL(1, serviceNew1.getTemporariesSize());
@@ -363,8 +363,8 @@ BOOST_AUTO_TEST_CASE(serviceTest) {
     BOOST_CHECK_EQUAL(nodes::types::nodeType::SERVICE, serviceNew2.getNodeType());
     BOOST_CHECK_EQUAL("service", serviceNew2.getName());
     BOOST_CHECK_EQUAL(2, serviceNew2.getParamsSize());
-    BOOST_CHECK_EQUAL("param1", serviceNew2.getParamAt(0)->getStringValue());
-    BOOST_CHECK_EQUAL("param2", serviceNew2.getParamAt(1)->getStringValue());
+    BOOST_CHECK_EQUAL("param1", std::dynamic_pointer_cast<nodes::procedural::CSymbol>(serviceNew2.getParamAt(0))->getStringValue());
+    BOOST_CHECK_EQUAL("param2", std::dynamic_pointer_cast<nodes::procedural::CSymbol>(serviceNew2.getParamAt(1))->getStringValue());
     BOOST_CHECK_EQUAL(1, serviceNew2.getBodySize());
     BOOST_CHECK_EQUAL("Expr1", std::dynamic_pointer_cast<nodes::procedural::CSymbol>(serviceNew2.getBodyNodeAt(0))->getStringValue());
     BOOST_CHECK_EQUAL(1, serviceNew2.getTemporariesSize());
@@ -379,7 +379,7 @@ BOOST_AUTO_TEST_CASE(serviceTest) {
 
 BOOST_AUTO_TEST_CASE(constraintTest) {
     // Params vector preparation
-    std::vector<std::shared_ptr<nodes::procedural::CSymbol>> params;
+    std::vector<std::shared_ptr<nodes::CNode>> params;
     params.push_back(std::make_shared<nodes::procedural::CSymbol>("param1"));
     params.push_back(std::make_shared<nodes::procedural::CSymbol>("param2"));
     
@@ -397,8 +397,8 @@ BOOST_AUTO_TEST_CASE(constraintTest) {
     BOOST_CHECK_EQUAL(nodes::types::nodeType::CONSTRAINT, constraint.getNodeType());
     BOOST_CHECK_EQUAL("constraint", constraint.getName());
     BOOST_CHECK_EQUAL(2, constraint.getParamsSize());
-    BOOST_CHECK_EQUAL("param1", constraint.getParamAt(0)->getStringValue());
-    BOOST_CHECK_EQUAL("param2", constraint.getParamAt(1)->getStringValue());
+    BOOST_CHECK_EQUAL("param1", std::dynamic_pointer_cast<nodes::procedural::CSymbol>(constraint.getParamAt(0))->getStringValue());
+    BOOST_CHECK_EQUAL("param2", std::dynamic_pointer_cast<nodes::procedural::CSymbol>(constraint.getParamAt(1))->getStringValue());
     BOOST_CHECK_EQUAL(1, constraint.getBodySize());
     BOOST_CHECK_EQUAL("Expr1", std::dynamic_pointer_cast<nodes::procedural::CSymbol>(constraint.getBodyNodeAt(0))->getStringValue());
     
@@ -407,16 +407,16 @@ BOOST_AUTO_TEST_CASE(constraintTest) {
     BOOST_CHECK_EQUAL(nodes::types::nodeType::CONSTRAINT, constraintCopy1.getNodeType());
     BOOST_CHECK_EQUAL("constraint", constraintCopy1.getName());
     BOOST_CHECK_EQUAL(2, constraintCopy1.getParamsSize());
-    BOOST_CHECK_EQUAL("param1", constraintCopy1.getParamAt(0)->getStringValue());
-    BOOST_CHECK_EQUAL("param2", constraintCopy1.getParamAt(1)->getStringValue());
+    BOOST_CHECK_EQUAL("param1", std::dynamic_pointer_cast<nodes::procedural::CSymbol>(constraintCopy1.getParamAt(0))->getStringValue());
+    BOOST_CHECK_EQUAL("param2", std::dynamic_pointer_cast<nodes::procedural::CSymbol>(constraintCopy1.getParamAt(1))->getStringValue());
     BOOST_CHECK_EQUAL(1, constraintCopy1.getBodySize());
     BOOST_CHECK_EQUAL("Expr1", std::dynamic_pointer_cast<nodes::procedural::CSymbol>(constraintCopy1.getBodyNodeAt(0))->getStringValue());
     // Check if original object remains untouched
     BOOST_CHECK_EQUAL(nodes::types::nodeType::CONSTRAINT, constraint.getNodeType());
     BOOST_CHECK_EQUAL("constraint", constraint.getName());
     BOOST_CHECK_EQUAL(2, constraint.getParamsSize());
-    BOOST_CHECK_EQUAL("param1", constraint.getParamAt(0)->getStringValue());
-    BOOST_CHECK_EQUAL("param2", constraint.getParamAt(1)->getStringValue());
+    BOOST_CHECK_EQUAL("param1", std::dynamic_pointer_cast<nodes::procedural::CSymbol>(constraint.getParamAt(0))->getStringValue());
+    BOOST_CHECK_EQUAL("param2", std::dynamic_pointer_cast<nodes::procedural::CSymbol>(constraint.getParamAt(1))->getStringValue());
     BOOST_CHECK_EQUAL(1, constraint.getBodySize());
     BOOST_CHECK_EQUAL("Expr1", std::dynamic_pointer_cast<nodes::procedural::CSymbol>(constraint.getBodyNodeAt(0))->getStringValue());
     
@@ -425,16 +425,16 @@ BOOST_AUTO_TEST_CASE(constraintTest) {
     BOOST_CHECK_EQUAL(nodes::types::nodeType::CONSTRAINT, constraingCopy2.getNodeType());
     BOOST_CHECK_EQUAL("constraint", constraingCopy2.getName());
     BOOST_CHECK_EQUAL(2, constraingCopy2.getParamsSize());
-    BOOST_CHECK_EQUAL("param1", constraingCopy2.getParamAt(0)->getStringValue());
-    BOOST_CHECK_EQUAL("param2", constraingCopy2.getParamAt(1)->getStringValue());
+    BOOST_CHECK_EQUAL("param1", std::dynamic_pointer_cast<nodes::procedural::CSymbol>(constraingCopy2.getParamAt(0))->getStringValue());
+    BOOST_CHECK_EQUAL("param2", std::dynamic_pointer_cast<nodes::procedural::CSymbol>(constraingCopy2.getParamAt(1))->getStringValue());
     BOOST_CHECK_EQUAL(1, constraingCopy2.getBodySize());
     BOOST_CHECK_EQUAL("Expr1", std::dynamic_pointer_cast<nodes::procedural::CSymbol>(constraingCopy2.getBodyNodeAt(0))->getStringValue());
     // Check if original object remains untouched
     BOOST_CHECK_EQUAL(nodes::types::nodeType::CONSTRAINT, constraint.getNodeType());
     BOOST_CHECK_EQUAL("constraint", constraint.getName());
     BOOST_CHECK_EQUAL(2, constraint.getParamsSize());
-    BOOST_CHECK_EQUAL("param1", constraint.getParamAt(0)->getStringValue());
-    BOOST_CHECK_EQUAL("param2", constraint.getParamAt(1)->getStringValue());
+    BOOST_CHECK_EQUAL("param1", std::dynamic_pointer_cast<nodes::procedural::CSymbol>(constraint.getParamAt(0))->getStringValue());
+    BOOST_CHECK_EQUAL("param2", std::dynamic_pointer_cast<nodes::procedural::CSymbol>(constraint.getParamAt(1))->getStringValue());
     BOOST_CHECK_EQUAL(1, constraint.getBodySize());
     BOOST_CHECK_EQUAL("Expr1", std::dynamic_pointer_cast<nodes::procedural::CSymbol>(constraint.getBodyNodeAt(0))->getStringValue());
     
@@ -443,8 +443,8 @@ BOOST_AUTO_TEST_CASE(constraintTest) {
     BOOST_CHECK_EQUAL(nodes::types::nodeType::CONSTRAINT, constraintNew1.getNodeType());
     BOOST_CHECK_EQUAL("constraint", constraintNew1.getName());
     BOOST_CHECK_EQUAL(2, constraintNew1.getParamsSize());
-    BOOST_CHECK_EQUAL("param1", constraintNew1.getParamAt(0)->getStringValue());
-    BOOST_CHECK_EQUAL("param2", constraintNew1.getParamAt(1)->getStringValue());
+    BOOST_CHECK_EQUAL("param1", std::dynamic_pointer_cast<nodes::procedural::CSymbol>(constraintNew1.getParamAt(0))->getStringValue());
+    BOOST_CHECK_EQUAL("param2", std::dynamic_pointer_cast<nodes::procedural::CSymbol>(constraintNew1.getParamAt(1))->getStringValue());
     BOOST_CHECK_EQUAL(1, constraintNew1.getBodySize());
     BOOST_CHECK_EQUAL("Expr1", std::dynamic_pointer_cast<nodes::procedural::CSymbol>(constraintNew1.getBodyNodeAt(0))->getStringValue());
     // Check if original object is emptied
@@ -458,8 +458,8 @@ BOOST_AUTO_TEST_CASE(constraintTest) {
     BOOST_CHECK_EQUAL(nodes::types::nodeType::CONSTRAINT, constraintNew2.getNodeType());
     BOOST_CHECK_EQUAL("constraint", constraintNew2.getName());
     BOOST_CHECK_EQUAL(2, constraintNew2.getParamsSize());
-    BOOST_CHECK_EQUAL("param1", constraintNew2.getParamAt(0)->getStringValue());
-    BOOST_CHECK_EQUAL("param2", constraintNew2.getParamAt(1)->getStringValue());
+    BOOST_CHECK_EQUAL("param1", std::dynamic_pointer_cast<nodes::procedural::CSymbol>(constraintNew2.getParamAt(0))->getStringValue());
+    BOOST_CHECK_EQUAL("param2", std::dynamic_pointer_cast<nodes::procedural::CSymbol>(constraintNew2.getParamAt(1))->getStringValue());
     BOOST_CHECK_EQUAL(1, constraintNew2.getBodySize());
     BOOST_CHECK_EQUAL("Expr1", std::dynamic_pointer_cast<nodes::procedural::CSymbol>(constraintNew2.getBodyNodeAt(0))->getStringValue());
     // Check if original object is emptied

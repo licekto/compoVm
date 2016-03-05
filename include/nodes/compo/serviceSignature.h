@@ -18,7 +18,7 @@ namespace nodes {
 			std::shared_ptr<nodes::procedural::CSymbol> m_name;
 
 			/**< Vector of parameter names */
-			std::vector<std::shared_ptr<nodes::procedural::CSymbol>> m_params;
+			std::vector<std::shared_ptr<nodes::CNode>> m_params;
 		  public:
 			/**
 			* Parametric constructor with default value
@@ -26,7 +26,7 @@ namespace nodes {
 			* @param params: Vector of parameters
 			*/
 			CServiceSignature(std::shared_ptr<nodes::procedural::CSymbol> name = nullptr,
-			                  const std::vector<std::shared_ptr<nodes::procedural::CSymbol>>& params = std::vector<std::shared_ptr<nodes::procedural::CSymbol>>(0));
+			                  const std::vector<std::shared_ptr<nodes::CNode>>& params = std::vector<std::shared_ptr<nodes::CNode>>(0));
 
 			/**
 			* Virtual print function to call from operator <<
@@ -57,13 +57,13 @@ namespace nodes {
 			* Parameters setter
 			* @param Constant pointer to pointer to parameter.
 			*/
-			void setParam(std::shared_ptr<nodes::procedural::CSymbol> param);
+			void setParam(std::shared_ptr<nodes::CNode> param);
 
 			/**
 			* Parameters getter
 			* @return Constant pointer to vector with parameters.
 			*/
-			std::shared_ptr<nodes::procedural::CSymbol> getParamAt(int index) const;
+			std::shared_ptr<nodes::CNode> getParamAt(int index) const;
 		};
 
 	}
