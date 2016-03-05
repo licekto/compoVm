@@ -362,13 +362,13 @@ jump_statement
 /*---------------------------- grammar-compo ---------------------------------*/
 
 start           
-                :   descriptorInterface END
+                :   descriptor_interface END
                     {
                          YYACCEPT; return 0;
                     }
                 ;
 
-descriptorInterface
+descriptor_interface
                 :   descriptors
                 |   interface
                 ;
@@ -383,7 +383,7 @@ descriptors
                 ;
 
 descriptor      
-                :   DESCRIPTOR IDENTIFIER inheritance '{' compoExprs '}'
+                :   DESCRIPTOR IDENTIFIER inheritance '{' compo_expressions '}'
                     {
                         $$ = std::make_shared<nodes::compo::CDescriptor>(std::dynamic_pointer_cast<nodes::procedural::CSymbol>($2),
                                                                          std::dynamic_pointer_cast<nodes::procedural::CSymbol>($3),
@@ -392,7 +392,7 @@ descriptor
                     }
 
 interface       
-                :   INTERFACE IDENTIFIER inheritance servicesSignsList
+                :   INTERFACE IDENTIFIER inheritance service_signatures_list
                 ;
 
 inheritance     
@@ -406,13 +406,13 @@ inheritance
                     }
                 ;
 
-compoExprs      
-                :   compoExpr compoExprs
+compo_expressions      
+                :   compo_expression compo_expressions
                 |   /* epsilon */           // Empty descriptor allowed
                 ;
 
 
-compoExpr	
+compo_expression	
                 :   provision
 		|   requirement
 		|   constraint
@@ -421,7 +421,7 @@ compoExpr
                 ;
 
 provision     
-                :   visibility PROVIDES provReqSign
+                :   visibility PROVIDES provision_requirement_signature
 		    {
 			parser->addDescriptorBodyNode(std::make_shared<nodes::compo::CProvision>(parser->getVisibility(), *parser->getPorts()));
                         parser->clearPorts();
@@ -429,7 +429,7 @@ provision
                 ;
 
 requirement   
-                :   visibility REQUIRES provReqSign
+                :   visibility REQUIRES provision_requirement_signature
                     {
 			parser->addDescriptorBodyNode(std::make_shared<nodes::compo::CRequirement>(parser->getVisibility(), *parser->getPorts()));
                         parser->clearPorts();
@@ -451,7 +451,7 @@ visibility
                     }
                 ;
 
-provReqSign     
+provision_requirement_signature     
                 :   '{' ports '}'
                 ;
 
@@ -461,7 +461,7 @@ ports
 		;
 
 port		
-                :   atomic portName collecting ':' portSign ofKind
+                :   atomic port_name collecting ':' port_signature of_kind
 		    {
                         std::dynamic_pointer_cast<nodes::compo::CPort>($5)->setKindOf(std::dynamic_pointer_cast<nodes::procedural::CSymbol>($6));
 			parser->addPort(std::dynamic_pointer_cast<nodes::compo::CPort>($5));
@@ -479,7 +479,7 @@ atomic
                     }
 		;
 
-portName
+port_name
                 :   IDENTIFIER
                     {
                         parser->setPortName(std::dynamic_pointer_cast<nodes::procedural::CSymbol>($1));
@@ -497,7 +497,7 @@ collecting
                     }
                 ;
 
-portSign        
+port_signature        
                 :   IDENTIFIER
                     {
                         $$ = std::make_shared<nodes::compo::CNamedPort>(parser->getPortName(),
@@ -511,7 +511,7 @@ portSign
                                                                             parser->getAtomicity(),
                                                                             parser->getCollectivity());
                     }
-                |   servicesSignsList
+                |   service_signatures_list
                     {
                         $$ = std::make_shared<nodes::compo::CSignaturesPort>(parser->getPortName(),
                                                                              parser->getAtomicity(),
@@ -521,7 +521,7 @@ portSign
                     }
                 ;
 
-ofKind          
+of_kind          
                 :   OFKIND IDENTIFIER
                     {
                         $$ = $2;
@@ -533,14 +533,14 @@ ofKind
                 ;
 
 service         
-                :   SERVICE serviceSign compound_statement
+                :   SERVICE service_signature compound_statement
                     {
                         parser->addDescriptorBodyNode(std::make_shared<nodes::compo::CService>(std::dynamic_pointer_cast<nodes::compo::CServiceSignature>($2),
                                                                                                std::dynamic_pointer_cast<nodes::procedural::CCompoundBody>($3)));
                     }
                 ;
 
-serviceSign
+service_signature
                 :   IDENTIFIER '(' serviceParams ')'
                     {
                         $$ = std::make_shared<nodes::compo::CServiceSignature>(std::dynamic_pointer_cast<nodes::procedural::CSymbol>($1), *parser->getServiceParams());
@@ -548,56 +548,56 @@ serviceSign
                     }
                 ;
 
-serviceSignCall
-                :   IDENTIFIER '(' pushParams serviceRuntimeParams ')'
+service_signature_call
+                :   IDENTIFIER '(' push_parameters service_runtime_params ')'
                     {
                         $$ = std::make_shared<nodes::compo::CServiceSignature>(std::dynamic_pointer_cast<nodes::procedural::CSymbol>($1), *parser->getServiceParams());
                         parser->popServiceParams();
                     }
                 ;
 
-pushParams
+push_parameters
                 :   {
                         parser->pushServiceParams();
                     }
                 ;
 
-serviceSigns    
-                :   serviceSign
+service_signatures    
+                :   service_signature
                     {
                         parser->addServiceSignature(std::dynamic_pointer_cast<nodes::compo::CServiceSignature>($1));
                     }
-                |   serviceSign ';' serviceSigns
+                |   service_signature ';' service_signatures
                     {
                         parser->addServiceSignature(std::dynamic_pointer_cast<nodes::compo::CServiceSignature>($1));
                     }
                 |   /* epsilon */
                 ;
 
-servicesSignsList
-                :   '{' serviceSigns '}'
+service_signatures_list
+                :   '{' service_signatures '}'
 
 serviceParams   
-                :   param
-                |   param ',' serviceParams
+                :   parameter
+                |   parameter ',' serviceParams
                 |   /* epsilon */
                 ;
 
-param
+parameter
                 :   IDENTIFIER
                     {
                         parser->addServiceParam($1);
                     }
                 ;
 
-serviceRuntimeParams
-                :   paramRuntime
-                |   paramRuntime ',' serviceRuntimeParams
+service_runtime_params
+                :   parameter_runtime
+                |   parameter_runtime ',' service_runtime_params
                 |   /* epsilon */
                 ;
 
-paramRuntime   
-                :   serviceInvocation
+parameter_runtime   
+                :   service_invocation
                     {
                         parser->addServiceParam($1);
                     }
@@ -609,7 +609,7 @@ paramRuntime
                 ;
 
 constraint	
-                :   CONSTRAINT serviceSign compound_statement
+                :   CONSTRAINT service_signature compound_statement
                     {
                         parser->addDescriptorBodyNode(std::make_shared<nodes::compo::CConstraint>(std::dynamic_pointer_cast<nodes::compo::CServiceSignature>($2),
                                                                                                   std::dynamic_pointer_cast<nodes::procedural::CCompoundBody>($3)));
@@ -617,20 +617,20 @@ constraint
 		;
 
 architecture	
-                :   ARCHITECTURE '{' connectionDisconnection '}'
+                :   ARCHITECTURE '{' connection_disconnection '}'
                     {
                         parser->addDescriptorBodyNode(std::make_shared<nodes::compo::CArchitecture>(*parser->getArchitectureBody()));
                         parser->clearArchitectureBody();
                     }
 		;
 
-connectionDisconnection
+connection_disconnection
                 :   disconnections
                 |   connections
                 ;
 
 connections     
-                :   connection ';' connectionDisconnection
+                :   connection ';' connection_disconnection
                     {
                         parser->addArchitectureNode(std::dynamic_pointer_cast<nodes::compo::CBind>($1));
                     }
@@ -638,21 +638,21 @@ connections
                 ;
 
 connection      
-                :   CONNECT portAddress TO portAddress
+                :   CONNECT port_address TO port_address
                     {
                         $$ = std::make_shared<nodes::compo::CConnection>(std::dynamic_pointer_cast<nodes::compo::CPortAddress>($2), std::dynamic_pointer_cast<nodes::compo::CPortAddress>($4));
                     }
                 ;
 
 disconnections  
-                :   disconnection ';' connectionDisconnection
+                :   disconnection ';' connection_disconnection
                     {
                         parser->addArchitectureNode(std::dynamic_pointer_cast<nodes::compo::CBind>($1));
                     }
                 ;
 
 disconnection   
-                :   DISCONNECT portAddress FROM portAddress
+                :   DISCONNECT port_address FROM port_address
                     {
                         $$ = std::make_shared<nodes::compo::CDisconnection>(std::dynamic_pointer_cast<nodes::compo::CPortAddress>($2), std::dynamic_pointer_cast<nodes::compo::CPortAddress>($4));
                     }
@@ -660,23 +660,23 @@ disconnection
 
 /*-------------------------- grammar-literals-compo --------------------------*/
 
-portAddress
-                :   IDENTIFIER '@' componentIdent
+port_address
+                :   IDENTIFIER '@' component_identifier
                     {
                         $$ = std::make_shared<nodes::compo::CPortAddress>(std::dynamic_pointer_cast<nodes::procedural::CSymbol>($1), $3);
                     }
                 ;
 
-componentIdent
-                :   collectionPortLiteral
+component_identifier
+                :   collection_port_literal
                     {
                         $$ = $1;
                     }
-                |   '(' serviceInvocation ')'
+                |   '(' service_invocation ')'
                     {
                         $$ = $2;
                     }
-                |   dereferenceLiteral
+                |   dereference_literal
                     {
                         $$ = $1;
                     }
@@ -686,7 +686,7 @@ componentIdent
                     }
                 ;
 
-collectionPortLiteral
+collection_port_literal
                 :   IDENTIFIER '[' expression ']'
                     {
                         $$ = std::make_shared<nodes::compo::CCollectionPortLiteral>(std::dynamic_pointer_cast<nodes::procedural::CSymbol>($1),
@@ -694,14 +694,14 @@ collectionPortLiteral
                     }
                 ;
 
-serviceInvocation
-                :   IDENTIFIER '.' serviceSignCall
+service_invocation
+                :   IDENTIFIER '.' service_signature_call
                     {
                         $$ = std::make_shared<nodes::compo::CServiceInvocation>(std::dynamic_pointer_cast<nodes::procedural::CSymbol>($1),
                                                                                 std::dynamic_pointer_cast<nodes::compo::CServiceSignature>($3)->getNameSymbol(),
                                                                                 $3);
                     }
-                |   IDENTIFIER '.' IDENTIFIER '(' serviceInvocation ')'
+                |   IDENTIFIER '.' IDENTIFIER '(' service_invocation ')'
                     {
                         $$ = std::make_shared<nodes::compo::CServiceInvocation>(std::dynamic_pointer_cast<nodes::procedural::CSymbol>($1),
                                                                                 std::dynamic_pointer_cast<nodes::procedural::CSymbol>($3),
@@ -709,7 +709,7 @@ serviceInvocation
                     }
                 ;
 
-dereferenceLiteral
+dereference_literal
                 :   '&' IDENTIFIER
                     {
                         $$ = std::make_shared<nodes::compo::CDereferenceLiteral>(std::dynamic_pointer_cast<nodes::procedural::CSymbol>($2));
