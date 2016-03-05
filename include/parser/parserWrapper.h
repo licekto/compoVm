@@ -32,7 +32,7 @@ class ParserWrapper {
 	std::vector<std::shared_ptr<nodes::CNode>> m_currentDescritporBody;
 
 	/**< Parameters of currently parsed service */
-	std::vector<std::shared_ptr<nodes::CNode>> m_currentServiceParams;
+	std::stack<std::vector<std::shared_ptr<nodes::CNode>>> m_currentServiceParamsStack;
 
 	/**< Visibility type of current requirement/provision */
 	nodes::types::visibilityType m_visibilityType;
@@ -165,11 +165,16 @@ class ParserWrapper {
 	 * @return reference to vector
 	 */
 	std::vector<std::shared_ptr<nodes::CNode>> * getServiceParams();
-
-	/**
-	 * Clears vector of service parameters
-	 */
-	void clearServiceParams();
+        
+        /**
+         * Push service parameters vector on the stack
+         */
+        void pushServiceParams();
+        
+        /**
+         * Pop service parameters vector from the stack
+         */
+        void popServiceParams();
 
 	/**
 	 * Sets visibility type of currently parsed provision/requirement

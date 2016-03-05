@@ -1,10 +1,10 @@
 #include <memory>
 
 #include "parser/parserWrapper.h"
-#include "nodes/compo/serviceSignature.h"
 
 ParserWrapper::ParserWrapper(Lexer *lexer)
 	: m_lexer(lexer), m_rootNodes(std::vector<std::shared_ptr<nodes::CNode>>()) {
+    pushServiceParams();
 }
 
 ParserWrapper::~ParserWrapper() {
@@ -67,15 +67,27 @@ void ParserWrapper::clearDescriptorBody() {
 }
 
 void ParserWrapper::addServiceParam(std::shared_ptr<nodes::CNode> param) {
-	m_currentServiceParams.push_back(param);
+	//m_currentServiceParams.push_back(param);
+    if (m_currentServiceParamsStack.empty()) {
+        pushServiceParams();
+    }
+    m_currentServiceParamsStack.top().push_back(param);
 }
 
 std::vector<std::shared_ptr<nodes::CNode>>* ParserWrapper::getServiceParams() {
-	return &m_currentServiceParams;
+	//return &m_currentServiceParams;
+    if (m_currentServiceParamsStack.empty()) {
+        pushServiceParams();
+    }
+    return &m_currentServiceParamsStack.top();
 }
 
-void ParserWrapper::clearServiceParams() {
-	m_currentServiceParams.clear();
+void ParserWrapper::pushServiceParams() {
+    m_currentServiceParamsStack.push(std::vector<std::shared_ptr<nodes::CNode>>(0));
+}
+
+void ParserWrapper::popServiceParams() {
+    m_currentServiceParamsStack.pop();
 }
 
 void ParserWrapper::setVisibility(nodes::types::visibilityType type) {
@@ -108,7 +120,6 @@ void ParserWrapper::clearPorts() {
 
 void ParserWrapper::clearAll() {
 	clearDescriptorBody();
-	clearServiceParams();
 	clearPorts();
         clearArchitectureBody();
         clearServiceSignatures();

@@ -266,6 +266,10 @@ compound_statement
                         $$ = parser->getCurrentCompoundBody();
                         parser->setCurrentCompoundBody(parser->popBlock());
                     }
+                |   push_context '{' '}'
+                    {
+                        $$ = nullptr;
+                    }
                 ;
 
 push_context
@@ -300,7 +304,6 @@ statement_list
                     {
                         parser->getCurrentCompoundBody()->addBodyNode($2);
                     }
-                |   /* epsilon */
                 ;
 
 expression_statement
@@ -541,15 +544,21 @@ serviceSign
                 :   IDENTIFIER '(' serviceParams ')'
                     {
                         $$ = std::make_shared<nodes::compo::CServiceSignature>(std::dynamic_pointer_cast<nodes::procedural::CSymbol>($1), *parser->getServiceParams());
-                        parser->clearServiceParams();
+                        parser->popServiceParams();
                     }
                 ;
 
 serviceSignCall
-                :   IDENTIFIER '(' serviceRuntimeParams ')'
+                :   IDENTIFIER '(' pushParams serviceRuntimeParams ')'
                     {
                         $$ = std::make_shared<nodes::compo::CServiceSignature>(std::dynamic_pointer_cast<nodes::procedural::CSymbol>($1), *parser->getServiceParams());
-                        parser->clearServiceParams();
+                        parser->popServiceParams();
+                    }
+                ;
+
+pushParams
+                :   {
+                        parser->pushServiceParams();
                     }
                 ;
 
@@ -616,12 +625,12 @@ architecture
 		;
 
 connectionDisconnection
-                :   connections
-                |   disconnections
+                :   disconnections
+                |   connections
                 ;
 
 connections     
-                :   connection ';' connections
+                :   connection ';' connectionDisconnection
                     {
                         parser->addArchitectureNode(std::dynamic_pointer_cast<nodes::compo::CBind>($1));
                     }
@@ -636,11 +645,10 @@ connection
                 ;
 
 disconnections  
-                :   disconnection ';' disconnections
+                :   disconnection ';' connectionDisconnection
                     {
                         parser->addArchitectureNode(std::dynamic_pointer_cast<nodes::compo::CBind>($1));
                     }
-                |   /* epsilon */
                 ;
 
 disconnection   

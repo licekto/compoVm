@@ -16,6 +16,7 @@
 #include "nodes/compo/namedPort.h"
 #include "nodes/compo/universalPort.h"
 #include "nodes/compo/connection.h"
+#include "nodes/compo/disconnection.h"
 #include "nodes/compo/dereferenceLiteral.h"
 #include "nodes/compo/serviceInvocation.h"
 #include "nodes/compo/collectionPortLiteral.h"
@@ -188,6 +189,7 @@ BOOST_AUTO_TEST_CASE(compoServiceTemporaries) {
     "descriptor test {\
         service temporaries() {\
             | a b |\
+            a;\
         }\
     }");
     
@@ -200,7 +202,7 @@ BOOST_AUTO_TEST_CASE(compoServiceTemporaries) {
     
     // Check service
     std::shared_ptr<nodes::compo::CService> service = std::dynamic_pointer_cast<nodes::compo::CService>(descriptor->getBodyNodeAt(0));
-    TEST_SERVICE(service, "temporaries", 0, 0, 2);
+    TEST_SERVICE(service, "temporaries", 0, 1, 2);
     
     // Check symbol
     std::shared_ptr<nodes::procedural::CSymbol> symbol = std::dynamic_pointer_cast<nodes::procedural::CSymbol>(service->getTemporaryAt(0));
@@ -283,6 +285,7 @@ BOOST_AUTO_TEST_CASE(compoArchitecture) {
             connect logger@analyzer to logging@logger;\
             connect outReqHa@analyzer to reqHa@handlers[i];\
             connect logger@&analyzer to logging@&logger;\
+            disconnect logger@analyzer from logging@logger;\
 	}\
     }");
     
@@ -295,14 +298,26 @@ BOOST_AUTO_TEST_CASE(compoArchitecture) {
     
     // Check architecture
     std::shared_ptr<nodes::compo::CArchitecture> architecture = std::dynamic_pointer_cast<nodes::compo::CArchitecture>(descriptor->getBodyNodeAt(0));
-    TEST_ARCHITECTURE(architecture, 3);
+    TEST_ARCHITECTURE(architecture, 4);
     
     // Check bind node
-    std::shared_ptr<nodes::compo::CConnection> connection = std::dynamic_pointer_cast<nodes::compo::CConnection>(architecture->getBodyNodeAt(0));
+    std::shared_ptr<nodes::compo::CDisconnection> disconnection = std::dynamic_pointer_cast<nodes::compo::CDisconnection>(architecture->getBodyNodeAt(0));
+    TEST_DISCONNECTION(disconnection);
+    
+    // Check port address
+    std::shared_ptr<nodes::compo::CPortAddress> portAddress = std::dynamic_pointer_cast<nodes::compo::CPortAddress>(disconnection->getPortIdentification1());
+    TEST_PORT_ADDRES_IDENTIFIER(portAddress, "logger", "analyzer");
+    
+    // Check port address
+    portAddress = std::dynamic_pointer_cast<nodes::compo::CPortAddress>(disconnection->getPortIdentification2());
+    TEST_PORT_ADDRES_IDENTIFIER(portAddress, "logging", "logger");
+    
+    // Check bind node
+    std::shared_ptr<nodes::compo::CConnection> connection = std::dynamic_pointer_cast<nodes::compo::CConnection>(architecture->getBodyNodeAt(1));
     TEST_CONNECTION(connection);
     
     // Check port address
-    std::shared_ptr<nodes::compo::CPortAddress> portAddress = std::dynamic_pointer_cast<nodes::compo::CPortAddress>(connection->getPortIdentification1());
+    portAddress = std::dynamic_pointer_cast<nodes::compo::CPortAddress>(connection->getPortIdentification1());
     TEST_PORT_ADDRES_DEREFERENCE(portAddress, "logger", "analyzer");
     
     // Check port address
@@ -310,7 +325,7 @@ BOOST_AUTO_TEST_CASE(compoArchitecture) {
     TEST_PORT_ADDRES_DEREFERENCE(portAddress, "logging", "logger");
     
     // Check bind node
-    connection = std::dynamic_pointer_cast<nodes::compo::CConnection>(architecture->getBodyNodeAt(1));
+    connection = std::dynamic_pointer_cast<nodes::compo::CConnection>(architecture->getBodyNodeAt(2));
     TEST_CONNECTION(connection);
     
     // Check port address
@@ -325,7 +340,7 @@ BOOST_AUTO_TEST_CASE(compoArchitecture) {
     BOOST_CHECK_EQUAL("i", std::dynamic_pointer_cast<nodes::procedural::CSymbol>(collectionPortLiteral->getIndexExpression())->getStringValue());
     
     // Check bind node
-    connection = std::dynamic_pointer_cast<nodes::compo::CConnection>(architecture->getBodyNodeAt(2));
+    connection = std::dynamic_pointer_cast<nodes::compo::CConnection>(architecture->getBodyNodeAt(3));
     TEST_CONNECTION(connection);
     
     // Check port address
@@ -346,7 +361,7 @@ BOOST_AUTO_TEST_CASE(compoServiceCall) {
     input.str(
     "descriptor test {\
 	architecture {\
-            connect handlers@self to default@(RequestHandler.new(handler.getName('a', 1, var)));\
+            connect handlers@self to default@(RequestHandler.new(handler.getName('a', 1, var, handler.getPtr())));\
 	}\
     }");
     
@@ -387,6 +402,11 @@ BOOST_AUTO_TEST_CASE(compoServiceCall) {
     BOOST_CHECK_EQUAL("a", std::dynamic_pointer_cast<nodes::procedural::CStringLiteral>(signature->getParamAt(0))->getValue());
     BOOST_CHECK_EQUAL(1, std::dynamic_pointer_cast<nodes::procedural::CConstant>(signature->getParamAt(1))->getValue());
     BOOST_CHECK_EQUAL("var", std::dynamic_pointer_cast<nodes::procedural::CSymbol>(signature->getParamAt(2))->getStringValue());
+    
+    BOOST_CHECK_EQUAL(nodes::types::nodeType::SERVICE_INVOCATION, std::dynamic_pointer_cast<nodes::CNode>(signature->getParamAt(3))->getNodeType());
+    serviceInvocation = std::dynamic_pointer_cast<nodes::compo::CServiceInvocation>(signature->getParamAt(3));
+    BOOST_CHECK_EQUAL("handler", std::dynamic_pointer_cast<nodes::procedural::CSymbol>(serviceInvocation->getReceiverName())->getStringValue());
+    BOOST_CHECK_EQUAL("getPtr", std::dynamic_pointer_cast<nodes::procedural::CSymbol>(serviceInvocation->getSelectorName())->getStringValue());
     
     // Clear AST for next test
     parser.clearRootNodes();
