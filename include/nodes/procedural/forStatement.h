@@ -1,9 +1,9 @@
 #pragma once
 
 #include <memory>
-#include "abstractStatement.h"
-#include "assignmentExpression.h"
-#include "compoundBody.h"
+#include "nodes/procedural/abstractStatement.h"
+#include "nodes/procedural/assignmentExpression.h"
+#include "nodes/procedural/compoundBody.h"
 
 namespace nodes {
 

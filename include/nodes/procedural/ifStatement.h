@@ -1,8 +1,8 @@
 #pragma once
 
 #include <memory>
-#include "abstractStatement.h"
-#include "compoundBody.h"
+#include "nodes/procedural/abstractStatement.h"
+#include "nodes/procedural/compoundBody.h"
 
 namespace nodes {
 

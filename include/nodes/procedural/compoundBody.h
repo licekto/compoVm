@@ -1,8 +1,7 @@
 #pragma once
 
 #include <memory>
-#include "nodes/node.h"
-#include "symbol.h"
+#include "nodes/procedural/symbol.h"
 
 namespace nodes {
 

@@ -4,7 +4,7 @@
 #include "nodes/node.h"
 #include "nodes/procedural/symbol.h"
 #include "nodes/procedural/compoundBody.h"
-#include "serviceSignature.h"
+#include "nodes/compo/serviceSignature.h"
 
 namespace nodes {
 

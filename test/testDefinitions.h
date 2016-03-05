@@ -6,27 +6,10 @@
 
 #include <boost/test/unit_test.hpp>
 
-#include "parser/lexer.h"
-#include "parser/parserWrapper.h"
 #include "nodes/compo/descriptor.h"
 #include "nodes/compo/service.h"
 #include "nodes/procedural/assignmentExpression.h"
 #include "nodes/procedural/constant.h"
-#include "nodes/procedural/stringLiteral.h"
-#include "nodes/procedural/parens.h"
-#include "nodes/procedural/additionExpression.h"
-#include "nodes/procedural/subtractionExpression.h"
-#include "nodes/procedural/multiplicationExpression.h"
-#include "nodes/procedural/divisionExpression.h"
-#include "nodes/procedural/equalityExpression.h"
-#include "nodes/procedural/nonEqualityExpression.h"
-#include "nodes/procedural/logicalOrExpression.h"
-#include "nodes/procedural/logicalAndExpression.h"
-#include "nodes/procedural/greaterExpression.h"
-#include "nodes/procedural/greaterOrEqualExpression.h"
-#include "nodes/procedural/lessExpression.h"
-#include "nodes/procedural/lessOrEqualExpression.h"
-#include "nodes/procedural/forStatement.h"
 
 #define TEST_DESCRIPTOR(descriptor, name, extends, bodySize) \
 do { \

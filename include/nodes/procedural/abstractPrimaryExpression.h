@@ -1,7 +1,6 @@
 #pragma once
 
 #include <memory>
-#include "nodes/node.h"
 #include "nodes/procedural/abstractExpression.h"
 
 namespace nodes {

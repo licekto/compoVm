@@ -3,8 +3,9 @@
 #include <memory>
 #include "nodes/node.h"
 #include "nodes/compo/port.h"
-#include "nodes/compo/signaturesPort.h"
 #include "nodes/procedural/symbol.h"
+#include "nodes/compo/signaturesPort.h"
+#include "nodes/compo/serviceSignature.h"
 
 namespace nodes {
 
