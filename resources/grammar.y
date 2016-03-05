@@ -12,7 +12,10 @@
 #include "nodes/compo/dereferenceLiteral.h"
 #include "nodes/compo/collectionPortLiteral.h"
 #include "nodes/compo/constraint.h"
+#include "nodes/compo/connection.h"
+#include "nodes/compo/disconnection.h"
 #include "nodes/compo/port.h"
+#include "nodes/compo/portAddress.h"
 #include "nodes/compo/namedPort.h"
 #include "nodes/compo/signaturesPort.h"
 #include "nodes/compo/universalPort.h"
@@ -21,6 +24,7 @@
 #include "nodes/compo/requirement.h"
 #include "nodes/compo/serviceSignature.h"
 #include "nodes/compo/serviceInvocation.h"
+#include "nodes/compo/bind.h"
 #include "nodes/procedural/symbol.h"
 #include "nodes/procedural/ifStatement.h"
 #include "nodes/procedural/forStatement.h"
@@ -580,7 +584,8 @@ constraint
 architecture	
                 :   ARCHITECTURE '{' connectionDisconnection '}'
                     {
-                        parser->addDescriptorBodyNode(std::make_shared<nodes::compo::CArchitecture>());
+                        parser->addDescriptorBodyNode(std::make_shared<nodes::compo::CArchitecture>(*parser->getArchitectureBody()));
+                        parser->clearArchitectureBody();
                     }
 		;
 
@@ -590,24 +595,62 @@ connectionDisconnection
                 ;
 
 connections     
-                :   connection ';' connections 
+                :   connection ';' connections
+                    {
+                        parser->addArchitectureNode(std::dynamic_pointer_cast<nodes::compo::CBind>($1));
+                    }
                 |   /* epsilon */
                 ;
 
 connection      
                 :   CONNECT portAddress TO portAddress
+                    {
+                        $$ = std::make_shared<nodes::compo::CConnection>(std::dynamic_pointer_cast<nodes::compo::CPortAddress>($2), std::dynamic_pointer_cast<nodes::compo::CPortAddress>($4));
+                    }
                 ;
 
 disconnections  
                 :   disconnection ';' disconnections
+                    {
+                        parser->addArchitectureNode(std::dynamic_pointer_cast<nodes::compo::CBind>($1));
+                    }
                 |   /* epsilon */
                 ;
 
 disconnection   
                 :   DISCONNECT portAddress FROM portAddress
+                    {
+                        $$ = std::make_shared<nodes::compo::CDisconnection>(std::dynamic_pointer_cast<nodes::compo::CPortAddress>($2), std::dynamic_pointer_cast<nodes::compo::CPortAddress>($4));
+                    }
                 ;
 
 /*-------------------------- grammar-literals-compo --------------------------*/
+
+portAddress
+                :   IDENTIFIER '@' componentIdent
+                    {
+                        $$ = std::make_shared<nodes::compo::CPortAddress>(std::dynamic_pointer_cast<nodes::procedural::CSymbol>($1), $2);
+                    }
+                ;
+
+componentIdent
+                :   collectionPortLiteral
+                    {
+                        $$ = $1;
+                    }
+                |   '(' serviceInvocation ')'
+                    {
+                        $$ = $1;
+                    }
+                |   dereferenceLiteral
+                    {
+                        $$ = $1;
+                    }
+                |   IDENTIFIER
+                    {
+                        $$ = $1;
+                    }
+                ;
 
 collectionPortLiteral
                 :   IDENTIFIER '[' expression ']'
@@ -615,19 +658,6 @@ collectionPortLiteral
                         $$ = std::make_shared<nodes::compo::CCollectionPortLiteral>(std::dynamic_pointer_cast<nodes::procedural::CSymbol>($1),
                                                                                     std::dynamic_pointer_cast<nodes::procedural::CAbstractExpression>($3));
                     }
-                ;
-
-dereferenceLiteral
-                :   '&' IDENTIFIER
-                    {
-                        $$ = std::make_shared<nodes::compo::CDereferenceLiteral>(std::dynamic_pointer_cast<nodes::procedural::CSymbol>($2));
-                    }
-                ;
-
-portAddress     :   IDENTIFIER '@' collectionPortLiteral
-                |   IDENTIFIER '@' '(' serviceInvocation ')'
-                |   IDENTIFIER '@' dereferenceLiteral
-                |   IDENTIFIER '@' IDENTIFIER
                 ;
 
 serviceInvocation
@@ -642,6 +672,13 @@ serviceInvocation
                         $$ = std::make_shared<nodes::compo::CServiceInvocation>(std::dynamic_pointer_cast<nodes::procedural::CSymbol>($1),
                                                                                std::dynamic_pointer_cast<nodes::procedural::CSymbol>($2),
                                                                                $4);
+                    }
+                ;
+
+dereferenceLiteral
+                :   '&' IDENTIFIER
+                    {
+                        $$ = std::make_shared<nodes::compo::CDereferenceLiteral>(std::dynamic_pointer_cast<nodes::procedural::CSymbol>($2));
                     }
                 ;
 

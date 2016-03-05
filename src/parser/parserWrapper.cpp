@@ -110,6 +110,8 @@ void ParserWrapper::clearAll() {
 	clearDescriptorBody();
 	clearServiceParams();
 	clearPorts();
+        clearArchitectureBody();
+        clearServiceSignatures();
 }
 
 void ParserWrapper::setCurrentCompoundBody(std::shared_ptr<nodes::procedural::CCompoundBody> body) {
@@ -146,4 +148,16 @@ void ParserWrapper::setCollectivity(bool collectivity) {
 
 bool ParserWrapper::getCollectivity() const {
 	return m_collectivity;
+}
+
+void ParserWrapper::addArchitectureNode(std::shared_ptr<nodes::compo::CBind> bindNode) {
+    m_currentArchitectureBody.push_back(bindNode);
+}
+
+std::vector<std::shared_ptr<nodes::compo::CBind>> * ParserWrapper::getArchitectureBody() {
+    return &m_currentArchitectureBody;
+}
+
+void ParserWrapper::clearArchitectureBody() {
+    m_currentArchitectureBody.clear();
 }

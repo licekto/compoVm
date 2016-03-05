@@ -36,6 +36,7 @@ namespace nodes {
                         DEREFERENCE,
                         COLLECTION_PORT,
                         SERVICE_INVOCATION,
+                        PORT_ADDRESS,
 			FOR,
 			WHILE,
 			IF,

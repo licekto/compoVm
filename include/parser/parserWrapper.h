@@ -6,6 +6,7 @@
 #include "parser/lexer.h"
 #include "nodes/node.h"
 #include "nodes/compo/port.h"
+#include "nodes/compo/bind.h"
 #include "nodes/compo/serviceSignature.h"
 #include "nodes/procedural/compoundBody.h"
 #include "nodes/procedural/symbol.h"
@@ -53,6 +54,9 @@ class ParserWrapper {
         
         /**< Is current port collecting port? */
         bool m_collectivity;
+        
+        /**< Vector of current architecture body */
+        std::vector<std::shared_ptr<nodes::compo::CBind>> m_currentArchitectureBody;
 
   public:
 	/**
@@ -265,4 +269,21 @@ class ParserWrapper {
 	 * @return bool value
 	 */
 	bool getCollectivity() const;
+        
+        /**
+	* Adds currently parsed bind node
+	 * @param port: smart pointer to bind node
+	 */
+	void addArchitectureNode(std::shared_ptr<nodes::compo::CBind> bindNode);
+
+	/**
+	 * Returns vector of ports
+	 * @return pointer to vector
+	 */
+	std::vector<std::shared_ptr<nodes::compo::CBind>> * getArchitectureBody();
+        
+        /**
+         * Clears vector of architecture body nodes
+         */
+        void clearArchitectureBody();
 };
