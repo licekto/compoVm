@@ -15,12 +15,12 @@ namespace nodes {
 		 */
 		class CInterface : public CNode {
 		  private:
-                        /**< Name of interface */
-                        std::shared_ptr<nodes::procedural::CSymbol> m_name;
-                        
-                        /**< Name of base interface */
-                        std::shared_ptr<nodes::procedural::CSymbol> m_extends;
-                      
+			/**< Name of interface */
+			std::shared_ptr<nodes::procedural::CSymbol> m_name;
+
+			/**< Name of base interface */
+			std::shared_ptr<nodes::procedural::CSymbol> m_extends;
+
 			/**< List of signatures */
 			std::vector<std::shared_ptr<nodes::compo::CServiceSignature>> m_signaturesList;
 
@@ -31,8 +31,8 @@ namespace nodes {
 			* @param atomic: Is atomic?
 			*/
 			CInterface(std::shared_ptr<nodes::procedural::CSymbol> name = nullptr,
-                                   std::shared_ptr<nodes::procedural::CSymbol> extends = nullptr,
-                                   std::vector<std::shared_ptr<nodes::compo::CServiceSignature>> list = std::vector<std::shared_ptr<nodes::compo::CServiceSignature>>(0));
+			           std::shared_ptr<nodes::procedural::CSymbol> extends = nullptr,
+			           std::vector<std::shared_ptr<nodes::compo::CServiceSignature>> list = std::vector<std::shared_ptr<nodes::compo::CServiceSignature>>(0));
 
 			/**
 			* Virtual print function to call from operator <<
@@ -40,25 +40,25 @@ namespace nodes {
 			* @see operator <<()
 			*/
 			virtual void print(std::ostream& os) const;
-                        
-                        /**
-			 * Interface name getter
-			 * @return name symbol.
-			 */
+
+			/**
+			* Interface name getter
+					 * @return name symbol.
+					 */
 			std::shared_ptr<nodes::procedural::CSymbol> getName() const;
-                        
-                        /**
-			 * Base interface name getter
-			 * @return name symbol.
-			 */
+
+			/**
+			* Base interface name getter
+					 * @return name symbol.
+					 */
 			std::shared_ptr<nodes::procedural::CSymbol> getExtends() const;
-                        
+
 			/**
 			 * Signatures size getter
 			 * @return size_t
 			 */
 			size_t getSignaturesSize() const;
-                        
+
 			/**
 			 * Signatures getter
 			 * @param index

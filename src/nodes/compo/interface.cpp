@@ -5,11 +5,11 @@ namespace nodes {
 	namespace compo {
 
 		CInterface::CInterface(std::shared_ptr<nodes::procedural::CSymbol> name,
-                                       std::shared_ptr<nodes::procedural::CSymbol> extends,
-                                       std::vector<std::shared_ptr<nodes::compo::CServiceSignature>> list)
+		                       std::shared_ptr<nodes::procedural::CSymbol> extends,
+		                       std::vector<std::shared_ptr<nodes::compo::CServiceSignature>> list)
 			:   CNode(types::nodeType::INTERFACE),
-                            m_name(name),
-                            m_extends(extends),
+			    m_name(name),
+			    m_extends(extends),
 			    m_signaturesList(list) {
 		}
 
@@ -17,14 +17,14 @@ namespace nodes {
 			outstream << "signaturesPort" << std::endl;
 		}
 
-                std::shared_ptr<nodes::procedural::CSymbol> CInterface::getName() const {
-                    return m_name;
-                }
-                
-                std::shared_ptr<nodes::procedural::CSymbol> CInterface::getExtends() const {
-                    return m_extends;
-                }
-                
+		std::shared_ptr<nodes::procedural::CSymbol> CInterface::getName() const {
+			return m_name;
+		}
+
+		std::shared_ptr<nodes::procedural::CSymbol> CInterface::getExtends() const {
+			return m_extends;
+		}
+
 		size_t CInterface::getSignaturesSize() const {
 			return m_signaturesList.size();
 		}

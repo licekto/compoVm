@@ -429,9 +429,11 @@ BOOST_AUTO_TEST_CASE(compoInterface) {
     std::shared_ptr<nodes::compo::CInterface> interface = std::dynamic_pointer_cast<nodes::compo::CInterface>(parser.getRootNodeAt(0));
     TEST_INTERFACE(interface, "IPrinting", "IAbcd", 2);
     
+    // Check signature
     BOOST_CHECK_EQUAL("print", interface->getSignatureAt(1)->getName());
     BOOST_CHECK_EQUAL("text", std::dynamic_pointer_cast<nodes::procedural::CSymbol>(interface->getSignatureAt(1)->getParamAt(0))->getStringValue());
     
+    // Check signature
     BOOST_CHECK_EQUAL("printLn", interface->getSignatureAt(0)->getName());
     BOOST_CHECK_EQUAL("text", std::dynamic_pointer_cast<nodes::procedural::CSymbol>(interface->getSignatureAt(0)->getParamAt(0))->getStringValue());
     BOOST_CHECK_EQUAL("param", std::dynamic_pointer_cast<nodes::procedural::CSymbol>(interface->getSignatureAt(0)->getParamAt(1))->getStringValue());
