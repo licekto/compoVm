@@ -102,7 +102,7 @@ class ParserWrapper {
 	* Root node setter
 	* @param node pointer
 	*/
-	void setRootNode(std::shared_ptr<nodes::CNode> node);
+	void addRootNode(std::shared_ptr<nodes::CNode> node);
 
 	/**
 	* Root node vector size getter

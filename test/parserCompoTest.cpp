@@ -22,6 +22,7 @@
 #include "nodes/compo/collectionPortLiteral.h"
 #include "nodes/procedural/stringLiteral.h"
 #include "nodes/procedural/parens.h"
+#include "nodes/compo/interface.h"
 
 BOOST_AUTO_TEST_SUITE(parserCompoTest)
 
@@ -407,6 +408,33 @@ BOOST_AUTO_TEST_CASE(compoServiceCall) {
     serviceInvocation = std::dynamic_pointer_cast<nodes::compo::CServiceInvocation>(signature->getParamAt(3));
     BOOST_CHECK_EQUAL("handler", std::dynamic_pointer_cast<nodes::procedural::CSymbol>(serviceInvocation->getReceiverName())->getStringValue());
     BOOST_CHECK_EQUAL("getPtr", std::dynamic_pointer_cast<nodes::procedural::CSymbol>(serviceInvocation->getSelectorName())->getStringValue());
+    
+    // Clear AST for next test
+    parser.clearRootNodes();
+}
+
+BOOST_AUTO_TEST_CASE(compoInterface) {
+    // Testing input
+    std::stringstream input;
+    input.str(
+    "interface IPrinting extends IAbcd {\
+        print(text);\
+        printLn(text, param);\
+    }");
+    
+    // Parse input and create AST
+    parser.parse(input);
+    
+    // Check interface
+    std::shared_ptr<nodes::compo::CInterface> interface = std::dynamic_pointer_cast<nodes::compo::CInterface>(parser.getRootNodeAt(0));
+    TEST_INTERFACE(interface, "IPrinting", "IAbcd", 2);
+    
+    BOOST_CHECK_EQUAL("print", interface->getSignatureAt(1)->getName());
+    BOOST_CHECK_EQUAL("text", std::dynamic_pointer_cast<nodes::procedural::CSymbol>(interface->getSignatureAt(1)->getParamAt(0))->getStringValue());
+    
+    BOOST_CHECK_EQUAL("printLn", interface->getSignatureAt(0)->getName());
+    BOOST_CHECK_EQUAL("text", std::dynamic_pointer_cast<nodes::procedural::CSymbol>(interface->getSignatureAt(0)->getParamAt(0))->getStringValue());
+    BOOST_CHECK_EQUAL("param", std::dynamic_pointer_cast<nodes::procedural::CSymbol>(interface->getSignatureAt(0)->getParamAt(1))->getStringValue());
     
     // Clear AST for next test
     parser.clearRootNodes();

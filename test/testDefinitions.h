@@ -20,6 +20,14 @@ do { \
     BOOST_CHECK_EQUAL(bodySize, descriptor->getBodySize()); \
 } while(0)
 
+#define TEST_INTERFACE(interface, name, extends, signaturesListSize) \
+do { \
+    BOOST_CHECK_EQUAL(nodes::types::nodeType::INTERFACE, interface->getNodeType()); \
+    BOOST_CHECK_EQUAL(name, interface->getName()->getStringValue()); \
+    BOOST_CHECK_EQUAL(extends, interface->getExtends()->getStringValue()); \
+    BOOST_CHECK_EQUAL(signaturesListSize, interface->getSignaturesSize()); \
+} while(0)
+
 #define TEST_PROVISION(provision, visibility, numOfPorts) \
 do { \
     BOOST_CHECK_EQUAL(nodes::types::nodeType::PROVISION, provision->getNodeType()); \

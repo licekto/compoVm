@@ -22,6 +22,7 @@
 #include "nodes/compo/descriptor.h"
 #include "nodes/compo/provision.h"
 #include "nodes/compo/requirement.h"
+#include "nodes/compo/interface.h"
 #include "nodes/compo/serviceSignature.h"
 #include "nodes/compo/serviceInvocation.h"
 #include "nodes/compo/bind.h"
@@ -369,15 +370,13 @@ start
                 ;
 
 descriptor_interface
-                :   descriptors
-                |   interface
-                ;
-                    
-
-descriptors     
-                :   descriptor descriptors
+                :   descriptor descriptor_interface
                     {
-                        parser->setRootNode($1);
+                        parser->addRootNode($1);
+                    }
+                |   interface descriptor_interface
+                    {
+                        parser->addRootNode($1);
                     }
                 |   /* epsilon */
                 ;
@@ -390,9 +389,15 @@ descriptor
                                                                          std::move(*(parser->getDescriptorBody())));
                         parser->clearAll();
                     }
+                ;
 
 interface       
                 :   INTERFACE IDENTIFIER inheritance service_signatures_list
+                    {
+                        $$ = std::make_shared<nodes::compo::CInterface>(std::dynamic_pointer_cast<nodes::procedural::CSymbol>($2),
+                                                                        std::dynamic_pointer_cast<nodes::procedural::CSymbol>($3),
+                                                                        *parser->getServiceSignatures());
+                    }
                 ;
 
 inheritance     

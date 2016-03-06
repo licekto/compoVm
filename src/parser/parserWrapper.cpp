@@ -15,7 +15,7 @@ Lexer * ParserWrapper::getLexer() const {
 	return m_lexer;
 }
 
-void ParserWrapper::setRootNode(std::shared_ptr<nodes::CNode> node) {
+void ParserWrapper::addRootNode(std::shared_ptr<nodes::CNode> node) {
 	m_rootNodes.push_back(node);
 }
 
