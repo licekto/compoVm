@@ -47,7 +47,7 @@ namespace nodes {
 			* Name getter
 			* @return Name of entity
 			*/
-			std::string getName() const;
+			std::shared_ptr<nodes::procedural::CSymbol> getNameSymbol() const;
 
 			/**
 			* Body size getter

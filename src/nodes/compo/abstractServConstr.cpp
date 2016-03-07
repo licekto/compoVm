@@ -20,11 +20,8 @@ namespace nodes {
 			outstream << "}" << std::endl;
 		}
 
-		std::string CAbstractServConstr::getName() const {
-			if (m_signature) {
-				return m_signature->getName();
-			}
-			return "";
+		std::shared_ptr<nodes::procedural::CSymbol> CAbstractServConstr::getNameSymbol() const {
+                        return m_signature->getName();
 		}
 
 		size_t CAbstractServConstr::getBodySize() const {
