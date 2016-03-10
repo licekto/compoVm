@@ -104,6 +104,13 @@ do { \
     BOOST_CHECK_EQUAL(nodes::types::nodeType::PORT_ADDRESS, disconnection->getPortIdentification2()->getNodeType()); \
 } while(0)
 
+#define TEST_DELEGATION(delegation) \
+do { \
+    BOOST_CHECK_EQUAL(nodes::types::nodeType::DELEGATION, delegation->getNodeType()); \
+    BOOST_CHECK_EQUAL(nodes::types::nodeType::PORT_ADDRESS, delegation->getPortIdentification1()->getNodeType()); \
+    BOOST_CHECK_EQUAL(nodes::types::nodeType::PORT_ADDRESS, delegation->getPortIdentification2()->getNodeType()); \
+} while(0)
+
 #define TEST_PORT_ADDRES_DEREFERENCE(portAddress, portName, componentName) \
 do { \
     BOOST_CHECK_EQUAL(nodes::types::nodeType::PORT_ADDRESS, portAddress->getNodeType()); \

@@ -17,6 +17,7 @@
 #include "nodes/compo/universalPort.h"
 #include "nodes/compo/connection.h"
 #include "nodes/compo/disconnection.h"
+#include "nodes/compo/delegation.h"
 #include "nodes/compo/dereferenceLiteral.h"
 #include "nodes/compo/serviceInvocation.h"
 #include "nodes/compo/collectionPortLiteral.h"
@@ -287,6 +288,7 @@ BOOST_AUTO_TEST_CASE(compoArchitecture) {
             connect outReqHa@analyzer to reqHa@handlers[i];\
             connect logger@&analyzer to logging@&logger;\
             disconnect logger@analyzer from logging@logger;\
+            delegate logger@analyzer to logging@logger;\
 	}\
     }");
     
@@ -299,14 +301,26 @@ BOOST_AUTO_TEST_CASE(compoArchitecture) {
     
     // Check architecture
     std::shared_ptr<nodes::compo::CArchitecture> architecture = std::dynamic_pointer_cast<nodes::compo::CArchitecture>(descriptor->getBodyNodeAt(0));
-    TEST_ARCHITECTURE(architecture, 4);
+    TEST_ARCHITECTURE(architecture, 5);
     
     // Check bind node
-    std::shared_ptr<nodes::compo::CDisconnection> disconnection = std::dynamic_pointer_cast<nodes::compo::CDisconnection>(architecture->getBodyNodeAt(0));
+    std::shared_ptr<nodes::compo::CDelegation> delegation = std::dynamic_pointer_cast<nodes::compo::CDelegation>(architecture->getBodyNodeAt(0));
+    TEST_DELEGATION(delegation);
+    
+    // Check port address
+    std::shared_ptr<nodes::compo::CPortAddress> portAddress = std::dynamic_pointer_cast<nodes::compo::CPortAddress>(delegation->getPortIdentification1());
+    TEST_PORT_ADDRES_IDENTIFIER(portAddress, "logger", "analyzer");
+    
+    // Check port address
+    portAddress = std::dynamic_pointer_cast<nodes::compo::CPortAddress>(delegation->getPortIdentification2());
+    TEST_PORT_ADDRES_IDENTIFIER(portAddress, "logging", "logger");
+    
+    // Check bind node
+    std::shared_ptr<nodes::compo::CDisconnection> disconnection = std::dynamic_pointer_cast<nodes::compo::CDisconnection>(architecture->getBodyNodeAt(1));
     TEST_DISCONNECTION(disconnection);
     
     // Check port address
-    std::shared_ptr<nodes::compo::CPortAddress> portAddress = std::dynamic_pointer_cast<nodes::compo::CPortAddress>(disconnection->getPortIdentification1());
+    portAddress = std::dynamic_pointer_cast<nodes::compo::CPortAddress>(disconnection->getPortIdentification1());
     TEST_PORT_ADDRES_IDENTIFIER(portAddress, "logger", "analyzer");
     
     // Check port address
@@ -314,7 +328,7 @@ BOOST_AUTO_TEST_CASE(compoArchitecture) {
     TEST_PORT_ADDRES_IDENTIFIER(portAddress, "logging", "logger");
     
     // Check bind node
-    std::shared_ptr<nodes::compo::CConnection> connection = std::dynamic_pointer_cast<nodes::compo::CConnection>(architecture->getBodyNodeAt(1));
+    std::shared_ptr<nodes::compo::CConnection> connection = std::dynamic_pointer_cast<nodes::compo::CConnection>(architecture->getBodyNodeAt(2));
     TEST_CONNECTION(connection);
     
     // Check port address
@@ -326,7 +340,7 @@ BOOST_AUTO_TEST_CASE(compoArchitecture) {
     TEST_PORT_ADDRES_DEREFERENCE(portAddress, "logging", "logger");
     
     // Check bind node
-    connection = std::dynamic_pointer_cast<nodes::compo::CConnection>(architecture->getBodyNodeAt(2));
+    connection = std::dynamic_pointer_cast<nodes::compo::CConnection>(architecture->getBodyNodeAt(3));
     TEST_CONNECTION(connection);
     
     // Check port address
@@ -341,7 +355,7 @@ BOOST_AUTO_TEST_CASE(compoArchitecture) {
     BOOST_CHECK_EQUAL("i", std::dynamic_pointer_cast<nodes::procedural::CSymbol>(collectionPortLiteral->getIndexExpression())->getStringValue());
     
     // Check bind node
-    connection = std::dynamic_pointer_cast<nodes::compo::CConnection>(architecture->getBodyNodeAt(3));
+    connection = std::dynamic_pointer_cast<nodes::compo::CConnection>(architecture->getBodyNodeAt(4));
     TEST_CONNECTION(connection);
     
     // Check port address

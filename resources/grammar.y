@@ -14,6 +14,7 @@
 #include "nodes/compo/constraint.h"
 #include "nodes/compo/connection.h"
 #include "nodes/compo/disconnection.h"
+#include "nodes/compo/delegation.h"
 #include "nodes/compo/port.h"
 #include "nodes/compo/portAddress.h"
 #include "nodes/compo/namedPort.h"
@@ -282,7 +283,7 @@ push_context
 
 temporaries
                 :   '|' temporaries_list '|'
-                |   /* epsilon */
+                |   empty
                 ;
 
 temporaries_list
@@ -378,7 +379,7 @@ descriptor_interface
                     {
                         parser->addRootNode($1);
                     }
-                |   /* epsilon */
+                |   empty
                 ;
 
 descriptor      
@@ -405,7 +406,7 @@ inheritance
                     {
                         $$ = $2;
                     }
-                |   /* epsilon */
+                |   empty
                     {
                         $$ = nullptr;
                     }
@@ -413,7 +414,7 @@ inheritance
 
 compo_expressions      
                 :   compo_expression compo_expressions
-                |   /* epsilon */           // Empty descriptor allowed
+                |   empty           // Empty descriptor allowed
                 ;
 
 
@@ -450,7 +451,7 @@ visibility
                     {
                         parser->setVisibility(nodes::types::visibilityType::INTERNAL);
                     }
-                |   /* epsilon */
+                |   empty
                     {
                         parser->setVisibility(nodes::types::visibilityType::EXTERNAL);
                     }
@@ -460,12 +461,12 @@ provision_requirement_signature
                 :   '{' ports '}'
                 ;
 
-ports		
+ports
                 :   port ';'
                 |   port ';' ports
 		;
 
-port		
+port
                 :   atomic port_name collecting ':' port_signature of_kind
 		    {
                         std::dynamic_pointer_cast<nodes::compo::CPort>($5)->setKindOf(std::dynamic_pointer_cast<nodes::procedural::CSymbol>($6));
@@ -473,12 +474,12 @@ port
 		    }
 		;
 
-atomic		
+atomic
                 :   ATOMIC
                     {
                         parser->setAtomicity(true);
                     }
-		|   /* epsilon */
+		|   empty
                     {
                         parser->setAtomicity(false);
                     }
@@ -496,7 +497,7 @@ collecting
                     {
                         parser->setCollectivity(true);
                     }
-                |   /* epsilon */
+                |   empty
                     {
                         parser->setCollectivity(false);
                     }
@@ -531,7 +532,7 @@ of_kind
                     {
                         $$ = $2;
                     }
-                |   /* epsilon */
+                |   empty
                     {
                         $$ = nullptr;
                     }
@@ -546,7 +547,7 @@ service
                 ;
 
 service_signature
-                :   IDENTIFIER '(' serviceParams ')'
+                :   IDENTIFIER '(' service_params ')'
                     {
                         $$ = std::make_shared<nodes::compo::CServiceSignature>(std::dynamic_pointer_cast<nodes::procedural::CSymbol>($1), *parser->getServiceParams());
                         parser->popServiceParams();
@@ -576,16 +577,16 @@ service_signatures
                     {
                         parser->addServiceSignature(std::dynamic_pointer_cast<nodes::compo::CServiceSignature>($1));
                     }
-                |   /* epsilon */
+                |   empty
                 ;
 
 service_signatures_list
                 :   '{' service_signatures '}'
 
-serviceParams   
+service_params   
                 :   parameter
-                |   parameter ',' serviceParams
-                |   /* epsilon */
+                |   parameter ',' service_params
+                |   empty
                 ;
 
 parameter
@@ -598,7 +599,7 @@ parameter
 service_runtime_params
                 :   parameter_runtime
                 |   parameter_runtime ',' service_runtime_params
-                |   /* epsilon */
+                |   empty
                 ;
 
 parameter_runtime   
@@ -632,6 +633,7 @@ architecture
 connection_disconnection
                 :   disconnections
                 |   connections
+                |   delegations
                 ;
 
 connections     
@@ -639,7 +641,7 @@ connections
                     {
                         parser->addArchitectureNode(std::dynamic_pointer_cast<nodes::compo::CBind>($1));
                     }
-                |   /* epsilon */
+                |   empty
                 ;
 
 connection      
@@ -660,6 +662,20 @@ disconnection
                 :   DISCONNECT port_address FROM port_address
                     {
                         $$ = std::make_shared<nodes::compo::CDisconnection>(std::dynamic_pointer_cast<nodes::compo::CPortAddress>($2), std::dynamic_pointer_cast<nodes::compo::CPortAddress>($4));
+                    }
+                ;
+
+delegations  
+                :   delegation ';' connection_disconnection
+                    {
+                        parser->addArchitectureNode(std::dynamic_pointer_cast<nodes::compo::CBind>($1));
+                    }
+                ;
+
+delegation   
+                :   DELEGATE port_address TO port_address
+                    {
+                        $$ = std::make_shared<nodes::compo::CDelegation>(std::dynamic_pointer_cast<nodes::compo::CPortAddress>($2), std::dynamic_pointer_cast<nodes::compo::CPortAddress>($4));
                     }
                 ;
 
@@ -720,7 +736,9 @@ dereference_literal
                         $$ = std::make_shared<nodes::compo::CDereferenceLiteral>(std::dynamic_pointer_cast<nodes::procedural::CSymbol>($2));
                     }
                 ;
-
+empty
+                :
+                ;
 /*----------------------------------------------------------------------------*/
 %%
 

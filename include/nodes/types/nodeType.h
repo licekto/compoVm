@@ -32,6 +32,7 @@ namespace nodes {
 			ARCHITECTURE,
 			CONNECTION,
 			DISCONNECTION,
+                        DELEGATION,
 			INJECTED_PORT,
 			DEREFERENCE,
 			COLLECTION_PORT,
