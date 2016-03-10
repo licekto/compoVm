@@ -412,7 +412,7 @@ BOOST_AUTO_TEST_CASE(compoServiceCall) {
     
     std::shared_ptr<nodes::compo::CServiceSignature> signature = std::dynamic_pointer_cast<nodes::compo::CServiceSignature>(serviceInvocation->getParameters());
     BOOST_CHECK_EQUAL(nodes::types::nodeType::SERVICE_SIGNATURE, signature->getNodeType());
-    BOOST_CHECK_EQUAL("getName", signature->getName());
+    BOOST_CHECK_EQUAL("getName", signature->getName()->getStringValue());
     
     BOOST_CHECK_EQUAL("a", std::dynamic_pointer_cast<nodes::procedural::CStringLiteral>(signature->getParamAt(0))->getValue());
     BOOST_CHECK_EQUAL(1, std::dynamic_pointer_cast<nodes::procedural::CConstant>(signature->getParamAt(1))->getValue());
@@ -444,11 +444,11 @@ BOOST_AUTO_TEST_CASE(compoInterface) {
     TEST_INTERFACE(interface, "IPrinting", "IAbcd", 2);
     
     // Check signature
-    BOOST_CHECK_EQUAL("print", interface->getSignatureAt(1)->getName());
+    BOOST_CHECK_EQUAL("print", interface->getSignatureAt(1)->getName()->getStringValue());
     BOOST_CHECK_EQUAL("text", std::dynamic_pointer_cast<nodes::procedural::CSymbol>(interface->getSignatureAt(1)->getParamAt(0))->getStringValue());
     
     // Check signature
-    BOOST_CHECK_EQUAL("printLn", interface->getSignatureAt(0)->getName());
+    BOOST_CHECK_EQUAL("printLn", interface->getSignatureAt(0)->getName()->getStringValue());
     BOOST_CHECK_EQUAL("text", std::dynamic_pointer_cast<nodes::procedural::CSymbol>(interface->getSignatureAt(0)->getParamAt(0))->getStringValue());
     BOOST_CHECK_EQUAL("param", std::dynamic_pointer_cast<nodes::procedural::CSymbol>(interface->getSignatureAt(0)->getParamAt(1))->getStringValue());
     

@@ -45,7 +45,7 @@ do { \
 #define TEST_SERVICE(service, name, numOfParams, bodySize, temporariesSize) \
 do { \
     BOOST_CHECK_EQUAL(nodes::types::nodeType::SERVICE, service->getNodeType()); \
-    BOOST_CHECK_EQUAL(name, service->getName()); \
+    BOOST_CHECK_EQUAL(name, service->getNameSymbol()->getStringValue()); \
     BOOST_CHECK_EQUAL(numOfParams, service->getParamsSize()); \
     BOOST_CHECK_EQUAL(bodySize, service->getBodySize()); \
     BOOST_CHECK_EQUAL(temporariesSize, service->getTemporariesSize()); \
@@ -54,7 +54,7 @@ do { \
 #define TEST_CONSTRAINT(service, name, numOfParams, bodySize) \
 do { \
     BOOST_CHECK_EQUAL(nodes::types::nodeType::CONSTRAINT, constraint->getNodeType()); \
-    BOOST_CHECK_EQUAL(name, constraint->getName()); \
+    BOOST_CHECK_EQUAL(name, constraint->getNameSymbol()->getStringValue()); \
     BOOST_CHECK_EQUAL(numOfParams, constraint->getParamsSize()); \
     BOOST_CHECK_EQUAL(bodySize, constraint->getBodySize()); \
 } while(0)
@@ -74,8 +74,8 @@ do { \
 #define TEST_SIGNATURES_PORT2(signPort, portName, sign1Name, sign2Name) \
 do { \
     BOOST_CHECK_EQUAL(portName, signPort->getName()); \
-    BOOST_CHECK_EQUAL(sign1Name, signPort->getSignatureAt(1)->getName()); \
-    BOOST_CHECK_EQUAL(sign2Name, signPort->getSignatureAt(0)->getName()); \
+    BOOST_CHECK_EQUAL(sign1Name, signPort->getSignatureAt(1)->getName()->getStringValue()); \
+    BOOST_CHECK_EQUAL(sign2Name, signPort->getSignatureAt(0)->getName()->getStringValue()); \
 } while(0)
 
 #define TEST_NAMED_PORT(namedPort, portName, paramName) \
