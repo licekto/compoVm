@@ -37,20 +37,20 @@ namespace nodes {
 
 			/**
 			* Name getter
-                        * @return Name of entity
-                        */
+			            * @return Name of entity
+			            */
 			std::shared_ptr<nodes::procedural::CSymbol> getName() const;
 
 			/**
 			* Name symbol getter
-                        * @return shared_ptr to CSymbol
-                        */
+			            * @return shared_ptr to CSymbol
+			            */
 			std::shared_ptr<nodes::procedural::CSymbol> getNameSymbol() const;
 
 			/**
 			* Parameter size vector size
-                        * @return number of parameters
-                        */
+			            * @return number of parameters
+			            */
 			size_t getParamsSize() const;
 
 			/**

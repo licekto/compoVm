@@ -14,7 +14,7 @@ namespace nodes {
 		}
 
 		std::shared_ptr<nodes::procedural::CSymbol> CServiceSignature::getName() const {
-                        return m_name;
+			return m_name;
 		}
 
 		size_t CServiceSignature::getParamsSize() const {

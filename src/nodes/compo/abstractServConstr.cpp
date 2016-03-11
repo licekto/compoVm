@@ -21,7 +21,7 @@ namespace nodes {
 		}
 
 		std::shared_ptr<nodes::procedural::CSymbol> CAbstractServConstr::getNameSymbol() const {
-                        return m_signature->getName();
+			return m_signature->getName();
 		}
 
 		size_t CAbstractServConstr::getBodySize() const {

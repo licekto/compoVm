@@ -83,7 +83,7 @@ Identifier                  [a-zA-Z][a-zA-Z_0-9]*
 
 <INITIAL>inject-with                    {return INJECTWITH;}
 
-<INITIAL>of-kind                         {return OFKIND;}
+<INITIAL>of-kind                        {return OFKIND;}
 
 <INITIAL>for				{return FOR;}
 
