@@ -402,15 +402,17 @@ BOOST_AUTO_TEST_CASE(compoServiceCall) {
     // Check port address
     portAddress = std::dynamic_pointer_cast<nodes::compo::CPortAddress>(connection->getPortIdentification2());
     BOOST_CHECK_EQUAL("default", portAddress->getPortName()->getStringValue());
+    
     std::shared_ptr<nodes::compo::CServiceInvocation> serviceInvocation = std::dynamic_pointer_cast<nodes::compo::CServiceInvocation>(portAddress->getComponent());
     BOOST_CHECK_EQUAL("RequestHandler", std::dynamic_pointer_cast<nodes::procedural::CSymbol>(serviceInvocation->getReceiverName())->getStringValue());
     BOOST_CHECK_EQUAL("new", std::dynamic_pointer_cast<nodes::procedural::CSymbol>(serviceInvocation->getSelectorName())->getStringValue());
     
-    serviceInvocation = std::dynamic_pointer_cast<nodes::compo::CServiceInvocation>(serviceInvocation->getParameters());
+    std::shared_ptr<nodes::compo::CServiceSignature> signature = std::dynamic_pointer_cast<nodes::compo::CServiceSignature>(serviceInvocation->getParameters());
+    serviceInvocation = std::dynamic_pointer_cast<nodes::compo::CServiceInvocation>(signature->getParamAt(0));
     BOOST_CHECK_EQUAL("handler", std::dynamic_pointer_cast<nodes::procedural::CSymbol>(serviceInvocation->getReceiverName())->getStringValue());
     BOOST_CHECK_EQUAL("getName", std::dynamic_pointer_cast<nodes::procedural::CSymbol>(serviceInvocation->getSelectorName())->getStringValue());
     
-    std::shared_ptr<nodes::compo::CServiceSignature> signature = std::dynamic_pointer_cast<nodes::compo::CServiceSignature>(serviceInvocation->getParameters());
+    signature = std::dynamic_pointer_cast<nodes::compo::CServiceSignature>(serviceInvocation->getParameters());
     BOOST_CHECK_EQUAL(nodes::types::nodeType::SERVICE_SIGNATURE, signature->getNodeType());
     BOOST_CHECK_EQUAL("getName", signature->getName()->getStringValue());
     

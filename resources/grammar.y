@@ -722,12 +722,6 @@ service_invocation
                                                                                 std::dynamic_pointer_cast<nodes::compo::CServiceSignature>($3)->getNameSymbol(),
                                                                                 $3);
                     }
-                |   IDENTIFIER '.' IDENTIFIER '(' service_invocation ')'
-                    {
-                        $$ = std::make_shared<nodes::compo::CServiceInvocation>(std::dynamic_pointer_cast<nodes::procedural::CSymbol>($1),
-                                                                                std::dynamic_pointer_cast<nodes::procedural::CSymbol>($3),
-                                                                                $5);
-                    }
                 ;
 
 dereference_literal
