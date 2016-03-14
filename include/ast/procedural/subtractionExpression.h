@@ -1,0 +1,29 @@
+#pragma once
+
+#include <memory>
+
+#include "ast/procedural/binaryExpression.h"
+#include "ast/types/operatorType.h"
+
+namespace ast {
+
+	namespace procedural {
+
+		/**
+		 * \class CSubtractionExpression
+		 * \brief Class for subtraction representation.
+		 */
+		class CSubtractionExpression : public CBinaryExpression {
+		  public:
+			/**
+			* Parametric constructor with default values
+			* @param variable: name of variable
+			* @param rval: right-hand side of assignment
+			*/
+			CSubtractionExpression(std::shared_ptr<ast::procedural::CAbstractExpression> op1 = nullptr,
+			                       std::shared_ptr<ast::procedural::CAbstractExpression> op2 = nullptr);
+		};
+
+	}
+
+}

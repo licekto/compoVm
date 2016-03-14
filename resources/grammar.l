@@ -10,10 +10,10 @@
 #include <cstdlib>
 #include "parser/parserWrapper.h"
 #include "generated/parser.h"
-#include "nodes/node.h"
-#include "nodes/procedural/symbol.h"
-#include "nodes/procedural/constant.h"
-#include "nodes/procedural/stringLiteral.h"
+#include "ast/node.h"
+#include "ast/procedural/symbol.h"
+#include "ast/procedural/constant.h"
+#include "ast/procedural/stringLiteral.h"
 
 std::string buffer;
 %}
@@ -41,7 +41,7 @@ Identifier                  [a-zA-Z][a-zA-Z_0-9]*
 <STRING>\\.?                            {buffer.append(yytext+1);} // skip backslash
 
 <STRING>\'                              {
-                                            yylval = std::make_shared<nodes::procedural::CStringLiteral>(buffer);
+                                            yylval = std::make_shared<ast::procedural::CStringLiteral>(buffer);
                                             BEGIN(INITIAL);
                                             buffer.clear();
                                             return STRING_LITERAL;
@@ -152,12 +152,12 @@ Identifier                  [a-zA-Z][a-zA-Z_0-9]*
 <INITIAL>"||"                           {return OR_OP;}
 
 <INITIAL>{Identifier}                   {
-                                            yylval = std::make_shared<nodes::procedural::CSymbol>(std::string(yytext, yyleng));
+                                            yylval = std::make_shared<ast::procedural::CSymbol>(std::string(yytext, yyleng));
                                             return IDENTIFIER;
                                         }
 
 <INITIAL>{IntegerLiteral}               {
-                                            yylval = std::make_shared<nodes::procedural::CConstant>(atoll(yytext));
+                                            yylval = std::make_shared<ast::procedural::CConstant>(atoll(yytext));
                                             return CONSTANT;
                                         }
 

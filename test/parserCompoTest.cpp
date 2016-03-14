@@ -7,23 +7,23 @@
 #include "parser/lexer.h"
 #include "parser/parserWrapper.h"
 
-#include "nodes/compo/descriptor.h"
-#include "nodes/compo/provision.h"
-#include "nodes/compo/requirement.h"
-#include "nodes/compo/service.h"
-#include "nodes/compo/constraint.h"
-#include "nodes/compo/architecture.h"
-#include "nodes/compo/namedPort.h"
-#include "nodes/compo/universalPort.h"
-#include "nodes/compo/connection.h"
-#include "nodes/compo/disconnection.h"
-#include "nodes/compo/delegation.h"
-#include "nodes/compo/dereferenceLiteral.h"
-#include "nodes/compo/serviceInvocation.h"
-#include "nodes/compo/collectionPortLiteral.h"
-#include "nodes/procedural/stringLiteral.h"
-#include "nodes/procedural/parens.h"
-#include "nodes/compo/interface.h"
+#include "ast/compo/descriptor.h"
+#include "ast/compo/provision.h"
+#include "ast/compo/requirement.h"
+#include "ast/compo/service.h"
+#include "ast/compo/constraint.h"
+#include "ast/compo/architecture.h"
+#include "ast/compo/namedPort.h"
+#include "ast/compo/universalPort.h"
+#include "ast/compo/connection.h"
+#include "ast/compo/disconnection.h"
+#include "ast/compo/delegation.h"
+#include "ast/compo/dereferenceLiteral.h"
+#include "ast/compo/serviceInvocation.h"
+#include "ast/compo/collectionPortLiteral.h"
+#include "ast/procedural/stringLiteral.h"
+#include "ast/procedural/parens.h"
+#include "ast/compo/interface.h"
 
 BOOST_AUTO_TEST_SUITE(parserCompoTest)
 
@@ -57,40 +57,40 @@ BOOST_AUTO_TEST_CASE(compoBasicStructure) {
     parser.parse(input);
     
     // Check descriptor
-    std::shared_ptr<nodes::compo::CDescriptor> descriptor = std::dynamic_pointer_cast<nodes::compo::CDescriptor>(parser.getRootNodeAt(0));
+    std::shared_ptr<ast::compo::CDescriptor> descriptor = std::dynamic_pointer_cast<ast::compo::CDescriptor>(parser.getRootNodeAt(0));
     TEST_DESCRIPTOR(descriptor, "HTTPServer", "server", 7);
     
     // Check provision
-    std::shared_ptr<nodes::compo::CProvision> provision = std::dynamic_pointer_cast<nodes::compo::CProvision>(descriptor->getBodyNodeAt(0)); 
-    TEST_PROVISION(provision, nodes::types::visibilityType::EXTERNAL, 1);
+    std::shared_ptr<ast::compo::CProvision> provision = std::dynamic_pointer_cast<ast::compo::CProvision>(descriptor->getBodyNodeAt(0)); 
+    TEST_PROVISION(provision, ast::types::visibilityType::EXTERNAL, 1);
     BOOST_CHECK_EQUAL("default", provision->getPortAt(0)->getName());
     
     // Check requirement
-    std::shared_ptr<nodes::compo::CRequirement> requirement = std::dynamic_pointer_cast<nodes::compo::CRequirement>(descriptor->getBodyNodeAt(1));
-    TEST_REQUIREMENT(requirement, nodes::types::visibilityType::EXTERNAL, 1);
+    std::shared_ptr<ast::compo::CRequirement> requirement = std::dynamic_pointer_cast<ast::compo::CRequirement>(descriptor->getBodyNodeAt(1));
+    TEST_REQUIREMENT(requirement, ast::types::visibilityType::EXTERNAL, 1);
     BOOST_CHECK_EQUAL("default", requirement->getPortAt(0)->getName());
     
     // Check provision
-    provision = std::dynamic_pointer_cast<nodes::compo::CProvision>(descriptor->getBodyNodeAt(2)); 
-    TEST_PROVISION(provision, nodes::types::visibilityType::INTERNAL, 1);
+    provision = std::dynamic_pointer_cast<ast::compo::CProvision>(descriptor->getBodyNodeAt(2)); 
+    TEST_PROVISION(provision, ast::types::visibilityType::INTERNAL, 1);
     BOOST_CHECK_EQUAL("default", provision->getPortAt(0)->getName());
     
     // Check requirement
-    requirement = std::dynamic_pointer_cast<nodes::compo::CRequirement>(descriptor->getBodyNodeAt(3));
-    TEST_REQUIREMENT(requirement, nodes::types::visibilityType::INTERNAL, 1);
+    requirement = std::dynamic_pointer_cast<ast::compo::CRequirement>(descriptor->getBodyNodeAt(3));
+    TEST_REQUIREMENT(requirement, ast::types::visibilityType::INTERNAL, 1);
     BOOST_CHECK_EQUAL("default", requirement->getPortAt(0)->getName());
     
     // Check service
-    std::shared_ptr<nodes::compo::CService> service = std::dynamic_pointer_cast<nodes::compo::CService>(descriptor->getBodyNodeAt(4));
+    std::shared_ptr<ast::compo::CService> service = std::dynamic_pointer_cast<ast::compo::CService>(descriptor->getBodyNodeAt(4));
     TEST_SERVICE(service, "create", 0, 0, 0);
     
     // Check constraint
-    std::shared_ptr<nodes::compo::CConstraint> constraint = std::dynamic_pointer_cast<nodes::compo::CConstraint>(descriptor->getBodyNodeAt(5));
+    std::shared_ptr<ast::compo::CConstraint> constraint = std::dynamic_pointer_cast<ast::compo::CConstraint>(descriptor->getBodyNodeAt(5));
     TEST_CONSTRAINT(constraint, "httpOnly", 0, 0);
     
     // Check architecture
-    std::shared_ptr<nodes::compo::CArchitecture> architecture = std::dynamic_pointer_cast<nodes::compo::CArchitecture>(descriptor->getBodyNodeAt(6));
-    BOOST_CHECK_EQUAL(nodes::types::nodeType::ARCHITECTURE, architecture->getNodeType());
+    std::shared_ptr<ast::compo::CArchitecture> architecture = std::dynamic_pointer_cast<ast::compo::CArchitecture>(descriptor->getBodyNodeAt(6));
+    BOOST_CHECK_EQUAL(ast::types::nodeType::ARCHITECTURE, architecture->getNodeType());
     
     // Clear AST for next test
     parser.clearRootNodes();
@@ -111,30 +111,30 @@ BOOST_AUTO_TEST_CASE(compoServiceParams) {
     parser.parse(input);
     
     // Check descriptor
-    std::shared_ptr<nodes::compo::CDescriptor> descriptor = std::dynamic_pointer_cast<nodes::compo::CDescriptor>(parser.getRootNodeAt(0));
+    std::shared_ptr<ast::compo::CDescriptor> descriptor = std::dynamic_pointer_cast<ast::compo::CDescriptor>(parser.getRootNodeAt(0));
     TEST_DESCRIPTOR(descriptor, "test", "", 4);
     
     // Check service
-    std::shared_ptr<nodes::compo::CService> service = std::dynamic_pointer_cast<nodes::compo::CService>(descriptor->getBodyNodeAt(0));
+    std::shared_ptr<ast::compo::CService> service = std::dynamic_pointer_cast<ast::compo::CService>(descriptor->getBodyNodeAt(0));
     TEST_SERVICE(service, "noparams", 0, 0, 0);
     
     // Check service
-    service = std::dynamic_pointer_cast<nodes::compo::CService>(descriptor->getBodyNodeAt(1));
+    service = std::dynamic_pointer_cast<ast::compo::CService>(descriptor->getBodyNodeAt(1));
     TEST_SERVICE(service, "oneparam", 1, 0, 0);
-    BOOST_CHECK_EQUAL("param1", std::dynamic_pointer_cast<nodes::procedural::CSymbol>(service->getParamAt(0))->getStringValue());
+    BOOST_CHECK_EQUAL("param1", std::dynamic_pointer_cast<ast::procedural::CSymbol>(service->getParamAt(0))->getStringValue());
     
     // Check service
-    service = std::dynamic_pointer_cast<nodes::compo::CService>(descriptor->getBodyNodeAt(2));
+    service = std::dynamic_pointer_cast<ast::compo::CService>(descriptor->getBodyNodeAt(2));
     TEST_SERVICE(service, "twoparams", 2, 0, 0);
-    BOOST_CHECK_EQUAL("param1", std::dynamic_pointer_cast<nodes::procedural::CSymbol>(service->getParamAt(0))->getStringValue());
-    BOOST_CHECK_EQUAL("param2", std::dynamic_pointer_cast<nodes::procedural::CSymbol>(service->getParamAt(1))->getStringValue());
+    BOOST_CHECK_EQUAL("param1", std::dynamic_pointer_cast<ast::procedural::CSymbol>(service->getParamAt(0))->getStringValue());
+    BOOST_CHECK_EQUAL("param2", std::dynamic_pointer_cast<ast::procedural::CSymbol>(service->getParamAt(1))->getStringValue());
     
     // Check service
-    service = std::dynamic_pointer_cast<nodes::compo::CService>(descriptor->getBodyNodeAt(3));
+    service = std::dynamic_pointer_cast<ast::compo::CService>(descriptor->getBodyNodeAt(3));
     TEST_SERVICE(service, "threeparams", 3, 0, 0);
-    BOOST_CHECK_EQUAL("param1", std::dynamic_pointer_cast<nodes::procedural::CSymbol>(service->getParamAt(0))->getStringValue());
-    BOOST_CHECK_EQUAL("param2", std::dynamic_pointer_cast<nodes::procedural::CSymbol>(service->getParamAt(1))->getStringValue());
-    BOOST_CHECK_EQUAL("param3", std::dynamic_pointer_cast<nodes::procedural::CSymbol>(service->getParamAt(2))->getStringValue());
+    BOOST_CHECK_EQUAL("param1", std::dynamic_pointer_cast<ast::procedural::CSymbol>(service->getParamAt(0))->getStringValue());
+    BOOST_CHECK_EQUAL("param2", std::dynamic_pointer_cast<ast::procedural::CSymbol>(service->getParamAt(1))->getStringValue());
+    BOOST_CHECK_EQUAL("param3", std::dynamic_pointer_cast<ast::procedural::CSymbol>(service->getParamAt(2))->getStringValue());
     
     // Clear AST for next test
     parser.clearRootNodes();
@@ -153,31 +153,31 @@ BOOST_AUTO_TEST_CASE(compoServiceBody) {
     parser.parse(input);    
     
     // Check descriptor
-    std::shared_ptr<nodes::compo::CDescriptor> descriptor = std::dynamic_pointer_cast<nodes::compo::CDescriptor>(parser.getRootNodeAt(0));
+    std::shared_ptr<ast::compo::CDescriptor> descriptor = std::dynamic_pointer_cast<ast::compo::CDescriptor>(parser.getRootNodeAt(0));
     TEST_DESCRIPTOR(descriptor, "test", "", 2);
     
     // Check service
-    std::shared_ptr<nodes::compo::CService> service = std::dynamic_pointer_cast<nodes::compo::CService>(descriptor->getBodyNodeAt(0));
+    std::shared_ptr<ast::compo::CService> service = std::dynamic_pointer_cast<ast::compo::CService>(descriptor->getBodyNodeAt(0));
     TEST_SERVICE(service, "body1", 0, 1, 0);
     
     // Check symbol
-    std::shared_ptr<nodes::procedural::CSymbol> symbol = std::dynamic_pointer_cast<nodes::procedural::CSymbol>(service->getBodyNodeAt(0));
+    std::shared_ptr<ast::procedural::CSymbol> symbol = std::dynamic_pointer_cast<ast::procedural::CSymbol>(service->getBodyNodeAt(0));
     TEST_SYMBOL(symbol, "a");
     
     // Check service
-    service = std::dynamic_pointer_cast<nodes::compo::CService>(descriptor->getBodyNodeAt(1));
+    service = std::dynamic_pointer_cast<ast::compo::CService>(descriptor->getBodyNodeAt(1));
     TEST_SERVICE(service, "body2", 0, 1, 0);
     
     // Check assignment
-    std::shared_ptr<nodes::procedural::CAssignmentExpression> assignment = std::dynamic_pointer_cast<nodes::procedural::CAssignmentExpression>(service->getBodyNodeAt(0));
-    BOOST_CHECK_EQUAL(nodes::types::nodeType::ASSIGNMENT_EXPRESSION, assignment->getNodeType());
+    std::shared_ptr<ast::procedural::CAssignmentExpression> assignment = std::dynamic_pointer_cast<ast::procedural::CAssignmentExpression>(service->getBodyNodeAt(0));
+    BOOST_CHECK_EQUAL(ast::types::nodeType::ASSIGNMENT_EXPRESSION, assignment->getNodeType());
     
     // Check symbol
-    symbol = std::dynamic_pointer_cast<nodes::procedural::CSymbol>(assignment->getVariable());
+    symbol = std::dynamic_pointer_cast<ast::procedural::CSymbol>(assignment->getVariable());
     TEST_SYMBOL(symbol, "b");
     
     // Check constant
-    std::shared_ptr<nodes::procedural::CConstant> constant = std::dynamic_pointer_cast<nodes::procedural::CConstant>(assignment->getRValue());
+    std::shared_ptr<ast::procedural::CConstant> constant = std::dynamic_pointer_cast<ast::procedural::CConstant>(assignment->getRValue());
     TEST_CONSTANT(constant, 1);
     
     // Clear AST for next test
@@ -199,19 +199,19 @@ BOOST_AUTO_TEST_CASE(compoServiceTemporaries) {
     parser.parse(input);    
     
     // Check descriptor
-    std::shared_ptr<nodes::compo::CDescriptor> descriptor = std::dynamic_pointer_cast<nodes::compo::CDescriptor>(parser.getRootNodeAt(0));
+    std::shared_ptr<ast::compo::CDescriptor> descriptor = std::dynamic_pointer_cast<ast::compo::CDescriptor>(parser.getRootNodeAt(0));
     TEST_DESCRIPTOR(descriptor, "test", "", 1);
     
     // Check service
-    std::shared_ptr<nodes::compo::CService> service = std::dynamic_pointer_cast<nodes::compo::CService>(descriptor->getBodyNodeAt(0));
+    std::shared_ptr<ast::compo::CService> service = std::dynamic_pointer_cast<ast::compo::CService>(descriptor->getBodyNodeAt(0));
     TEST_SERVICE(service, "temporaries", 0, 1, 2);
     
     // Check symbol
-    std::shared_ptr<nodes::procedural::CSymbol> symbol = std::dynamic_pointer_cast<nodes::procedural::CSymbol>(service->getTemporaryAt(0));
+    std::shared_ptr<ast::procedural::CSymbol> symbol = std::dynamic_pointer_cast<ast::procedural::CSymbol>(service->getTemporaryAt(0));
     TEST_SYMBOL(symbol, "a");
     
     // Check symbol
-    symbol = std::dynamic_pointer_cast<nodes::procedural::CSymbol>(service->getTemporaryAt(1));
+    symbol = std::dynamic_pointer_cast<ast::procedural::CSymbol>(service->getTemporaryAt(1));
     TEST_SYMBOL(symbol, "b");    
     
     // Clear AST for next test
@@ -237,40 +237,40 @@ BOOST_AUTO_TEST_CASE(compoProvision) {
     parser.parse(input);
     
     // Check descriptor
-    std::shared_ptr<nodes::compo::CDescriptor> descriptor = std::dynamic_pointer_cast<nodes::compo::CDescriptor>(parser.getRootNodeAt(0));
+    std::shared_ptr<ast::compo::CDescriptor> descriptor = std::dynamic_pointer_cast<ast::compo::CDescriptor>(parser.getRootNodeAt(0));
     TEST_DESCRIPTOR(descriptor, "test", "", 1);
     
     // Check provision
-    std::shared_ptr<nodes::compo::CProvision> provision = std::dynamic_pointer_cast<nodes::compo::CProvision>(descriptor->getBodyNodeAt(0)); 
-    TEST_PROVISION(provision, nodes::types::visibilityType::EXTERNAL, 6);
+    std::shared_ptr<ast::compo::CProvision> provision = std::dynamic_pointer_cast<ast::compo::CProvision>(descriptor->getBodyNodeAt(0)); 
+    TEST_PROVISION(provision, ast::types::visibilityType::EXTERNAL, 6);
     
     // Check port
-    std::shared_ptr<nodes::compo::CSignaturesPort> signPort = std::dynamic_pointer_cast<nodes::compo::CSignaturesPort>(provision->getPortAt(0));
+    std::shared_ptr<ast::compo::CSignaturesPort> signPort = std::dynamic_pointer_cast<ast::compo::CSignaturesPort>(provision->getPortAt(0));
     TEST_SIGNATURES_PORT2(signPort, "default", "run", "stop");
-    BOOST_CHECK_EQUAL("a", std::dynamic_pointer_cast<nodes::procedural::CSymbol>(signPort->getSignatureAt(1)->getParamAt(0))->getStringValue());
-    BOOST_CHECK_EQUAL("b", std::dynamic_pointer_cast<nodes::procedural::CSymbol>(signPort->getSignatureAt(1)->getParamAt(1))->getStringValue());
-    BOOST_CHECK_EQUAL("c", std::dynamic_pointer_cast<nodes::procedural::CSymbol>(signPort->getSignatureAt(0)->getParamAt(0))->getStringValue());
+    BOOST_CHECK_EQUAL("a", std::dynamic_pointer_cast<ast::procedural::CSymbol>(signPort->getSignatureAt(1)->getParamAt(0))->getStringValue());
+    BOOST_CHECK_EQUAL("b", std::dynamic_pointer_cast<ast::procedural::CSymbol>(signPort->getSignatureAt(1)->getParamAt(1))->getStringValue());
+    BOOST_CHECK_EQUAL("c", std::dynamic_pointer_cast<ast::procedural::CSymbol>(signPort->getSignatureAt(0)->getParamAt(0))->getStringValue());
     
     // Check port
-    signPort = std::dynamic_pointer_cast<nodes::compo::CSignaturesPort>(provision->getPortAt(1));
+    signPort = std::dynamic_pointer_cast<ast::compo::CSignaturesPort>(provision->getPortAt(1));
     TEST_SIGNATURES_PORT2(signPort, "port1", "start", "close");
-    BOOST_CHECK_EQUAL("a", std::dynamic_pointer_cast<nodes::procedural::CSymbol>(signPort->getSignatureAt(1)->getParamAt(0))->getStringValue());
-    BOOST_CHECK_EQUAL("b", std::dynamic_pointer_cast<nodes::procedural::CSymbol>(signPort->getSignatureAt(1)->getParamAt(1))->getStringValue());
+    BOOST_CHECK_EQUAL("a", std::dynamic_pointer_cast<ast::procedural::CSymbol>(signPort->getSignatureAt(1)->getParamAt(0))->getStringValue());
+    BOOST_CHECK_EQUAL("b", std::dynamic_pointer_cast<ast::procedural::CSymbol>(signPort->getSignatureAt(1)->getParamAt(1))->getStringValue());
     
     // Check port
-    std::shared_ptr<nodes::compo::CNamedPort> namedPort = std::dynamic_pointer_cast<nodes::compo::CNamedPort>(provision->getPortAt(2));
+    std::shared_ptr<ast::compo::CNamedPort> namedPort = std::dynamic_pointer_cast<ast::compo::CNamedPort>(provision->getPortAt(2));
     TEST_NAMED_PORT(namedPort, "port2", "IPrinting");
     
     // Check port
-    namedPort = std::dynamic_pointer_cast<nodes::compo::CNamedPort>(provision->getPortAt(3));
+    namedPort = std::dynamic_pointer_cast<ast::compo::CNamedPort>(provision->getPortAt(3));
     TEST_NAMED_PORT(namedPort, "fE", "FrontEnd");
     
     // Check port
-    std::shared_ptr<nodes::compo::CUniversalPort> universalPort = std::dynamic_pointer_cast<nodes::compo::CUniversalPort>(provision->getPortAt(4));
+    std::shared_ptr<ast::compo::CUniversalPort> universalPort = std::dynamic_pointer_cast<ast::compo::CUniversalPort>(provision->getPortAt(4));
     BOOST_CHECK_EQUAL("bE", universalPort->getName());
     
     // Check port
-    namedPort = std::dynamic_pointer_cast<nodes::compo::CNamedPort>(provision->getPortAt(5));
+    namedPort = std::dynamic_pointer_cast<ast::compo::CNamedPort>(provision->getPortAt(5));
     TEST_NAMED_PORT(namedPort, "handlers", "RequestHandler");
     BOOST_CHECK(namedPort->getCollectivity());
     
@@ -296,74 +296,74 @@ BOOST_AUTO_TEST_CASE(compoArchitecture) {
     parser.parse(input);
     
     // Check descriptor
-    std::shared_ptr<nodes::compo::CDescriptor> descriptor = std::dynamic_pointer_cast<nodes::compo::CDescriptor>(parser.getRootNodeAt(0));
+    std::shared_ptr<ast::compo::CDescriptor> descriptor = std::dynamic_pointer_cast<ast::compo::CDescriptor>(parser.getRootNodeAt(0));
     TEST_DESCRIPTOR(descriptor, "test", "", 1);
     
     // Check architecture
-    std::shared_ptr<nodes::compo::CArchitecture> architecture = std::dynamic_pointer_cast<nodes::compo::CArchitecture>(descriptor->getBodyNodeAt(0));
+    std::shared_ptr<ast::compo::CArchitecture> architecture = std::dynamic_pointer_cast<ast::compo::CArchitecture>(descriptor->getBodyNodeAt(0));
     TEST_ARCHITECTURE(architecture, 5);
     
     // Check bind node
-    std::shared_ptr<nodes::compo::CDelegation> delegation = std::dynamic_pointer_cast<nodes::compo::CDelegation>(architecture->getBodyNodeAt(0));
+    std::shared_ptr<ast::compo::CDelegation> delegation = std::dynamic_pointer_cast<ast::compo::CDelegation>(architecture->getBodyNodeAt(0));
     TEST_DELEGATION(delegation);
     
     // Check port address
-    std::shared_ptr<nodes::compo::CPortAddress> portAddress = std::dynamic_pointer_cast<nodes::compo::CPortAddress>(delegation->getPortIdentification1());
+    std::shared_ptr<ast::compo::CPortAddress> portAddress = std::dynamic_pointer_cast<ast::compo::CPortAddress>(delegation->getPortIdentification1());
     TEST_PORT_ADDRES_IDENTIFIER(portAddress, "logger", "analyzer");
     
     // Check port address
-    portAddress = std::dynamic_pointer_cast<nodes::compo::CPortAddress>(delegation->getPortIdentification2());
+    portAddress = std::dynamic_pointer_cast<ast::compo::CPortAddress>(delegation->getPortIdentification2());
     TEST_PORT_ADDRES_IDENTIFIER(portAddress, "logging", "logger");
     
     // Check bind node
-    std::shared_ptr<nodes::compo::CDisconnection> disconnection = std::dynamic_pointer_cast<nodes::compo::CDisconnection>(architecture->getBodyNodeAt(1));
+    std::shared_ptr<ast::compo::CDisconnection> disconnection = std::dynamic_pointer_cast<ast::compo::CDisconnection>(architecture->getBodyNodeAt(1));
     TEST_DISCONNECTION(disconnection);
     
     // Check port address
-    portAddress = std::dynamic_pointer_cast<nodes::compo::CPortAddress>(disconnection->getPortIdentification1());
+    portAddress = std::dynamic_pointer_cast<ast::compo::CPortAddress>(disconnection->getPortIdentification1());
     TEST_PORT_ADDRES_IDENTIFIER(portAddress, "logger", "analyzer");
     
     // Check port address
-    portAddress = std::dynamic_pointer_cast<nodes::compo::CPortAddress>(disconnection->getPortIdentification2());
+    portAddress = std::dynamic_pointer_cast<ast::compo::CPortAddress>(disconnection->getPortIdentification2());
     TEST_PORT_ADDRES_IDENTIFIER(portAddress, "logging", "logger");
     
     // Check bind node
-    std::shared_ptr<nodes::compo::CConnection> connection = std::dynamic_pointer_cast<nodes::compo::CConnection>(architecture->getBodyNodeAt(2));
+    std::shared_ptr<ast::compo::CConnection> connection = std::dynamic_pointer_cast<ast::compo::CConnection>(architecture->getBodyNodeAt(2));
     TEST_CONNECTION(connection);
     
     // Check port address
-    portAddress = std::dynamic_pointer_cast<nodes::compo::CPortAddress>(connection->getPortIdentification1());
+    portAddress = std::dynamic_pointer_cast<ast::compo::CPortAddress>(connection->getPortIdentification1());
     TEST_PORT_ADDRES_DEREFERENCE(portAddress, "logger", "analyzer");
     
     // Check port address
-    portAddress = std::dynamic_pointer_cast<nodes::compo::CPortAddress>(connection->getPortIdentification2());
+    portAddress = std::dynamic_pointer_cast<ast::compo::CPortAddress>(connection->getPortIdentification2());
     TEST_PORT_ADDRES_DEREFERENCE(portAddress, "logging", "logger");
     
     // Check bind node
-    connection = std::dynamic_pointer_cast<nodes::compo::CConnection>(architecture->getBodyNodeAt(3));
+    connection = std::dynamic_pointer_cast<ast::compo::CConnection>(architecture->getBodyNodeAt(3));
     TEST_CONNECTION(connection);
     
     // Check port address
-    portAddress = std::dynamic_pointer_cast<nodes::compo::CPortAddress>(connection->getPortIdentification1());
+    portAddress = std::dynamic_pointer_cast<ast::compo::CPortAddress>(connection->getPortIdentification1());
     TEST_PORT_ADDRES_IDENTIFIER(portAddress, "outReqHa", "analyzer");
     
     // Check port address
-    portAddress = std::dynamic_pointer_cast<nodes::compo::CPortAddress>(connection->getPortIdentification2());
+    portAddress = std::dynamic_pointer_cast<ast::compo::CPortAddress>(connection->getPortIdentification2());
     BOOST_CHECK_EQUAL("reqHa", portAddress->getPortName()->getStringValue());
-    std::shared_ptr<nodes::compo::CCollectionPortLiteral> collectionPortLiteral = std::dynamic_pointer_cast<nodes::compo::CCollectionPortLiteral>(portAddress->getComponent());
+    std::shared_ptr<ast::compo::CCollectionPortLiteral> collectionPortLiteral = std::dynamic_pointer_cast<ast::compo::CCollectionPortLiteral>(portAddress->getComponent());
     BOOST_CHECK_EQUAL("handlers", collectionPortLiteral->getPortName()->getStringValue());
-    BOOST_CHECK_EQUAL("i", std::dynamic_pointer_cast<nodes::procedural::CSymbol>(collectionPortLiteral->getIndexExpression())->getStringValue());
+    BOOST_CHECK_EQUAL("i", std::dynamic_pointer_cast<ast::procedural::CSymbol>(collectionPortLiteral->getIndexExpression())->getStringValue());
     
     // Check bind node
-    connection = std::dynamic_pointer_cast<nodes::compo::CConnection>(architecture->getBodyNodeAt(4));
+    connection = std::dynamic_pointer_cast<ast::compo::CConnection>(architecture->getBodyNodeAt(4));
     TEST_CONNECTION(connection);
     
     // Check port address
-    portAddress = std::dynamic_pointer_cast<nodes::compo::CPortAddress>(connection->getPortIdentification1());
+    portAddress = std::dynamic_pointer_cast<ast::compo::CPortAddress>(connection->getPortIdentification1());
     TEST_PORT_ADDRES_IDENTIFIER(portAddress, "logger", "analyzer");
     
     // Check port address
-    portAddress = std::dynamic_pointer_cast<nodes::compo::CPortAddress>(connection->getPortIdentification2());
+    portAddress = std::dynamic_pointer_cast<ast::compo::CPortAddress>(connection->getPortIdentification2());
     TEST_PORT_ADDRES_IDENTIFIER(portAddress, "logging", "logger");
     
     // Clear AST for next test
@@ -384,46 +384,46 @@ BOOST_AUTO_TEST_CASE(compoServiceCall) {
     parser.parse(input);
     
     // Check descriptor
-    std::shared_ptr<nodes::compo::CDescriptor> descriptor = std::dynamic_pointer_cast<nodes::compo::CDescriptor>(parser.getRootNodeAt(0));
+    std::shared_ptr<ast::compo::CDescriptor> descriptor = std::dynamic_pointer_cast<ast::compo::CDescriptor>(parser.getRootNodeAt(0));
     TEST_DESCRIPTOR(descriptor, "test", "", 1);
     
     // Check architecture
-    std::shared_ptr<nodes::compo::CArchitecture> architecture = std::dynamic_pointer_cast<nodes::compo::CArchitecture>(descriptor->getBodyNodeAt(0));
+    std::shared_ptr<ast::compo::CArchitecture> architecture = std::dynamic_pointer_cast<ast::compo::CArchitecture>(descriptor->getBodyNodeAt(0));
     TEST_ARCHITECTURE(architecture, 1);
     
     // Check bind node
-    std::shared_ptr<nodes::compo::CConnection> connection = std::dynamic_pointer_cast<nodes::compo::CConnection>(architecture->getBodyNodeAt(0));
+    std::shared_ptr<ast::compo::CConnection> connection = std::dynamic_pointer_cast<ast::compo::CConnection>(architecture->getBodyNodeAt(0));
     TEST_CONNECTION(connection);
     
     // Check port address
-    std::shared_ptr<nodes::compo::CPortAddress> portAddress = std::dynamic_pointer_cast<nodes::compo::CPortAddress>(connection->getPortIdentification1());
+    std::shared_ptr<ast::compo::CPortAddress> portAddress = std::dynamic_pointer_cast<ast::compo::CPortAddress>(connection->getPortIdentification1());
     TEST_PORT_ADDRES_IDENTIFIER(portAddress, "handlers", "self");
     
     // Check port address
-    portAddress = std::dynamic_pointer_cast<nodes::compo::CPortAddress>(connection->getPortIdentification2());
+    portAddress = std::dynamic_pointer_cast<ast::compo::CPortAddress>(connection->getPortIdentification2());
     BOOST_CHECK_EQUAL("default", portAddress->getPortName()->getStringValue());
     
-    std::shared_ptr<nodes::compo::CServiceInvocation> serviceInvocation = std::dynamic_pointer_cast<nodes::compo::CServiceInvocation>(portAddress->getComponent());
-    BOOST_CHECK_EQUAL("RequestHandler", std::dynamic_pointer_cast<nodes::procedural::CSymbol>(serviceInvocation->getReceiverName())->getStringValue());
-    BOOST_CHECK_EQUAL("new", std::dynamic_pointer_cast<nodes::procedural::CSymbol>(serviceInvocation->getSelectorName())->getStringValue());
+    std::shared_ptr<ast::compo::CServiceInvocation> serviceInvocation = std::dynamic_pointer_cast<ast::compo::CServiceInvocation>(portAddress->getComponent());
+    BOOST_CHECK_EQUAL("RequestHandler", std::dynamic_pointer_cast<ast::procedural::CSymbol>(serviceInvocation->getReceiverName())->getStringValue());
+    BOOST_CHECK_EQUAL("new", std::dynamic_pointer_cast<ast::procedural::CSymbol>(serviceInvocation->getSelectorName())->getStringValue());
     
-    std::shared_ptr<nodes::compo::CServiceSignature> signature = std::dynamic_pointer_cast<nodes::compo::CServiceSignature>(serviceInvocation->getParameters());
-    serviceInvocation = std::dynamic_pointer_cast<nodes::compo::CServiceInvocation>(signature->getParamAt(0));
-    BOOST_CHECK_EQUAL("handler", std::dynamic_pointer_cast<nodes::procedural::CSymbol>(serviceInvocation->getReceiverName())->getStringValue());
-    BOOST_CHECK_EQUAL("getName", std::dynamic_pointer_cast<nodes::procedural::CSymbol>(serviceInvocation->getSelectorName())->getStringValue());
+    std::shared_ptr<ast::compo::CServiceSignature> signature = std::dynamic_pointer_cast<ast::compo::CServiceSignature>(serviceInvocation->getParameters());
+    serviceInvocation = std::dynamic_pointer_cast<ast::compo::CServiceInvocation>(signature->getParamAt(0));
+    BOOST_CHECK_EQUAL("handler", std::dynamic_pointer_cast<ast::procedural::CSymbol>(serviceInvocation->getReceiverName())->getStringValue());
+    BOOST_CHECK_EQUAL("getName", std::dynamic_pointer_cast<ast::procedural::CSymbol>(serviceInvocation->getSelectorName())->getStringValue());
     
-    signature = std::dynamic_pointer_cast<nodes::compo::CServiceSignature>(serviceInvocation->getParameters());
-    BOOST_CHECK_EQUAL(nodes::types::nodeType::SERVICE_SIGNATURE, signature->getNodeType());
+    signature = std::dynamic_pointer_cast<ast::compo::CServiceSignature>(serviceInvocation->getParameters());
+    BOOST_CHECK_EQUAL(ast::types::nodeType::SERVICE_SIGNATURE, signature->getNodeType());
     BOOST_CHECK_EQUAL("getName", signature->getName()->getStringValue());
     
-    BOOST_CHECK_EQUAL("a", std::dynamic_pointer_cast<nodes::procedural::CStringLiteral>(signature->getParamAt(0))->getValue());
-    BOOST_CHECK_EQUAL(1, std::dynamic_pointer_cast<nodes::procedural::CConstant>(signature->getParamAt(1))->getValue());
-    BOOST_CHECK_EQUAL("var", std::dynamic_pointer_cast<nodes::procedural::CSymbol>(signature->getParamAt(2))->getStringValue());
+    BOOST_CHECK_EQUAL("a", std::dynamic_pointer_cast<ast::procedural::CStringLiteral>(signature->getParamAt(0))->getValue());
+    BOOST_CHECK_EQUAL(1, std::dynamic_pointer_cast<ast::procedural::CConstant>(signature->getParamAt(1))->getValue());
+    BOOST_CHECK_EQUAL("var", std::dynamic_pointer_cast<ast::procedural::CSymbol>(signature->getParamAt(2))->getStringValue());
     
-    BOOST_CHECK_EQUAL(nodes::types::nodeType::SERVICE_INVOCATION, std::dynamic_pointer_cast<nodes::CNode>(signature->getParamAt(3))->getNodeType());
-    serviceInvocation = std::dynamic_pointer_cast<nodes::compo::CServiceInvocation>(signature->getParamAt(3));
-    BOOST_CHECK_EQUAL("handler", std::dynamic_pointer_cast<nodes::procedural::CSymbol>(serviceInvocation->getReceiverName())->getStringValue());
-    BOOST_CHECK_EQUAL("getPtr", std::dynamic_pointer_cast<nodes::procedural::CSymbol>(serviceInvocation->getSelectorName())->getStringValue());
+    BOOST_CHECK_EQUAL(ast::types::nodeType::SERVICE_INVOCATION, std::dynamic_pointer_cast<ast::CNode>(signature->getParamAt(3))->getNodeType());
+    serviceInvocation = std::dynamic_pointer_cast<ast::compo::CServiceInvocation>(signature->getParamAt(3));
+    BOOST_CHECK_EQUAL("handler", std::dynamic_pointer_cast<ast::procedural::CSymbol>(serviceInvocation->getReceiverName())->getStringValue());
+    BOOST_CHECK_EQUAL("getPtr", std::dynamic_pointer_cast<ast::procedural::CSymbol>(serviceInvocation->getSelectorName())->getStringValue());
     
     // Clear AST for next test
     parser.clearRootNodes();
@@ -442,17 +442,17 @@ BOOST_AUTO_TEST_CASE(compoInterface) {
     parser.parse(input);
     
     // Check interface
-    std::shared_ptr<nodes::compo::CInterface> interface = std::dynamic_pointer_cast<nodes::compo::CInterface>(parser.getRootNodeAt(0));
+    std::shared_ptr<ast::compo::CInterface> interface = std::dynamic_pointer_cast<ast::compo::CInterface>(parser.getRootNodeAt(0));
     TEST_INTERFACE(interface, "IPrinting", "IAbcd", 2);
     
     // Check signature
     BOOST_CHECK_EQUAL("print", interface->getSignatureAt(1)->getName()->getStringValue());
-    BOOST_CHECK_EQUAL("text", std::dynamic_pointer_cast<nodes::procedural::CSymbol>(interface->getSignatureAt(1)->getParamAt(0))->getStringValue());
+    BOOST_CHECK_EQUAL("text", std::dynamic_pointer_cast<ast::procedural::CSymbol>(interface->getSignatureAt(1)->getParamAt(0))->getStringValue());
     
     // Check signature
     BOOST_CHECK_EQUAL("printLn", interface->getSignatureAt(0)->getName()->getStringValue());
-    BOOST_CHECK_EQUAL("text", std::dynamic_pointer_cast<nodes::procedural::CSymbol>(interface->getSignatureAt(0)->getParamAt(0))->getStringValue());
-    BOOST_CHECK_EQUAL("param", std::dynamic_pointer_cast<nodes::procedural::CSymbol>(interface->getSignatureAt(0)->getParamAt(1))->getStringValue());
+    BOOST_CHECK_EQUAL("text", std::dynamic_pointer_cast<ast::procedural::CSymbol>(interface->getSignatureAt(0)->getParamAt(0))->getStringValue());
+    BOOST_CHECK_EQUAL("param", std::dynamic_pointer_cast<ast::procedural::CSymbol>(interface->getSignatureAt(0)->getParamAt(1))->getStringValue());
     
     // Clear AST for next test
     parser.clearRootNodes();
