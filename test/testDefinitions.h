@@ -11,13 +11,14 @@
 #include "ast/procedural/assignmentExpression.h"
 #include "ast/procedural/constant.h"
 
-#define TEST_DESCRIPTOR(descriptor, name, extends, bodySize) \
+#define TEST_DESCRIPTOR(descriptor, name, extends, servicesSize, constraintsSize) \
 do { \
     BOOST_CHECK_EQUAL(ast::types::nodeType::DESCRIPTOR, descriptor->getNodeType()); \
     BOOST_CHECK_EQUAL(name, descriptor->getName()); \
     BOOST_CHECK_EQUAL(extends, descriptor->getExtends()); \
     BOOST_CHECK_EQUAL("default", descriptor->getDefaultPort()->getName()); \
-    BOOST_CHECK_EQUAL(bodySize, descriptor->getBodySize()); \
+    BOOST_CHECK_EQUAL(servicesSize, descriptor->getServicesSize()); \
+    BOOST_CHECK_EQUAL(constraintsSize, descriptor->getConstraintsSize()); \
 } while(0)
 
 #define TEST_INTERFACE(interface, name, extends, signaturesListSize) \

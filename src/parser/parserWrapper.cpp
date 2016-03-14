@@ -1,6 +1,8 @@
 #include <memory>
 
 #include "parser/parserWrapper.h"
+#include "ast/compo/architecture.h"
+#include "ast/compo/provision.h"
 
 ParserWrapper::ParserWrapper(Lexer *lexer)
 	: m_lexer(lexer), m_rootNodes(std::vector<std::shared_ptr<ast::CNode>>()) {
@@ -54,16 +56,68 @@ bool ParserWrapper::isStackEmpty() const {
 	return m_blockStack.empty();
 }
 
-void ParserWrapper::addDescriptorBodyNode(std::shared_ptr<ast::CNode> node) {
-	m_currentDescritporBody.push_back(node);
+void ParserWrapper::setInProvision(std::shared_ptr<ast::compo::CProvision> inProv) {
+    m_currentInteralProvision = inProv;
 }
 
-std::vector<std::shared_ptr<ast::CNode>>* ParserWrapper::getDescriptorBody() {
-	return &m_currentDescritporBody;
+std::shared_ptr<ast::compo::CProvision> ParserWrapper::getInProvision() {
+    return m_currentInteralProvision;
 }
 
-void ParserWrapper::clearDescriptorBody() {
-	m_currentDescritporBody.clear();
+void ParserWrapper::setExProvision(std::shared_ptr<ast::compo::CProvision> exProv) {
+    m_currentExteralProvision = exProv;
+}
+
+std::shared_ptr<ast::compo::CProvision> ParserWrapper::getExProvision() {
+    return m_currentExteralProvision;
+}
+
+void ParserWrapper::setInRequirement(std::shared_ptr<ast::compo::CRequirement> inReq) {
+    m_currentInteralRequirement = inReq;
+}
+
+std::shared_ptr<ast::compo::CRequirement> ParserWrapper::getInRequirement() {
+    return m_currentInteralRequirement;
+}
+
+void ParserWrapper::setExRequirement(std::shared_ptr<ast::compo::CRequirement> exReq) {
+    m_currentExteralRequirement = exReq;
+}
+
+std::shared_ptr<ast::compo::CRequirement> ParserWrapper::getExRequirement() {
+    return m_currentExteralRequirement;
+}
+
+void ParserWrapper::setArchitecture(std::shared_ptr<ast::compo::CArchitecture> arch) {
+    m_architecture = arch;
+}
+
+std::shared_ptr<ast::compo::CArchitecture> ParserWrapper::getArchitecture() {
+    return m_architecture;
+}
+
+void ParserWrapper::addDescriptorService(std::shared_ptr<ast::compo::CService> service) {
+	m_currentDescritporServices.push_back(service);
+}
+
+std::vector<std::shared_ptr<ast::compo::CService>>* ParserWrapper::getDescriptorServices() {
+	return &m_currentDescritporServices;
+}
+
+void ParserWrapper::clearDescriptorServices() {
+	m_currentDescritporServices.clear();
+}
+
+void ParserWrapper::addDescriptorConstraint(std::shared_ptr<ast::compo::CConstraint> constraint) {
+	m_currentDescritporConstraints.push_back(constraint);
+}
+
+std::vector<std::shared_ptr<ast::compo::CConstraint>>* ParserWrapper::getDescriptorConstraints() {
+	return &m_currentDescritporConstraints;
+}
+
+void ParserWrapper::clearDescriptorConstraints() {
+	m_currentDescritporConstraints.clear();
 }
 
 void ParserWrapper::addServiceParam(std::shared_ptr<ast::CNode> param) {
@@ -119,10 +173,11 @@ void ParserWrapper::clearPorts() {
 }
 
 void ParserWrapper::clearAll() {
-	clearDescriptorBody();
 	clearPorts();
 	clearArchitectureBody();
 	clearServiceSignatures();
+        clearDescriptorServices();
+        clearDescriptorConstraints();
 }
 
 void ParserWrapper::setCurrentCompoundBody(std::shared_ptr<ast::procedural::CCompoundBody> body) {

@@ -387,7 +387,13 @@ descriptor
                     {
                         $$ = std::make_shared<ast::compo::CDescriptor>(std::dynamic_pointer_cast<ast::procedural::CSymbol>($2),
                                                                          std::dynamic_pointer_cast<ast::procedural::CSymbol>($3),
-                                                                         std::move(*(parser->getDescriptorBody())));
+                                                                         parser->getInProvision(),
+                                                                         parser->getExProvision(),
+                                                                         parser->getInRequirement(),
+                                                                         parser->getExRequirement(),
+                                                                         parser->getArchitecture(),
+                                                                         *parser->getDescriptorServices(),
+                                                                         *parser->getDescriptorConstraints());
                         parser->clearAll();
                     }
                 ;
@@ -429,7 +435,14 @@ compo_expression
 provision     
                 :   visibility PROVIDES provision_requirement_signature
 		    {
-			parser->addDescriptorBodyNode(std::make_shared<ast::compo::CProvision>(parser->getVisibility(), *parser->getPorts()));
+                        if (parser->getVisibility() == ast::types::visibilityType::EXTERNAL)
+                        {
+                            parser->setExProvision(std::make_shared<ast::compo::CProvision>(parser->getVisibility(), *parser->getPorts()));
+                        }
+                        else
+                        {
+                            parser->setInProvision(std::make_shared<ast::compo::CProvision>(parser->getVisibility(), *parser->getPorts()));
+                        }
                         parser->clearPorts();
 		    }
                 ;
@@ -437,7 +450,14 @@ provision
 requirement   
                 :   visibility REQUIRES provision_requirement_signature
                     {
-			parser->addDescriptorBodyNode(std::make_shared<ast::compo::CRequirement>(parser->getVisibility(), *parser->getPorts()));
+                        if (parser->getVisibility() == ast::types::visibilityType::EXTERNAL)
+                        {
+                            parser->setExRequirement(std::make_shared<ast::compo::CRequirement>(parser->getVisibility(), *parser->getPorts()));
+                        }
+                        else
+                        {
+                            parser->setInRequirement(std::make_shared<ast::compo::CRequirement>(parser->getVisibility(), *parser->getPorts()));
+                        }
                         parser->clearPorts();
 		    }
                 ;
@@ -541,7 +561,7 @@ of_kind
 service         
                 :   SERVICE service_signature compound_statement
                     {
-                        parser->addDescriptorBodyNode(std::make_shared<ast::compo::CService>(std::dynamic_pointer_cast<ast::compo::CServiceSignature>($2),
+                        parser->addDescriptorService(std::make_shared<ast::compo::CService>(std::dynamic_pointer_cast<ast::compo::CServiceSignature>($2),
                                                                                                std::dynamic_pointer_cast<ast::procedural::CCompoundBody>($3)));
                     }
                 ;
@@ -617,27 +637,27 @@ parameter_runtime
 constraint	
                 :   CONSTRAINT service_signature compound_statement
                     {
-                        parser->addDescriptorBodyNode(std::make_shared<ast::compo::CConstraint>(std::dynamic_pointer_cast<ast::compo::CServiceSignature>($2),
+                        parser->addDescriptorConstraint(std::make_shared<ast::compo::CConstraint>(std::dynamic_pointer_cast<ast::compo::CServiceSignature>($2),
                                                                                                   std::dynamic_pointer_cast<ast::procedural::CCompoundBody>($3)));
                     }
 		;
 
 architecture	
-                :   ARCHITECTURE '{' connection_disconnection '}'
+                :   ARCHITECTURE '{' bindings '}'
                     {
-                        parser->addDescriptorBodyNode(std::make_shared<ast::compo::CArchitecture>(*parser->getArchitectureBody()));
+                        parser->setArchitecture(std::make_shared<ast::compo::CArchitecture>(*parser->getArchitectureBody()));
                         parser->clearArchitectureBody();
                     }
 		;
 
-connection_disconnection
+bindings
                 :   disconnections
                 |   connections
                 |   delegations
                 ;
 
 connections     
-                :   connection ';' connection_disconnection
+                :   connection ';' bindings
                     {
                         parser->addArchitectureNode(std::dynamic_pointer_cast<ast::compo::CBind>($1));
                     }
@@ -652,7 +672,7 @@ connection
                 ;
 
 disconnections  
-                :   disconnection ';' connection_disconnection
+                :   disconnection ';' bindings
                     {
                         parser->addArchitectureNode(std::dynamic_pointer_cast<ast::compo::CBind>($1));
                     }
@@ -666,7 +686,7 @@ disconnection
                 ;
 
 delegations  
-                :   delegation ';' connection_disconnection
+                :   delegation ';' bindings
                     {
                         parser->addArchitectureNode(std::dynamic_pointer_cast<ast::compo::CBind>($1));
                     }

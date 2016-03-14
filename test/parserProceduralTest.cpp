@@ -69,10 +69,10 @@ BOOST_AUTO_TEST_CASE(nodesProceduralBinary) {
     
     // Check descriptor
     std::shared_ptr<ast::compo::CDescriptor> descriptor = std::dynamic_pointer_cast<ast::compo::CDescriptor>(parser.getRootNodeAt(0));
-    TEST_DESCRIPTOR(descriptor, "test", "", 1);
+    TEST_DESCRIPTOR(descriptor, "test", "", 1, 0);
     
     // Check service
-    std::shared_ptr<ast::compo::CService> service = std::dynamic_pointer_cast<ast::compo::CService>(descriptor->getBodyNodeAt(0));
+    std::shared_ptr<ast::compo::CService> service = std::dynamic_pointer_cast<ast::compo::CService>(descriptor->getServiceAt(0));
     TEST_SERVICE(service, "main", 0, 16, 0);
     
     // Check symbol
@@ -415,10 +415,10 @@ BOOST_AUTO_TEST_CASE(compoCompoundStatement) {
     
     // Check descriptor
     std::shared_ptr<ast::compo::CDescriptor> descriptor = std::dynamic_pointer_cast<ast::compo::CDescriptor>(parser.getRootNodeAt(0));
-    TEST_DESCRIPTOR(descriptor, "test", "", 1);
+    TEST_DESCRIPTOR(descriptor, "test", "", 1, 0);
     
     // Check service
-    std::shared_ptr<ast::compo::CService> service = std::dynamic_pointer_cast<ast::compo::CService>(descriptor->getBodyNodeAt(0));
+    std::shared_ptr<ast::compo::CService> service = std::dynamic_pointer_cast<ast::compo::CService>(descriptor->getServiceAt(0));
     TEST_SERVICE(service, "main", 0, 1, 0);
     
     std::shared_ptr<ast::procedural::CCompoundBody> compoundBody = std::dynamic_pointer_cast<ast::procedural::CCompoundBody>(service->getBodyNodeAt(0));
@@ -456,10 +456,10 @@ BOOST_AUTO_TEST_CASE(nodesForStatement) {
     
     // Check descriptor
     std::shared_ptr<ast::compo::CDescriptor> descriptor = std::dynamic_pointer_cast<ast::compo::CDescriptor>(parser.getRootNodeAt(0));
-    TEST_DESCRIPTOR(descriptor, "test", "", 1);
+    TEST_DESCRIPTOR(descriptor, "test", "", 1, 0);
     
     // Check service
-    std::shared_ptr<ast::compo::CService> service = std::dynamic_pointer_cast<ast::compo::CService>(descriptor->getBodyNodeAt(0));
+    std::shared_ptr<ast::compo::CService> service = std::dynamic_pointer_cast<ast::compo::CService>(descriptor->getServiceAt(0));
     TEST_SERVICE(service, "main", 0, 1, 0);
     
     // Check for statement
@@ -530,10 +530,10 @@ BOOST_AUTO_TEST_CASE(nodesWhileStatement) {
     
     // Check descriptor
     std::shared_ptr<ast::compo::CDescriptor> descriptor = std::dynamic_pointer_cast<ast::compo::CDescriptor>(parser.getRootNodeAt(0));
-    TEST_DESCRIPTOR(descriptor, "test", "", 1);
+    TEST_DESCRIPTOR(descriptor, "test", "", 1, 0);
     
     // Check service
-    std::shared_ptr<ast::compo::CService> service = std::dynamic_pointer_cast<ast::compo::CService>(descriptor->getBodyNodeAt(0));
+    std::shared_ptr<ast::compo::CService> service = std::dynamic_pointer_cast<ast::compo::CService>(descriptor->getServiceAt(0));
     TEST_SERVICE(service, "main", 0, 1, 0);
     
     // Check for statement
@@ -582,10 +582,10 @@ BOOST_AUTO_TEST_CASE(nodesIfStatement) {
     
     // Check descriptor
     std::shared_ptr<ast::compo::CDescriptor> descriptor = std::dynamic_pointer_cast<ast::compo::CDescriptor>(parser.getRootNodeAt(0));
-    TEST_DESCRIPTOR(descriptor, "test", "", 1);
+    TEST_DESCRIPTOR(descriptor, "test", "", 1, 0);
     
     // Check service
-    std::shared_ptr<ast::compo::CService> service = std::dynamic_pointer_cast<ast::compo::CService>(descriptor->getBodyNodeAt(0));
+    std::shared_ptr<ast::compo::CService> service = std::dynamic_pointer_cast<ast::compo::CService>(descriptor->getServiceAt(0));
     TEST_SERVICE(service, "main", 0, 2, 0);
     
     // Check if statement
@@ -655,10 +655,10 @@ BOOST_AUTO_TEST_CASE(nodesBreakContinueReturnStatement) {
     
     // Check descriptor
     std::shared_ptr<ast::compo::CDescriptor> descriptor = std::dynamic_pointer_cast<ast::compo::CDescriptor>(parser.getRootNodeAt(0));
-    TEST_DESCRIPTOR(descriptor, "test", "", 1);
+    TEST_DESCRIPTOR(descriptor, "test", "", 1, 0);
     
     // Check service
-    std::shared_ptr<ast::compo::CService> service = std::dynamic_pointer_cast<ast::compo::CService>(descriptor->getBodyNodeAt(0));
+    std::shared_ptr<ast::compo::CService> service = std::dynamic_pointer_cast<ast::compo::CService>(descriptor->getServiceAt(0));
     TEST_SERVICE(service, "main", 0, 3, 0);
     
     // Check if statement

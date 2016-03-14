@@ -465,6 +465,7 @@ BOOST_AUTO_TEST_CASE(constraintTest) {
     BOOST_CHECK_EQUAL(0, constraintNew1.getBodySize());
 }
 
+/*
 BOOST_AUTO_TEST_CASE(descriptorTest) {
     // Descriptor body preparation
     std::vector<std::shared_ptr<ast::CNode>> body;
@@ -531,5 +532,5 @@ BOOST_AUTO_TEST_CASE(descriptorTest) {
     BOOST_CHECK_EQUAL("", descriptorNew1.getExtends());
     BOOST_CHECK_EQUAL(0, descriptorNew1.getBodySize());
 }
-
+*/
 BOOST_AUTO_TEST_SUITE_END()

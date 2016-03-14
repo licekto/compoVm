@@ -28,8 +28,20 @@ class ParserWrapper {
 	/**< Stack of nested blocks */
 	std::stack<std::shared_ptr<ast::procedural::CCompoundBody>> m_blockStack;
 
+        std::shared_ptr<ast::compo::CProvision> m_currentInteralProvision;
+                        
+        std::shared_ptr<ast::compo::CProvision> m_currentExteralProvision;
+
+        std::shared_ptr<ast::compo::CRequirement> m_currentInteralRequirement;
+
+        std::shared_ptr<ast::compo::CRequirement> m_currentExteralRequirement;
+
+        std::shared_ptr<ast::compo::CArchitecture> m_architecture;
+        
 	/**< Body of currently parsed descriptor */
-	std::vector<std::shared_ptr<ast::CNode>> m_currentDescritporBody;
+	std::vector<std::shared_ptr<ast::compo::CService>> m_currentDescritporServices;
+        
+        std::vector<std::shared_ptr<ast::compo::CConstraint>> m_currentDescritporConstraints;
 
 	/**< Parameters of currently parsed service */
 	std::stack<std::vector<std::shared_ptr<ast::CNode>>> m_currentServiceParamsStack;
@@ -137,22 +149,59 @@ class ParserWrapper {
 	 */
 	bool isStackEmpty() const;
 
+        void setInProvision(std::shared_ptr<ast::compo::CProvision> inProv);
+        
+        std::shared_ptr<ast::compo::CProvision> getInProvision();
+        
+        void setExProvision(std::shared_ptr<ast::compo::CProvision> exProv);
+        
+        std::shared_ptr<ast::compo::CProvision> getExProvision();
+        
+        void setInRequirement(std::shared_ptr<ast::compo::CRequirement> inReq);
+        
+        std::shared_ptr<ast::compo::CRequirement> getInRequirement();
+        
+        void setExRequirement(std::shared_ptr<ast::compo::CRequirement> exReq);
+        
+        std::shared_ptr<ast::compo::CRequirement> getExRequirement();
+        
+        void setArchitecture(std::shared_ptr<ast::compo::CArchitecture> arch);
+        
+        std::shared_ptr<ast::compo::CArchitecture> getArchitecture();
+        
 	/**
 	 * Sets node of currently parsed descriptor
 	 * @param node: smart pointer to body node
 	 */
-	void addDescriptorBodyNode(std::shared_ptr<ast::CNode> node);
+	void addDescriptorService(std::shared_ptr<ast::compo::CService> service);
 
 	/**
 	 * Returns vector of body nodes
 	 * @return reference to vector
 	 */
-	std::vector<std::shared_ptr<ast::CNode>> * getDescriptorBody();
+	std::vector<std::shared_ptr<ast::compo::CService>> * getDescriptorServices();
 
 	/**
 	 * Clears vector of body nodes
 	 */
-	void clearDescriptorBody();
+	void clearDescriptorServices();
+        
+        /**
+	 * Sets node of currently parsed descriptor
+	 * @param node: smart pointer to body node
+	 */
+	void addDescriptorConstraint(std::shared_ptr<ast::compo::CConstraint> constraint);
+
+	/**
+	 * Returns vector of body nodes
+	 * @return reference to vector
+	 */
+	std::vector<std::shared_ptr<ast::compo::CConstraint>> * getDescriptorConstraints();
+
+	/**
+	 * Clears vector of body nodes
+	 */
+	void clearDescriptorConstraints();
 
 	/**
 	 * Sets parameter of currently parsed service
