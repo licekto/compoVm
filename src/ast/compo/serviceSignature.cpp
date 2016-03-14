@@ -9,9 +9,9 @@ namespace ast {
 			: CNode(types::nodeType::SERVICE_SIGNATURE), m_name(name), m_params(params) {
 		}
 
-		void CServiceSignature::accept(ast::visitors::CAbstractStringVisitor* visitor) {
-                    visitor->visit(this);
-                }
+		void CServiceSignature::accept(ast::visitors::CAbstractVisitor* visitor) {
+			visitor->visit(this);
+		}
 
 		std::shared_ptr<ast::procedural::CSymbol> CServiceSignature::getName() const {
 			return m_name;

@@ -9,9 +9,9 @@ namespace ast {
 			    m_parameter(parameter) {
 		}
 
-		void CDereferenceLiteral::accept(ast::visitors::CAbstractStringVisitor* visitor) {
-                    visitor->visit(this);
-                }
+		void CDereferenceLiteral::accept(ast::visitors::CAbstractVisitor* visitor) {
+			visitor->visit(this);
+		}
 
 		std::shared_ptr<ast::procedural::CSymbol> CDereferenceLiteral::getParamName() const {
 			return m_parameter;

@@ -13,9 +13,9 @@ namespace ast {
 			    m_signaturesList(list) {
 		}
 
-		void CInterface::accept(ast::visitors::CAbstractStringVisitor* visitor) {
-                    visitor->visit(this);
-                }
+		void CInterface::accept(ast::visitors::CAbstractVisitor* visitor) {
+			visitor->visit(this);
+		}
 
 		std::shared_ptr<ast::procedural::CSymbol> CInterface::getName() const {
 			return m_name;

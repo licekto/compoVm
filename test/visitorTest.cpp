@@ -5,7 +5,7 @@
 
 #include "testDefinitions.h"
 
-#include "ast/visitor/abstractStringVisitor.h"
+#include "ast/visitor/abstractVisitor.h"
 #include "ast/compo/architecture.h"
 #include "ast/compo/provision.h"
 #include "ast/compo/requirement.h"
@@ -15,7 +15,7 @@
 
 BOOST_AUTO_TEST_SUITE(visitorTest)
 
-class testVisitor : public ast::visitors::CAbstractStringVisitor {
+class testVisitor : public ast::visitors::CAbstractVisitor {
     
     private:
         std::string nodes;

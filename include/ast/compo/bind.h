@@ -32,12 +32,12 @@ namespace ast {
 
 		  public:
 
-                        /**
-                        * Accept method for visitor acceptation.
-                        * @param visitor: Pointer to abstract visitor.
-                        */
-                        virtual void accept(ast::visitors::CAbstractStringVisitor *visitor);
-                      
+			/**
+			* Accept method for visitor acceptation.
+			* @param visitor: Pointer to abstract visitor.
+			*/
+			virtual void accept(ast::visitors::CAbstractVisitor *visitor);
+
 			/**
 			 * Port name getter
 			 * @return name symbol of port identification.
@@ -46,8 +46,8 @@ namespace ast {
 
 			/**
 			* Port name getter
-                        * @return name symbol of port identification.
-                        */
+			            * @return name symbol of port identification.
+			            */
 			std::shared_ptr<ast::compo::CPortAddress> getPortIdentification2() const;
 		};
 

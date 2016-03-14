@@ -11,9 +11,9 @@ namespace ast {
 			  m_name(name) {
 		}
 
-		void CSymbol::accept(ast::visitors::CAbstractStringVisitor* visitor) {
-                    visitor->visit(this);
-                }
+		void CSymbol::accept(ast::visitors::CAbstractVisitor* visitor) {
+			visitor->visit(this);
+		}
 
 		std::string CSymbol::getStringValue() const {
 			return m_name;

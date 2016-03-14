@@ -22,12 +22,12 @@ namespace ast {
 			*/
 			CService(std::shared_ptr<ast::compo::CServiceSignature> signature = nullptr,
 			         std::shared_ptr<ast::procedural::CCompoundBody> body = nullptr);
-			
-                        /**
-                        * Accept method for visitor acceptation.
-                        * @param visitor: Pointer to abstract visitor.
-                        */
-                        virtual void accept(ast::visitors::CAbstractStringVisitor *visitor);
+
+			/**
+			* Accept method for visitor acceptation.
+			* @param visitor: Pointer to abstract visitor.
+			*/
+			virtual void accept(ast::visitors::CAbstractVisitor *visitor);
 		};
 
 	}

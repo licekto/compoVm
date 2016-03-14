@@ -14,9 +14,9 @@ namespace ast {
 			    m_signaturesList(list) {
 		}
 
-		void CSignaturesPort::accept(ast::visitors::CAbstractStringVisitor* visitor) {
-                    visitor->visit(this);
-                }
+		void CSignaturesPort::accept(ast::visitors::CAbstractVisitor* visitor) {
+			visitor->visit(this);
+		}
 
 		size_t CSignaturesPort::getSignaturesSize() const {
 			return m_signaturesList.size();

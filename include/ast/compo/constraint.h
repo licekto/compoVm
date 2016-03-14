@@ -22,22 +22,22 @@ namespace ast {
 			CConstraint(std::shared_ptr<ast::compo::CServiceSignature> signature = nullptr,
 			            std::shared_ptr<ast::procedural::CCompoundBody> body = nullptr);
 
-                        /**
-                        * Accept method for visitor acceptation.
-                        * @param visitor: Pointer to abstract visitor.
-                        */
-                        virtual void accept(ast::visitors::CAbstractStringVisitor *visitor);
-                        
+			/**
+			* Accept method for visitor acceptation.
+			* @param visitor: Pointer to abstract visitor.
+			*/
+			virtual void accept(ast::visitors::CAbstractVisitor *visitor);
+
 			/**
 			* Temporaries size getter
-                        * @return size of temporaries vector
-                        */
+			            * @return size of temporaries vector
+			            */
 			size_t getTemporariesSize() const = delete;
 
 			/**
 			* Adds new body node
-                        * @param node: shared pointer to node
-                        */
+			            * @param node: shared pointer to node
+			            */
 			void addTemporary(std::shared_ptr<ast::procedural::CSymbol> temporary) = delete;
 
 			/**

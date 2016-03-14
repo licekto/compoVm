@@ -13,9 +13,9 @@ namespace ast {
 			    m_elseBody(elseBody) {
 		}
 
-		void CIfStatement::accept(ast::visitors::CAbstractStringVisitor* visitor) {
-                    visitor->visit(this);
-                }
+		void CIfStatement::accept(ast::visitors::CAbstractVisitor* visitor) {
+			visitor->visit(this);
+		}
 
 		std::shared_ptr<ast::procedural::CCompoundBody> CIfStatement::getIfBody() const {
 			return m_ifBody;

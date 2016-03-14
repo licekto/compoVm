@@ -23,12 +23,12 @@ namespace ast {
 			*/
 			CArchitecture(const std::vector<std::shared_ptr<ast::compo::CBind>>& architectureBody = std::vector<std::shared_ptr<ast::compo::CBind>>(0));
 
-                        /**
-                        * Accept method for visitor acceptation.
-                        * @param visitor: Pointer to abstract visitor.
-                        */
-                        virtual void accept(ast::visitors::CAbstractStringVisitor *visitor);
-                        
+			/**
+			* Accept method for visitor acceptation.
+			* @param visitor: Pointer to abstract visitor.
+			*/
+			virtual void accept(ast::visitors::CAbstractVisitor *visitor);
+
 			/**
 			 * Body size getter
 			 * @return size_t

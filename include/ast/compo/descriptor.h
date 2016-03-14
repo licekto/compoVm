@@ -40,12 +40,12 @@ namespace ast {
 			            std::shared_ptr<ast::procedural::CSymbol> extends = nullptr,
 			            const std::vector<std::shared_ptr<ast::CNode>>& body = std::vector<std::shared_ptr<ast::CNode>>(0));
 
-                        /**
-                        * Accept method for visitor acceptation.
-                        * @param visitor: Pointer to abstract visitor.
-                        */
-                        virtual void accept(ast::visitors::CAbstractStringVisitor *visitor);
-                        
+			/**
+			* Accept method for visitor acceptation.
+			* @param visitor: Pointer to abstract visitor.
+			*/
+			virtual void accept(ast::visitors::CAbstractVisitor *visitor);
+
 			/**
 			* Name getter
 			* @return name symbol

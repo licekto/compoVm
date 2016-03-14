@@ -13,9 +13,9 @@ namespace ast {
 			    m_injectedWith(injectedWith) {
 		}
 
-		void CInjectedPort::accept(ast::visitors::CAbstractStringVisitor* visitor) {
-                    visitor->visit(this);
-                }
+		void CInjectedPort::accept(ast::visitors::CAbstractVisitor* visitor) {
+			visitor->visit(this);
+		}
 
 		std::string CInjectedPort::getInjectedWith() const {
 			if (m_injectedWith) {

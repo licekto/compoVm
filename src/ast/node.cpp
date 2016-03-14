@@ -11,7 +11,7 @@ namespace ast {
 	}
 
 	std::ostream& operator << (std::ostream& outstream, const CNode& /*node*/) {
-                outstream << "Empty" << std::endl;
+		outstream << "Empty" << std::endl;
 		return outstream;
 	}
 

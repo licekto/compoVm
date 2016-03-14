@@ -10,9 +10,9 @@ namespace ast {
 			    CBind(portIdentification1, portIdentification2) {
 		}
 
-		void CConnection::accept(ast::visitors::CAbstractStringVisitor* visitor) {
-                    visitor->visit(this);
-                }
+		void CConnection::accept(ast::visitors::CAbstractVisitor* visitor) {
+			visitor->visit(this);
+		}
 	}
 
 }

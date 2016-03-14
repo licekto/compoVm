@@ -29,11 +29,11 @@ namespace ast {
 			              bool atomic = false,
 			              std::shared_ptr<ast::procedural::CSymbol> injectedWith = nullptr);
 
-                        /**
-                        * Accept method for visitor acceptation.
-                        * @param visitor: Pointer to abstract visitor.
-                        */
-                        virtual void accept(ast::visitors::CAbstractStringVisitor *visitor);
+			/**
+			* Accept method for visitor acceptation.
+			* @param visitor: Pointer to abstract visitor.
+			*/
+			virtual void accept(ast::visitors::CAbstractVisitor *visitor);
 
 			/**
 			 * Injected with getter

@@ -13,9 +13,9 @@ namespace ast {
 			    m_parameters(parameters) {
 		}
 
-		void CServiceInvocation::accept(ast::visitors::CAbstractStringVisitor* visitor) {
-                    visitor->visit(this);
-                }
+		void CServiceInvocation::accept(ast::visitors::CAbstractVisitor* visitor) {
+			visitor->visit(this);
+		}
 
 
 		std::shared_ptr<ast::procedural::CSymbol> CServiceInvocation::getReceiverName() const {

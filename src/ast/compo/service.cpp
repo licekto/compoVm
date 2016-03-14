@@ -10,9 +10,9 @@ namespace ast {
 			    CAbstractServConstr(signature, body) {
 		}
 
-		void CService::accept(ast::visitors::CAbstractStringVisitor* visitor) {
-                    visitor->visit(this);
-                }
+		void CService::accept(ast::visitors::CAbstractVisitor* visitor) {
+			visitor->visit(this);
+		}
 
 	}
 

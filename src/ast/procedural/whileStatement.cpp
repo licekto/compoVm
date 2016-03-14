@@ -12,9 +12,9 @@ namespace ast {
 			    m_body(body) {
 		}
 
-		void CWhileStatement::accept(ast::visitors::CAbstractStringVisitor* visitor) {
-                    visitor->visit(this);
-                }
+		void CWhileStatement::accept(ast::visitors::CAbstractVisitor* visitor) {
+			visitor->visit(this);
+		}
 
 		std::shared_ptr<ast::procedural::CCompoundBody> CWhileStatement::getBody() const {
 			return m_body;

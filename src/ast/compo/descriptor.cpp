@@ -16,9 +16,9 @@ namespace ast {
 			                std::vector<std::shared_ptr<ast::compo::CServiceSignature>>(0))) {
 		}
 
-		void CDescriptor::accept(ast::visitors::CAbstractStringVisitor* visitor) {
-                    visitor->visit(this);
-                }
+		void CDescriptor::accept(ast::visitors::CAbstractVisitor* visitor) {
+			visitor->visit(this);
+		}
 
 		std::string CDescriptor::getName() const {
 			if (m_name) {

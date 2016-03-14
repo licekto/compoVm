@@ -8,9 +8,9 @@ namespace ast {
 			  m_architectureBody(architectureBody) {
 		}
 
-		void CArchitecture::accept(ast::visitors::CAbstractStringVisitor* visitor) {
-                    visitor->visit(this);
-                }
+		void CArchitecture::accept(ast::visitors::CAbstractVisitor* visitor) {
+			visitor->visit(this);
+		}
 
 		size_t CArchitecture::getBodySize() const {
 			return m_architectureBody.size();

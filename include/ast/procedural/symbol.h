@@ -2,7 +2,7 @@
 
 #include <memory>
 #include "abstractPrimaryExpression.h"
-#include "ast/visitor/abstractStringVisitor.h"
+#include "ast/visitor/abstractVisitor.h"
 
 namespace ast {
 
@@ -25,10 +25,10 @@ namespace ast {
 			CSymbol(const std::string& name);
 
 			/**
-                        * Accept method for visitor acceptation.
-                        * @param visitor: Pointer to abstract visitor.
-                        */
-                        virtual void accept(ast::visitors::CAbstractStringVisitor *visitor);
+			            * Accept method for visitor acceptation.
+			            * @param visitor: Pointer to abstract visitor.
+			            */
+			virtual void accept(ast::visitors::CAbstractVisitor *visitor);
 
 			/**
 			* StringValue getter

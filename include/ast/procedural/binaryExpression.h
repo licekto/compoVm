@@ -3,7 +3,7 @@
 #include <memory>
 #include "ast/procedural/abstractExpression.h"
 #include "ast/types/operatorType.h"
-#include "ast/visitor/abstractStringVisitor.h"
+#include "ast/visitor/abstractVisitor.h"
 
 namespace ast {
 
@@ -34,12 +34,12 @@ namespace ast {
 			                            std::shared_ptr<ast::procedural::CAbstractExpression> op2 = nullptr);
 
 		  public:
-			
-                        /**
-                        * Accept method for visitor acceptation.
-                        * @param visitor: Pointer to abstract visitor.
-                        */
-                        virtual void accept(ast::visitors::CAbstractStringVisitor *visitor);
+
+			/**
+			* Accept method for visitor acceptation.
+			* @param visitor: Pointer to abstract visitor.
+			*/
+			virtual void accept(ast::visitors::CAbstractVisitor *visitor);
 
 			/**
 			* Operator getter

@@ -4,7 +4,7 @@
 #include <vector>
 
 #include "ast/types/nodeType.h"
-#include "ast/visitor/abstractStringVisitor.h"
+#include "ast/visitor/abstractVisitor.h"
 
 /**
  *  \addtogroup ast
@@ -49,12 +49,12 @@ namespace ast {
 		* @return Altered output stream
 		*/
 		friend std::ostream& operator <<(std::ostream& os, const CNode& node);
-                
-                /**
-                 * Accept method for visitor acceptation.
-                 * @param visitor: Pointer to abstract visitor.
-                 */
-                virtual void accept(ast::visitors::CAbstractStringVisitor *visitor) = 0;
+
+		/**
+		 * Accept method for visitor acceptation.
+		 * @param visitor: Pointer to abstract visitor.
+		 */
+		virtual void accept(ast::visitors::CAbstractVisitor *visitor) = 0;
 	};
 
 }

@@ -11,9 +11,9 @@ namespace ast {
 			  m_ports(ports) {
 		}
 
-		void CAbstractReqProv::accept(ast::visitors::CAbstractStringVisitor* visitor) {
-                    visitor->visit(this);
-                }
+		void CAbstractReqProv::accept(ast::visitors::CAbstractVisitor* visitor) {
+			visitor->visit(this);
+		}
 
 		types::visibilityType CAbstractReqProv::getVisibilityType() const {
 			return m_visibilityType;

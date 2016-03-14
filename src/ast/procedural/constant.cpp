@@ -11,9 +11,9 @@ namespace ast {
 			  m_intValue(val) {
 		}
 
-		void CConstant::accept(ast::visitors::CAbstractStringVisitor* visitor) {
-                    visitor->visit(this);
-                }
+		void CConstant::accept(ast::visitors::CAbstractVisitor* visitor) {
+			visitor->visit(this);
+		}
 
 		i32 CConstant::getValue() const {
 			return m_intValue;

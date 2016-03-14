@@ -11,9 +11,9 @@ namespace ast {
 			    m_body(body) {
 		}
 
-		void CCompoundBody::accept(ast::visitors::CAbstractStringVisitor* visitor) {
-                    visitor->visit(this);
-                }
+		void CCompoundBody::accept(ast::visitors::CAbstractVisitor* visitor) {
+			visitor->visit(this);
+		}
 
 		std::shared_ptr<ast::CNode> CCompoundBody::getBodyNodeAt(int index) const {
 			std::shared_ptr<ast::CNode> node = nullptr;

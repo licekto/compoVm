@@ -12,9 +12,9 @@ namespace ast {
 			    m_collectivity(collectivity) {
 		}
 
-		void CPort::accept(ast::visitors::CAbstractStringVisitor* visitor) {
-                    visitor->visit(this);
-                }
+		void CPort::accept(ast::visitors::CAbstractVisitor* visitor) {
+			visitor->visit(this);
+		}
 
 		std::string CPort::getName() const {
 			if (m_name) {

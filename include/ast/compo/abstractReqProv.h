@@ -44,13 +44,13 @@ namespace ast {
 			                 const std::vector<std::shared_ptr<compo::CPort> >& ports = std::vector<std::shared_ptr<ast::compo::CPort>>(0));
 
 		  public:
-                      
-                        /**
-                        * Accept method for visitor acceptation.
-                        * @param visitor: Pointer to abstract visitor.
-                        */
-                        virtual void accept(ast::visitors::CAbstractStringVisitor *visitor);
-                      
+
+			/**
+			* Accept method for visitor acceptation.
+			* @param visitor: Pointer to abstract visitor.
+			*/
+			virtual void accept(ast::visitors::CAbstractVisitor *visitor);
+
 			/**
 			* visibility type getter
 			* @return visibilityType

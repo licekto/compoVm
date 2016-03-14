@@ -21,12 +21,12 @@ namespace ast {
 			*/
 			CConnection(std::shared_ptr<ast::compo::CPortAddress> portIdentification1 = nullptr,
 			            std::shared_ptr<ast::compo::CPortAddress> portIdentification2 = nullptr);
-                        
-                        /**
-                        * Accept method for visitor acceptation.
-                        * @param visitor: Pointer to abstract visitor.
-                        */
-                        virtual void accept(ast::visitors::CAbstractStringVisitor *visitor);
+
+			/**
+			* Accept method for visitor acceptation.
+			* @param visitor: Pointer to abstract visitor.
+			*/
+			virtual void accept(ast::visitors::CAbstractVisitor *visitor);
 		};
 
 	}

@@ -24,12 +24,12 @@ namespace ast {
 			*/
 			CDereferenceLiteral(std::shared_ptr<ast::procedural::CSymbol> parameter = nullptr);
 
-                        /**
-                        * Accept method for visitor acceptation.
-                        * @param visitor: Pointer to abstract visitor.
-                        */
-                        virtual void accept(ast::visitors::CAbstractStringVisitor *visitor);
-                        
+			/**
+			* Accept method for visitor acceptation.
+			* @param visitor: Pointer to abstract visitor.
+			*/
+			virtual void accept(ast::visitors::CAbstractVisitor *visitor);
+
 			/**
 			 * Signatures getter
 			 * @return shared_ptr to CServiceSignature

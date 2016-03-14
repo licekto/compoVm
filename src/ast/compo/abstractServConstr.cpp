@@ -11,9 +11,9 @@ namespace ast {
 			  m_body(body) {
 		}
 
-		void CAbstractServConstr::accept(ast::visitors::CAbstractStringVisitor* visitor) {
-                    visitor->visit(this);
-                }
+		void CAbstractServConstr::accept(ast::visitors::CAbstractVisitor* visitor) {
+			visitor->visit(this);
+		}
 
 		std::shared_ptr<ast::procedural::CSymbol> CAbstractServConstr::getNameSymbol() const {
 			return m_signature->getName();

@@ -31,10 +31,10 @@ namespace ast {
 			             std::shared_ptr<ast::CNode> component = nullptr);
 
 			/**
-                        * Accept method for visitor acceptation.
-                        * @param visitor: Pointer to abstract visitor.
-                        */
-                        virtual void accept(ast::visitors::CAbstractStringVisitor *visitor);
+			            * Accept method for visitor acceptation.
+			            * @param visitor: Pointer to abstract visitor.
+			            */
+			virtual void accept(ast::visitors::CAbstractVisitor *visitor);
 
 			/**
 			 * Port name getter

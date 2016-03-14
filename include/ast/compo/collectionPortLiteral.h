@@ -28,12 +28,12 @@ namespace ast {
 			CCollectionPortLiteral(std::shared_ptr<ast::procedural::CSymbol> portName = nullptr,
 			                       std::shared_ptr<ast::procedural::CAbstractExpression> indexExpression = nullptr);
 
-                        /**
-                        * Accept method for visitor acceptation.
-                        * @param visitor: Pointer to abstract visitor.
-                        */
-                        virtual void accept(ast::visitors::CAbstractStringVisitor *visitor);
-                        
+			/**
+			* Accept method for visitor acceptation.
+			* @param visitor: Pointer to abstract visitor.
+			*/
+			virtual void accept(ast::visitors::CAbstractVisitor *visitor);
+
 			/**
 			 * Signatures getter
 			 * @return shared_ptr to CServiceSignature
