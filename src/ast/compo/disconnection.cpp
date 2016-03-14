@@ -10,10 +10,9 @@ namespace ast {
 			    CBind(portIdentification1, portIdentification2) {
 		}
 
-		void CDisconnection::print(std::ostream& outstream) const {
-			outstream << "\t";
-			outstream << *m_portIdentification1 << " : { }";
-		}
+		void CDisconnection::accept(ast::visitors::CAbstractStringVisitor* visitor) {
+                    visitor->visit(this);
+                }
 	}
 
 }

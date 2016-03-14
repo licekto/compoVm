@@ -10,10 +10,9 @@ namespace ast {
 			    m_portName(portName), m_component(component) {
 		}
 
-		void CPortAddress::print(std::ostream& outstream) const {
-			outstream << "\t";
-			outstream << *m_portName << " : { }";
-		}
+		void CPortAddress::accept(ast::visitors::CAbstractStringVisitor* visitor) {
+                    visitor->visit(this);
+                }
 
 		std::shared_ptr<ast::procedural::CSymbol> CPortAddress::getPortName() const {
 			return m_portName;

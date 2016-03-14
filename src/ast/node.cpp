@@ -10,8 +10,8 @@ namespace ast {
 		return m_nodeType;
 	}
 
-	std::ostream& operator << (std::ostream& outstream, const CNode& node) {
-		node.print(outstream);
+	std::ostream& operator << (std::ostream& outstream, const CNode& /*node*/) {
+                outstream << "Empty" << std::endl;
 		return outstream;
 	}
 

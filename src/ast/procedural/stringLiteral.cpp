@@ -9,9 +9,9 @@ namespace ast {
 			  m_stringValue(val) {
 		}
 
-		void CStringLiteral::print(std::ostream& outStr) const {
-			outStr << m_stringValue;
-		}
+		void CStringLiteral::accept(ast::visitors::CAbstractStringVisitor* visitor) {
+                    visitor->visit(this);
+                }
 
 		std::string CStringLiteral::getValue() const {
 			return m_stringValue;

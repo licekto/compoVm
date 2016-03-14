@@ -30,9 +30,8 @@
 #include "ast/procedural/breakStatement.h"
 #include "ast/procedural/continueStatement.h"
 #include "ast/procedural/returnStatement.h"
-
-#include "testDefinitions.h"
 #include "ast/procedural/whileStatement.h"
+#include "testDefinitions.h"
 
 BOOST_AUTO_TEST_SUITE(parserProceduralTest)
 

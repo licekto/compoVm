@@ -9,11 +9,9 @@ namespace ast {
 			    m_expression(expression) {
 		}
 
-		void CReturnStatement::print(std::ostream& outstream) const {
-			outstream << "\t";
-			outstream << "return ";
-			outstream << m_expression << "; ";
-		}
+		void CReturnStatement::accept(ast::visitors::CAbstractStringVisitor* visitor) {
+                    visitor->visit(this);
+                }
 
 		std::shared_ptr<ast::procedural::CAbstractExpression> CReturnStatement::getExpression() const {
 			return m_expression;

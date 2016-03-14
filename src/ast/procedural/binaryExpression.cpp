@@ -14,9 +14,9 @@ namespace ast {
 			    m_operand2(op2) {
 		}
 
-		void CBinaryExpression::print(std::ostream& outstream) const {
-			outstream << *m_operand1 << " " << m_operator << *m_operand2 << ";" << std::endl;
-		}
+		void CBinaryExpression::accept(ast::visitors::CAbstractStringVisitor* visitor) {
+                    visitor->visit(this);
+                }
 
 		types::operatorType CBinaryExpression::getOperator() const {
 			return m_operator;

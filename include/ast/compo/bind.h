@@ -31,13 +31,13 @@ namespace ast {
 			      std::shared_ptr<ast::compo::CPortAddress> portIdentification2 = nullptr);
 
 		  public:
-			/**
-			* Virtual print function to call from operator <<
-			* @param os: output stream
-			* @see operator <<()
-			*/
-			virtual void print(std::ostream& os) const;
 
+                        /**
+                        * Accept method for visitor acceptation.
+                        * @param visitor: Pointer to abstract visitor.
+                        */
+                        virtual void accept(ast::visitors::CAbstractStringVisitor *visitor);
+                      
 			/**
 			 * Port name getter
 			 * @return name symbol of port identification.
@@ -46,10 +46,9 @@ namespace ast {
 
 			/**
 			* Port name getter
-					 * @return name symbol of port identification.
-					 */
+                        * @return name symbol of port identification.
+                        */
 			std::shared_ptr<ast::compo::CPortAddress> getPortIdentification2() const;
-
 		};
 
 	}

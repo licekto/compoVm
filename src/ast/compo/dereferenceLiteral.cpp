@@ -9,9 +9,9 @@ namespace ast {
 			    m_parameter(parameter) {
 		}
 
-		void CDereferenceLiteral::print(std::ostream& outstream) const {
-			outstream << "&" << *m_parameter << std::endl;
-		}
+		void CDereferenceLiteral::accept(ast::visitors::CAbstractStringVisitor* visitor) {
+                    visitor->visit(this);
+                }
 
 		std::shared_ptr<ast::procedural::CSymbol> CDereferenceLiteral::getParamName() const {
 			return m_parameter;

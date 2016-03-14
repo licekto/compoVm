@@ -13,13 +13,9 @@ namespace ast {
 			    m_elseBody(elseBody) {
 		}
 
-		void CIfStatement::print(std::ostream& outstream) const {
-			outstream << "\t";
-			outstream << "for (";
-			outstream << m_condition << "; ";
-			outstream << *m_ifBody << std::endl;
-			outstream << "}" << std::endl;
-		}
+		void CIfStatement::accept(ast::visitors::CAbstractStringVisitor* visitor) {
+                    visitor->visit(this);
+                }
 
 		std::shared_ptr<ast::procedural::CCompoundBody> CIfStatement::getIfBody() const {
 			return m_ifBody;

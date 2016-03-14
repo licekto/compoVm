@@ -2,6 +2,7 @@
 
 #include <memory>
 #include "ast/procedural/symbol.h"
+#include "ast/visitor/abstractStringVisitor.h"
 
 namespace ast {
 
@@ -31,11 +32,10 @@ namespace ast {
 			              const std::vector<std::shared_ptr<ast::CNode>>& body = std::vector<std::shared_ptr<ast::CNode>>(0));
 
 			/**
-			* Virtual print function to call from operator <<
-			* @param os: output stream
-			* @see operator <<()
-			*/
-			virtual void print(std::ostream& os) const;
+                        * Accept method for visitor acceptation.
+                        * @param visitor: Pointer to abstract visitor.
+                        */
+                        virtual void accept(ast::visitors::CAbstractStringVisitor *visitor);
 
 			/**
 			* Body size getter

@@ -13,9 +13,9 @@ namespace ast {
 			    m_parameters(parameters) {
 		}
 
-		void CServiceInvocation::print(std::ostream& outstream) const {
-			outstream << "&" << *m_selector << std::endl;
-		}
+		void CServiceInvocation::accept(ast::visitors::CAbstractStringVisitor* visitor) {
+                    visitor->visit(this);
+                }
 
 
 		std::shared_ptr<ast::procedural::CSymbol> CServiceInvocation::getReceiverName() const {

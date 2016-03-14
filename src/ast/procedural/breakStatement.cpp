@@ -8,10 +8,9 @@ namespace ast {
 			:   CNode(types::nodeType::BREAK) {
 		}
 
-		void CBreakStatement::print(std::ostream& outstream) const {
-			outstream << "\t";
-			outstream << "break;";
-		}
+		void CBreakStatement::accept(ast::visitors::CAbstractStringVisitor* visitor) {
+                    visitor->visit(this);
+                }
 	}
 
 }

@@ -11,9 +11,9 @@ namespace ast {
 			  m_expression(expr) {
 		}
 
-		void CParens::print(std::ostream& outStr) const {
-			outStr << m_expression;
-		}
+		void CParens::accept(ast::visitors::CAbstractStringVisitor* visitor) {
+                    visitor->visit(this);
+                }
 
 		std::shared_ptr<ast::CNode> CParens::getExpression() const {
 			return m_expression;

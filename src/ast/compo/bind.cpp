@@ -10,10 +10,9 @@ namespace ast {
 			    m_portIdentification1(portIdentification1), m_portIdentification2(portIdentification2) {
 		}
 
-		void CBind::print(std::ostream& outstream) const {
-			outstream << "\t";
-			outstream << *m_portIdentification1 << " : { }";
-		}
+		void CBind::accept(ast::visitors::CAbstractStringVisitor* visitor) {
+                    visitor->visit(this);
+                }
 
 		std::shared_ptr<ast::compo::CPortAddress> CBind::getPortIdentification1() const {
 			return m_portIdentification1;

@@ -11,24 +11,9 @@ namespace ast {
 			    m_body(body) {
 		}
 
-		void CCompoundBody::print(std::ostream& outstream) const {
-			outstream << "\t{";
-			if (m_temporaries.size() != 0) {
-				outstream << "| ";
-				for (std::shared_ptr<ast::procedural::CSymbol> symbol : m_temporaries) {
-					outstream << "\t\t";
-					outstream << *symbol << " ";
-				}
-				outstream << "|" << std::endl;
-			}
-			if (m_body.size() != 0) {
-				for (std::shared_ptr<ast::CNode> expr : m_body) {
-					outstream << "\t\t";
-					outstream << *expr;
-				}
-			}
-			outstream << "}" << std::endl;
-		}
+		void CCompoundBody::accept(ast::visitors::CAbstractStringVisitor* visitor) {
+                    visitor->visit(this);
+                }
 
 		std::shared_ptr<ast::CNode> CCompoundBody::getBodyNodeAt(int index) const {
 			std::shared_ptr<ast::CNode> node = nullptr;

@@ -21,13 +21,12 @@ namespace ast {
 			*/
 			CDelegation(std::shared_ptr<ast::compo::CPortAddress> portIdentification1 = nullptr,
 			            std::shared_ptr<ast::compo::CPortAddress> portIdentification2 = nullptr);
-
-			/**
-			* Virtual print function to call from operator <<
-					* @param os: output stream
-					* @see operator <<()
-					*/
-			virtual void print(std::ostream& os) const;
+                        
+                        /**
+                        * Accept method for visitor acceptation.
+                        * @param visitor: Pointer to abstract visitor.
+                        */
+                        virtual void accept(ast::visitors::CAbstractStringVisitor *visitor);
 		};
 
 	}

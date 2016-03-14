@@ -4,24 +4,22 @@
 #include <vector>
 
 #include "ast/types/nodeType.h"
+#include "ast/visitor/abstractStringVisitor.h"
 
 /**
- *  \addtogroup nodes
+ *  \addtogroup ast
  *  @{
  */
 
 /**
- * nodes Namespace to uniquely identify compo AST nodes.
+ * ast Namespace to uniquely identify compo AST nodes.
  */
 namespace ast {
-
 	/**
 	 * \class CNode
 	 * \brief Abstract base class for other nodes.
 	 *
-	 * Abstract base class of AST. Every node in AST is inherited from this one.
-	 *
-	 * Rule of five is needed since CNode class has user-declared destructor.
+	 * Abstract base class of AST. Every node in AST is derived from this one.
 	 */
 	class CNode {
 	  protected:
@@ -37,13 +35,6 @@ namespace ast {
 	  public:
 
 		/**
-		* Virtual print function to call from operator <<
-		* @param os: output stream
-		* @see operator <<()
-		*/
-		virtual void print(std::ostream& os) const = 0;
-
-		/**
 		* NodeType getter
 		* @return Type of node
 		*/
@@ -57,7 +48,13 @@ namespace ast {
 		* @see print()
 		* @return Altered output stream
 		*/
-		friend  std::ostream& operator <<(std::ostream& os, const CNode& node);
+		friend std::ostream& operator <<(std::ostream& os, const CNode& node);
+                
+                /**
+                 * Accept method for visitor acceptation.
+                 * @param visitor: Pointer to abstract visitor.
+                 */
+                virtual void accept(ast::visitors::CAbstractStringVisitor *visitor) = 0;
 	};
 
 }

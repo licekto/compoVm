@@ -16,24 +16,9 @@ namespace ast {
 			                std::vector<std::shared_ptr<ast::compo::CServiceSignature>>(0))) {
 		}
 
-		void CDescriptor::print(std::ostream& outstream) const {
-			outstream << "descriptor";
-			if (m_name) {
-				outstream << *m_name << " ";
-			}
-			if (m_extends) {
-				outstream << "extends " << *m_extends;
-			}
-			outstream << " {" << std::endl;
-
-			if (m_body.size() != 0) {
-				for (std::shared_ptr<ast::CNode> expr : m_body) {
-					outstream << *expr;
-				}
-			}
-
-			outstream << "}" << std::endl;
-		}
+		void CDescriptor::accept(ast::visitors::CAbstractStringVisitor* visitor) {
+                    visitor->visit(this);
+                }
 
 		std::string CDescriptor::getName() const {
 			if (m_name) {

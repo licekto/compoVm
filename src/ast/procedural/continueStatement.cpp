@@ -8,10 +8,9 @@ namespace ast {
 			:   CNode(types::nodeType::CONTINUE) {
 		}
 
-		void CContinueStatement::print(std::ostream& outstream) const {
-			outstream << "\t";
-			outstream << "continue;";
-		}
+		void CContinueStatement::accept(ast::visitors::CAbstractStringVisitor* visitor) {
+                    visitor->visit(this);
+                }
 	}
 
 }

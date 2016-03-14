@@ -12,12 +12,9 @@ namespace ast {
 			    m_collectivity(collectivity) {
 		}
 
-		void CPort::print(std::ostream& outstream) const {
-			if (m_name) {
-				outstream << "\t";
-				outstream << *m_name << " : { }";
-			}
-		}
+		void CPort::accept(ast::visitors::CAbstractStringVisitor* visitor) {
+                    visitor->visit(this);
+                }
 
 		std::string CPort::getName() const {
 			if (m_name) {

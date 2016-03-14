@@ -10,12 +10,9 @@ namespace ast {
 			    CAbstractServConstr(signature, body) {
 		}
 
-		void CService::print(std::ostream& outStr) const {
-			outStr << "\t";
-			outStr << *m_body;
-			outStr << "\t";
-			outStr << "}" << std::endl;;
-		}
+		void CService::accept(ast::visitors::CAbstractStringVisitor* visitor) {
+                    visitor->visit(this);
+                }
 
 	}
 

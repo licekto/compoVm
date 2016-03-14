@@ -12,13 +12,9 @@ namespace ast {
 			    m_body(body) {
 		}
 
-		void CWhileStatement::print(std::ostream& outstream) const {
-			outstream << "\t";
-			outstream << "while (";
-			outstream << m_condition << ") {" << std::endl;
-			outstream << *m_body << std::endl;
-			outstream << "}" << std::endl;
-		}
+		void CWhileStatement::accept(ast::visitors::CAbstractStringVisitor* visitor) {
+                    visitor->visit(this);
+                }
 
 		std::shared_ptr<ast::procedural::CCompoundBody> CWhileStatement::getBody() const {
 			return m_body;

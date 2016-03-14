@@ -10,9 +10,9 @@ namespace ast {
 			    CAbstractServConstr(signature, body) {
 		}
 
-		void CConstraint::print(std::ostream& outstream) const {
-			outstream << "constraint()" << std::endl;
-		}
+		void CConstraint::accept(ast::visitors::CAbstractStringVisitor* visitor) {
+                    visitor->visit(this);
+                }
 
 	}
 }

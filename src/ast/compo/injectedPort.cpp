@@ -13,10 +13,9 @@ namespace ast {
 			    m_injectedWith(injectedWith) {
 		}
 
-		void CInjectedPort::print(std::ostream& outstream) const {
-			outstream << "\t";
-			outstream << *m_name << " : { }";
-		}
+		void CInjectedPort::accept(ast::visitors::CAbstractStringVisitor* visitor) {
+                    visitor->visit(this);
+                }
 
 		std::string CInjectedPort::getInjectedWith() const {
 			if (m_injectedWith) {

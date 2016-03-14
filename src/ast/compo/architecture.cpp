@@ -8,12 +8,9 @@ namespace ast {
 			  m_architectureBody(architectureBody) {
 		}
 
-		void CArchitecture::print(std::ostream& outStr) const {
-			outStr << "\t";
-			outStr << "architecture {}";
-
-			outStr << std::endl;
-		}
+		void CArchitecture::accept(ast::visitors::CAbstractStringVisitor* visitor) {
+                    visitor->visit(this);
+                }
 
 		size_t CArchitecture::getBodySize() const {
 			return m_architectureBody.size();

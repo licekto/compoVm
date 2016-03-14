@@ -2,6 +2,7 @@
 
 #include <memory>
 #include "abstractStatement.h"
+#include "ast/visitor/abstractStringVisitor.h"
 
 namespace ast {
 
@@ -21,12 +22,12 @@ namespace ast {
 		 */
 		class CAbstractExpression : public virtual CAbstractStatement {
 		  public:
-			/**
-			* Virtual print function to call from operator <<
-			* @param os: output stream
-			* @see operator <<()
-			*/
-			virtual void print(std::ostream& outStr) const = 0;
+			
+                      /**
+                        * Accept method for visitor acceptation.
+                        * @param visitor: Pointer to abstract visitor.
+                        */
+                        virtual void accept(ast::visitors::CAbstractStringVisitor *visitor) = 0;
 		};
 
 	}

@@ -10,9 +10,9 @@ namespace ast {
 			    CAbstractReqProv(type, ports) {
 		}
 
-		void CProvision::print(std::ostream& outstream) const {
-			outstream << "provides" << std::endl;
-		}
+		void CProvision::accept(ast::visitors::CAbstractStringVisitor* visitor) {
+                    visitor->visit(this);
+                }
 
 	}
 

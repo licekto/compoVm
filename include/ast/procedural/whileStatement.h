@@ -5,6 +5,7 @@
 #include "ast/procedural/abstractStatement.h"
 #include "ast/procedural/assignmentExpression.h"
 #include "ast/procedural/compoundBody.h"
+#include "ast/visitor/abstractStringVisitor.h"
 
 namespace ast {
 
@@ -32,11 +33,10 @@ namespace ast {
 			                std::shared_ptr<ast::procedural::CCompoundBody> body = nullptr);
 
 			/**
-			* Virtual print function to call from operator <<
-			* @param os: output stream
-			* @see operator <<()
-			*/
-			virtual void print(std::ostream& os) const;
+                        * Accept method for visitor acceptation.
+                        * @param visitor: Pointer to abstract visitor.
+                        */
+                        virtual void accept(ast::visitors::CAbstractStringVisitor *visitor);
 
 			/**
 			* Body getter

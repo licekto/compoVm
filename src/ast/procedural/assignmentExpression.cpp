@@ -10,9 +10,9 @@ namespace ast {
 			    m_variable(variable), m_rValue(rVal) {
 		}
 
-		void CAssignmentExpression::print(std::ostream& outstream) const {
-			outstream << *m_variable << " := " << *m_rValue << ";" << std::endl;
-		}
+		void CAssignmentExpression::accept(ast::visitors::CAbstractStringVisitor* visitor) {
+                    visitor->visit(this);
+                }
 
 		std::shared_ptr<ast::procedural::CSymbol> CAssignmentExpression::getVariable() const {
 			return m_variable;

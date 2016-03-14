@@ -36,13 +36,13 @@ namespace ast {
 			                    std::shared_ptr<ast::procedural::CCompoundBody> body = nullptr);
 
 		  public:
-			/**
-			* Virtual print function to call from operator <<
-			* @param os: output stream
-			* @see operator <<()
-			*/
-			virtual void print(std::ostream& os) const;
 
+                        /**
+                        * Accept method for visitor acceptation.
+                        * @param visitor: Pointer to abstract visitor.
+                        */
+                        virtual void accept(ast::visitors::CAbstractStringVisitor *visitor);
+                        
 			/**
 			* Name getter
 			* @return Name of entity

@@ -11,9 +11,9 @@ namespace ast {
 			    CPort(types::portType::UNIVERSAL, name, atomicity, collectivity) {
 		}
 
-		void CUniversalPort::print(std::ostream& outstream) const {
-			outstream << "signaturesPort" << std::endl;
-		}
+		void CUniversalPort::accept(ast::visitors::CAbstractStringVisitor* visitor) {
+                    visitor->visit(this);
+                }
 	}
 
 }

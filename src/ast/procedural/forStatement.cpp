@@ -15,15 +15,9 @@ namespace ast {
 			    m_body(body) {
 		}
 
-		void CForStatement::print(std::ostream& outstream) const {
-			outstream << "\t";
-			outstream << "for (";
-			outstream << m_initExpression << "; ";
-			outstream << m_condition << "; ";
-			outstream << m_increment << ") {";
-			outstream << *m_body << std::endl;
-			outstream << "}" << std::endl;
-		}
+		void CForStatement::accept(ast::visitors::CAbstractStringVisitor* visitor) {
+                    visitor->visit(this);
+                }
 
 		std::shared_ptr<ast::procedural::CCompoundBody> CForStatement::getBody() const {
 			return m_body;

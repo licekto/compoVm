@@ -11,9 +11,9 @@ namespace ast {
 			    m_indexExpression(indexExpression) {
 		}
 
-		void CCollectionPortLiteral::print(std::ostream& outstream) const {
-			outstream << "&" << *m_portName << std::endl;
-		}
+		void CCollectionPortLiteral::accept(ast::visitors::CAbstractStringVisitor* visitor) {
+                    visitor->visit(this);
+                }
 
 		std::shared_ptr<ast::procedural::CSymbol> CCollectionPortLiteral::getPortName() const {
 			return m_portName;
