@@ -4,53 +4,8 @@
 
 #include "parser/parserWrapper.h"
 #include "parser/lexer.h"
-#include "ast/node.h"
-#include "ast/types/visibilityType.h"
-#include "ast/types/portType.h"
-#include "ast/compo/architecture.h"
-#include "ast/compo/service.h"
-#include "ast/compo/dereferenceLiteral.h"
-#include "ast/compo/collectionPortLiteral.h"
-#include "ast/compo/constraint.h"
-#include "ast/compo/connection.h"
-#include "ast/compo/disconnection.h"
-#include "ast/compo/delegation.h"
-#include "ast/compo/port.h"
-#include "ast/compo/portAddress.h"
-#include "ast/compo/namedPort.h"
-#include "ast/compo/signaturesPort.h"
-#include "ast/compo/universalPort.h"
-#include "ast/compo/descriptor.h"
-#include "ast/compo/provision.h"
-#include "ast/compo/requirement.h"
-#include "ast/compo/interface.h"
-#include "ast/compo/serviceSignature.h"
-#include "ast/compo/serviceInvocation.h"
-#include "ast/compo/bind.h"
-#include "ast/procedural/symbol.h"
-#include "ast/procedural/ifStatement.h"
-#include "ast/procedural/forStatement.h"
-#include "ast/procedural/whileStatement.h"
-#include "ast/procedural/breakStatement.h"
-#include "ast/procedural/continueStatement.h"
-#include "ast/procedural/returnStatement.h"
-#include "ast/procedural/abstractExpression.h"
-#include "ast/procedural/assignmentExpression.h"
-#include "ast/procedural/additionExpression.h"
-#include "ast/procedural/subtractionExpression.h"
-#include "ast/procedural/multiplicationExpression.h"
-#include "ast/procedural/divisionExpression.h"
-#include "ast/procedural/equalityExpression.h"
-#include "ast/procedural/nonEqualityExpression.h"
-#include "ast/procedural/logicalAndExpression.h"
-#include "ast/procedural/logicalOrExpression.h"
-#include "ast/procedural/lessExpression.h"
-#include "ast/procedural/lessOrEqualExpression.h"
-#include "ast/procedural/greaterExpression.h"
-#include "ast/procedural/greaterOrEqualExpression.h"
 
-#include "ast/procedural/constant.h"
-#include "ast/procedural/parens.h"
+#include "definitions.h"
 
 #define yylex()                  parser->getLexer()->yylex()
 #define yyerror(parser, message) parser->error(message)
@@ -123,7 +78,7 @@ primary_expression
                     }
                 |   '(' expression ')'
                     {
-                        $$ = std::make_shared<ast::procedural::CParens>($2);
+                        $$ = new_ptr(ast_parens)($2);
                     }
                 ;
 
@@ -134,11 +89,11 @@ multiplicative_expression
                     }
                 |   multiplicative_expression '*' primary_expression
                     {
-                        $$ = std::make_shared<ast::procedural::CMultiplicationExpression>(std::dynamic_pointer_cast<ast::procedural::CAbstractExpression>($1), std::dynamic_pointer_cast<ast::procedural::CAbstractExpression>($3));
+                        $$ = new_ptr(ast_multiplication)(cast(ast_expression)($1), cast(ast_expression)($3));
                     }
                 |   multiplicative_expression '/' primary_expression
                     {
-                        $$ = std::make_shared<ast::procedural::CDivisionExpression>(std::dynamic_pointer_cast<ast::procedural::CAbstractExpression>($1), std::dynamic_pointer_cast<ast::procedural::CAbstractExpression>($3));
+                        $$ = new_ptr(ast_division)(cast(ast_expression)($1), cast(ast_expression)($3));
                     }
                 ;
 
@@ -149,11 +104,11 @@ additive_expression
                     }
                 |   additive_expression '+' multiplicative_expression
                     {
-                        $$ = std::make_shared<ast::procedural::CAdditionExpression>(std::dynamic_pointer_cast<ast::procedural::CAbstractExpression>($1), std::dynamic_pointer_cast<ast::procedural::CAbstractExpression>($3));
+                        $$ = new_ptr(ast_addition)(cast(ast_expression)($1), cast(ast_expression)($3));
                     }
                 |   additive_expression '-' multiplicative_expression
                     {
-                        $$ = std::make_shared<ast::procedural::CSubtractionExpression>(std::dynamic_pointer_cast<ast::procedural::CAbstractExpression>($1), std::dynamic_pointer_cast<ast::procedural::CAbstractExpression>($3));
+                        $$ = new_ptr(ast_subtraction)(cast(ast_expression)($1), cast(ast_expression)($3));
                     }
                 ;
 
@@ -164,19 +119,19 @@ relational_expression
                     }
                 |   relational_expression '<' additive_expression
                     {
-                        $$ = std::make_shared<ast::procedural::CLessExpression>(std::dynamic_pointer_cast<ast::procedural::CAbstractExpression>($1), std::dynamic_pointer_cast<ast::procedural::CAbstractExpression>($3));
+                        $$ = new_ptr(ast_less)(cast(ast_expression)($1), cast(ast_expression)($3));
                     }
                 |   relational_expression '>' additive_expression
                     {
-                        $$ = std::make_shared<ast::procedural::CGreaterExpression>(std::dynamic_pointer_cast<ast::procedural::CAbstractExpression>($1), std::dynamic_pointer_cast<ast::procedural::CAbstractExpression>($3));
+                        $$ = new_ptr(ast_greater)(cast(ast_expression)($1), cast(ast_expression)($3));
                     }
                 |   relational_expression LE_OP additive_expression
                     {
-                        $$ = std::make_shared<ast::procedural::CLessOrEqualExpression>(std::dynamic_pointer_cast<ast::procedural::CAbstractExpression>($1), std::dynamic_pointer_cast<ast::procedural::CAbstractExpression>($3));
+                        $$ = new_ptr(ast_lessorequal)(cast(ast_expression)($1), cast(ast_expression)($3));
                     }
                 |   relational_expression GE_OP additive_expression
                     {
-                        $$ = std::make_shared<ast::procedural::CGreaterOrEqualExpression>(std::dynamic_pointer_cast<ast::procedural::CAbstractExpression>($1), std::dynamic_pointer_cast<ast::procedural::CAbstractExpression>($3));
+                        $$ = new_ptr(ast_greaterorequal)(cast(ast_expression)($1), cast(ast_expression)($3));
                     }
                 ;
 
@@ -187,11 +142,11 @@ equality_expression
                     }
                 |   equality_expression EQ_OP additive_expression
                     {
-                        $$ = std::make_shared<ast::procedural::CEqualityExpression>(std::dynamic_pointer_cast<ast::procedural::CAbstractExpression>($1), std::dynamic_pointer_cast<ast::procedural::CAbstractExpression>($3));
+                        $$ = new_ptr(ast_equality)(cast(ast_expression)($1), cast(ast_expression)($3));
                     }
                 |   equality_expression NE_OP additive_expression
                     {
-                        $$ = std::make_shared<ast::procedural::CNonEqualityExpression>(std::dynamic_pointer_cast<ast::procedural::CAbstractExpression>($1), std::dynamic_pointer_cast<ast::procedural::CAbstractExpression>($3));
+                        $$ = new_ptr(ast_nonequality)(cast(ast_expression)($1), cast(ast_expression)($3));
                     }
                 ;
 
@@ -202,7 +157,7 @@ logical_and_expression
                     }
                 |   logical_and_expression AND_OP equality_expression
                     {
-                        $$ = std::make_shared<ast::procedural::CLogicalAndExpression>(std::dynamic_pointer_cast<ast::procedural::CAbstractExpression>($1), std::dynamic_pointer_cast<ast::procedural::CAbstractExpression>($3));
+                        $$ = new_ptr(ast_and)(cast(ast_expression)($1), cast(ast_expression)($3));
                     }
                 ;
 
@@ -213,7 +168,7 @@ logical_or_expression
                     }
                 |   logical_or_expression OR_OP logical_and_expression
                     {
-                        $$ = std::make_shared<ast::procedural::CLogicalOrExpression>(std::dynamic_pointer_cast<ast::procedural::CAbstractExpression>($1), std::dynamic_pointer_cast<ast::procedural::CAbstractExpression>($3));
+                        $$ = new_ptr(ast_or)(cast(ast_expression)($1), cast(ast_expression)($3));
                     }
                 ;
 
@@ -225,7 +180,7 @@ assignment_expression
                     }
                 |   primary_expression ASSIGNMENT expression
                     {
-                        $$ = std::make_shared<ast::procedural::CAssignmentExpression>(std::dynamic_pointer_cast<ast::procedural::CSymbol>($1), $3);
+                        $$ = new_ptr(ast_assignment)(cast(ast_symbol)($1), $3);
                     }
 
 expression      
@@ -277,7 +232,7 @@ compound_statement
 push_context
                 :   {
                         parser->pushBlock(parser->getCurrentCompoundBody());
-                        parser->setCurrentCompoundBody(std::make_shared<ast::procedural::CCompoundBody>());
+                        parser->setCurrentCompoundBody(new_ptr(ast_compound)());
                     }
                 ;
 
@@ -289,11 +244,11 @@ temporaries
 temporaries_list
                 :   IDENTIFIER
                     {
-                        parser->getCurrentCompoundBody()->addTemporary(std::dynamic_pointer_cast<ast::procedural::CSymbol>($1));
+                        parser->getCurrentCompoundBody()->addTemporary(cast(ast_symbol)($1));
                     }
                 |   temporaries_list IDENTIFIER
                     {
-                        parser->getCurrentCompoundBody()->addTemporary(std::dynamic_pointer_cast<ast::procedural::CSymbol>($2));
+                        parser->getCurrentCompoundBody()->addTemporary(cast(ast_symbol)($2));
                     }
                 ;
 
@@ -319,45 +274,45 @@ expression_statement
 selection_statement
                 :   IF '(' expression ')' statement
                     {
-                        $$ = std::make_shared<ast::procedural::CIfStatement>(std::dynamic_pointer_cast<ast::procedural::CAbstractExpression>($3),
-                                                                               std::dynamic_pointer_cast<ast::procedural::CCompoundBody>($5),
+                        $$ = new_ptr(ast_if)(cast(ast_expression)($3),
+                                                                               cast(ast_compound)($5),
                                                                                nullptr);
                     }
                 |   IF '(' expression ')' statement ELSE statement
                     {
-                        $$ = std::make_shared<ast::procedural::CIfStatement>(std::dynamic_pointer_cast<ast::procedural::CAbstractExpression>($3),
-                                                                               std::dynamic_pointer_cast<ast::procedural::CCompoundBody>($5),
-                                                                               std::dynamic_pointer_cast<ast::procedural::CCompoundBody>($7));
+                        $$ = new_ptr(ast_if)(cast(ast_expression)($3),
+                                                                               cast(ast_compound)($5),
+                                                                               cast(ast_compound)($7));
                     }
                 ;
 
 iteration_statement
                 :   WHILE '(' expression ')' statement
                     {
-                        $$ = std::make_shared<ast::procedural::CWhileStatement>(std::dynamic_pointer_cast<ast::procedural::CAbstractExpression>($3),
-                                                                                  std::dynamic_pointer_cast<ast::procedural::CCompoundBody>($5));
+                        $$ = new_ptr(ast_while)(cast(ast_expression)($3),
+                                                                                  cast(ast_compound)($5));
                     }
                 |   FOR '(' assignment_expression ';' expression_statement expression ')' statement
                     {
-                        $$ = std::make_shared<ast::procedural::CForStatement>(std::dynamic_pointer_cast<ast::procedural::CAssignmentExpression>($3),
-                                                                                std::dynamic_pointer_cast<ast::procedural::CAbstractExpression>($5),
-                                                                                std::dynamic_pointer_cast<ast::procedural::CAbstractExpression>($6),
-                                                                                std::dynamic_pointer_cast<ast::procedural::CCompoundBody>($8));
+                        $$ = new_ptr(ast_for)(cast(ast_assignment)($3),
+                                                                                cast(ast_expression)($5),
+                                                                                cast(ast_expression)($6),
+                                                                                cast(ast_compound)($8));
                     }
                 ;
 
 jump_statement
                 :   CONTINUE ';'
                     {
-                        $$ = std::make_shared<ast::procedural::CContinueStatement>();
+                        $$ = new_ptr(ast_continue)();
                     }
                 |   BREAK ';'
                     {
-                        $$ = std::make_shared<ast::procedural::CBreakStatement>();
+                        $$ = new_ptr(ast_break)();
                     }
                 |   RETURN expression ';'
                     {
-                        $$ = std::make_shared<ast::procedural::CReturnStatement>(std::dynamic_pointer_cast<ast::procedural::CAbstractExpression>($2));
+                        $$ = new_ptr(ast_return)(cast(ast_expression)($2));
                     }
                 ;
 
@@ -385,8 +340,8 @@ descriptor_interface
 descriptor      
                 :   DESCRIPTOR IDENTIFIER inheritance '{' compo_expressions '}'
                     {
-                        $$ = std::make_shared<ast::compo::CDescriptor>(std::dynamic_pointer_cast<ast::procedural::CSymbol>($2),
-                                                                         std::dynamic_pointer_cast<ast::procedural::CSymbol>($3),
+                        $$ = new_ptr(ast_descriptor)(cast(ast_symbol)($2),
+                                                                         cast(ast_symbol)($3),
                                                                          parser->getInProvision(),
                                                                          parser->getExProvision(),
                                                                          parser->getInRequirement(),
@@ -401,8 +356,8 @@ descriptor
 interface       
                 :   INTERFACE IDENTIFIER inheritance service_signatures_list
                     {
-                        $$ = std::make_shared<ast::compo::CInterface>(std::dynamic_pointer_cast<ast::procedural::CSymbol>($2),
-                                                                        std::dynamic_pointer_cast<ast::procedural::CSymbol>($3),
+                        $$ = new_ptr(ast_interface)(cast(ast_symbol)($2),
+                                                                        cast(ast_symbol)($3),
                                                                         *parser->getServiceSignatures());
                     }
                 ;
@@ -437,11 +392,11 @@ provision
 		    {
                         if (parser->getVisibility() == ast::types::visibilityType::EXTERNAL)
                         {
-                            parser->setExProvision(std::make_shared<ast::compo::CProvision>(parser->getVisibility(), *parser->getPorts()));
+                            parser->setExProvision(new_ptr(ast_provision)(parser->getVisibility(), *parser->getPorts()));
                         }
                         else
                         {
-                            parser->setInProvision(std::make_shared<ast::compo::CProvision>(parser->getVisibility(), *parser->getPorts()));
+                            parser->setInProvision(new_ptr(ast_provision)(parser->getVisibility(), *parser->getPorts()));
                         }
                         parser->clearPorts();
 		    }
@@ -452,11 +407,11 @@ requirement
                     {
                         if (parser->getVisibility() == ast::types::visibilityType::EXTERNAL)
                         {
-                            parser->setExRequirement(std::make_shared<ast::compo::CRequirement>(parser->getVisibility(), *parser->getPorts()));
+                            parser->setExRequirement(new_ptr(ast_requirement)(parser->getVisibility(), *parser->getPorts()));
                         }
                         else
                         {
-                            parser->setInRequirement(std::make_shared<ast::compo::CRequirement>(parser->getVisibility(), *parser->getPorts()));
+                            parser->setInRequirement(new_ptr(ast_requirement)(parser->getVisibility(), *parser->getPorts()));
                         }
                         parser->clearPorts();
 		    }
@@ -489,8 +444,8 @@ ports
 port
                 :   atomic port_name collecting ':' port_signature of_kind
 		    {
-                        std::dynamic_pointer_cast<ast::compo::CPort>($5)->setKindOf(std::dynamic_pointer_cast<ast::procedural::CSymbol>($6));
-			parser->addPort(std::dynamic_pointer_cast<ast::compo::CPort>($5));
+                        cast(ast_port)($5)->setKindOf(cast(ast_symbol)($6));
+			parser->addPort(cast(ast_port)($5));
 		    }
 		;
 
@@ -508,7 +463,7 @@ atomic
 port_name
                 :   IDENTIFIER
                     {
-                        parser->setPortName(std::dynamic_pointer_cast<ast::procedural::CSymbol>($1));
+                        parser->setPortName(cast(ast_symbol)($1));
                     }
                 ;
 
@@ -526,20 +481,20 @@ collecting
 port_signature        
                 :   IDENTIFIER
                     {
-                        $$ = std::make_shared<ast::compo::CNamedPort>(parser->getPortName(),
+                        $$ = new_ptr(ast_namedport)(parser->getPortName(),
                                                                         parser->getAtomicity(),
-                                                                        std::dynamic_pointer_cast<ast::procedural::CSymbol>($1),
+                                                                        cast(ast_symbol)($1),
                                                                         parser->getCollectivity());
                     }
                 |   '*'
                     {
-                        $$ = std::make_shared<ast::compo::CUniversalPort>(parser->getPortName(),
+                        $$ = new_ptr(ast_universalport)(parser->getPortName(),
                                                                             parser->getAtomicity(),
                                                                             parser->getCollectivity());
                     }
                 |   service_signatures_list
                     {
-                        $$ = std::make_shared<ast::compo::CSignaturesPort>(parser->getPortName(),
+                        $$ = new_ptr(ast_signaturesport)(parser->getPortName(),
                                                                              parser->getAtomicity(),
                                                                             *parser->getServiceSignatures(),
                                                                              parser->getCollectivity());
@@ -561,15 +516,15 @@ of_kind
 service         
                 :   SERVICE service_signature compound_statement
                     {
-                        parser->addDescriptorService(std::make_shared<ast::compo::CService>(std::dynamic_pointer_cast<ast::compo::CServiceSignature>($2),
-                                                                                               std::dynamic_pointer_cast<ast::procedural::CCompoundBody>($3)));
+                        parser->addDescriptorService(new_ptr(ast_service)(cast(ast_servicesignature)($2),
+                                                                                               cast(ast_compound)($3)));
                     }
                 ;
 
 service_signature
                 :   IDENTIFIER '(' service_params ')'
                     {
-                        $$ = std::make_shared<ast::compo::CServiceSignature>(std::dynamic_pointer_cast<ast::procedural::CSymbol>($1), *parser->getServiceParams());
+                        $$ = new_ptr(ast_servicesignature)(cast(ast_symbol)($1), *parser->getServiceParams());
                         parser->popServiceParams();
                     }
                 ;
@@ -577,7 +532,7 @@ service_signature
 service_signature_call
                 :   IDENTIFIER '(' push_parameters service_runtime_params ')'
                     {
-                        $$ = std::make_shared<ast::compo::CServiceSignature>(std::dynamic_pointer_cast<ast::procedural::CSymbol>($1), *parser->getServiceParams());
+                        $$ = new_ptr(ast_servicesignature)(cast(ast_symbol)($1), *parser->getServiceParams());
                         parser->popServiceParams();
                     }
                 ;
@@ -591,11 +546,11 @@ push_parameters
 service_signatures    
                 :   service_signature
                     {
-                        parser->addServiceSignature(std::dynamic_pointer_cast<ast::compo::CServiceSignature>($1));
+                        parser->addServiceSignature(cast(ast_servicesignature)($1));
                     }
                 |   service_signature ';' service_signatures
                     {
-                        parser->addServiceSignature(std::dynamic_pointer_cast<ast::compo::CServiceSignature>($1));
+                        parser->addServiceSignature(cast(ast_servicesignature)($1));
                     }
                 |   empty
                 ;
@@ -637,15 +592,15 @@ parameter_runtime
 constraint	
                 :   CONSTRAINT service_signature compound_statement
                     {
-                        parser->addDescriptorConstraint(std::make_shared<ast::compo::CConstraint>(std::dynamic_pointer_cast<ast::compo::CServiceSignature>($2),
-                                                                                                  std::dynamic_pointer_cast<ast::procedural::CCompoundBody>($3)));
+                        parser->addDescriptorConstraint(new_ptr(ast_constraint)(cast(ast_servicesignature)($2),
+                                                                                                  cast(ast_compound)($3)));
                     }
 		;
 
 architecture	
                 :   ARCHITECTURE '{' bindings '}'
                     {
-                        parser->setArchitecture(std::make_shared<ast::compo::CArchitecture>(*parser->getArchitectureBody()));
+                        parser->setArchitecture(new_ptr(ast_architecture)(*parser->getArchitectureBody()));
                         parser->clearArchitectureBody();
                     }
 		;
@@ -659,7 +614,7 @@ bindings
 connections     
                 :   connection ';' bindings
                     {
-                        parser->addArchitectureNode(std::dynamic_pointer_cast<ast::compo::CBind>($1));
+                        parser->addArchitectureNode(cast(ast_bind)($1));
                     }
                 |   empty
                 ;
@@ -667,35 +622,35 @@ connections
 connection      
                 :   CONNECT port_address TO port_address
                     {
-                        $$ = std::make_shared<ast::compo::CConnection>(std::dynamic_pointer_cast<ast::compo::CPortAddress>($2), std::dynamic_pointer_cast<ast::compo::CPortAddress>($4));
+                        $$ = new_ptr(ast_connection)(cast(ast_portaddress)($2), cast(ast_portaddress)($4));
                     }
                 ;
 
 disconnections  
                 :   disconnection ';' bindings
                     {
-                        parser->addArchitectureNode(std::dynamic_pointer_cast<ast::compo::CBind>($1));
+                        parser->addArchitectureNode(cast(ast_bind)($1));
                     }
                 ;
 
 disconnection   
                 :   DISCONNECT port_address FROM port_address
                     {
-                        $$ = std::make_shared<ast::compo::CDisconnection>(std::dynamic_pointer_cast<ast::compo::CPortAddress>($2), std::dynamic_pointer_cast<ast::compo::CPortAddress>($4));
+                        $$ = new_ptr(ast_disconnection)(cast(ast_portaddress)($2), cast(ast_portaddress)($4));
                     }
                 ;
 
 delegations  
                 :   delegation ';' bindings
                     {
-                        parser->addArchitectureNode(std::dynamic_pointer_cast<ast::compo::CBind>($1));
+                        parser->addArchitectureNode(cast(ast_bind)($1));
                     }
                 ;
 
 delegation   
                 :   DELEGATE port_address TO port_address
                     {
-                        $$ = std::make_shared<ast::compo::CDelegation>(std::dynamic_pointer_cast<ast::compo::CPortAddress>($2), std::dynamic_pointer_cast<ast::compo::CPortAddress>($4));
+                        $$ = new_ptr(ast_delegation)(cast(ast_portaddress)($2), cast(ast_portaddress)($4));
                     }
                 ;
 
@@ -704,7 +659,7 @@ delegation
 port_address
                 :   IDENTIFIER '@' component_identifier
                     {
-                        $$ = std::make_shared<ast::compo::CPortAddress>(std::dynamic_pointer_cast<ast::procedural::CSymbol>($1), $3);
+                        $$ = new_ptr(ast_portaddress)(cast(ast_symbol)($1), $3);
                     }
                 ;
 
@@ -730,16 +685,16 @@ component_identifier
 collection_port_literal
                 :   IDENTIFIER '[' expression ']'
                     {
-                        $$ = std::make_shared<ast::compo::CCollectionPortLiteral>(std::dynamic_pointer_cast<ast::procedural::CSymbol>($1),
-                                                                                    std::dynamic_pointer_cast<ast::procedural::CAbstractExpression>($3));
+                        $$ = new_ptr(ast_collectionportliteral)(cast(ast_symbol)($1),
+                                                                                    cast(ast_expression)($3));
                     }
                 ;
 
 service_invocation
                 :   IDENTIFIER '.' service_signature_call
                     {
-                        $$ = std::make_shared<ast::compo::CServiceInvocation>(std::dynamic_pointer_cast<ast::procedural::CSymbol>($1),
-                                                                                std::dynamic_pointer_cast<ast::compo::CServiceSignature>($3)->getNameSymbol(),
+                        $$ = new_ptr(ast_serviceinvocation)(cast(ast_symbol)($1),
+                                                                                cast(ast_servicesignature)($3)->getNameSymbol(),
                                                                                 $3);
                     }
                 ;
@@ -747,7 +702,7 @@ service_invocation
 dereference_literal
                 :   '&' IDENTIFIER
                     {
-                        $$ = std::make_shared<ast::compo::CDereferenceLiteral>(std::dynamic_pointer_cast<ast::procedural::CSymbol>($2));
+                        $$ = new_ptr(ast_dereference)(cast(ast_symbol)($2));
                     }
                 ;
 empty

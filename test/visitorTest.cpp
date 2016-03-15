@@ -5,13 +5,7 @@
 
 #include "testDefinitions.h"
 
-#include "ast/visitor/abstractVisitor.h"
-#include "ast/compo/architecture.h"
-#include "ast/compo/provision.h"
-#include "ast/compo/requirement.h"
-#include "ast/compo/constraint.h"
-#include "ast/compo/connection.h"
-#include "ast/compo/disconnection.h"
+#include "definitions.h"
 
 BOOST_AUTO_TEST_SUITE(visitorTest)
 
@@ -26,56 +20,56 @@ class testVisitor : public ast::visitors::CAbstractVisitor {
 
         virtual void visit(ast::compo::CAbstractReqProv */* node */) {nodes += " CAbstractReqProv";}
         virtual void visit(ast::compo::CAbstractServConstr */* node */) {nodes += " CAbstractServConstr";}
-        virtual void visit(ast::compo::CArchitecture */* node */) {nodes += " CArchitecture";}
+        virtual void visit(ast_architecture */* node */) {nodes += " CArchitecture";}
         virtual void visit(ast::compo::CBind */* node */) {nodes += " CBind";}
-        virtual void visit(ast::compo::CCollectionPortLiteral */* node */) {nodes += " CCollectionPortLiteral";}
-        virtual void visit(ast::compo::CConnection */* node */) {nodes += " CConnection";}
-        virtual void visit(ast::compo::CConstraint */* node */) {nodes += " CConstraint";}
-        virtual void visit(ast::compo::CDelegation */* node */) {nodes += " CDelegation";}
-        virtual void visit(ast::compo::CDereferenceLiteral */* node */) {nodes += " CDereferenceLiteral";}
-        virtual void visit(ast::compo::CDescriptor */* node */) {nodes += " CDescriptor";}
-        virtual void visit(ast::compo::CDisconnection */* node */) {nodes += " CDisconnection";}
-        virtual void visit(ast::compo::CInjectedPort */* node */) {nodes += " CInjectedPort";}
-        virtual void visit(ast::compo::CInterface */* node */) {nodes += " CInterface";}
-        virtual void visit(ast::compo::CNamedPort */* node */) {nodes += " CNamedPort";}
+        virtual void visit(ast_collectionportliteral */* node */) {nodes += " CCollectionPortLiteral";}
+        virtual void visit(ast_connection */* node */) {nodes += " CConnection";}
+        virtual void visit(ast_constraint */* node */) {nodes += " CConstraint";}
+        virtual void visit(ast_delegation */* node */) {nodes += " CDelegation";}
+        virtual void visit(ast_dereference */* node */) {nodes += " CDereferenceLiteral";}
+        virtual void visit(ast_descriptor */* node */) {nodes += " CDescriptor";}
+        virtual void visit(ast_disconnection */* node */) {nodes += " CDisconnection";}
+        virtual void visit(ast_injectedport */* node */) {nodes += " CInjectedPort";}
+        virtual void visit(ast_interface */* node */) {nodes += " CInterface";}
+        virtual void visit(ast_namedport */* node */) {nodes += " CNamedPort";}
         virtual void visit(ast::compo::CPort */* node */) {nodes += " CPort";}
-        virtual void visit(ast::compo::CPortAddress */* node */) {nodes += " CPortAddress";}
-        virtual void visit(ast::compo::CProvision */* node */) {nodes += " CProvision";}
-        virtual void visit(ast::compo::CRequirement */* node */) {nodes += " CRequirement";}
-        virtual void visit(ast::compo::CService */* node */) {nodes += " CService";}
-        virtual void visit(ast::compo::CServiceInvocation */* node */) {nodes += " CServiceInvocation";}
-        virtual void visit(ast::compo::CServiceSignature */* node */) {nodes += " CServiceSignature";}
-        virtual void visit(ast::compo::CSignaturesPort */* node */) {nodes += " CSignaturesPort";}
-        virtual void visit(ast::compo::CUniversalPort */* node */) {nodes += " CUniversalPort";}
+        virtual void visit(ast_portaddress */* node */) {nodes += " CPortAddress";}
+        virtual void visit(ast_provision */* node */) {nodes += " CProvision";}
+        virtual void visit(ast_requirement */* node */) {nodes += " CRequirement";}
+        virtual void visit(ast_service */* node */) {nodes += " CService";}
+        virtual void visit(ast_serviceinvocation */* node */) {nodes += " CServiceInvocation";}
+        virtual void visit(ast_servicesignature */* node */) {nodes += " CServiceSignature";}
+        virtual void visit(ast_signaturesport */* node */) {nodes += " CSignaturesPort";}
+        virtual void visit(ast_universalport */* node */) {nodes += " CUniversalPort";}
 
         virtual void visit(ast::procedural::CAbstractExpression */* node */) {nodes += " CAbstractExpression";}
         virtual void visit(ast::procedural::CAbstractPrimaryExpression */* node */) {nodes += " CAbstractPrimaryExpression";}
         virtual void visit(ast::procedural::CAbstractStatement */* node */) {nodes += " CAbstractStatement";}
-        virtual void visit(ast::procedural::CAdditionExpression * /* node */) {nodes += " CAdditionExpression";}
-        virtual void visit(ast::procedural::CAssignmentExpression */* node */) {nodes += " CAssignmentExpression";}
+        virtual void visit(ast_addition * /* node */) {nodes += " CAdditionExpression";}
+        virtual void visit(ast_assignment */* node */) {nodes += " CAssignmentExpression";}
         virtual void visit(ast::procedural::CBinaryExpression */* node */) {nodes += " CBinaryExpression";}
-        virtual void visit(ast::procedural::CBreakStatement */* node */) {nodes += " CBreakStatement";}
-        virtual void visit(ast::procedural::CCompoundBody */* node */) {nodes += " CCompoundBody";}
-        virtual void visit(ast::procedural::CConstant */* node */) {nodes += " CConstant";}
-        virtual void visit(ast::procedural::CContinueStatement */* node */) {nodes += " CContinueStatement";}
-        virtual void visit(ast::procedural::CDivisionExpression * /* node */) {nodes += " CDivisionExpression";}
-        virtual void visit(ast::procedural::CEqualityExpression * /* node */) {nodes += " CEqualityExpression";}
-        virtual void visit(ast::procedural::CForStatement */* node */) {nodes += " CForStatement";}
-        virtual void visit(ast::procedural::CGreaterExpression * /* node */) {nodes += " CGreaterExpression";}
-        virtual void visit(ast::procedural::CGreaterOrEqualExpression * /* node */) {nodes += " CGreaterOrEqualExpression";}
-        virtual void visit(ast::procedural::CIfStatement */* node */) {nodes += " CIfStatement";}
-        virtual void visit(ast::procedural::CLessExpression * /* node */) {nodes += " CLessExpression";}
-        virtual void visit(ast::procedural::CLessOrEqualExpression * /* node */) {nodes += " CLessOrEqualExpression";}
-        virtual void visit(ast::procedural::CLogicalAndExpression * /* node */) {nodes += " CLogicalAndExpression";}
-        virtual void visit(ast::procedural::CLogicalOrExpression * /* node */) {nodes += " CLogicalOrExpression";}
-        virtual void visit(ast::procedural::CMultiplicationExpression * /* node */) {nodes += " CMultiplicationExpression";}
-        virtual void visit(ast::procedural::CNonEqualityExpression * /* node */) {nodes += " CNonEqualityExpression";}
-        virtual void visit(ast::procedural::CParens */* node */) {nodes += " CParens";}
-        virtual void visit(ast::procedural::CReturnStatement */* node */) {nodes += " CReturnStatement";}
-        virtual void visit(ast::procedural::CSubtractionExpression * /* node */) {nodes += " CSubtractionExpression";}
-        virtual void visit(ast::procedural::CStringLiteral */* node */) {nodes += " CStringLiteral";}
-        virtual void visit(ast::procedural::CSymbol */* node */) {nodes += " CSymbol";}
-        virtual void visit(ast::procedural::CWhileStatement */* node */) {nodes += " CWhileStatement";}
+        virtual void visit(ast_break */* node */) {nodes += " CBreakStatement";}
+        virtual void visit(ast_compound */* node */) {nodes += " CCompoundBody";}
+        virtual void visit(ast_constant */* node */) {nodes += " CConstant";}
+        virtual void visit(ast_continue */* node */) {nodes += " CContinueStatement";}
+        virtual void visit(ast_division * /* node */) {nodes += " CDivisionExpression";}
+        virtual void visit(ast_equality * /* node */) {nodes += " CEqualityExpression";}
+        virtual void visit(ast_for */* node */) {nodes += " CForStatement";}
+        virtual void visit(ast_greater * /* node */) {nodes += " CGreaterExpression";}
+        virtual void visit(ast_greaterorequal * /* node */) {nodes += " CGreaterOrEqualExpression";}
+        virtual void visit(ast_if */* node */) {nodes += " CIfStatement";}
+        virtual void visit(ast_less * /* node */) {nodes += " CLessExpression";}
+        virtual void visit(ast_lessorequal * /* node */) {nodes += " CLessOrEqualExpression";}
+        virtual void visit(ast_and * /* node */) {nodes += " CLogicalAndExpression";}
+        virtual void visit(ast_or * /* node */) {nodes += " CLogicalOrExpression";}
+        virtual void visit(ast_multiplication * /* node */) {nodes += " CMultiplicationExpression";}
+        virtual void visit(ast_nonequality * /* node */) {nodes += " CNonEqualityExpression";}
+        virtual void visit(ast_parens */* node */) {nodes += " CParens";}
+        virtual void visit(ast_return */* node */) {nodes += " CReturnStatement";}
+        virtual void visit(ast_subtraction * /* node */) {nodes += " CSubtractionExpression";}
+        virtual void visit(ast_string */* node */) {nodes += " CStringLiteral";}
+        virtual void visit(ast_symbol */* node */) {nodes += " CSymbol";}
+        virtual void visit(ast_while */* node */) {nodes += " CWhileStatement";}
         
         std::string getNodes() const {
             return nodes;
@@ -86,28 +80,28 @@ BOOST_AUTO_TEST_CASE(basic) {
     
     testVisitor visitor;
     
-    ast::compo::CDescriptor descriptor;
+    ast_descriptor descriptor;
     descriptor.accept(&visitor);
     
-    ast::compo::CArchitecture architecture;
+    ast_architecture architecture;
     architecture.accept(&visitor);
     
-    ast::compo::CProvision provision;
+    ast_provision provision;
     provision.accept(&visitor);
     
-    ast::compo::CRequirement requirement;
+    ast_requirement requirement;
     requirement.accept(&visitor);
     
-    ast::compo::CService service;
+    ast_service service;
     service.accept(&visitor);
     
-    ast::compo::CConstraint constraint;
+    ast_constraint constraint;
     constraint.accept(&visitor);
     
-    ast::compo::CConnection connection;
+    ast_connection connection;
     connection.accept(&visitor);
     
-    ast::compo::CDisconnection disconnection;
+    ast_disconnection disconnection;
     disconnection.accept(&visitor);
     
     BOOST_CHECK_EQUAL(" CDescriptor CArchitecture CProvision CRequirement CService CConstraint CConnection CDisconnection", visitor.getNodes());
