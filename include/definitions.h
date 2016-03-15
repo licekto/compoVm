@@ -47,6 +47,8 @@
 #include "ast/procedural/symbol.h"
 #include "ast/procedural/whileStatement.h"
 
+using ast_node = ast::CNode;
+
 using ast_reqprov = ast::compo::CAbstractReqProv;
 using ast_servconstr = ast::compo::CAbstractServConstr;
 using ast_architecture = ast::compo::CArchitecture;
