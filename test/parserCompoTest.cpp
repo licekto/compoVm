@@ -2,11 +2,9 @@
 
 #include <boost/test/unit_test.hpp>
 
-#include "testDefinitions.h"
-
 #include "parser/lexer.h"
 #include "parser/parserWrapper.h"
-
+#include "testDefinitions.h"
 #include "definitions.h"
 
 BOOST_AUTO_TEST_SUITE(parserCompoTest)
