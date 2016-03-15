@@ -10,6 +10,10 @@ namespace ast {
 			    CAbstractExpression(),
 			    CBinaryExpression(types::operatorType::TIMES, op1, op2) {
 		}
+
+		void CMultiplicationExpression::accept(ast::visitors::CAbstractVisitor* visitor) {
+			visitor->visit(this);
+		}
 	}
 
 }

@@ -10,6 +10,10 @@ namespace ast {
 			    CAbstractExpression(),
 			    CBinaryExpression(types::operatorType::MINUS, op1, op2) {
 		}
+
+		void CSubtractionExpression::accept(ast::visitors::CAbstractVisitor* visitor) {
+			visitor->visit(this);
+		}
 	}
 
 }

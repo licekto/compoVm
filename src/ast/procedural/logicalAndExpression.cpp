@@ -10,6 +10,10 @@ namespace ast {
 			    CAbstractExpression(),
 			    CBinaryExpression(types::operatorType::LOGICAL_AND, op1, op2) {
 		}
+
+		void CLogicalAndExpression::accept(ast::visitors::CAbstractVisitor* visitor) {
+			visitor->visit(this);
+		}
 	}
 
 }

@@ -10,6 +10,10 @@ namespace ast {
 			    CAbstractExpression(),
 			    CBinaryExpression(types::operatorType::EQUALITY, op1, op2) {
 		}
+
+		void CEqualityExpression::accept(ast::visitors::CAbstractVisitor* visitor) {
+			visitor->visit(this);
+		}
 	}
 
 }

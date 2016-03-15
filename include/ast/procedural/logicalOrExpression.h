@@ -22,6 +22,12 @@ namespace ast {
 			*/
 			CLogicalOrExpression(std::shared_ptr<ast::procedural::CAbstractExpression> op1 = nullptr,
 			                     std::shared_ptr<ast::procedural::CAbstractExpression> op2 = nullptr);
+
+			/**
+			* Accept method for visitor acceptation.
+					* @param visitor: Pointer to abstract visitor.
+					*/
+			virtual void accept(ast::visitors::CAbstractVisitor *visitor);
 		};
 
 	}

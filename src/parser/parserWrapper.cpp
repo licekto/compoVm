@@ -57,43 +57,43 @@ bool ParserWrapper::isStackEmpty() const {
 }
 
 void ParserWrapper::setInProvision(std::shared_ptr<ast::compo::CProvision> inProv) {
-    m_currentInteralProvision = inProv;
+	m_currentInteralProvision = inProv;
 }
 
 std::shared_ptr<ast::compo::CProvision> ParserWrapper::getInProvision() {
-    return m_currentInteralProvision;
+	return m_currentInteralProvision;
 }
 
 void ParserWrapper::setExProvision(std::shared_ptr<ast::compo::CProvision> exProv) {
-    m_currentExteralProvision = exProv;
+	m_currentExteralProvision = exProv;
 }
 
 std::shared_ptr<ast::compo::CProvision> ParserWrapper::getExProvision() {
-    return m_currentExteralProvision;
+	return m_currentExteralProvision;
 }
 
 void ParserWrapper::setInRequirement(std::shared_ptr<ast::compo::CRequirement> inReq) {
-    m_currentInteralRequirement = inReq;
+	m_currentInteralRequirement = inReq;
 }
 
 std::shared_ptr<ast::compo::CRequirement> ParserWrapper::getInRequirement() {
-    return m_currentInteralRequirement;
+	return m_currentInteralRequirement;
 }
 
 void ParserWrapper::setExRequirement(std::shared_ptr<ast::compo::CRequirement> exReq) {
-    m_currentExteralRequirement = exReq;
+	m_currentExteralRequirement = exReq;
 }
 
 std::shared_ptr<ast::compo::CRequirement> ParserWrapper::getExRequirement() {
-    return m_currentExteralRequirement;
+	return m_currentExteralRequirement;
 }
 
 void ParserWrapper::setArchitecture(std::shared_ptr<ast::compo::CArchitecture> arch) {
-    m_architecture = arch;
+	m_architecture = arch;
 }
 
 std::shared_ptr<ast::compo::CArchitecture> ParserWrapper::getArchitecture() {
-    return m_architecture;
+	return m_architecture;
 }
 
 void ParserWrapper::addDescriptorService(std::shared_ptr<ast::compo::CService> service) {
@@ -176,8 +176,8 @@ void ParserWrapper::clearAll() {
 	clearPorts();
 	clearArchitectureBody();
 	clearServiceSignatures();
-        clearDescriptorServices();
-        clearDescriptorConstraints();
+	clearDescriptorServices();
+	clearDescriptorConstraints();
 }
 
 void ParserWrapper::setCurrentCompoundBody(std::shared_ptr<ast::procedural::CCompoundBody> body) {

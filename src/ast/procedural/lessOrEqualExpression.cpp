@@ -10,6 +10,10 @@ namespace ast {
 			    CAbstractExpression(),
 			    CBinaryExpression(types::operatorType::LESS_OR_EQUAL, op1, op2) {
 		}
+
+		void CLessOrEqualExpression::accept(ast::visitors::CAbstractVisitor* visitor) {
+			visitor->visit(this);
+		}
 	}
 
 }
