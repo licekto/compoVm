@@ -17,6 +17,7 @@ class testVisitor : public ast::visitors::CAbstractVisitor {
     public:
         
         virtual void visit(ast::CNode */* node */) {nodes += " CNode";}
+        virtual void visit(ast::CProgram */* node */) {nodes += " CProgram";};
 
         virtual void visit(ast::compo::CAbstractReqProv */* node */) {nodes += " CAbstractReqProv";}
         virtual void visit(ast::compo::CAbstractServConstr */* node */) {nodes += " CAbstractServConstr";}

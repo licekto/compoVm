@@ -6,6 +6,7 @@
 #include "parser/parserWrapper.h"
 #include "testDefinitions.h"
 #include "definitions.h"
+#include "ast/program.h"
 
 BOOST_AUTO_TEST_SUITE(parserCompoTest)
 
@@ -39,7 +40,7 @@ BOOST_AUTO_TEST_CASE(compoBasicStructure) {
     parser.parse(input);
     
     // Check descriptor
-    ptr(ast_descriptor) descriptor = cast(ast_descriptor)(parser.getRootNodeAt(0));
+    ptr(ast_descriptor) descriptor = cast(ast_descriptor)(parser.getRootNode()->getNodeAt(0));
     TEST_DESCRIPTOR(descriptor, "HTTPServer", "server", 1, 1);
     
     // Check provision
@@ -93,7 +94,7 @@ BOOST_AUTO_TEST_CASE(compoServiceParams) {
     parser.parse(input);
     
     // Check descriptor
-    ptr(ast_descriptor) descriptor = cast(ast_descriptor)(parser.getRootNodeAt(0));
+    ptr(ast_descriptor) descriptor = cast(ast_descriptor)(parser.getRootNode()->getNodeAt(0));
     TEST_DESCRIPTOR(descriptor, "test", "", 4, 0);
     
     // Check service
@@ -135,7 +136,7 @@ BOOST_AUTO_TEST_CASE(compoServiceBody) {
     parser.parse(input);    
     
     // Check descriptor
-    ptr(ast_descriptor) descriptor = cast(ast_descriptor)(parser.getRootNodeAt(0));
+    ptr(ast_descriptor) descriptor = cast(ast_descriptor)(parser.getRootNode()->getNodeAt(0));
     TEST_DESCRIPTOR(descriptor, "test", "", 2, 0);
     
     // Check service
@@ -181,7 +182,7 @@ BOOST_AUTO_TEST_CASE(compoServiceTemporaries) {
     parser.parse(input);    
     
     // Check descriptor
-    ptr(ast_descriptor) descriptor = cast(ast_descriptor)(parser.getRootNodeAt(0));
+    ptr(ast_descriptor) descriptor = cast(ast_descriptor)(parser.getRootNode()->getNodeAt(0));
     TEST_DESCRIPTOR(descriptor, "test", "", 1, 0);
     
     // Check service
@@ -219,7 +220,7 @@ BOOST_AUTO_TEST_CASE(compoProvision) {
     parser.parse(input);
     
     // Check descriptor
-    ptr(ast_descriptor) descriptor = cast(ast_descriptor)(parser.getRootNodeAt(0));
+    ptr(ast_descriptor) descriptor = cast(ast_descriptor)(parser.getRootNode()->getNodeAt(0));
     TEST_DESCRIPTOR(descriptor, "test", "", 0, 0);
     
     // Check provision
@@ -278,7 +279,7 @@ BOOST_AUTO_TEST_CASE(compoArchitecture) {
     parser.parse(input);
     
     // Check descriptor
-    ptr(ast_descriptor) descriptor = cast(ast_descriptor)(parser.getRootNodeAt(0));
+    ptr(ast_descriptor) descriptor = cast(ast_descriptor)(parser.getRootNode()->getNodeAt(0));
     TEST_DESCRIPTOR(descriptor, "test", "", 0, 0);
     
     // Check architecture
@@ -366,7 +367,7 @@ BOOST_AUTO_TEST_CASE(compoServiceCall) {
     parser.parse(input);
     
     // Check descriptor
-    ptr(ast_descriptor) descriptor = cast(ast_descriptor)(parser.getRootNodeAt(0));
+    ptr(ast_descriptor) descriptor = cast(ast_descriptor)(parser.getRootNode()->getNodeAt(0));
     TEST_DESCRIPTOR(descriptor, "test", "", 0, 0);
     
     // Check architecture
@@ -424,7 +425,7 @@ BOOST_AUTO_TEST_CASE(compoInterface) {
     parser.parse(input);
     
     // Check interface
-    ptr(ast_interface) interface = cast(ast_interface)(parser.getRootNodeAt(0));
+    ptr(ast_interface) interface = cast(ast_interface)(parser.getRootNode()->getNodeAt(0));
     TEST_INTERFACE(interface, "IPrinting", "IAbcd", 2);
     
     // Check signature

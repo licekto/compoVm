@@ -2,6 +2,9 @@
 
 #include <memory>
 
+#include "ast/node.h"
+#include "ast/program.h"
+
 #include "ast/compo/architecture.h"
 #include "ast/compo/collectionPortLiteral.h"
 #include "ast/compo/connection.h"

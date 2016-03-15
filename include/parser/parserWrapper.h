@@ -23,7 +23,7 @@ class ParserWrapper {
 	Lexer *m_lexer;
 
 	/**< Vector of root nodes */
-	std::vector<std::shared_ptr<ast::CNode>> m_rootNodes;
+	std::shared_ptr<ast::CProgram> m_root;
 
 	/**< Stack of nested blocks */
 	std::stack<std::shared_ptr<ast::procedural::CCompoundBody>> m_blockStack;
@@ -117,17 +117,11 @@ class ParserWrapper {
 	void addRootNode(std::shared_ptr<ast::CNode> node);
 
 	/**
-	* Root node vector size getter
-	* @return size of node vector
-	*/
-	size_t getRootNodesSize() const;
-
-	/**
 	* Root node getter
 	* @param index: index of wanted node
 	* @return root node at given index
 	*/
-	std::shared_ptr<ast::CNode> getRootNodeAt(unsigned int index);
+	std::shared_ptr<ast::CProgram> getRootNode();
 
 	/**
 	 * Pushes new block context on the stack

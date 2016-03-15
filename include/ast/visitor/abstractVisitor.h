@@ -4,6 +4,7 @@ namespace ast {
 
 	// Forward declaration
 	class CNode;
+        class CProgram;
 
 	namespace compo {
 		class CAbstractReqProv;
@@ -81,6 +82,7 @@ namespace ast {
 		class CAbstractVisitor {
 		  public:
 			virtual void visit(ast::CNode *node) = 0;
+                        virtual void visit(ast::CProgram *node) = 0;
 
 			virtual void visit(ast::compo::CAbstractReqProv *node) = 0;
 			virtual void visit(ast::compo::CAbstractServConstr *node) = 0;

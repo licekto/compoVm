@@ -3,9 +3,10 @@
 #include "parser/parserWrapper.h"
 #include "ast/compo/architecture.h"
 #include "ast/compo/provision.h"
+#include "ast/program.h"
 
 ParserWrapper::ParserWrapper(Lexer *lexer)
-	: m_lexer(lexer), m_rootNodes(std::vector<std::shared_ptr<ast::CNode>>()) {
+	: m_lexer(lexer), m_root(std::make_shared<ast::CProgram>()) {
 	pushServiceParams();
 }
 
@@ -18,25 +19,16 @@ Lexer * ParserWrapper::getLexer() const {
 }
 
 void ParserWrapper::addRootNode(std::shared_ptr<ast::CNode> node) {
-	m_rootNodes.push_back(node);
+	m_root->addNode(node);
 }
 
-size_t ParserWrapper::getRootNodesSize() const {
-	return m_rootNodes.size();
-}
-
-std::shared_ptr<ast::CNode> ParserWrapper::getRootNodeAt(unsigned int index) {
-	if (index < m_rootNodes.size()) {
-		return m_rootNodes.at(index);
-	}
-	return nullptr;
+std::shared_ptr<ast::CProgram> ParserWrapper::getRootNode() {
+    return m_root;
 }
 
 void ParserWrapper::clearRootNodes() {
-	for (std::shared_ptr<ast::CNode> node : m_rootNodes) {
-		node.reset();
-	}
-	m_rootNodes.clear();
+	m_root.reset();
+        m_root = std::make_shared<ast::CProgram>();
 }
 
 void ParserWrapper::pushBlock(std::shared_ptr<ast::procedural::CCompoundBody> block) {

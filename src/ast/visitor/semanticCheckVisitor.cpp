@@ -4,16 +4,15 @@ namespace ast {
 
 	namespace visitors {
             
-            CSemanticCheckVisitor::CSemanticCheckVisitor() {
-                m_currentDescriptor = nullptr;
-                m_currentService = nullptr;
-            }
+            
             
             void CSemanticCheckVisitor::checkSemantics() {
                 
             }
             
             void CSemanticCheckVisitor::visit(ast::CNode *node) {}
+            
+            void CSemanticCheckVisitor::visit(ast::CProgram *node) {}
 
             void CSemanticCheckVisitor::visit(ast::compo::CAbstractReqProv *node) {}
             void CSemanticCheckVisitor::visit(ast::compo::CAbstractServConstr *node) {}
@@ -35,21 +34,22 @@ namespace ast {
             void CSemanticCheckVisitor::visit(ast::compo::CDereferenceLiteral *node) {}
             
             void CSemanticCheckVisitor::visit(ast::compo::CDescriptor *node) {
-                //m_currentDescriptor = node;
                 
-                m_currentDescriptor->getInProvision()->accept(this);
-                m_currentDescriptor->getExProvision()->accept(this);
-                m_currentDescriptor->getInRequirement()->accept(this);
-                m_currentDescriptor->getExRequirement()->accept(this);
-                m_currentDescriptor->getArchitecture()->accept(this);
+                node->getInProvision()->accept(this);
+                node->getExProvision()->accept(this);
+                node->getInRequirement()->accept(this);
+                node->getExRequirement()->accept(this);
+                node->getArchitecture()->accept(this);
                 
-                for (size_t i = 0; i < m_currentDescriptor->getServicesSize(); ++i) {
-                    m_currentDescriptor->getServiceAt(i)->accept(this);
+                for (size_t i = 0; i < node->getServicesSize(); ++i) {
+                    node->getServiceAt(i)->accept(this);
                 }
                 
-                for (size_t i = 0; i < m_currentDescriptor->getConstraintsSize(); ++i) {
-                    m_currentDescriptor->getConstraintAt(i)->accept(this);
+                for (size_t i = 0; i < node->getConstraintsSize(); ++i) {
+                    node->getConstraintAt(i)->accept(this);
                 }
+                
+                throw "aa";
             }
             
             void CSemanticCheckVisitor::visit(ast::compo::CDisconnection *node) {}

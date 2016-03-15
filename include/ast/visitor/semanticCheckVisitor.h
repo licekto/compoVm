@@ -15,17 +15,15 @@ namespace ast {
 		*/
 		class CSemanticCheckVisitor : public CAbstractVisitor {
                   private:
-                        ptr(ast_descriptor) m_currentDescriptor;
-                        
-                        ptr(ast_service) m_currentService;
                     
+                        void checkDescriptor();
+                      
 		  public:
-                        
-                        CSemanticCheckVisitor();
                         
                         void checkSemantics();
                         
 			virtual void visit(ast::CNode *node);
+                        virtual void visit(ast::CProgram *node);
 
 			virtual void visit(ast::compo::CAbstractReqProv *node);
 			virtual void visit(ast::compo::CAbstractServConstr *node);
