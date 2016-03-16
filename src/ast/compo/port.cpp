@@ -11,16 +11,9 @@ namespace ast {
 			    m_atomicity(atomicity),
 			    m_collectivity(collectivity) {
 		}
-
-		void CPort::accept(ast::visitors::CAbstractVisitor* visitor) {
-			visitor->visit(this);
-		}
-
-		std::string CPort::getName() const {
-			if (m_name) {
-				return m_name->getStringValue();
-			}
-			return "";
+                
+		std::shared_ptr<ast::procedural::CSymbol> CPort::getNameSymbol() const {
+                    return m_name;
 		}
 
 		bool CPort::getAtomicity() const {

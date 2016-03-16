@@ -13,10 +13,6 @@ namespace ast {
 			visitor->visit(this);
 		}
 
-		std::shared_ptr<ast::procedural::CSymbol> CServiceSignature::getName() const {
-			return m_name;
-		}
-
 		size_t CServiceSignature::getParamsSize() const {
 			return m_params.size();
 		}

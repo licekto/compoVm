@@ -32,11 +32,8 @@ namespace ast {
 			visitor->visit(this);
 		}
 
-		std::string CDescriptor::getName() const {
-			if (m_name) {
-				return m_name->getStringValue();
-			}
-			return "";
+		std::shared_ptr<ast::procedural::CSymbol> CDescriptor::getNameSymbol() const {
+                    return m_name;
 		}
 
 		std::string CDescriptor::getExtends() const {

@@ -3,6 +3,8 @@
 #include "abstractVisitor.h"
 #include "definitions.h"
 
+#include "exceptions/semantic/wrongAstNodeTypeException.h"
+
 namespace ast {
 
 	namespace visitors {
@@ -18,10 +20,8 @@ namespace ast {
                     
                         void checkDescriptor();
                       
-		  public:
-                        
-                        void checkSemantics();
-                        
+                        void checkNodeType(ast::CNode *node, ast_type type);
+		  public:                        
 			virtual void visit(ast::CNode *node);
                         virtual void visit(ast::CProgram *node);
 

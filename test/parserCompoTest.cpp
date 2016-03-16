@@ -46,22 +46,22 @@ BOOST_AUTO_TEST_CASE(compoBasicStructure) {
     // Check provision
     ptr(ast_provision) provision = cast(ast_provision)(descriptor->getExProvision());
     TEST_PROVISION(provision, ast::types::visibilityType::EXTERNAL, 1);
-    BOOST_CHECK_EQUAL("default", provision->getPortAt(0)->getName());
+    BOOST_CHECK_EQUAL("default", provision->getPortAt(0)->getNameSymbol()->getStringValue());
     
     // Check requirement
     ptr(ast_requirement) requirement = cast(ast_requirement)(descriptor->getExRequirement());
     TEST_REQUIREMENT(requirement, ast::types::visibilityType::EXTERNAL, 1);
-    BOOST_CHECK_EQUAL("default", requirement->getPortAt(0)->getName());
+    BOOST_CHECK_EQUAL("default", requirement->getPortAt(0)->getNameSymbol()->getStringValue());
     
     // Check provision
     provision = cast(ast_provision)(descriptor->getInProvision());
     TEST_PROVISION(provision, ast::types::visibilityType::INTERNAL, 1);
-    BOOST_CHECK_EQUAL("default", provision->getPortAt(0)->getName());
+    BOOST_CHECK_EQUAL("default", provision->getPortAt(0)->getNameSymbol()->getStringValue());
     
     // Check requirement
     requirement = cast(ast_requirement)(descriptor->getInRequirement());
     TEST_REQUIREMENT(requirement, ast::types::visibilityType::INTERNAL, 1);
-    BOOST_CHECK_EQUAL("default", requirement->getPortAt(0)->getName());
+    BOOST_CHECK_EQUAL("default", requirement->getPortAt(0)->getNameSymbol()->getStringValue());
     
     // Check service
     ptr(ast_service) service = cast(ast_service)(descriptor->getServiceAt(0));
@@ -250,7 +250,7 @@ BOOST_AUTO_TEST_CASE(compoProvision) {
     
     // Check port
     ptr(ast_universalport) universalPort = cast(ast_universalport)(provision->getPortAt(4));
-    BOOST_CHECK_EQUAL("bE", universalPort->getName());
+    BOOST_CHECK_EQUAL("bE", universalPort->getNameSymbol()->getStringValue());
     
     // Check port
     namedPort = cast(ast_namedport)(provision->getPortAt(5));
@@ -397,7 +397,7 @@ BOOST_AUTO_TEST_CASE(compoServiceCall) {
     
     signature = cast(ast_servicesignature)(serviceInvocation->getParameters());
     BOOST_CHECK_EQUAL(ast::types::nodeType::SERVICE_SIGNATURE, signature->getNodeType());
-    BOOST_CHECK_EQUAL("getName", signature->getName()->getStringValue());
+    BOOST_CHECK_EQUAL("getName", signature->getNameSymbol()->getStringValue());
     
     BOOST_CHECK_EQUAL("a", cast(ast_string)(signature->getParamAt(0))->getValue());
     BOOST_CHECK_EQUAL(1, cast(ast_constant)(signature->getParamAt(1))->getValue());
@@ -429,11 +429,11 @@ BOOST_AUTO_TEST_CASE(compoInterface) {
     TEST_INTERFACE(interface, "IPrinting", "IAbcd", 2);
     
     // Check signature
-    BOOST_CHECK_EQUAL("print", interface->getSignatureAt(1)->getName()->getStringValue());
+    BOOST_CHECK_EQUAL("print", interface->getSignatureAt(1)->getNameSymbol()->getStringValue());
     BOOST_CHECK_EQUAL("text", cast(ast_symbol)(interface->getSignatureAt(1)->getParamAt(0))->getStringValue());
     
     // Check signature
-    BOOST_CHECK_EQUAL("printLn", interface->getSignatureAt(0)->getName()->getStringValue());
+    BOOST_CHECK_EQUAL("printLn", interface->getSignatureAt(0)->getNameSymbol()->getStringValue());
     BOOST_CHECK_EQUAL("text", cast(ast_symbol)(interface->getSignatureAt(0)->getParamAt(0))->getStringValue());
     BOOST_CHECK_EQUAL("param", cast(ast_symbol)(interface->getSignatureAt(0)->getParamAt(1))->getStringValue());
     

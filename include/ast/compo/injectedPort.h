@@ -24,8 +24,7 @@ namespace ast {
 			* @param atomic: is atomic
 			* @param injectedWith: name of injected port
 			*/
-			CInjectedPort(ast::types::portType type = ast::types::portType::UNIVERSAL,
-			              std::shared_ptr<ast::procedural::CSymbol> name = nullptr,
+			CInjectedPort(std::shared_ptr<ast::procedural::CSymbol> name = nullptr,
 			              bool atomic = false,
 			              std::shared_ptr<ast::procedural::CSymbol> injectedWith = nullptr);
 
@@ -39,7 +38,7 @@ namespace ast {
 			 * Injected with getter
 			 * @return name symbol of injecting element.
 			 */
-			std::string getInjectedWith() const;
+			std::shared_ptr<ast::procedural::CSymbol> getInjectedWith() const;
 		};
 
 	}

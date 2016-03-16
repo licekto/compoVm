@@ -2,7 +2,9 @@
 
 namespace ast {
     
-    CProgram::CProgram() : m_rootNodes(std::vector<std::shared_ptr<ast::CNode>>(0)) {
+    CProgram::CProgram()
+    : CNode(ast::types::nodeType::PROGRAM),
+      m_rootNodes(std::vector<std::shared_ptr<ast::CNode>>(0)) {
         
     }
     

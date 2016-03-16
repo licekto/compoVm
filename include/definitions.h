@@ -50,7 +50,10 @@
 #include "ast/procedural/symbol.h"
 #include "ast/procedural/whileStatement.h"
 
+#include "ast/types/nodeType.h"
+
 using ast_node = ast::CNode;
+using ast_program = ast::CProgram;
 
 using ast_reqprov = ast::compo::CAbstractReqProv;
 using ast_servconstr = ast::compo::CAbstractServConstr;
@@ -105,6 +108,8 @@ using ast_string = ast::procedural::CStringLiteral;
 using ast_subtraction = ast::procedural::CSubtractionExpression;
 using ast_symbol = ast::procedural::CSymbol;
 using ast_while = ast::procedural::CWhileStatement;
+
+using ast_type = ast::types::nodeType;
 
 #define ptr(x) std::shared_ptr<x>
 #define new_ptr(x) std::make_shared<x>

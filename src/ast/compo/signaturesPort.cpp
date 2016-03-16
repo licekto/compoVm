@@ -9,7 +9,7 @@ namespace ast {
 		                                 bool atomicity,
 		                                 std::vector<std::shared_ptr<ast::compo::CServiceSignature>> list,
 		                                 bool collectivity)
-			:   CNode(types::nodeType::PORT),
+			:   CNode(types::nodeType::SIGNATURES_PORT),
 			    CPort(types::portType::EXPLICIT_LIST, name, atomicity, collectivity),
 			    m_signaturesList(list) {
 		}

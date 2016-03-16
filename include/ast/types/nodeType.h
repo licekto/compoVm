@@ -2,6 +2,8 @@
 
 #include <map>
 
+#define IS_TYPE(node, type) (node->getNodeType() == type)
+
 namespace ast {
 
 	/**
@@ -20,6 +22,7 @@ namespace ast {
 		 */
 		enum nodeType {
 			END = 0,
+                        PROGRAM,
 			DESCRIPTOR,
 			SYMBOL,
 			SERVICE,
@@ -34,6 +37,9 @@ namespace ast {
 			DISCONNECTION,
 			DELEGATION,
 			INJECTED_PORT,
+                        NAMED_PORT,
+                        SIGNATURES_PORT,
+                        UNIVERSAL_PORT,
 			DEREFERENCE,
 			COLLECTION_PORT,
 			SERVICE_INVOCATION,

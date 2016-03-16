@@ -72,7 +72,7 @@ namespace ast {
 			* Name getter
 			* @return name symbol
 			*/
-			std::string getName() const;
+			std::shared_ptr<ast::procedural::CSymbol> getNameSymbol() const;
 
 			/**
 			* Extends getter

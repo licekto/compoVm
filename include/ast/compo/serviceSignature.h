@@ -35,12 +35,6 @@ namespace ast {
 			virtual void accept(ast::visitors::CAbstractVisitor *visitor);
 
 			/**
-			* Name getter
-			            * @return Name of entity
-			            */
-			std::shared_ptr<ast::procedural::CSymbol> getName() const;
-
-			/**
 			* Name symbol getter
 			            * @return shared_ptr to CSymbol
 			            */

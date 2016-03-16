@@ -16,7 +16,7 @@ namespace ast {
 		}
 
 		std::shared_ptr<ast::procedural::CSymbol> CAbstractServConstr::getNameSymbol() const {
-			return m_signature->getName();
+			return m_signature->getNameSymbol();
 		}
 
 		size_t CAbstractServConstr::getBodySize() const {

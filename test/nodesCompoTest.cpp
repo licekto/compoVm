@@ -41,6 +41,7 @@ BOOST_AUTO_TEST_CASE(symbolTest) {
     BOOST_CHECK_EQUAL("Symbol", symbolNew2.getStringValue());
 }
 
+/*
 BOOST_AUTO_TEST_CASE(portTest) {
     // Original port creation
     ast::compo::CPort port(ast::types::portType::UNIVERSAL, new_ptr(ast_symbol)("port"), true);
@@ -76,66 +77,63 @@ BOOST_AUTO_TEST_CASE(portTest) {
     BOOST_CHECK_EQUAL("port", portMoved2.getName());
     BOOST_CHECK(portMoved2.getAtomicity());
 }
+*/
 
 BOOST_AUTO_TEST_CASE(injectedPortTest) {
     // Original port creation
-    ast_injectedport port(ast::types::portType::UNIVERSAL, new_ptr(ast_symbol)("port"), true, new_ptr(ast_symbol)("injectingPort"));
+    ast_injectedport port(new_ptr(ast_symbol)("port"), true, new_ptr(ast_symbol)("injectingPort"));
     BOOST_CHECK_EQUAL(ast::types::nodeType::INJECTED_PORT, port.getNodeType());
-    BOOST_CHECK_EQUAL("port", port.getName());
+    BOOST_CHECK_EQUAL("port", port.getNameSymbol()->getStringValue());
     BOOST_CHECK(port.getAtomicity());
-    BOOST_CHECK_EQUAL("injectingPort", port.getInjectedWith());
+    BOOST_CHECK_EQUAL("injectingPort", port.getInjectedWith()->getStringValue());
     
     // Copy ctor test
     ast_injectedport portCopy1(port);
-    BOOST_CHECK_EQUAL("port", port.getName());
+    BOOST_CHECK_EQUAL("port", port.getNameSymbol()->getStringValue());
     BOOST_CHECK(port.getAtomicity());
-    BOOST_CHECK_EQUAL("injectingPort", port.getInjectedWith());
-    BOOST_CHECK_EQUAL("port", portCopy1.getName());
+    BOOST_CHECK_EQUAL("injectingPort", port.getInjectedWith()->getStringValue());
+    BOOST_CHECK_EQUAL("port", portCopy1.getNameSymbol()->getStringValue());
     BOOST_CHECK(portCopy1.getAtomicity());
-    BOOST_CHECK_EQUAL("injectingPort", portCopy1.getInjectedWith());
+    BOOST_CHECK_EQUAL("injectingPort", portCopy1.getInjectedWith()->getStringValue());
     
     // Copy assignment operator test
     ast_injectedport portCopy2 = port;
-    BOOST_CHECK_EQUAL("port", port.getName());
+    BOOST_CHECK_EQUAL("port", port.getNameSymbol()->getStringValue());
     BOOST_CHECK(port.getAtomicity());
-    BOOST_CHECK_EQUAL("injectingPort", port.getInjectedWith());
-    BOOST_CHECK_EQUAL("port", portCopy2.getName());
+    BOOST_CHECK_EQUAL("injectingPort", port.getInjectedWith()->getStringValue());
+    BOOST_CHECK_EQUAL("port", portCopy2.getNameSymbol()->getStringValue());
     BOOST_CHECK(portCopy2.getAtomicity());
-    BOOST_CHECK_EQUAL("injectingPort", portCopy2.getInjectedWith());
+    BOOST_CHECK_EQUAL("injectingPort", portCopy2.getInjectedWith()->getStringValue());
     
     // Move constructor test
     ast_injectedport portMoved1(std::move(port));
-    BOOST_CHECK_EQUAL("", port.getName());
     BOOST_CHECK(port.getAtomicity());
-    BOOST_CHECK_EQUAL("", port.getInjectedWith());
-    BOOST_CHECK_EQUAL("port", portMoved1.getName());
+    BOOST_CHECK_EQUAL("port", portMoved1.getNameSymbol()->getStringValue());
     BOOST_CHECK(portMoved1.getAtomicity());
-    BOOST_CHECK_EQUAL("injectingPort", portMoved1.getInjectedWith());
+    BOOST_CHECK_EQUAL("injectingPort", portMoved1.getInjectedWith()->getStringValue());
     
     // Move assignment operator test
     ast_injectedport portMoved2 = std::move(portMoved1);
-    BOOST_CHECK_EQUAL("", portMoved1.getName());
     BOOST_CHECK(portMoved1.getAtomicity());
-    BOOST_CHECK_EQUAL("", portMoved1.getInjectedWith());
-    BOOST_CHECK_EQUAL("port", portMoved2.getName());
+    BOOST_CHECK_EQUAL("port", portMoved2.getNameSymbol()->getStringValue());
     BOOST_CHECK(portMoved2.getAtomicity());
-    BOOST_CHECK_EQUAL("injectingPort", portMoved2.getInjectedWith());
+    BOOST_CHECK_EQUAL("injectingPort", portMoved2.getInjectedWith()->getStringValue());
 }
 
 BOOST_AUTO_TEST_CASE(provisionTest) {
     // Port vector preparation
     std::vector<ptr(ast::compo::CPort)> portVec;
-    portVec.push_back(new_ptr(ast::compo::CPort)(ast::types::portType::UNIVERSAL, new_ptr(ast_symbol)("port1"), true));
-    portVec.push_back(new_ptr(ast::compo::CPort)(ast::types::portType::UNIVERSAL, new_ptr(ast_symbol)("port2"), false));
+    portVec.push_back(new_ptr(ast::compo::CUniversalPort)(new_ptr(ast_symbol)("port1"), true, false));
+    portVec.push_back(new_ptr(ast::compo::CUniversalPort)(new_ptr(ast_symbol)("port2"), false, false));
     
     // Original provision creation
     ast_provision provision(ast::types::visibilityType::EXTERNAL, portVec);
     BOOST_CHECK_EQUAL(ast::types::nodeType::PROVISION, provision.getNodeType());
     BOOST_CHECK_EQUAL(ast::types::visibilityType::EXTERNAL, provision.getVisibilityType());
     BOOST_CHECK_EQUAL(2, provision.getNumberOfPorts());
-    BOOST_CHECK_EQUAL("port1", provision.getPortAt(0)->getName());
+    BOOST_CHECK_EQUAL("port1", provision.getPortAt(0)->getNameSymbol()->getStringValue());
     BOOST_CHECK(provision.getPortAt(0)->getAtomicity());
-    BOOST_CHECK_EQUAL("port2", provision.getPortAt(1)->getName());
+    BOOST_CHECK_EQUAL("port2", provision.getPortAt(1)->getNameSymbol()->getStringValue());
     BOOST_CHECK(!provision.getPortAt(1)->getAtomicity());
     
     // Copy constructor test
@@ -143,23 +141,23 @@ BOOST_AUTO_TEST_CASE(provisionTest) {
     BOOST_CHECK_EQUAL(ast::types::nodeType::PROVISION, provisionCopy1.getNodeType());
     BOOST_CHECK_EQUAL(ast::types::visibilityType::EXTERNAL, provisionCopy1.getVisibilityType());
     BOOST_CHECK_EQUAL(2, provisionCopy1.getNumberOfPorts());
-    BOOST_CHECK_EQUAL("port1", provisionCopy1.getPortAt(0)->getName());
-    BOOST_CHECK_EQUAL("port2", provisionCopy1.getPortAt(1)->getName());
+    BOOST_CHECK_EQUAL("port1", provisionCopy1.getPortAt(0)->getNameSymbol()->getStringValue());
+    BOOST_CHECK_EQUAL("port2", provisionCopy1.getPortAt(1)->getNameSymbol()->getStringValue());
     
     // Assignment operator test
     ast_provision provisionCopy2 = provision;
     BOOST_CHECK_EQUAL(ast::types::nodeType::PROVISION, provisionCopy2.getNodeType());
     BOOST_CHECK_EQUAL(ast::types::visibilityType::EXTERNAL, provisionCopy2.getVisibilityType());
     BOOST_CHECK_EQUAL(2, provisionCopy2.getNumberOfPorts());
-    BOOST_CHECK_EQUAL("port1", provisionCopy2.getPortAt(0)->getName());
-    BOOST_CHECK_EQUAL("port2", provisionCopy2.getPortAt(1)->getName());
+    BOOST_CHECK_EQUAL("port1", provisionCopy2.getPortAt(0)->getNameSymbol()->getStringValue());
+    BOOST_CHECK_EQUAL("port2", provisionCopy2.getPortAt(1)->getNameSymbol()->getStringValue());
     
     // Test of original provision
     BOOST_CHECK_EQUAL(ast::types::nodeType::PROVISION, provision.getNodeType());
     BOOST_CHECK_EQUAL(ast::types::visibilityType::EXTERNAL, provision.getVisibilityType());
     BOOST_CHECK_EQUAL(2, provision.getNumberOfPorts());
-    BOOST_CHECK_EQUAL("port1", provision.getPortAt(0)->getName());
-    BOOST_CHECK_EQUAL("port2", provision.getPortAt(1)->getName());
+    BOOST_CHECK_EQUAL("port1", provision.getPortAt(0)->getNameSymbol()->getStringValue());
+    BOOST_CHECK_EQUAL("port2", provision.getPortAt(1)->getNameSymbol()->getStringValue());
     
     ast_provision provisionNew1(std::move(provision));
     
@@ -172,8 +170,8 @@ BOOST_AUTO_TEST_CASE(provisionTest) {
     BOOST_CHECK_EQUAL(ast::types::nodeType::PROVISION, provisionNew1.getNodeType());
     BOOST_CHECK_EQUAL(ast::types::visibilityType::EXTERNAL, provisionNew1.getVisibilityType());
     BOOST_CHECK_EQUAL(2, provisionNew1.getNumberOfPorts());
-    BOOST_CHECK_EQUAL("port1", provisionNew1.getPortAt(0)->getName());
-    BOOST_CHECK_EQUAL("port2", provisionNew1.getPortAt(1)->getName());
+    BOOST_CHECK_EQUAL("port1", provisionNew1.getPortAt(0)->getNameSymbol()->getStringValue());
+    BOOST_CHECK_EQUAL("port2", provisionNew1.getPortAt(1)->getNameSymbol()->getStringValue());
     
     ast_provision provisionNew2 = std::move(provisionNew1);
     
@@ -186,24 +184,24 @@ BOOST_AUTO_TEST_CASE(provisionTest) {
     BOOST_CHECK_EQUAL(ast::types::nodeType::PROVISION, provisionNew2.getNodeType());
     BOOST_CHECK_EQUAL(ast::types::visibilityType::EXTERNAL, provisionNew2.getVisibilityType());
     BOOST_CHECK_EQUAL(2, provisionNew2.getNumberOfPorts());
-    BOOST_CHECK_EQUAL("port1", provisionNew2.getPortAt(0)->getName());
-    BOOST_CHECK_EQUAL("port2", provisionNew2.getPortAt(1)->getName());
+    BOOST_CHECK_EQUAL("port1", provisionNew2.getPortAt(0)->getNameSymbol()->getStringValue());
+    BOOST_CHECK_EQUAL("port2", provisionNew2.getPortAt(1)->getNameSymbol()->getStringValue());
 }
 
 BOOST_AUTO_TEST_CASE(requirementTest) {
     // Port vector preparation
     std::vector<ptr(ast::compo::CPort)> portVec;
-    portVec.push_back(new_ptr(ast::compo::CPort)(ast::types::portType::UNIVERSAL, new_ptr(ast_symbol)("port1"), true));
-    portVec.push_back(new_ptr(ast::compo::CPort)(ast::types::portType::UNIVERSAL, new_ptr(ast_symbol)("port2"), false));
+    portVec.push_back(new_ptr(ast::compo::CUniversalPort)(new_ptr(ast_symbol)("port1"), true));
+    portVec.push_back(new_ptr(ast::compo::CUniversalPort)(new_ptr(ast_symbol)("port2"), false));
     
     // Original requirement creation
     ast_requirement requirement(ast::types::visibilityType::EXTERNAL, portVec);
     BOOST_CHECK_EQUAL(ast::types::nodeType::REQUIREMENT, requirement.getNodeType());
     BOOST_CHECK_EQUAL(ast::types::visibilityType::EXTERNAL, requirement.getVisibilityType());
     BOOST_CHECK_EQUAL(2, requirement.getNumberOfPorts());
-    BOOST_CHECK_EQUAL("port1", requirement.getPortAt(0)->getName());
+    BOOST_CHECK_EQUAL("port1", requirement.getPortAt(0)->getNameSymbol()->getStringValue());
     BOOST_CHECK(requirement.getPortAt(0)->getAtomicity());
-    BOOST_CHECK_EQUAL("port2", requirement.getPortAt(1)->getName());
+    BOOST_CHECK_EQUAL("port2", requirement.getPortAt(1)->getNameSymbol()->getStringValue());
     BOOST_CHECK(!requirement.getPortAt(1)->getAtomicity());
     
     // Copy constructor test
@@ -211,23 +209,23 @@ BOOST_AUTO_TEST_CASE(requirementTest) {
     BOOST_CHECK_EQUAL(ast::types::nodeType::REQUIREMENT, requirementCopy1.getNodeType());
     BOOST_CHECK_EQUAL(ast::types::visibilityType::EXTERNAL, requirementCopy1.getVisibilityType());
     BOOST_CHECK_EQUAL(2, requirementCopy1.getNumberOfPorts());
-    BOOST_CHECK_EQUAL("port1", requirementCopy1.getPortAt(0)->getName());
-    BOOST_CHECK_EQUAL("port2", requirementCopy1.getPortAt(1)->getName());
+    BOOST_CHECK_EQUAL("port1", requirementCopy1.getPortAt(0)->getNameSymbol()->getStringValue());
+    BOOST_CHECK_EQUAL("port2", requirementCopy1.getPortAt(1)->getNameSymbol()->getStringValue());
     
     // Assignment operator test
     ast_requirement requirementCopy2 = requirement;
     BOOST_CHECK_EQUAL(ast::types::nodeType::REQUIREMENT, requirementCopy2.getNodeType());
     BOOST_CHECK_EQUAL(ast::types::visibilityType::EXTERNAL, requirementCopy2.getVisibilityType());
     BOOST_CHECK_EQUAL(2, requirementCopy2.getNumberOfPorts());
-    BOOST_CHECK_EQUAL("port1", requirementCopy2.getPortAt(0)->getName());
-    BOOST_CHECK_EQUAL("port2", requirementCopy2.getPortAt(1)->getName());
+    BOOST_CHECK_EQUAL("port1", requirementCopy2.getPortAt(0)->getNameSymbol()->getStringValue());
+    BOOST_CHECK_EQUAL("port2", requirementCopy2.getPortAt(1)->getNameSymbol()->getStringValue());
     
     // Test of original requirement
     BOOST_CHECK_EQUAL(ast::types::nodeType::REQUIREMENT, requirement.getNodeType());
     BOOST_CHECK_EQUAL(ast::types::visibilityType::EXTERNAL, requirement.getVisibilityType());
     BOOST_CHECK_EQUAL(2, requirement.getNumberOfPorts());
-    BOOST_CHECK_EQUAL("port1", requirement.getPortAt(0)->getName());
-    BOOST_CHECK_EQUAL("port2", requirement.getPortAt(1)->getName());
+    BOOST_CHECK_EQUAL("port1", requirement.getPortAt(0)->getNameSymbol()->getStringValue());
+    BOOST_CHECK_EQUAL("port2", requirement.getPortAt(1)->getNameSymbol()->getStringValue());
     
     ast_requirement requirementNew1(std::move(requirement));
     
@@ -240,8 +238,8 @@ BOOST_AUTO_TEST_CASE(requirementTest) {
     BOOST_CHECK_EQUAL(ast::types::nodeType::REQUIREMENT, requirementNew1.getNodeType());
     BOOST_CHECK_EQUAL(ast::types::visibilityType::EXTERNAL, requirementNew1.getVisibilityType());
     BOOST_CHECK_EQUAL(2, requirementNew1.getNumberOfPorts());
-    BOOST_CHECK_EQUAL("port1", requirementNew1.getPortAt(0)->getName());
-    BOOST_CHECK_EQUAL("port2", requirementNew1.getPortAt(1)->getName());
+    BOOST_CHECK_EQUAL("port1", requirementNew1.getPortAt(0)->getNameSymbol()->getStringValue());
+    BOOST_CHECK_EQUAL("port2", requirementNew1.getPortAt(1)->getNameSymbol()->getStringValue());
     
     ast_requirement requirementNew2 = std::move(requirementNew1);
     
@@ -254,8 +252,8 @@ BOOST_AUTO_TEST_CASE(requirementTest) {
     BOOST_CHECK_EQUAL(ast::types::nodeType::REQUIREMENT, requirementNew2.getNodeType());
     BOOST_CHECK_EQUAL(ast::types::visibilityType::EXTERNAL, requirementNew2.getVisibilityType());
     BOOST_CHECK_EQUAL(2, requirementNew2.getNumberOfPorts());
-    BOOST_CHECK_EQUAL("port1", requirementNew2.getPortAt(0)->getName());
-    BOOST_CHECK_EQUAL("port2", requirementNew2.getPortAt(1)->getName());
+    BOOST_CHECK_EQUAL("port1", requirementNew2.getPortAt(0)->getNameSymbol()->getStringValue());
+    BOOST_CHECK_EQUAL("port2", requirementNew2.getPortAt(1)->getNameSymbol()->getStringValue());
 }
 
 BOOST_AUTO_TEST_CASE(serviceTest) {

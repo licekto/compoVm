@@ -8,7 +8,7 @@ namespace ast {
 		                       bool atomicity,
 		                       std::shared_ptr<ast::procedural::CSymbol> nameParam,
 		                       bool collectivity)
-			:   CNode(types::nodeType::PORT),
+			:   CNode(types::nodeType::NAMED_PORT),
 			    CPort(types::portType::NAMED, name, atomicity, collectivity),
 			    m_nameParam(nameParam) {
 		}

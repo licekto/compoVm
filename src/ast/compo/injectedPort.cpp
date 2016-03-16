@@ -4,12 +4,11 @@ namespace ast {
 
 	namespace compo {
 
-		CInjectedPort::CInjectedPort( ast::types::portType type,
-		                              std::shared_ptr<ast::procedural::CSymbol> name,
+		CInjectedPort::CInjectedPort( std::shared_ptr<ast::procedural::CSymbol> name,
 		                              bool atomic,
 		                              std::shared_ptr<ast::procedural::CSymbol> injectedWith  )
 			:   CNode(types::nodeType::INJECTED_PORT),
-			    CPort(type, name, atomic),
+			    CPort(ast::types::portType::INJECTED, name, atomic),
 			    m_injectedWith(injectedWith) {
 		}
 
@@ -17,11 +16,8 @@ namespace ast {
 			visitor->visit(this);
 		}
 
-		std::string CInjectedPort::getInjectedWith() const {
-			if (m_injectedWith) {
-				return m_injectedWith->getStringValue();
-			}
-			return "";
+		std::shared_ptr<ast::procedural::CSymbol> CInjectedPort::getInjectedWith() const {
+                    return m_injectedWith;
 		}
 	}
 

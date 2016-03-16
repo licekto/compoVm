@@ -49,13 +49,13 @@ namespace ast {
 			            * Accept method for visitor acceptation.
 			            * @param visitor: Pointer to abstract visitor.
 			            */
-			virtual void accept(ast::visitors::CAbstractVisitor *visitor);
+			virtual void accept(ast::visitors::CAbstractVisitor *visitor) = 0;
 
 			/**
 			* Name getter
 			* @return Name of port
 			*/
-			std::string getName() const;
+			std::shared_ptr<ast::procedural::CSymbol> getNameSymbol() const;
 
 			/**
 			* Atomicity getter
