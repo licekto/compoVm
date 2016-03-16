@@ -15,7 +15,9 @@
 do { \
     BOOST_CHECK_EQUAL(ast::types::nodeType::DESCRIPTOR, descriptor->getNodeType()); \
     BOOST_CHECK_EQUAL(name, descriptor->getNameSymbol()->getStringValue()); \
-    BOOST_CHECK_EQUAL(extends, descriptor->getExtends()); \
+    if (descriptor->getExtendsSymbol()) { \
+        BOOST_CHECK_EQUAL(extends, descriptor->getExtendsSymbol()->getStringValue()); \
+    } \
     BOOST_CHECK_EQUAL("default", descriptor->getDefaultPort()->getNameSymbol()->getStringValue()); \
     BOOST_CHECK_EQUAL(servicesSize, descriptor->getServicesSize()); \
     BOOST_CHECK_EQUAL(constraintsSize, descriptor->getConstraintsSize()); \

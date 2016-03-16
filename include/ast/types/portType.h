@@ -12,7 +12,7 @@ namespace ast {
 			EXPLICIT_LIST,
 			UNIVERSAL,
 			NAMED,
-                        INJECTED,
+			INJECTED,
 		};
 
 	}

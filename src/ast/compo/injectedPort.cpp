@@ -17,7 +17,7 @@ namespace ast {
 		}
 
 		std::shared_ptr<ast::procedural::CSymbol> CInjectedPort::getInjectedWith() const {
-                    return m_injectedWith;
+			return m_injectedWith;
 		}
 	}
 

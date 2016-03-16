@@ -4,7 +4,7 @@
 
 namespace exceptions {
 
-    class CAbstractException : public std::exception {
-    };
+	class CAbstractException : public std::exception {
+	};
 
 }

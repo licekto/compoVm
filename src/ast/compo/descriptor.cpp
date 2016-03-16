@@ -33,14 +33,11 @@ namespace ast {
 		}
 
 		std::shared_ptr<ast::procedural::CSymbol> CDescriptor::getNameSymbol() const {
-                    return m_name;
+			return m_name;
 		}
 
-		std::string CDescriptor::getExtends() const {
-			if (m_extends) {
-				return m_extends->getStringValue();
-			}
-			return "";
+		std::shared_ptr<ast::procedural::CSymbol> CDescriptor::getExtendsSymbol() const {
+			return m_extends;
 		}
 
 		size_t CDescriptor::getServicesSize() const {

@@ -4,11 +4,11 @@
 
 namespace exceptions {
 
-    namespace semantic {
-        
-        class CAbstractSemanticException : public CAbstractException {
-        };
-        
-    }
+	namespace semantic {
+
+		class CAbstractSemanticException : public CAbstractException {
+		};
+
+	}
 
 }

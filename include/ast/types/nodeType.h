@@ -22,7 +22,7 @@ namespace ast {
 		 */
 		enum nodeType {
 			END = 0,
-                        PROGRAM,
+			PROGRAM,
 			DESCRIPTOR,
 			SYMBOL,
 			SERVICE,
@@ -37,9 +37,9 @@ namespace ast {
 			DISCONNECTION,
 			DELEGATION,
 			INJECTED_PORT,
-                        NAMED_PORT,
-                        SIGNATURES_PORT,
-                        UNIVERSAL_PORT,
+			NAMED_PORT,
+			SIGNATURES_PORT,
+			UNIVERSAL_PORT,
 			DEREFERENCE,
 			COLLECTION_PORT,
 			SERVICE_INVOCATION,

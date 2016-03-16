@@ -16,14 +16,14 @@ namespace ast {
 		* Abstract base class for visitors servers as interface. Every visitor derived from this one.
 		*/
 		class CSemanticCheckVisitor : public CAbstractVisitor {
-                  private:
-                    
-                        void checkDescriptor();
-                      
-                        void checkNodeType(ast::CNode *node, ast_type type);
-		  public:                        
+		  private:
+
+			void checkDescriptor();
+
+			void checkNodeType(ast::CNode *node, ast_type type);
+		  public:
 			virtual void visit(ast::CNode *node);
-                        virtual void visit(ast::CProgram *node);
+			virtual void visit(ast::CProgram *node);
 
 			virtual void visit(ast::compo::CAbstractReqProv *node);
 			virtual void visit(ast::compo::CAbstractServConstr *node);

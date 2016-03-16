@@ -11,9 +11,9 @@ namespace ast {
 			    m_atomicity(atomicity),
 			    m_collectivity(collectivity) {
 		}
-                
+
 		std::shared_ptr<ast::procedural::CSymbol> CPort::getNameSymbol() const {
-                    return m_name;
+			return m_name;
 		}
 
 		bool CPort::getAtomicity() const {

@@ -78,7 +78,7 @@ namespace ast {
 			* Extends getter
 			* @return name of parent class symbol
 			*/
-			std::string getExtends() const;
+			std::shared_ptr<ast::procedural::CSymbol> getExtendsSymbol() const;
 
 			/**
 			 * Body vector size getter

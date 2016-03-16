@@ -23,12 +23,12 @@ void ParserWrapper::addRootNode(std::shared_ptr<ast::CNode> node) {
 }
 
 std::shared_ptr<ast::CProgram> ParserWrapper::getRootNode() {
-    return m_root;
+	return m_root;
 }
 
 void ParserWrapper::clearRootNodes() {
 	m_root.reset();
-        m_root = std::make_shared<ast::CProgram>();
+	m_root = std::make_shared<ast::CProgram>();
 }
 
 void ParserWrapper::pushBlock(std::shared_ptr<ast::procedural::CCompoundBody> block) {
