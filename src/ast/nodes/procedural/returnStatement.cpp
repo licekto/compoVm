@@ -11,7 +11,7 @@ namespace ast {
 			    m_expression(expression) {
 		}
 
-		void CReturnStatement::accept(ast::visitors::CAbstractVisitor* visitor) {
+		void CReturnStatement::accept(visitors::CAbstractVisitor* visitor) {
 			visitor->visit(this);
 		}
 

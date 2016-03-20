@@ -14,7 +14,7 @@ namespace ast {
 		 * \class CArchitecture
 		 * \brief Class for Compo architecture representation.
 		 */
-		class CArchitecture : public CNode {
+		class CArchitecture : public CNode, public std::enable_shared_from_this<CArchitecture> {
 		  private:
 			/**< Vector of architecture body nodes */
 			std::vector<std::shared_ptr<compo::CBind>> m_architectureBody;

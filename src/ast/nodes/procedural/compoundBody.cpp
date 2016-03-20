@@ -13,7 +13,7 @@ namespace ast {
 			    m_body(body) {
 		}
 
-		void CCompoundBody::accept(ast::visitors::CAbstractVisitor* visitor) {
+		void CCompoundBody::accept(visitors::CAbstractVisitor* visitor) {
 			visitor->visit(this);
 		}
 

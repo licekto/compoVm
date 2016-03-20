@@ -14,7 +14,7 @@ namespace ast {
 			    m_body(body) {
 		}
 
-		void CWhileStatement::accept(ast::visitors::CAbstractVisitor* visitor) {
+		void CWhileStatement::accept(visitors::CAbstractVisitor* visitor) {
 			visitor->visit(this);
 		}
 

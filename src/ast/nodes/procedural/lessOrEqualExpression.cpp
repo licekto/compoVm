@@ -13,7 +13,7 @@ namespace ast {
 			    CBinaryExpression(types::operatorType::LESS_OR_EQUAL, op1, op2) {
 		}
 
-		void CLessOrEqualExpression::accept(ast::visitors::CAbstractVisitor* visitor) {
+		void CLessOrEqualExpression::accept(visitors::CAbstractVisitor* visitor) {
 			visitor->visit(this);
 		}
 	}

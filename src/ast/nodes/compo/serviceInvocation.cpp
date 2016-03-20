@@ -15,7 +15,7 @@ namespace ast {
 			    m_parameters(parameters) {
 		}
 
-		void CServiceInvocation::accept(ast::visitors::CAbstractVisitor* visitor) {
+		void CServiceInvocation::accept(visitors::CAbstractVisitor* visitor) {
 			visitor->visit(this);
 		}
 

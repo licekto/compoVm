@@ -13,7 +13,7 @@ namespace ast {
 			  m_intValue(val) {
 		}
 
-		void CConstant::accept(ast::visitors::CAbstractVisitor* visitor) {
+		void CConstant::accept(visitors::CAbstractVisitor* visitor) {
 			visitor->visit(this);
 		}
 

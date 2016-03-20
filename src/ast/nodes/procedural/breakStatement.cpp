@@ -10,7 +10,7 @@ namespace ast {
 			:   CNode(types::nodeType::BREAK) {
 		}
 
-		void CBreakStatement::accept(ast::visitors::CAbstractVisitor* visitor) {
+		void CBreakStatement::accept(visitors::CAbstractVisitor* visitor) {
 			visitor->visit(this);
 		}
 	}

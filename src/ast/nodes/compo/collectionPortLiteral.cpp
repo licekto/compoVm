@@ -13,7 +13,7 @@ namespace ast {
 			    m_indexExpression(indexExpression) {
 		}
 
-		void CCollectionPortLiteral::accept(ast::visitors::CAbstractVisitor* visitor) {
+		void CCollectionPortLiteral::accept(visitors::CAbstractVisitor* visitor) {
 			visitor->visit(this);
 		}
 

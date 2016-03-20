@@ -15,7 +15,7 @@ namespace ast {
 			    m_elseBody(elseBody) {
 		}
 
-		void CIfStatement::accept(ast::visitors::CAbstractVisitor* visitor) {
+		void CIfStatement::accept(visitors::CAbstractVisitor* visitor) {
 			visitor->visit(this);
 		}
 

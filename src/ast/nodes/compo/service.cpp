@@ -12,7 +12,7 @@ namespace ast {
 			    CAbstractServConstr(signature, body) {
 		}
 
-		void CService::accept(ast::visitors::CAbstractVisitor* visitor) {
+		void CService::accept(visitors::CAbstractVisitor* visitor) {
 			visitor->visit(this);
 		}
 

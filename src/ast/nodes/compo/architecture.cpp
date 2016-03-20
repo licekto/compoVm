@@ -10,7 +10,7 @@ namespace ast {
 			  m_architectureBody(architectureBody) {
 		}
 
-		void CArchitecture::accept(ast::visitors::CAbstractVisitor* visitor) {
+		void CArchitecture::accept(visitors::CAbstractVisitor* visitor) {
 			visitor->visit(this);
 		}
 

@@ -13,7 +13,7 @@ namespace ast {
 			    CPort(types::portType::UNIVERSAL, name, atomicity, collectivity) {
 		}
 
-		void CUniversalPort::accept(ast::visitors::CAbstractVisitor* visitor) {
+		void CUniversalPort::accept(visitors::CAbstractVisitor* visitor) {
 			visitor->visit(this);
 		}
 	}

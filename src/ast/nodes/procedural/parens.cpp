@@ -13,7 +13,7 @@ namespace ast {
 			  m_expression(expr) {
 		}
 
-		void CParens::accept(ast::visitors::CAbstractVisitor* visitor) {
+		void CParens::accept(visitors::CAbstractVisitor* visitor) {
 			visitor->visit(this);
 		}
 

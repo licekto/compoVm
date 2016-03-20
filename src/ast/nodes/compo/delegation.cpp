@@ -12,7 +12,7 @@ namespace ast {
 			    CBind(portIdentification1, portIdentification2) {
 		}
 
-		void CDelegation::accept(ast::visitors::CAbstractVisitor* visitor) {
+		void CDelegation::accept(visitors::CAbstractVisitor* visitor) {
 			visitor->visit(this);
 		}
 	}

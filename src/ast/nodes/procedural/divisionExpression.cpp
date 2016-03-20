@@ -13,7 +13,7 @@ namespace ast {
 			    CBinaryExpression(types::operatorType::DIVISION, op1, op2) {
 		}
 
-		void CDivisionExpression::accept(ast::visitors::CAbstractVisitor* visitor) {
+		void CDivisionExpression::accept(visitors::CAbstractVisitor* visitor) {
 			visitor->visit(this);
 		}
 	}

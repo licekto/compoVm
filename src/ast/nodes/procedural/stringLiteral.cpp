@@ -11,7 +11,7 @@ namespace ast {
 			  m_stringValue(val) {
 		}
 
-		void CStringLiteral::accept(ast::visitors::CAbstractVisitor* visitor) {
+		void CStringLiteral::accept(visitors::CAbstractVisitor* visitor) {
 			visitor->visit(this);
 		}
 

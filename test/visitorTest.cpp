@@ -19,10 +19,10 @@ class testVisitor : public ast::visitors::CAbstractVisitor {
         virtual void visit(ast::nodes::CNode */* node */) {nodes += " CNode";}
         virtual void visit(ast::nodes::CProgram */* node */) {nodes += " CProgram";};
 
-        virtual void visit(ast::nodes::compo::CAbstractReqProv */* node */) {nodes += " CAbstractReqProv";}
-        virtual void visit(ast::nodes::compo::CAbstractServConstr */* node */) {nodes += " CAbstractServConstr";}
+        virtual void visit(ast_reqprov */* node */) {nodes += " CAbstractReqProv";}
+        virtual void visit(ast_servconstr */* node */) {nodes += " CAbstractServConstr";}
         virtual void visit(ast_architecture */* node */) {nodes += " CArchitecture";}
-        virtual void visit(ast::nodes::compo::CBind */* node */) {nodes += " CBind";}
+        virtual void visit(ast_bind */* node */) {nodes += " CBind";}
         virtual void visit(ast_collectionportliteral */* node */) {nodes += " CCollectionPortLiteral";}
         virtual void visit(ast_connection */* node */) {nodes += " CConnection";}
         virtual void visit(ast_constraint */* node */) {nodes += " CConstraint";}
@@ -33,7 +33,7 @@ class testVisitor : public ast::visitors::CAbstractVisitor {
         virtual void visit(ast_injectedport */* node */) {nodes += " CInjectedPort";}
         virtual void visit(ast_interface */* node */) {nodes += " CInterface";}
         virtual void visit(ast_namedport */* node */) {nodes += " CNamedPort";}
-        virtual void visit(ast::nodes::compo::CPort */* node */) {nodes += " CPort";}
+        virtual void visit(ast_port */* node */) {nodes += " CPort";}
         virtual void visit(ast_portaddress */* node */) {nodes += " CPortAddress";}
         virtual void visit(ast_provision */* node */) {nodes += " CProvision";}
         virtual void visit(ast_requirement */* node */) {nodes += " CRequirement";}
@@ -43,12 +43,12 @@ class testVisitor : public ast::visitors::CAbstractVisitor {
         virtual void visit(ast_signaturesport */* node */) {nodes += " CSignaturesPort";}
         virtual void visit(ast_universalport */* node */) {nodes += " CUniversalPort";}
 
-        virtual void visit(ast::nodes::procedural::CAbstractExpression */* node */) {nodes += " CAbstractExpression";}
-        virtual void visit(ast::nodes::procedural::CAbstractPrimaryExpression */* node */) {nodes += " CAbstractPrimaryExpression";}
-        virtual void visit(ast::nodes::procedural::CAbstractStatement */* node */) {nodes += " CAbstractStatement";}
+        virtual void visit(ast_expression */* node */) {nodes += " CAbstractExpression";}
+        virtual void visit(ast_primaryexpression */* node */) {nodes += " CAbstractPrimaryExpression";}
+        virtual void visit(ast_statement */* node */) {nodes += " CAbstractStatement";}
         virtual void visit(ast_addition * /* node */) {nodes += " CAdditionExpression";}
         virtual void visit(ast_assignment */* node */) {nodes += " CAssignmentExpression";}
-        virtual void visit(ast::nodes::procedural::CBinaryExpression */* node */) {nodes += " CBinaryExpression";}
+        virtual void visit(ast_binary */* node */) {nodes += " CBinaryExpression";}
         virtual void visit(ast_break */* node */) {nodes += " CBreakStatement";}
         virtual void visit(ast_compound */* node */) {nodes += " CCompoundBody";}
         virtual void visit(ast_constant */* node */) {nodes += " CConstant";}

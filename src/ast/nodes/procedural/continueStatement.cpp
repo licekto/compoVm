@@ -10,7 +10,7 @@ namespace ast {
 			:   CNode(types::nodeType::CONTINUE) {
 		}
 
-		void CContinueStatement::accept(ast::visitors::CAbstractVisitor* visitor) {
+		void CContinueStatement::accept(visitors::CAbstractVisitor* visitor) {
 			visitor->visit(this);
 		}
 	}

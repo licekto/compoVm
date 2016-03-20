@@ -13,7 +13,7 @@ namespace ast {
 			    CBinaryExpression(types::operatorType::MINUS, op1, op2) {
 		}
 
-		void CSubtractionExpression::accept(ast::visitors::CAbstractVisitor* visitor) {
+		void CSubtractionExpression::accept(visitors::CAbstractVisitor* visitor) {
 			visitor->visit(this);
 		}
 	}

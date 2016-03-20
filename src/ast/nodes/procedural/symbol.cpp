@@ -13,7 +13,7 @@ namespace ast {
 			  m_name(name) {
 		}
 
-		void CSymbol::accept(ast::visitors::CAbstractVisitor* visitor) {
+		void CSymbol::accept(visitors::CAbstractVisitor* visitor) {
 			visitor->visit(this);
 		}
 

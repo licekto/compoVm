@@ -12,7 +12,7 @@ namespace ast {
 			    m_portName(portName), m_component(component) {
 		}
 
-		void CPortAddress::accept(ast::visitors::CAbstractVisitor* visitor) {
+		void CPortAddress::accept(visitors::CAbstractVisitor* visitor) {
 			visitor->visit(this);
 		}
 

@@ -13,7 +13,7 @@ namespace ast {
 			    CBinaryExpression(types::operatorType::GREATER, op1, op2) {
 		}
 
-		void CGreaterExpression::accept(ast::visitors::CAbstractVisitor* visitor) {
+		void CGreaterExpression::accept(visitors::CAbstractVisitor* visitor) {
 			visitor->visit(this);
 		}
 	}

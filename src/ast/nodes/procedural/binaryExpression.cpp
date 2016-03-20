@@ -15,7 +15,7 @@ namespace ast {
 			    m_operand2(op2) {
 		}
 
-		void CBinaryExpression::accept(ast::visitors::CAbstractVisitor* visitor) {
+		void CBinaryExpression::accept(visitors::CAbstractVisitor* visitor) {
 			visitor->visit(this);
 		}
 

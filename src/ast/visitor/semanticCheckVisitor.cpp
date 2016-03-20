@@ -1,5 +1,6 @@
 #include "ast/visitor/semanticCheckVisitor.h"
 #include "exceptions/semantic/emptyProgramException.h"
+#include "ast/semantic/globalDescriptorsTable.h"
 
 namespace ast {
 
@@ -126,6 +127,8 @@ namespace ast {
 			for (size_t i = 0; i < node->getConstraintsSize(); ++i) {
 				node->getConstraintAt(i)->accept(this);
 			}
+                        
+                        //m_descriptorTable.addSymbol(node);
                         
                         checkDescriptorArchitecture(node);
 		}

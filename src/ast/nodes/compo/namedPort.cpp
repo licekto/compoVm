@@ -15,7 +15,7 @@ namespace ast {
 			    m_nameParam(nameParam) {
 		}
 
-		void CNamedPort::accept(ast::visitors::CAbstractVisitor* visitor) {
+		void CNamedPort::accept(visitors::CAbstractVisitor* visitor) {
 			visitor->visit(this);
 		}
 

@@ -16,7 +16,7 @@ namespace ast {
 			    m_signaturesList(list) {
 		}
 
-		void CSignaturesPort::accept(ast::visitors::CAbstractVisitor* visitor) {
+		void CSignaturesPort::accept(visitors::CAbstractVisitor* visitor) {
 			visitor->visit(this);
 		}
 

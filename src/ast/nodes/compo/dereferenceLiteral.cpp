@@ -11,7 +11,7 @@ namespace ast {
 			    m_parameter(parameter) {
 		}
 
-		void CDereferenceLiteral::accept(ast::visitors::CAbstractVisitor* visitor) {
+		void CDereferenceLiteral::accept(visitors::CAbstractVisitor* visitor) {
 			visitor->visit(this);
 		}
 

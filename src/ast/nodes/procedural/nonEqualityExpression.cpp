@@ -13,7 +13,7 @@ namespace ast {
 			    CBinaryExpression(types::operatorType::NON_EQUALITY, op1, op2) {
 		}
 
-		void CNonEqualityExpression::accept(ast::visitors::CAbstractVisitor* visitor) {
+		void CNonEqualityExpression::accept(visitors::CAbstractVisitor* visitor) {
 			visitor->visit(this);
 		}
 	}

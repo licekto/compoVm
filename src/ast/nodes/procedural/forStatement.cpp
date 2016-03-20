@@ -17,7 +17,7 @@ namespace ast {
 			    m_body(body) {
 		}
 
-		void CForStatement::accept(ast::visitors::CAbstractVisitor* visitor) {
+		void CForStatement::accept(visitors::CAbstractVisitor* visitor) {
 			visitor->visit(this);
 		}
 

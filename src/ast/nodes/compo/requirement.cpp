@@ -12,7 +12,7 @@ namespace ast {
 			    CAbstractReqProv(type, ports) {
 		}
 
-		void CRequirement::accept(ast::visitors::CAbstractVisitor* visitor) {
+		void CRequirement::accept(visitors::CAbstractVisitor* visitor) {
 			visitor->visit(this);
 		}
 

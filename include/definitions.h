@@ -55,6 +55,7 @@
 using ast_node = ast::nodes::CNode;
 using ast_program = ast::nodes::CProgram;
 
+using ast_descriptorinterface = ast::nodes::compo::CAbstractDescriptorInterface;
 using ast_reqprov = ast::nodes::compo::CAbstractReqProv;
 using ast_servconstr = ast::nodes::compo::CAbstractServConstr;
 using ast_architecture = ast::nodes::compo::CArchitecture;
@@ -112,5 +113,6 @@ using ast_while = ast::nodes::procedural::CWhileStatement;
 using ast_type = ast::nodes::types::nodeType;
 
 #define ptr(x) std::shared_ptr<x>
+#define wptr(x) std::weak_ptr<x>
 #define new_ptr(x) std::make_shared<x>
 #define cast(x) std::dynamic_pointer_cast<x>

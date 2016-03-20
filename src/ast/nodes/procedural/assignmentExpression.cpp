@@ -12,7 +12,7 @@ namespace ast {
 			    m_variable(variable), m_rValue(rVal) {
 		}
 
-		void CAssignmentExpression::accept(ast::visitors::CAbstractVisitor* visitor) {
+		void CAssignmentExpression::accept(visitors::CAbstractVisitor* visitor) {
 			visitor->visit(this);
 		}
 

@@ -1,5 +1,6 @@
 #pragma once
 
+#include <memory>
 #include <iostream>
 #include <vector>
 
@@ -16,6 +17,14 @@
  */
 namespace ast {
     
+    /**
+    *  \addtogroup nodes
+    *  @{
+    */
+
+   /**
+    * nodes Namespace to uniquely identify compo AST nodes.
+    */
     namespace nodes {
 	
         /**
@@ -61,6 +70,6 @@ namespace ast {
 	};
         
     }
-
+    /*! @}*/
 }
 /*! @}*/

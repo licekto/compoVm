@@ -4,6 +4,7 @@
 #include "definitions.h"
 
 #include "exceptions/semantic/wrongAstNodeTypeException.h"
+#include "ast/semantic/globalDescriptorsTable.h"
 
 namespace ast {
 
@@ -15,9 +16,11 @@ namespace ast {
 		*
 		* Abstract base class for visitors servers as interface. Every visitor derived from this one.
 		*/
-		class CSemanticCheckVisitor : public CAbstractVisitor {
+		class CSemanticCheckVisitor : public CAbstractVisitor, public std::enable_shared_from_this<CSemanticCheckVisitor> {
 		  private:
 
+                        ast::semantic::CGlobalDescriptorTable m_descriptorTable;
+                      
 			void checkDescriptorArchitecture(ast::nodes::compo::CDescriptor *node);
 
 			void checkNodeType(ast::nodes::CNode *node, ast_type type);

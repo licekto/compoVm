@@ -29,7 +29,7 @@ namespace ast {
 			                std::vector<std::shared_ptr<ast::nodes::compo::CServiceSignature>>(0))) {
 		}
 
-		void CDescriptor::accept(ast::visitors::CAbstractVisitor* visitor) {
+		void CDescriptor::accept(visitors::CAbstractVisitor* visitor) {
 			visitor->visit(this);
 		}
 

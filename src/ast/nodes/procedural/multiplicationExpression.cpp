@@ -13,7 +13,7 @@ namespace ast {
 			    CBinaryExpression(types::operatorType::TIMES, op1, op2) {
 		}
 
-		void CMultiplicationExpression::accept(ast::visitors::CAbstractVisitor* visitor) {
+		void CMultiplicationExpression::accept(visitors::CAbstractVisitor* visitor) {
 			visitor->visit(this);
 		}
 	}

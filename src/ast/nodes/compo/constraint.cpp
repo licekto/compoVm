@@ -12,7 +12,7 @@ namespace ast {
 			    CAbstractServConstr(signature, body) {
 		}
 
-		void CConstraint::accept(ast::visitors::CAbstractVisitor* visitor) {
+		void CConstraint::accept(visitors::CAbstractVisitor* visitor) {
 			visitor->visit(this);
 		}
 

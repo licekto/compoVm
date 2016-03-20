@@ -12,7 +12,7 @@ namespace ast {
 			    m_portIdentification1(portIdentification1), m_portIdentification2(portIdentification2) {
 		}
 
-		void CBind::accept(ast::visitors::CAbstractVisitor* visitor) {
+		void CBind::accept(visitors::CAbstractVisitor* visitor) {
 			visitor->visit(this);
 		}
 

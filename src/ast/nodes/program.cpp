@@ -10,7 +10,7 @@ namespace ast {
 
 	}
 
-	void CProgram::accept(ast::visitors::CAbstractVisitor* visitor) {
+	void CProgram::accept(visitors::CAbstractVisitor* visitor) {
 		visitor->visit(this);
 	}
 

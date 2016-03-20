@@ -11,7 +11,7 @@ namespace ast {
 			: CNode(types::nodeType::SERVICE_SIGNATURE), m_name(name), m_params(params) {
 		}
 
-		void CServiceSignature::accept(ast::visitors::CAbstractVisitor* visitor) {
+		void CServiceSignature::accept(visitors::CAbstractVisitor* visitor) {
 			visitor->visit(this);
 		}
 
