@@ -13,8 +13,8 @@ namespace ast {
 			    CBinaryExpression(types::operatorType::LOGICAL_AND, op1, op2) {
 		}
 
-		void CLogicalAndExpression::accept(visitors::CAbstractVisitor* visitor) {
-			visitor->visit(this);
+		void CLogicalAndExpression::accept(std::shared_ptr<visitors::CAbstractVisitor> visitor) {
+			visitor->visit(shared_from_this());
 		}
 	}
     }

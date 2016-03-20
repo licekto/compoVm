@@ -14,7 +14,7 @@ namespace ast {
 		 * \class CServiceSignature
 		 * \brief Class for Compo service signature representation.
 		 */
-		class CServiceSignature : public CNode {
+		class CServiceSignature : public CNode, public std::enable_shared_from_this<CServiceSignature> {
 		  private:
 			/**< Name */
 			std::shared_ptr<procedural::CSymbol> m_name;
@@ -34,7 +34,7 @@ namespace ast {
 			            * Accept method for visitor acceptation.
 			            * @param visitor: Pointer to abstract visitor.
 			            */
-			virtual void accept(visitors::CAbstractVisitor *visitor);
+			virtual void accept(std::shared_ptr<visitors::CAbstractVisitor> visitor);
 
 			/**
 			* Name symbol getter

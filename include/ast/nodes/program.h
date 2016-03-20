@@ -16,7 +16,7 @@ namespace ast {
 	 *
 	 * Abstract base class of AST. Every node in AST is derived from this one.
 	 */
-	class CProgram : public CNode {
+	class CProgram : public CNode, public std::enable_shared_from_this<CProgram> {
 	  protected:
 
 		/**< Vector of root nodes */
@@ -30,7 +30,7 @@ namespace ast {
 		* Accept method for visitor acceptation.
 			 * @param visitor: Pointer to abstract visitor.
 			 */
-		virtual void accept(visitors::CAbstractVisitor *visitor);
+		virtual void accept(std::shared_ptr<visitors::CAbstractVisitor> visitor);
 
 		void addNode(std::shared_ptr<CNode> node);
 

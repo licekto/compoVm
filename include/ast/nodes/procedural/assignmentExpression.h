@@ -15,7 +15,7 @@ namespace ast {
 		 * \class CAssignmentExpression
 		 * \brief Class for assignment representation.
 		 */
-		class CAssignmentExpression : public CAbstractExpression {
+		class CAssignmentExpression : public CAbstractExpression, public std::enable_shared_from_this<CAssignmentExpression> {
 		  protected:
 			/**< Variable to assign to */
 			std::shared_ptr<procedural::CSymbol> m_variable;
@@ -36,7 +36,7 @@ namespace ast {
 			            * Accept method for visitor acceptation.
 			            * @param visitor: Pointer to abstract visitor.
 			            */
-			virtual void accept(visitors::CAbstractVisitor *visitor);
+			virtual void accept(std::shared_ptr<visitors::CAbstractVisitor> visitor);
 
 			/**
 			* Variable name getter

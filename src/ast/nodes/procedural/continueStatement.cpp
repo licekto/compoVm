@@ -10,8 +10,8 @@ namespace ast {
 			:   CNode(types::nodeType::CONTINUE) {
 		}
 
-		void CContinueStatement::accept(visitors::CAbstractVisitor* visitor) {
-			visitor->visit(this);
+		void CContinueStatement::accept(std::shared_ptr<visitors::CAbstractVisitor> visitor) {
+			visitor->visit(shared_from_this());
 		}
 	}
     }

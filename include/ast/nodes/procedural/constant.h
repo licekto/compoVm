@@ -17,7 +17,7 @@ namespace ast {
 		 *
 		 * Class contains positive or negative 4B integer value.
 		 */
-		class CConstant : public CAbstractPrimaryExpression {
+		class CConstant : public CAbstractPrimaryExpression, public std::enable_shared_from_this<CConstant> {
 		  private:
 			/**< Integer 4B value */
 			i32 m_intValue;
@@ -33,7 +33,7 @@ namespace ast {
 			            * Accept method for visitor acceptation.
 			            * @param visitor: Pointer to abstract visitor.
 			            */
-			virtual void accept(visitors::CAbstractVisitor *visitor);
+			virtual void accept(std::shared_ptr<visitors::CAbstractVisitor> visitor);
 
 			/**
 			 * Integer value getter

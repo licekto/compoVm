@@ -10,8 +10,8 @@ namespace ast {
 
 	}
 
-	void CProgram::accept(visitors::CAbstractVisitor* visitor) {
-		visitor->visit(this);
+	void CProgram::accept(std::shared_ptr<visitors::CAbstractVisitor> visitor) {
+		visitor->visit(shared_from_this());
 	}
 
 

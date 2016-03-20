@@ -14,8 +14,8 @@ namespace ast {
 			    m_injectedWith(injectedWith) {
 		}
 
-		void CInjectedPort::accept(visitors::CAbstractVisitor* visitor) {
-			visitor->visit(this);
+		void CInjectedPort::accept(std::shared_ptr<visitors::CAbstractVisitor> visitor) {
+			visitor->visit(shared_from_this());
 		}
 
 		std::shared_ptr<ast::nodes::procedural::CSymbol> CInjectedPort::getInjectedWith() const {

@@ -15,7 +15,7 @@ namespace ast {
 		 * \class CContinueStatement
 		 * \brief Class for continue statement representation
 		 */
-		class CContinueStatement : public CAbstractStatement {
+		class CContinueStatement : public CAbstractStatement, public std::enable_shared_from_this<CContinueStatement> {
 		  public:
 			/**
 			* Default constructor
@@ -26,7 +26,7 @@ namespace ast {
 			            * Accept method for visitor acceptation.
 			            * @param visitor: Pointer to abstract visitor.
 			            */
-			virtual void accept(visitors::CAbstractVisitor *visitor);
+			virtual void accept(std::shared_ptr<visitors::CAbstractVisitor> visitor);
 		};
 
 	}

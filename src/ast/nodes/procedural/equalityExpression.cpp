@@ -13,8 +13,8 @@ namespace ast {
 			    CBinaryExpression(types::operatorType::EQUALITY, op1, op2) {
 		}
 
-		void CEqualityExpression::accept(visitors::CAbstractVisitor* visitor) {
-			visitor->visit(this);
+		void CEqualityExpression::accept(std::shared_ptr<visitors::CAbstractVisitor> visitor) {
+			visitor->visit(shared_from_this());
 		}
 	}
     }

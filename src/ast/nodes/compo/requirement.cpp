@@ -12,8 +12,8 @@ namespace ast {
 			    CAbstractReqProv(type, ports) {
 		}
 
-		void CRequirement::accept(visitors::CAbstractVisitor* visitor) {
-			visitor->visit(this);
+		void CRequirement::accept(std::shared_ptr<visitors::CAbstractVisitor> visitor) {
+			visitor->visit(shared_from_this());
 		}
 
 	}

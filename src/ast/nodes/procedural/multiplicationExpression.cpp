@@ -13,8 +13,8 @@ namespace ast {
 			    CBinaryExpression(types::operatorType::TIMES, op1, op2) {
 		}
 
-		void CMultiplicationExpression::accept(visitors::CAbstractVisitor* visitor) {
-			visitor->visit(this);
+		void CMultiplicationExpression::accept(std::shared_ptr<visitors::CAbstractVisitor> visitor) {
+			visitor->visit(shared_from_this());
 		}
 	}
     }

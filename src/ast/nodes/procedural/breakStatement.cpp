@@ -10,8 +10,8 @@ namespace ast {
 			:   CNode(types::nodeType::BREAK) {
 		}
 
-		void CBreakStatement::accept(visitors::CAbstractVisitor* visitor) {
-			visitor->visit(this);
+		void CBreakStatement::accept(std::shared_ptr<visitors::CAbstractVisitor> visitor) {
+			visitor->visit(shared_from_this());
 		}
 	}
     }

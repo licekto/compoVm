@@ -11,8 +11,8 @@ namespace ast {
 			: CNode(types::nodeType::SERVICE_SIGNATURE), m_name(name), m_params(params) {
 		}
 
-		void CServiceSignature::accept(visitors::CAbstractVisitor* visitor) {
-			visitor->visit(this);
+		void CServiceSignature::accept(std::shared_ptr<visitors::CAbstractVisitor> visitor) {
+			visitor->visit(shared_from_this());
 		}
 
 		size_t CServiceSignature::getParamsSize() const {

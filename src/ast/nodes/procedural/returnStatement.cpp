@@ -11,8 +11,8 @@ namespace ast {
 			    m_expression(expression) {
 		}
 
-		void CReturnStatement::accept(visitors::CAbstractVisitor* visitor) {
-			visitor->visit(this);
+		void CReturnStatement::accept(std::shared_ptr<visitors::CAbstractVisitor> visitor) {
+			visitor->visit(shared_from_this());
 		}
 
 		std::shared_ptr<ast::nodes::procedural::CAbstractExpression> CReturnStatement::getExpression() const {

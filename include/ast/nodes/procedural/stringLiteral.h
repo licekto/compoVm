@@ -16,7 +16,7 @@ namespace ast {
 		 *
 		 * Class contains positive or negative 4B integer value.
 		 */
-		class CStringLiteral : public CAbstractPrimaryExpression {
+		class CStringLiteral : public CAbstractPrimaryExpression, public std::enable_shared_from_this<CStringLiteral> {
 		  private:
 			/**< String value */
 			std::string m_stringValue;
@@ -32,7 +32,7 @@ namespace ast {
 			            * Accept method for visitor acceptation.
 			            * @param visitor: Pointer to abstract visitor.
 			            */
-			virtual void accept(visitors::CAbstractVisitor *visitor);
+			virtual void accept(std::shared_ptr<visitors::CAbstractVisitor> visitor);
 
 			/**
 			 * String value getter

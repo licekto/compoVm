@@ -14,7 +14,7 @@ namespace ast {
 		 * \class CSymbol
 		 * \brief Class for Compo symbol node representation.
 		 */
-		class CSymbol : public CAbstractPrimaryExpression {
+		class CSymbol : public CAbstractPrimaryExpression, public std::enable_shared_from_this<CSymbol> {
 		  private:
 			/**< Name of symbol */
 			std::string m_name;
@@ -30,7 +30,7 @@ namespace ast {
 			            * Accept method for visitor acceptation.
 			            * @param visitor: Pointer to abstract visitor.
 			            */
-			virtual void accept(visitors::CAbstractVisitor *visitor);
+			virtual void accept(std::shared_ptr<visitors::CAbstractVisitor>visitor);
 
 			/**
 			* StringValue getter

@@ -13,8 +13,8 @@ namespace ast {
 			    m_indexExpression(indexExpression) {
 		}
 
-		void CCollectionPortLiteral::accept(visitors::CAbstractVisitor* visitor) {
-			visitor->visit(this);
+		void CCollectionPortLiteral::accept(std::shared_ptr<visitors::CAbstractVisitor> visitor) {
+			visitor->visit(shared_from_this());
 		}
 
 		std::shared_ptr<ast::nodes::procedural::CSymbol> CCollectionPortLiteral::getPortName() const {

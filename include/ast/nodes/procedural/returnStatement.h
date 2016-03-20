@@ -16,7 +16,7 @@ namespace ast {
 		 * \class CReturnStatement
 		 * \brief Class for return statement representation
 		 */
-		class CReturnStatement : public CAbstractStatement {
+		class CReturnStatement : public CAbstractStatement, public std::enable_shared_from_this<CReturnStatement> {
 		  private:
 			/**< Start condition node */
 			std::shared_ptr<procedural::CAbstractExpression> m_expression;
@@ -32,7 +32,7 @@ namespace ast {
 			            * Accept method for visitor acceptation.
 			            * @param visitor: Pointer to abstract visitor.
 			            */
-			virtual void accept(visitors::CAbstractVisitor *visitor);
+			virtual void accept(std::shared_ptr<visitors::CAbstractVisitor> visitor);
 
 			/**
 			* End condition getter

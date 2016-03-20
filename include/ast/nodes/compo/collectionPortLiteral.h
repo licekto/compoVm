@@ -13,7 +13,7 @@ namespace ast {
 		 * \class CNamedPort
 		 * \brief Class for named port representation.
 		 */
-		class CCollectionPortLiteral : public CNode {
+		class CCollectionPortLiteral : public CNode, public std::enable_shared_from_this<CCollectionPortLiteral> {
 		  protected:
 			/**< Name parameter symbol of port */
 			std::shared_ptr<procedural::CSymbol> m_portName;
@@ -34,7 +34,7 @@ namespace ast {
 			* Accept method for visitor acceptation.
 			* @param visitor: Pointer to abstract visitor.
 			*/
-			virtual void accept(visitors::CAbstractVisitor *visitor);
+			virtual void accept(std::shared_ptr<visitors::CAbstractVisitor> visitor);
 
 			/**
 			 * Signatures getter

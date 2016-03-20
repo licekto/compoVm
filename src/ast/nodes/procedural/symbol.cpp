@@ -13,8 +13,8 @@ namespace ast {
 			  m_name(name) {
 		}
 
-		void CSymbol::accept(visitors::CAbstractVisitor* visitor) {
-			visitor->visit(this);
+		void CSymbol::accept(std::shared_ptr<visitors::CAbstractVisitor> visitor) {
+			visitor->visit(shared_from_this());
 		}
 
 		std::string CSymbol::getStringValue() const {

@@ -15,8 +15,8 @@ namespace ast {
 			    m_nameParam(nameParam) {
 		}
 
-		void CNamedPort::accept(visitors::CAbstractVisitor* visitor) {
-			visitor->visit(this);
+		void CNamedPort::accept(std::shared_ptr<visitors::CAbstractVisitor> visitor) {
+			visitor->visit(shared_from_this());
 		}
 
 		std::shared_ptr<ast::nodes::procedural::CSymbol> CNamedPort::getParamName() const {

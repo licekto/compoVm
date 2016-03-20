@@ -15,8 +15,8 @@ namespace ast {
 			    m_parameters(parameters) {
 		}
 
-		void CServiceInvocation::accept(visitors::CAbstractVisitor* visitor) {
-			visitor->visit(this);
+		void CServiceInvocation::accept(std::shared_ptr<visitors::CAbstractVisitor> visitor) {
+			visitor->visit(shared_from_this());
 		}
 
 

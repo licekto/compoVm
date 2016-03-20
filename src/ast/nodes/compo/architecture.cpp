@@ -10,8 +10,8 @@ namespace ast {
 			  m_architectureBody(architectureBody) {
 		}
 
-		void CArchitecture::accept(visitors::CAbstractVisitor* visitor) {
-			visitor->visit(this);
+		void CArchitecture::accept(std::shared_ptr<visitors::CAbstractVisitor> visitor) {
+			visitor->visit(shared_from_this());
 		}
 
 		size_t CArchitecture::getBodySize() const {

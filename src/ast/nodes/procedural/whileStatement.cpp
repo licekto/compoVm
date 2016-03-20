@@ -14,8 +14,8 @@ namespace ast {
 			    m_body(body) {
 		}
 
-		void CWhileStatement::accept(visitors::CAbstractVisitor* visitor) {
-			visitor->visit(this);
+		void CWhileStatement::accept(std::shared_ptr<visitors::CAbstractVisitor> visitor) {
+			visitor->visit(shared_from_this());
 		}
 
 		std::shared_ptr<ast::nodes::procedural::CCompoundBody> CWhileStatement::getBody() const {

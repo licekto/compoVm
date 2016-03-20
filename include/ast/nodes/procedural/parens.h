@@ -14,7 +14,7 @@ namespace ast {
 		 * \class CParens
 		 * \brief Class for expression in parentheses.
 		 */
-		class CParens : public CAbstractPrimaryExpression {
+		class CParens : public CAbstractPrimaryExpression, public std::enable_shared_from_this<CParens> {
 		  private:
 			/**< Expression in parentheses */
 			std::shared_ptr<CNode> m_expression;
@@ -31,7 +31,7 @@ namespace ast {
 			            * Accept method for visitor acceptation.
 			            * @param visitor: Pointer to abstract visitor.
 			            */
-			virtual void accept(visitors::CAbstractVisitor *visitor);
+			virtual void accept(std::shared_ptr<visitors::CAbstractVisitor> visitor);
 
 			/**
 			 * Expression getter

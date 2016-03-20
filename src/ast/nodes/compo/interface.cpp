@@ -14,8 +14,8 @@ namespace ast {
 			    m_signaturesList(list) {
 		}
 
-		void CInterface::accept(visitors::CAbstractVisitor* visitor) {
-			visitor->visit(this);
+		void CInterface::accept(std::shared_ptr<visitors::CAbstractVisitor> visitor) {
+			visitor->visit(shared_from_this());
 		}
 
 		size_t CInterface::getSignaturesSize() const {

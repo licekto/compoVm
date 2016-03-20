@@ -11,8 +11,8 @@ namespace ast {
 			  m_stringValue(val) {
 		}
 
-		void CStringLiteral::accept(visitors::CAbstractVisitor* visitor) {
-			visitor->visit(this);
+		void CStringLiteral::accept(std::shared_ptr<visitors::CAbstractVisitor> visitor) {
+			visitor->visit(shared_from_this());
 		}
 
 		std::string CStringLiteral::getValue() const {

@@ -12,10 +12,6 @@ namespace ast {
 			    m_portIdentification1(portIdentification1), m_portIdentification2(portIdentification2) {
 		}
 
-		void CBind::accept(visitors::CAbstractVisitor* visitor) {
-			visitor->visit(this);
-		}
-
 		std::shared_ptr<ast::nodes::compo::CPortAddress> CBind::getPortIdentification1() const {
 			return m_portIdentification1;
 		}

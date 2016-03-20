@@ -29,8 +29,8 @@ namespace ast {
 			                std::vector<std::shared_ptr<ast::nodes::compo::CServiceSignature>>(0))) {
 		}
 
-		void CDescriptor::accept(visitors::CAbstractVisitor* visitor) {
-			visitor->visit(this);
+		void CDescriptor::accept(std::shared_ptr<visitors::CAbstractVisitor> visitor) {
+			visitor->visit(shared_from_this());
 		}
 
 		size_t CDescriptor::getServicesSize() const {

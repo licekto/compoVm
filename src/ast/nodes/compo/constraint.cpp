@@ -12,8 +12,8 @@ namespace ast {
 			    CAbstractServConstr(signature, body) {
 		}
 
-		void CConstraint::accept(visitors::CAbstractVisitor* visitor) {
-			visitor->visit(this);
+		void CConstraint::accept(std::shared_ptr<visitors::CAbstractVisitor> visitor) {
+			visitor->visit(shared_from_this());
 		}
 
 	}

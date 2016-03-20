@@ -13,8 +13,8 @@ namespace ast {
 			    CBinaryExpression(types::operatorType::GREATER_OR_EQUAL, op1, op2) {
 		}
 
-		void CGreaterOrEqualExpression::accept(visitors::CAbstractVisitor* visitor) {
-			visitor->visit(this);
+		void CGreaterOrEqualExpression::accept(std::shared_ptr<visitors::CAbstractVisitor> visitor) {
+			visitor->visit(shared_from_this());
 		}
 	}
     }

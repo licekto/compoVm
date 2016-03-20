@@ -50,7 +50,7 @@ namespace ast {
 			* Accept method for visitor acceptation.
 			* @param visitor: Pointer to abstract visitor.
 			*/
-			virtual void accept(visitors::CAbstractVisitor *visitor);
+			virtual void accept(std::shared_ptr<visitors::CAbstractVisitor> visitor) = 0;
 
 			/**
 			* visibility type getter

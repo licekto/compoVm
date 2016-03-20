@@ -13,8 +13,8 @@ namespace ast {
 			    CPort(types::portType::UNIVERSAL, name, atomicity, collectivity) {
 		}
 
-		void CUniversalPort::accept(visitors::CAbstractVisitor* visitor) {
-			visitor->visit(this);
+		void CUniversalPort::accept(std::shared_ptr<visitors::CAbstractVisitor> visitor) {
+			visitor->visit(shared_from_this());
 		}
 	}
     }

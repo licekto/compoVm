@@ -13,8 +13,8 @@ namespace ast {
 			    CBinaryExpression(types::operatorType::MINUS, op1, op2) {
 		}
 
-		void CSubtractionExpression::accept(visitors::CAbstractVisitor* visitor) {
-			visitor->visit(this);
+		void CSubtractionExpression::accept(std::shared_ptr<visitors::CAbstractVisitor> visitor) {
+			visitor->visit(shared_from_this());
 		}
 	}
     }

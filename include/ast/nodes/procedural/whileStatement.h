@@ -17,7 +17,7 @@ namespace ast {
 		 * \class CWhileStatement
 		 * \brief Class for while-loop representation
 		 */
-		class CWhileStatement : public CAbstractStatement {
+		class CWhileStatement : public CAbstractStatement, public std::enable_shared_from_this<CWhileStatement> {
 		  private:
 			/**< Condition node */
 			std::shared_ptr<procedural::CAbstractExpression> m_condition;
@@ -38,7 +38,7 @@ namespace ast {
 			            * Accept method for visitor acceptation.
 			            * @param visitor: Pointer to abstract visitor.
 			            */
-			virtual void accept(visitors::CAbstractVisitor *visitor);
+			virtual void accept(std::shared_ptr<visitors::CAbstractVisitor> visitor);
 
 			/**
 			* Body getter

@@ -15,10 +15,6 @@ namespace ast {
 			    m_operand2(op2) {
 		}
 
-		void CBinaryExpression::accept(visitors::CAbstractVisitor* visitor) {
-			visitor->visit(this);
-		}
-
 		types::operatorType CBinaryExpression::getOperator() const {
 			return m_operator;
 		}

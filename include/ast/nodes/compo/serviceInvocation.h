@@ -13,7 +13,7 @@ namespace ast {
 		 * \class CNamedPort
 		 * \brief Class for named port representation.
 		 */
-		class CServiceInvocation : public CNode {
+		class CServiceInvocation : public CNode, public std::enable_shared_from_this<CServiceInvocation> {
 		  protected:
 			/**< Name of component */
 			std::shared_ptr<procedural::CSymbol> m_receiver;
@@ -38,7 +38,7 @@ namespace ast {
 			            * Accept method for visitor acceptation.
 			            * @param visitor: Pointer to abstract visitor.
 			            */
-			virtual void accept(visitors::CAbstractVisitor *visitor);
+			virtual void accept(std::shared_ptr<visitors::CAbstractVisitor> visitor);
 
 			/**
 			 * Signatures getter

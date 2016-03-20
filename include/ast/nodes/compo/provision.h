@@ -13,7 +13,7 @@ namespace ast {
 		 * \class CProvision
 		 * \brief Class for Compo provision node representation.
 		 */
-		class CProvision : public CAbstractReqProv {
+		class CProvision : public CAbstractReqProv, public std::enable_shared_from_this<CProvision> {
 		  public:
 			/**
 			* Parametric constructor with default value
@@ -27,7 +27,7 @@ namespace ast {
 			            * Accept method for visitor acceptation.
 			            * @param visitor: Pointer to abstract visitor.
 			            */
-			virtual void accept(visitors::CAbstractVisitor *visitor);
+			virtual void accept(std::shared_ptr<visitors::CAbstractVisitor> visitor);
 		};
 
 	}

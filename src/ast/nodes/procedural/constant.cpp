@@ -13,8 +13,8 @@ namespace ast {
 			  m_intValue(val) {
 		}
 
-		void CConstant::accept(visitors::CAbstractVisitor* visitor) {
-			visitor->visit(this);
+		void CConstant::accept(std::shared_ptr<visitors::CAbstractVisitor> visitor) {
+			visitor->visit(shared_from_this());
 		}
 
 		i32 CConstant::getValue() const {

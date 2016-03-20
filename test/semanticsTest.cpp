@@ -45,10 +45,10 @@ BOOST_AUTO_TEST_CASE(basic) {
     
     ptr(ast_program) program = parser.getRootNode();
     
-    ast::visitors::CSemanticCheckVisitor visitor;
+    std::shared_ptr<ast::visitors::CSemanticCheckVisitor> visitor = std::make_shared<ast::visitors::CSemanticCheckVisitor>();
 
     try {
-        program->accept(&visitor);
+        program->accept(visitor);
     }
     catch (const exceptions::semantic::CWrongAstNodeTypeException& ex) {
         ex.what();

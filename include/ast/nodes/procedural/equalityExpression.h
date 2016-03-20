@@ -15,7 +15,7 @@ namespace ast {
 		 * \class CEqualityExpression
 		 * \brief Class for equality representation.
 		 */
-		class CEqualityExpression : public CBinaryExpression {
+		class CEqualityExpression : public CBinaryExpression, public std::enable_shared_from_this<CEqualityExpression> {
 		  public:
 			/**
 			* Parametric constructor with default values
@@ -29,7 +29,7 @@ namespace ast {
 			* Accept method for visitor acceptation.
 					* @param visitor: Pointer to abstract visitor.
 					*/
-			virtual void accept(visitors::CAbstractVisitor *visitor);
+			virtual void accept(std::shared_ptr<visitors::CAbstractVisitor> visitor);
 		};
 
 	}

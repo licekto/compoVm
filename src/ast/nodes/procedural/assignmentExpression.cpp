@@ -12,8 +12,8 @@ namespace ast {
 			    m_variable(variable), m_rValue(rVal) {
 		}
 
-		void CAssignmentExpression::accept(visitors::CAbstractVisitor* visitor) {
-			visitor->visit(this);
+		void CAssignmentExpression::accept(std::shared_ptr<visitors::CAbstractVisitor> visitor) {
+			visitor->visit(shared_from_this());
 		}
 
 		std::shared_ptr<ast::nodes::procedural::CSymbol> CAssignmentExpression::getVariable() const {

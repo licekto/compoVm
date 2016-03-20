@@ -12,8 +12,8 @@ namespace ast {
 			    CBind(portIdentification1, portIdentification2) {
 		}
 
-		void CDisconnection::accept(visitors::CAbstractVisitor* visitor) {
-			visitor->visit(this);
+		void CDisconnection::accept(std::shared_ptr<visitors::CAbstractVisitor> visitor) {
+			visitor->visit(shared_from_this());
 		}
 	}
     }

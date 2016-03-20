@@ -16,7 +16,7 @@ namespace ast {
 		         *
 		         * Compound statement contains temporaries (| var1 var2 | syntax) and standard procedural statements. Therefore separate class was made to simplify body handling.
 		 */
-		class CCompoundBody : public CAbstractStatement {
+		class CCompoundBody : public CAbstractStatement, public std::enable_shared_from_this<CCompoundBody> {
 		  private:
 			/**< Temporaries vector */
 			std::vector<std::shared_ptr<procedural::CSymbol>> m_temporaries;
@@ -37,7 +37,7 @@ namespace ast {
                         * Accept method for visitor acceptation.
                         * @param visitor: Pointer to abstract visitor.
                         */
-			virtual void accept(visitors::CAbstractVisitor *visitor);
+			virtual void accept(std::shared_ptr<visitors::CAbstractVisitor> visitor);
 
 			/**
 			* Body size getter

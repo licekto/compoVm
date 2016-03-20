@@ -17,8 +17,8 @@ namespace ast {
 			    m_body(body) {
 		}
 
-		void CForStatement::accept(visitors::CAbstractVisitor* visitor) {
-			visitor->visit(this);
+		void CForStatement::accept(std::shared_ptr<visitors::CAbstractVisitor> visitor) {
+			visitor->visit(shared_from_this());
 		}
 
 		std::shared_ptr<ast::nodes::procedural::CCompoundBody> CForStatement::getBody() const {

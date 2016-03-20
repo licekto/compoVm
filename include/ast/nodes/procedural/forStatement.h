@@ -16,7 +16,7 @@ namespace ast {
 		 * \class CForStatement
 		 * \brief Class for for-loop representation
 		 */
-		class CForStatement : public CAbstractStatement {
+		class CForStatement : public CAbstractStatement, public std::enable_shared_from_this<CForStatement> {
 		  private:
 			/**< Start condition node */
 			std::shared_ptr<procedural::CAssignmentExpression> m_initExpression;
@@ -47,7 +47,7 @@ namespace ast {
 			            * Accept method for visitor acceptation.
 			            * @param visitor: Pointer to abstract visitor.
 			            */
-			virtual void accept(visitors::CAbstractVisitor *visitor);
+			virtual void accept(std::shared_ptr<visitors::CAbstractVisitor> visitor);
 
 			/**
 			* Body getter

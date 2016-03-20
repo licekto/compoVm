@@ -1,5 +1,7 @@
 #pragma once
 
+#include <memory>
+
 namespace ast {
 
     namespace nodes {
@@ -85,61 +87,61 @@ namespace ast {
 		*/
 		class CAbstractVisitor {
 		  public:
-			virtual void visit(ast::nodes::CNode *node) = 0;
-			virtual void visit(ast::nodes::CProgram *node) = 0;
+			virtual void visit(std::shared_ptr<ast::nodes::CNode> node) = 0;
+			virtual void visit(std::shared_ptr<ast::nodes::CProgram> node) = 0;
 
-			virtual void visit(ast::nodes::compo::CAbstractReqProv *node) = 0;
-			virtual void visit(ast::nodes::compo::CAbstractServConstr *node) = 0;
-			virtual void visit(ast::nodes::compo::CArchitecture *node) = 0;
-			virtual void visit(ast::nodes::compo::CBind *node) = 0;
-			virtual void visit(ast::nodes::compo::CCollectionPortLiteral *node) = 0;
-			virtual void visit(ast::nodes::compo::CConnection *node) = 0;
-			virtual void visit(ast::nodes::compo::CConstraint *node) = 0;
-			virtual void visit(ast::nodes::compo::CDelegation *node) = 0;
-			virtual void visit(ast::nodes::compo::CDereferenceLiteral *node) = 0;
-			virtual void visit(ast::nodes::compo::CDescriptor *node) = 0;
-			virtual void visit(ast::nodes::compo::CDisconnection *node) = 0;
-			virtual void visit(ast::nodes::compo::CInjectedPort *node) = 0;
-			virtual void visit(ast::nodes::compo::CInterface *node) = 0;
-			virtual void visit(ast::nodes::compo::CNamedPort *node) = 0;
-			virtual void visit(ast::nodes::compo::CPort *node) = 0;
-			virtual void visit(ast::nodes::compo::CPortAddress *node) = 0;
-			virtual void visit(ast::nodes::compo::CProvision *node) = 0;
-			virtual void visit(ast::nodes::compo::CRequirement *node) = 0;
-			virtual void visit(ast::nodes::compo::CService *node) = 0;
-			virtual void visit(ast::nodes::compo::CServiceInvocation *node) = 0;
-			virtual void visit(ast::nodes::compo::CServiceSignature *node) = 0;
-			virtual void visit(ast::nodes::compo::CSignaturesPort *node) = 0;
-			virtual void visit(ast::nodes::compo::CUniversalPort *node) = 0;
+			virtual void visit(std::shared_ptr<ast::nodes::compo::CAbstractReqProv> node) = 0;
+			virtual void visit(std::shared_ptr<ast::nodes::compo::CAbstractServConstr> node) = 0;
+			virtual void visit(std::shared_ptr<ast::nodes::compo::CArchitecture> node) = 0;
+			virtual void visit(std::shared_ptr<ast::nodes::compo::CBind> node) = 0;
+			virtual void visit(std::shared_ptr<ast::nodes::compo::CCollectionPortLiteral> node) = 0;
+			virtual void visit(std::shared_ptr<ast::nodes::compo::CConnection> node) = 0;
+			virtual void visit(std::shared_ptr<ast::nodes::compo::CConstraint> node) = 0;
+			virtual void visit(std::shared_ptr<ast::nodes::compo::CDelegation> node) = 0;
+			virtual void visit(std::shared_ptr<ast::nodes::compo::CDereferenceLiteral> node) = 0;
+			virtual void visit(std::shared_ptr<ast::nodes::compo::CDescriptor> node) = 0;
+			virtual void visit(std::shared_ptr<ast::nodes::compo::CDisconnection> node) = 0;
+			virtual void visit(std::shared_ptr<ast::nodes::compo::CInjectedPort> node) = 0;
+			virtual void visit(std::shared_ptr<ast::nodes::compo::CInterface> node) = 0;
+			virtual void visit(std::shared_ptr<ast::nodes::compo::CNamedPort> node) = 0;
+			virtual void visit(std::shared_ptr<ast::nodes::compo::CPort> node) = 0;
+			virtual void visit(std::shared_ptr<ast::nodes::compo::CPortAddress> node) = 0;
+			virtual void visit(std::shared_ptr<ast::nodes::compo::CProvision> node) = 0;
+			virtual void visit(std::shared_ptr<ast::nodes::compo::CRequirement> node) = 0;
+			virtual void visit(std::shared_ptr<ast::nodes::compo::CService> node) = 0;
+			virtual void visit(std::shared_ptr<ast::nodes::compo::CServiceInvocation> node) = 0;
+			virtual void visit(std::shared_ptr<ast::nodes::compo::CServiceSignature> node) = 0;
+			virtual void visit(std::shared_ptr<ast::nodes::compo::CSignaturesPort> node) = 0;
+			virtual void visit(std::shared_ptr<ast::nodes::compo::CUniversalPort> node) = 0;
 
-			virtual void visit(ast::nodes::procedural::CAbstractExpression *node) = 0;
-			virtual void visit(ast::nodes::procedural::CAbstractPrimaryExpression *node) = 0;
-			virtual void visit(ast::nodes::procedural::CAbstractStatement *node) = 0;
-			virtual void visit(ast::nodes::procedural::CAdditionExpression *node) = 0;
-			virtual void visit(ast::nodes::procedural::CAssignmentExpression *node) = 0;
-			virtual void visit(ast::nodes::procedural::CBinaryExpression *node) = 0;
-			virtual void visit(ast::nodes::procedural::CBreakStatement *node) = 0;
-			virtual void visit(ast::nodes::procedural::CCompoundBody *node) = 0;
-			virtual void visit(ast::nodes::procedural::CConstant *node) = 0;
-			virtual void visit(ast::nodes::procedural::CContinueStatement *node) = 0;
-			virtual void visit(ast::nodes::procedural::CDivisionExpression *node) = 0;
-			virtual void visit(ast::nodes::procedural::CEqualityExpression *node) = 0;
-			virtual void visit(ast::nodes::procedural::CForStatement *node) = 0;
-			virtual void visit(ast::nodes::procedural::CGreaterExpression *node) = 0;
-			virtual void visit(ast::nodes::procedural::CGreaterOrEqualExpression *node) = 0;
-			virtual void visit(ast::nodes::procedural::CIfStatement *node) = 0;
-			virtual void visit(ast::nodes::procedural::CLessExpression *node) = 0;
-			virtual void visit(ast::nodes::procedural::CLessOrEqualExpression *node) = 0;
-			virtual void visit(ast::nodes::procedural::CLogicalAndExpression *node) = 0;
-			virtual void visit(ast::nodes::procedural::CLogicalOrExpression *node) = 0;
-			virtual void visit(ast::nodes::procedural::CMultiplicationExpression *node) = 0;
-			virtual void visit(ast::nodes::procedural::CNonEqualityExpression *node) = 0;
-			virtual void visit(ast::nodes::procedural::CParens *node) = 0;
-			virtual void visit(ast::nodes::procedural::CReturnStatement *node) = 0;
-			virtual void visit(ast::nodes::procedural::CSubtractionExpression *node) = 0;
-			virtual void visit(ast::nodes::procedural::CStringLiteral *node) = 0;
-			virtual void visit(ast::nodes::procedural::CSymbol *node) = 0;
-			virtual void visit(ast::nodes::procedural::CWhileStatement *node) = 0;
+			virtual void visit(std::shared_ptr<ast::nodes::procedural::CAbstractExpression> node) = 0;
+			virtual void visit(std::shared_ptr<ast::nodes::procedural::CAbstractPrimaryExpression> node) = 0;
+			virtual void visit(std::shared_ptr<ast::nodes::procedural::CAbstractStatement> node) = 0;
+			virtual void visit(std::shared_ptr<ast::nodes::procedural::CAdditionExpression> node) = 0;
+			virtual void visit(std::shared_ptr<ast::nodes::procedural::CAssignmentExpression> node) = 0;
+			virtual void visit(std::shared_ptr<ast::nodes::procedural::CBinaryExpression> node) = 0;
+			virtual void visit(std::shared_ptr<ast::nodes::procedural::CBreakStatement> node) = 0;
+			virtual void visit(std::shared_ptr<ast::nodes::procedural::CCompoundBody> node) = 0;
+			virtual void visit(std::shared_ptr<ast::nodes::procedural::CConstant> node) = 0;
+			virtual void visit(std::shared_ptr<ast::nodes::procedural::CContinueStatement> node) = 0;
+			virtual void visit(std::shared_ptr<ast::nodes::procedural::CDivisionExpression> node) = 0;
+			virtual void visit(std::shared_ptr<ast::nodes::procedural::CEqualityExpression> node) = 0;
+			virtual void visit(std::shared_ptr<ast::nodes::procedural::CForStatement> node) = 0;
+			virtual void visit(std::shared_ptr<ast::nodes::procedural::CGreaterExpression> node) = 0;
+			virtual void visit(std::shared_ptr<ast::nodes::procedural::CGreaterOrEqualExpression> node) = 0;
+			virtual void visit(std::shared_ptr<ast::nodes::procedural::CIfStatement> node) = 0;
+			virtual void visit(std::shared_ptr<ast::nodes::procedural::CLessExpression> node) = 0;
+			virtual void visit(std::shared_ptr<ast::nodes::procedural::CLessOrEqualExpression> node) = 0;
+			virtual void visit(std::shared_ptr<ast::nodes::procedural::CLogicalAndExpression> node) = 0;
+			virtual void visit(std::shared_ptr<ast::nodes::procedural::CLogicalOrExpression> node) = 0;
+			virtual void visit(std::shared_ptr<ast::nodes::procedural::CMultiplicationExpression> node) = 0;
+			virtual void visit(std::shared_ptr<ast::nodes::procedural::CNonEqualityExpression> node) = 0;
+			virtual void visit(std::shared_ptr<ast::nodes::procedural::CParens> node) = 0;
+			virtual void visit(std::shared_ptr<ast::nodes::procedural::CReturnStatement> node) = 0;
+			virtual void visit(std::shared_ptr<ast::nodes::procedural::CSubtractionExpression> node) = 0;
+			virtual void visit(std::shared_ptr<ast::nodes::procedural::CStringLiteral> node) = 0;
+			virtual void visit(std::shared_ptr<ast::nodes::procedural::CSymbol> node) = 0;
+			virtual void visit(std::shared_ptr<ast::nodes::procedural::CWhileStatement> node) = 0;
 		};
 	}
 }

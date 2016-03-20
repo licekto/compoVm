@@ -13,8 +13,8 @@ namespace ast {
 			    m_body(body) {
 		}
 
-		void CCompoundBody::accept(visitors::CAbstractVisitor* visitor) {
-			visitor->visit(this);
+		void CCompoundBody::accept(std::shared_ptr<visitors::CAbstractVisitor> visitor) {
+			visitor->visit(shared_from_this());
 		}
 
 		std::shared_ptr<ast::nodes::CNode> CCompoundBody::getBodyNodeAt(int index) const {
