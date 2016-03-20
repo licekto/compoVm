@@ -11,7 +11,7 @@
 #define yyerror(parser, message) parser->error(message)
 %}
 
-%define api.value.type {std::shared_ptr<ast::CNode>}
+%define api.value.type {std::shared_ptr<ast::nodes::CNode>}
 %define parse.error verbose
 %define parse.lac full
 
@@ -390,7 +390,7 @@ compo_expression
 provision     
                 :   visibility PROVIDES provision_requirement_signature
 		    {
-                        if (parser->getVisibility() == ast::types::visibilityType::EXTERNAL)
+                        if (parser->getVisibility() == ast::nodes::types::visibilityType::EXTERNAL)
                         {
                             parser->setExProvision(new_ptr(ast_provision)(parser->getVisibility(), *parser->getPorts()));
                         }
@@ -405,7 +405,7 @@ provision
 requirement   
                 :   visibility REQUIRES provision_requirement_signature
                     {
-                        if (parser->getVisibility() == ast::types::visibilityType::EXTERNAL)
+                        if (parser->getVisibility() == ast::nodes::types::visibilityType::EXTERNAL)
                         {
                             parser->setExRequirement(new_ptr(ast_requirement)(parser->getVisibility(), *parser->getPorts()));
                         }
@@ -420,15 +420,15 @@ requirement
 visibility
                 :   EXTERNALLY
                     {
-                        parser->setVisibility(ast::types::visibilityType::EXTERNAL);
+                        parser->setVisibility(ast::nodes::types::visibilityType::EXTERNAL);
                     }
                 |   INTERNALLY
                     {
-                        parser->setVisibility(ast::types::visibilityType::INTERNAL);
+                        parser->setVisibility(ast::nodes::types::visibilityType::INTERNAL);
                     }
                 |   empty
                     {
-                        parser->setVisibility(ast::types::visibilityType::EXTERNAL);
+                        parser->setVisibility(ast::nodes::types::visibilityType::EXTERNAL);
                     }
                 ;
 

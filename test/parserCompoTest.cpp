@@ -6,7 +6,7 @@
 #include "parser/parserWrapper.h"
 #include "testDefinitions.h"
 #include "definitions.h"
-#include "ast/program.h"
+#include "ast/nodes/program.h"
 
 BOOST_AUTO_TEST_SUITE(parserCompoTest)
 
@@ -45,22 +45,22 @@ BOOST_AUTO_TEST_CASE(compoBasicStructure) {
     
     // Check provision
     ptr(ast_provision) provision = cast(ast_provision)(descriptor->getExProvision());
-    TEST_PROVISION(provision, ast::types::visibilityType::EXTERNAL, 1);
+    TEST_PROVISION(provision, ast::nodes::types::visibilityType::EXTERNAL, 1);
     BOOST_CHECK_EQUAL("default", provision->getPortAt(0)->getNameSymbol()->getStringValue());
     
     // Check requirement
     ptr(ast_requirement) requirement = cast(ast_requirement)(descriptor->getExRequirement());
-    TEST_REQUIREMENT(requirement, ast::types::visibilityType::EXTERNAL, 1);
+    TEST_REQUIREMENT(requirement, ast::nodes::types::visibilityType::EXTERNAL, 1);
     BOOST_CHECK_EQUAL("default", requirement->getPortAt(0)->getNameSymbol()->getStringValue());
     
     // Check provision
     provision = cast(ast_provision)(descriptor->getInProvision());
-    TEST_PROVISION(provision, ast::types::visibilityType::INTERNAL, 1);
+    TEST_PROVISION(provision, ast::nodes::types::visibilityType::INTERNAL, 1);
     BOOST_CHECK_EQUAL("default", provision->getPortAt(0)->getNameSymbol()->getStringValue());
     
     // Check requirement
     requirement = cast(ast_requirement)(descriptor->getInRequirement());
-    TEST_REQUIREMENT(requirement, ast::types::visibilityType::INTERNAL, 1);
+    TEST_REQUIREMENT(requirement, ast::nodes::types::visibilityType::INTERNAL, 1);
     BOOST_CHECK_EQUAL("default", requirement->getPortAt(0)->getNameSymbol()->getStringValue());
     
     // Check service
@@ -73,7 +73,7 @@ BOOST_AUTO_TEST_CASE(compoBasicStructure) {
     
     // Check architecture
     ptr(ast_architecture) architecture = cast(ast_architecture)(descriptor->getArchitecture());
-    BOOST_CHECK_EQUAL(ast::types::nodeType::ARCHITECTURE, architecture->getNodeType());
+    BOOST_CHECK_EQUAL(ast::nodes::types::nodeType::ARCHITECTURE, architecture->getNodeType());
     
     // Clear AST for next test
     parser.clearRootNodes();
@@ -153,7 +153,7 @@ BOOST_AUTO_TEST_CASE(compoServiceBody) {
     
     // Check assignment
     ptr(ast_assignment) assignment = cast(ast_assignment)(service->getBodyNodeAt(0));
-    BOOST_CHECK_EQUAL(ast::types::nodeType::ASSIGNMENT_EXPRESSION, assignment->getNodeType());
+    BOOST_CHECK_EQUAL(ast::nodes::types::nodeType::ASSIGNMENT_EXPRESSION, assignment->getNodeType());
     
     // Check symbol
     symbol = cast(ast_symbol)(assignment->getVariable());
@@ -225,7 +225,7 @@ BOOST_AUTO_TEST_CASE(compoProvision) {
     
     // Check provision
     ptr(ast_provision) provision = cast(ast_provision)(descriptor->getExProvision()); 
-    TEST_PROVISION(provision, ast::types::visibilityType::EXTERNAL, 6);
+    TEST_PROVISION(provision, ast::nodes::types::visibilityType::EXTERNAL, 6);
     
     // Check port
     ptr(ast_signaturesport) signPort = cast(ast_signaturesport)(provision->getPortAt(0));
@@ -396,14 +396,14 @@ BOOST_AUTO_TEST_CASE(compoServiceCall) {
     BOOST_CHECK_EQUAL("getName", cast(ast_symbol)(serviceInvocation->getSelectorName())->getStringValue());
     
     signature = cast(ast_servicesignature)(serviceInvocation->getParameters());
-    BOOST_CHECK_EQUAL(ast::types::nodeType::SERVICE_SIGNATURE, signature->getNodeType());
+    BOOST_CHECK_EQUAL(ast::nodes::types::nodeType::SERVICE_SIGNATURE, signature->getNodeType());
     BOOST_CHECK_EQUAL("getName", signature->getNameSymbol()->getStringValue());
     
     BOOST_CHECK_EQUAL("a", cast(ast_string)(signature->getParamAt(0))->getValue());
     BOOST_CHECK_EQUAL(1, cast(ast_constant)(signature->getParamAt(1))->getValue());
     BOOST_CHECK_EQUAL("var", cast(ast_symbol)(signature->getParamAt(2))->getStringValue());
     
-    BOOST_CHECK_EQUAL(ast::types::nodeType::SERVICE_INVOCATION, cast(ast::CNode)(signature->getParamAt(3))->getNodeType());
+    BOOST_CHECK_EQUAL(ast::nodes::types::nodeType::SERVICE_INVOCATION, cast(ast::nodes::CNode)(signature->getParamAt(3))->getNodeType());
     serviceInvocation = cast(ast_serviceinvocation)(signature->getParamAt(3));
     BOOST_CHECK_EQUAL("handler", cast(ast_symbol)(serviceInvocation->getReceiverName())->getStringValue());
     BOOST_CHECK_EQUAL("getPtr", cast(ast_symbol)(serviceInvocation->getSelectorName())->getStringValue());

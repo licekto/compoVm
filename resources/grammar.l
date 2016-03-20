@@ -10,10 +10,8 @@
 #include <cstdlib>
 #include "parser/parserWrapper.h"
 #include "generated/parser.h"
-#include "ast/node.h"
-#include "ast/procedural/symbol.h"
-#include "ast/procedural/constant.h"
-#include "ast/procedural/stringLiteral.h"
+
+#include "definitions.h"
 
 std::string buffer;
 %}
@@ -41,7 +39,7 @@ Identifier                  [a-zA-Z][a-zA-Z_0-9]*
 <STRING>\\.?                            {buffer.append(yytext+1);} // skip backslash
 
 <STRING>\'                              {
-                                            yylval = std::make_shared<ast::procedural::CStringLiteral>(buffer);
+                                            yylval = new_ptr(ast_string)(buffer);
                                             BEGIN(INITIAL);
                                             buffer.clear();
                                             return STRING_LITERAL;
@@ -152,12 +150,12 @@ Identifier                  [a-zA-Z][a-zA-Z_0-9]*
 <INITIAL>"||"                           {return OR_OP;}
 
 <INITIAL>{Identifier}                   {
-                                            yylval = std::make_shared<ast::procedural::CSymbol>(std::string(yytext, yyleng));
+                                            yylval = new_ptr(ast_symbol)(std::string(yytext, yyleng));
                                             return IDENTIFIER;
                                         }
 
 <INITIAL>{IntegerLiteral}               {
-                                            yylval = std::make_shared<ast::procedural::CConstant>(atoll(yytext));
+                                            yylval = new_ptr(ast_constant)(atoll(yytext));
                                             return CONSTANT;
                                         }
 

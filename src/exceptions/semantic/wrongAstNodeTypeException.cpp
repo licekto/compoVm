@@ -13,9 +13,9 @@ namespace exceptions {
 
 		const char* CWrongAstNodeTypeException::what() const throw() {
 			std::string msg = "Wrong type of AST node. Actual: '";
-			msg += ast::types::typeName(m_expected);
+			msg += ast::nodes::types::typeName(m_expected);
 			msg += "', expected: '";
-			msg += ast::types::typeName(m_actual);
+			msg += ast::nodes::types::typeName(m_actual);
 			msg += "'.";
 
 			return msg.c_str();
