@@ -50,7 +50,7 @@ BOOST_AUTO_TEST_CASE(basic) {
     try {
         program->accept(&visitor);
     }
-    catch (exceptions::semantic::CAbstractSemanticException ex) {
+    catch (const exceptions::semantic::CWrongAstNodeTypeException& ex) {
         ex.what();
     }
     

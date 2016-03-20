@@ -10,6 +10,7 @@
 #include "provision.h"
 #include "requirement.h"
 #include "architecture.h"
+#include "ast/compo/abstractDescriptorInterface.h"
 
 namespace ast {
 
@@ -19,14 +20,8 @@ namespace ast {
 		 * \class CDescriptor
 		 * \brief Class for Compo descriptor representation.
 		 */
-		class CDescriptor : public CNode {
+		class CDescriptor : public CAbstractDescriptorInterface {
 		  private:
-			/**< Descriptor name */
-			std::shared_ptr<ast::procedural::CSymbol> m_name;
-
-			/**< Inheritance information */
-			std::shared_ptr<ast::procedural::CSymbol> m_extends;
-
 			std::shared_ptr<ast::compo::CProvision> m_interalProvision;
 
 			std::shared_ptr<ast::compo::CProvision> m_exteralProvision;
@@ -67,18 +62,6 @@ namespace ast {
 			* @param visitor: Pointer to abstract visitor.
 			*/
 			virtual void accept(ast::visitors::CAbstractVisitor *visitor);
-
-			/**
-			* Name getter
-			* @return name symbol
-			*/
-			std::shared_ptr<ast::procedural::CSymbol> getNameSymbol() const;
-
-			/**
-			* Extends getter
-			* @return name of parent class symbol
-			*/
-			std::shared_ptr<ast::procedural::CSymbol> getExtendsSymbol() const;
 
 			/**
 			 * Body vector size getter

@@ -32,15 +32,15 @@ namespace ast {
 			              const std::vector<std::shared_ptr<ast::CNode>>& body = std::vector<std::shared_ptr<ast::CNode>>(0));
 
 			/**
-			            * Accept method for visitor acceptation.
-			            * @param visitor: Pointer to abstract visitor.
-			            */
+                        * Accept method for visitor acceptation.
+                        * @param visitor: Pointer to abstract visitor.
+                        */
 			virtual void accept(ast::visitors::CAbstractVisitor *visitor);
 
 			/**
 			* Body size getter
-			                     * @return size of body vector
-			                     */
+                        * @return size of body vector
+                        */
 			size_t getBodySize() const;
 
 			/**
@@ -57,8 +57,8 @@ namespace ast {
 
 			/**
 			* Temporaries size getter
-			                     * @return size of temporaries vector
-			                     */
+                        * @return size of temporaries vector
+                        */
 			size_t getTemporariesSize() const;
 
 			/**
@@ -69,8 +69,8 @@ namespace ast {
 
 			/**
 			* Body getter
-			            * @return Constant pointer to body vector
-			            */
+                        * @return Constant pointer to body vector
+                        */
 			std::shared_ptr<ast::procedural::CSymbol> getTemporaryAt(int index) const;
 		};
 

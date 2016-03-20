@@ -1,15 +1,20 @@
 #include "ast/visitor/semanticCheckVisitor.h"
+#include "exceptions/semantic/emptyProgramException.h"
 
 namespace ast {
 
 	namespace visitors {
 
+                void CSemanticCheckVisitor::checkDescriptorArchitecture(ast::compo::CDescriptor *node) {
+                    
+                }
+            
 		void CSemanticCheckVisitor::checkNodeType(ast::CNode *node, ast_type type) {
 			if (!IS_TYPE(node, type)) {
-				throw exceptions::semantic::CAbstractSemanticException(type, node->getNodeType());
+				throw exceptions::semantic::CWrongAstNodeTypeException(type, node->getNodeType());
 			}
 		}
-
+                
 		/*---------------------- abstract nodes --------------------------*/
 		void CSemanticCheckVisitor::visit(ast::CNode *node) {
 			checkNodeType(node, ast_type::CONSTRAINT);
@@ -26,7 +31,6 @@ namespace ast {
 		void CSemanticCheckVisitor::visit(ast::compo::CPort *node) {
 			checkNodeType(node, ast_type::CONSTRAINT);
 		}
-
 		void CSemanticCheckVisitor::visit(ast::procedural::CAbstractExpression *node) {
 			checkNodeType(node, ast_type::CONSTRAINT);
 		}
@@ -44,6 +48,10 @@ namespace ast {
 		void CSemanticCheckVisitor::visit(ast::CProgram *node) {
 			checkNodeType(node, ast_type::PROGRAM);
 
+                        if (node->getNodesSize() == 0) {
+                            //throw exceptions::semantic::CEmptyProgramException;
+                        }
+                        
 			for (size_t i = 0; i < node->getNodesSize(); ++i) {
 				node->getNodeAt(i)->accept(this);
 			}
@@ -100,8 +108,6 @@ namespace ast {
 			node->getParamName()->accept(this);
 		}
 
-
-
 		void CSemanticCheckVisitor::visit(ast::compo::CDescriptor *node) {
 			checkNodeType(node, ast_type::DESCRIPTOR);
 
@@ -120,6 +126,8 @@ namespace ast {
 			for (size_t i = 0; i < node->getConstraintsSize(); ++i) {
 				node->getConstraintAt(i)->accept(this);
 			}
+                        
+                        checkDescriptorArchitecture(node);
 		}
 
 		void CSemanticCheckVisitor::visit(ast::compo::CDisconnection *node) {
@@ -142,8 +150,8 @@ namespace ast {
 		void CSemanticCheckVisitor::visit(ast::compo::CInterface *node) {
 			checkNodeType(node, ast_type::INTERFACE);
 
-			node->getExtends()->accept(this);
-			node->getName()->accept(this);
+			node->getExtendsSymbol()->accept(this);
+			node->getNameSymbol()->accept(this);
 
 			for (size_t i = 0; i < node->getSignaturesSize(); ++i) {
 				node->getSignatureAt(i)->accept(this);

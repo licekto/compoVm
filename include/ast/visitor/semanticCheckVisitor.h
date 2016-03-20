@@ -18,7 +18,7 @@ namespace ast {
 		class CSemanticCheckVisitor : public CAbstractVisitor {
 		  private:
 
-			void checkDescriptor();
+			void checkDescriptorArchitecture(ast::compo::CDescriptor *node);
 
 			void checkNodeType(ast::CNode *node, ast_type type);
 		  public:

@@ -8,21 +8,12 @@ namespace ast {
 		                       std::shared_ptr<ast::procedural::CSymbol> extends,
 		                       std::vector<std::shared_ptr<ast::compo::CServiceSignature>> list)
 			:   CNode(types::nodeType::INTERFACE),
-			    m_name(name),
-			    m_extends(extends),
+			    CAbstractDescriptorInterface(name, extends),
 			    m_signaturesList(list) {
 		}
 
 		void CInterface::accept(ast::visitors::CAbstractVisitor* visitor) {
 			visitor->visit(this);
-		}
-
-		std::shared_ptr<ast::procedural::CSymbol> CInterface::getName() const {
-			return m_name;
-		}
-
-		std::shared_ptr<ast::procedural::CSymbol> CInterface::getExtends() const {
-			return m_extends;
 		}
 
 		size_t CInterface::getSignaturesSize() const {

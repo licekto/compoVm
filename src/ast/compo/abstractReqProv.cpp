@@ -6,8 +6,7 @@ namespace ast {
 
 		CAbstractReqProv::CAbstractReqProv(types::visibilityType type,
 		                                   const std::vector<std::shared_ptr<ast::compo::CPort>>& ports)
-			: CNode(types::nodeType::PROVISION),
-			  m_visibilityType(type),
+			: m_visibilityType(type),
 			  m_ports(ports) {
 		}
 

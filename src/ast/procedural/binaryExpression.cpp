@@ -7,8 +7,7 @@ namespace ast {
 		CBinaryExpression::CBinaryExpression(types::operatorType type,
 		                                     std::shared_ptr<ast::procedural::CAbstractExpression> op1,
 		                                     std::shared_ptr<ast::procedural::CAbstractExpression> op2)
-			:   CNode(types::nodeType::ASSIGNMENT_EXPRESSION),
-			    CAbstractExpression(),
+			:   CAbstractExpression(),
 			    m_operator(type),
 			    m_operand1(op1),
 			    m_operand2(op2) {

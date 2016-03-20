@@ -4,6 +4,7 @@
 #include "ast/node.h"
 #include "ast/compo/serviceSignature.h"
 #include "ast/procedural/symbol.h"
+#include "ast/compo/abstractDescriptorInterface.h"
 
 namespace ast {
 
@@ -13,13 +14,8 @@ namespace ast {
 		 * \class CSignaturesPort
 		 * \brief Class for port with signatures list.
 		 */
-		class CInterface : public CNode {
+		class CInterface : public CAbstractDescriptorInterface {
 		  private:
-			/**< Name of interface */
-			std::shared_ptr<ast::procedural::CSymbol> m_name;
-
-			/**< Name of base interface */
-			std::shared_ptr<ast::procedural::CSymbol> m_extends;
 
 			/**< List of signatures */
 			std::vector<std::shared_ptr<ast::compo::CServiceSignature>> m_signaturesList;
@@ -39,18 +35,6 @@ namespace ast {
 			            * @param visitor: Pointer to abstract visitor.
 			            */
 			virtual void accept(ast::visitors::CAbstractVisitor *visitor);
-
-			/**
-			* Interface name getter
-					 * @return name symbol.
-					 */
-			std::shared_ptr<ast::procedural::CSymbol> getName() const;
-
-			/**
-			* Base interface name getter
-					 * @return name symbol.
-					 */
-			std::shared_ptr<ast::procedural::CSymbol> getExtends() const;
 
 			/**
 			 * Signatures size getter

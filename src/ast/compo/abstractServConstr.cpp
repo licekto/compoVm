@@ -6,8 +6,7 @@ namespace ast {
 
 		CAbstractServConstr::CAbstractServConstr(std::shared_ptr<ast::compo::CServiceSignature> signature,
 		        std::shared_ptr<ast::procedural::CCompoundBody> body)
-			: CNode(types::nodeType::SERVICE),
-			  m_signature(signature),
+			: m_signature(signature),
 			  m_body(body) {
 		}
 

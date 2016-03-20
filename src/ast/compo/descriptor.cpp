@@ -14,8 +14,7 @@ namespace ast {
 		                         const std::vector<std::shared_ptr<ast::compo::CService>>& services,
 		                         const std::vector<std::shared_ptr<ast::compo::CConstraint>>& constraints)
 			: CNode(types::nodeType::DESCRIPTOR),
-			  m_name(name),
-			  m_extends(extends),
+                          CAbstractDescriptorInterface(name, extends),
 			  m_interalProvision(inProv),
 			  m_exteralProvision(exProv),
 			  m_interalRequirement(inReq),
@@ -30,14 +29,6 @@ namespace ast {
 
 		void CDescriptor::accept(ast::visitors::CAbstractVisitor* visitor) {
 			visitor->visit(this);
-		}
-
-		std::shared_ptr<ast::procedural::CSymbol> CDescriptor::getNameSymbol() const {
-			return m_name;
-		}
-
-		std::shared_ptr<ast::procedural::CSymbol> CDescriptor::getExtendsSymbol() const {
-			return m_extends;
 		}
 
 		size_t CDescriptor::getServicesSize() const {

@@ -26,8 +26,8 @@ do { \
 #define TEST_INTERFACE(interface, name, extends, signaturesListSize) \
 do { \
     BOOST_CHECK_EQUAL(ast::types::nodeType::INTERFACE, interface->getNodeType()); \
-    BOOST_CHECK_EQUAL(name, interface->getName()->getStringValue()); \
-    BOOST_CHECK_EQUAL(extends, interface->getExtends()->getStringValue()); \
+    BOOST_CHECK_EQUAL(name, interface->getNameSymbol()->getStringValue()); \
+    BOOST_CHECK_EQUAL(extends, interface->getExtendsSymbol()->getStringValue()); \
     BOOST_CHECK_EQUAL(signaturesListSize, interface->getSignaturesSize()); \
 } while(0)
 
