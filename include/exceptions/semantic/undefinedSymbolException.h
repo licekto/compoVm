@@ -10,10 +10,10 @@ namespace exceptions {
 
 		class CUndefinedSymbolException : public CAbstractUndefinedException {
 		  public:
-                        
-                        CUndefinedSymbolException(std::string name);
-			
-                        virtual const char* what() const throw();
+
+			CUndefinedSymbolException(std::string name);
+
+			virtual const char* what() const throw();
 		};
 
 	}

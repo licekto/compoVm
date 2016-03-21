@@ -5,42 +5,42 @@
 #include "ast/visitor/abstractVisitor.h"
 
 namespace ast {
-    
-    namespace nodes {
 
-	namespace procedural {
+	namespace nodes {
 
-		/**
-		 * \class CSymbol
-		 * \brief Class for Compo symbol node representation.
-		 */
-		class CSymbol : public CAbstractPrimaryExpression, public std::enable_shared_from_this<CSymbol> {
-		  private:
-			/**< Name of symbol */
-			std::string m_name;
-
-		  public:
-			/**
-			* Parametric constructor with default value
-			* @param name: string name
-			*/
-			CSymbol(const std::string& name);
+		namespace procedural {
 
 			/**
-			            * Accept method for visitor acceptation.
-			            * @param visitor: Pointer to abstract visitor.
-			            */
-			virtual void accept(std::shared_ptr<visitors::CAbstractVisitor>visitor);
+			 * \class CSymbol
+			 * \brief Class for Compo symbol node representation.
+			 */
+			class CSymbol : public CAbstractPrimaryExpression, public std::enable_shared_from_this<CSymbol> {
+			  private:
+				/**< Name of symbol */
+				std::string m_name;
 
-			/**
-			* StringValue getter
-			* @return name string object
-			*/
-			std::string getStringValue() const;
-		};
+			  public:
+				/**
+				* Parametric constructor with default value
+				* @param name: string name
+				*/
+				CSymbol(const std::string& name);
+
+				/**
+				            * Accept method for visitor acceptation.
+				            * @param visitor: Pointer to abstract visitor.
+				            */
+				virtual void accept(std::shared_ptr<visitors::CAbstractVisitor>visitor);
+
+				/**
+				* StringValue getter
+				* @return name string object
+				*/
+				std::string getStringValue() const;
+			};
+
+		}
 
 	}
-        
-    }
 
 }

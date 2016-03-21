@@ -2,41 +2,41 @@
 
 namespace ast {
 
-    namespace nodes {
-    
-	namespace compo {
+	namespace nodes {
 
-		CPort::CPort(ast::nodes::types::portType type, std::shared_ptr<ast::nodes::procedural::CSymbol> name, bool atomicity, bool collectivity)
-			:   CNode(types::nodeType::PORT),
-			    m_portType(type),
-			    m_name(name),
-			    m_atomicity(atomicity),
-			    m_collectivity(collectivity) {
-		}
+		namespace compo {
 
-		std::shared_ptr<ast::nodes::procedural::CSymbol> CPort::getNameSymbol() const {
-			return m_name;
-		}
+			CPort::CPort(ast::nodes::types::portType type, std::shared_ptr<ast::nodes::procedural::CSymbol> name, bool atomicity, bool collectivity)
+				:   CNode(types::nodeType::PORT),
+				    m_portType(type),
+				    m_name(name),
+				    m_atomicity(atomicity),
+				    m_collectivity(collectivity) {
+			}
 
-		bool CPort::getAtomicity() const {
-			return m_atomicity;
-		}
+			std::shared_ptr<ast::nodes::procedural::CSymbol> CPort::getNameSymbol() const {
+				return m_name;
+			}
 
-		ast::nodes::types::portType CPort::getPortType() const {
-			return m_portType;
-		}
+			bool CPort::getAtomicity() const {
+				return m_atomicity;
+			}
 
-		void CPort::setKindOf(std::shared_ptr<ast::nodes::procedural::CSymbol> kindOf) {
-			m_kindOf = kindOf;
-		}
+			ast::nodes::types::portType CPort::getPortType() const {
+				return m_portType;
+			}
 
-		std::shared_ptr<ast::nodes::procedural::CSymbol> CPort::getKindOf() const {
-			return m_kindOf;
-		}
+			void CPort::setKindOf(std::shared_ptr<ast::nodes::procedural::CSymbol> kindOf) {
+				m_kindOf = kindOf;
+			}
 
-		bool CPort::getCollectivity() const {
-			return m_collectivity;
+			std::shared_ptr<ast::nodes::procedural::CSymbol> CPort::getKindOf() const {
+				return m_kindOf;
+			}
+
+			bool CPort::getCollectivity() const {
+				return m_collectivity;
+			}
 		}
 	}
-    }
 }

@@ -2,17 +2,17 @@
 
 namespace ast {
 
-    namespace nodes {
-    
-	namespace procedural {
+	namespace nodes {
 
-		CBreakStatement::CBreakStatement()
-			:   CNode(types::nodeType::BREAK) {
-		}
+		namespace procedural {
 
-		void CBreakStatement::accept(std::shared_ptr<visitors::CAbstractVisitor> visitor) {
-			visitor->visit(shared_from_this());
+			CBreakStatement::CBreakStatement()
+				:   CNode(types::nodeType::BREAK) {
+			}
+
+			void CBreakStatement::accept(std::shared_ptr<visitors::CAbstractVisitor> visitor) {
+				visitor->visit(shared_from_this());
+			}
 		}
 	}
-    }
 }

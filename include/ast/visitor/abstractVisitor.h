@@ -4,70 +4,70 @@
 
 namespace ast {
 
-    namespace nodes {
-    
-	// Forward declaration
-	class CNode;
-	class CProgram;
+	namespace nodes {
 
-	namespace compo {
-		class CAbstractReqProv;
-		class CAbstractServConstr;
-		class CArchitecture;
-		class CBind;
-		class CCollectionPortLiteral;
-		class CConnection;
-		class CConstraint;
-		class CDelegation;
-		class CDereferenceLiteral;
-		class CDescriptor;
-		class CDisconnection;
-		class CInjectedPort;
-		class CInterface;
-		class CNamedPort;
-		class CPort;
-		class CPortAddress;
-		class CProvision;
-		class CRequirement;
-		class CService;
-		class CServiceInvocation;
-		class CServiceSignature;
-		class CSignaturesPort;
-		class CUniversalPort;
-	}
+		// Forward declaration
+		class CNode;
+		class CProgram;
 
-	namespace procedural {
-		class CAbstractExpression;
-		class CAbstractPrimaryExpression;
-		class CAbstractStatement;
-		class CAdditionExpression;
-		class CAssignmentExpression;
-		class CBinaryExpression;
-		class CBreakStatement;
-		class CCompoundBody;
-		class CConstant;
-		class CContinueStatement;
-		class CDivisionExpression;
-		class CEqualityExpression;
-		class CForStatement;
-		class CGreaterExpression;
-		class CGreaterOrEqualExpression;
-		class CIfStatement;
-		class CLessExpression;
-		class CLessOrEqualExpression;
-		class CLogicalAndExpression;
-		class CLogicalOrExpression;
-		class CMultiplicationExpression;
-		class CNonEqualityExpression;
-		class CParens;
-		class CReturnStatement;
-		class CSubtractionExpression;
-		class CStringLiteral;
-		class CSymbol;
-		class CWhileStatement;
+		namespace compo {
+			class CAbstractReqProv;
+			class CAbstractServConstr;
+			class CArchitecture;
+			class CBind;
+			class CCollectionPortLiteral;
+			class CConnection;
+			class CConstraint;
+			class CDelegation;
+			class CDereferenceLiteral;
+			class CDescriptor;
+			class CDisconnection;
+			class CInjectedPort;
+			class CInterface;
+			class CNamedPort;
+			class CPort;
+			class CPortAddress;
+			class CProvision;
+			class CRequirement;
+			class CService;
+			class CServiceInvocation;
+			class CServiceSignature;
+			class CSignaturesPort;
+			class CUniversalPort;
+		}
+
+		namespace procedural {
+			class CAbstractExpression;
+			class CAbstractPrimaryExpression;
+			class CAbstractStatement;
+			class CAdditionExpression;
+			class CAssignmentExpression;
+			class CBinaryExpression;
+			class CBreakStatement;
+			class CCompoundBody;
+			class CConstant;
+			class CContinueStatement;
+			class CDivisionExpression;
+			class CEqualityExpression;
+			class CForStatement;
+			class CGreaterExpression;
+			class CGreaterOrEqualExpression;
+			class CIfStatement;
+			class CLessExpression;
+			class CLessOrEqualExpression;
+			class CLogicalAndExpression;
+			class CLogicalOrExpression;
+			class CMultiplicationExpression;
+			class CNonEqualityExpression;
+			class CParens;
+			class CReturnStatement;
+			class CSubtractionExpression;
+			class CStringLiteral;
+			class CSymbol;
+			class CWhileStatement;
+		}
+
 	}
-        
-    }
 
 	/**
 	*  \addtogroup visitors

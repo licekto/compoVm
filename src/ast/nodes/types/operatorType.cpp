@@ -2,21 +2,21 @@
 
 namespace ast {
 
-    namespace nodes {
-    
-	namespace types {
+	namespace nodes {
 
-		std::map<operatorType, char> operatorNames = {
-			{operatorType::PLUS, '+'},
-			{operatorType::MINUS, '-'},
-			{operatorType::TIMES, '*'},
-			{operatorType::DIVISION, '/'},
-		};
+		namespace types {
 
-		char operatorName(operatorType type) {
-			return operatorNames[type];
+			std::map<operatorType, char> operatorNames = {
+				{operatorType::PLUS, '+'},
+				{operatorType::MINUS, '-'},
+				{operatorType::TIMES, '*'},
+				{operatorType::DIVISION, '/'},
+			};
+
+			char operatorName(operatorType type) {
+				return operatorNames[type];
+			}
+
 		}
-
 	}
-    }
 }

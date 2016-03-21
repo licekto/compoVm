@@ -10,10 +10,10 @@ namespace exceptions {
 
 		class CUndefinedDescriptorException : public CAbstractUndefinedException {
 		  public:
-                        
-                        CUndefinedDescriptorException(std::string name);
-			
-                        virtual const char* what() const throw();
+
+			CUndefinedDescriptorException(std::string name);
+
+			virtual const char* what() const throw();
 		};
 
 	}

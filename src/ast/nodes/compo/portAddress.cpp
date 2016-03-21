@@ -2,27 +2,27 @@
 
 namespace ast {
 
-    namespace nodes {
-    
-	namespace compo {
+	namespace nodes {
 
-		CPortAddress::CPortAddress(std::shared_ptr<ast::nodes::procedural::CSymbol> portName,
-		                           std::shared_ptr<ast::nodes::CNode> component)
-			:   CNode(types::nodeType::PORT_ADDRESS),
-			    m_portName(portName), m_component(component) {
-		}
+		namespace compo {
 
-		void CPortAddress::accept(std::shared_ptr<visitors::CAbstractVisitor> visitor) {
-			visitor->visit(shared_from_this());
-		}
+			CPortAddress::CPortAddress(std::shared_ptr<ast::nodes::procedural::CSymbol> portName,
+			                           std::shared_ptr<ast::nodes::CNode> component)
+				:   CNode(types::nodeType::PORT_ADDRESS),
+				    m_portName(portName), m_component(component) {
+			}
 
-		std::shared_ptr<ast::nodes::procedural::CSymbol> CPortAddress::getPortName() const {
-			return m_portName;
-		}
+			void CPortAddress::accept(std::shared_ptr<visitors::CAbstractVisitor> visitor) {
+				visitor->visit(shared_from_this());
+			}
 
-		std::shared_ptr<ast::nodes::CNode> CPortAddress::getComponent() const {
-			return m_component;
+			std::shared_ptr<ast::nodes::procedural::CSymbol> CPortAddress::getPortName() const {
+				return m_portName;
+			}
+
+			std::shared_ptr<ast::nodes::CNode> CPortAddress::getComponent() const {
+				return m_component;
+			}
 		}
 	}
-    }
 }

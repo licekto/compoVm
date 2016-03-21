@@ -4,7 +4,7 @@ namespace exceptions {
 
 	namespace semantic {
 		const char* CEmptyProgramException::what() const throw() {
-                    return "Empty program exception!";
+			return "Empty program exception!";
 		}
 	}
 

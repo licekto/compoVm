@@ -3,16 +3,13 @@
 namespace exceptions {
 
 	namespace semantic {
-            
-                CUndefinedSymbolException::CUndefinedSymbolException(std::string name)
-                        : CAbstractUndefinedException(name) {
-                }
-            
-		const char* CUndefinedSymbolException::what() const throw() {
-                        std::string msg = "Symbol ";
-			msg += getPartialMessage();
 
-			return msg.c_str();
+		CUndefinedSymbolException::CUndefinedSymbolException(std::string name)
+			: CAbstractUndefinedException(name, "Symbol") {
+		}
+
+		const char* CUndefinedSymbolException::what() const throw() {
+			return m_msg.c_str();
 		}
 	}
 

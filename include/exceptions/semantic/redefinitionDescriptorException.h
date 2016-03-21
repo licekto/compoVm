@@ -10,10 +10,10 @@ namespace exceptions {
 
 		class CRedefinitionDescriptorException : public CAbstractRedefinitionException {
 		  public:
-                        
-                        CRedefinitionDescriptorException(std::string name);
-			
-                        virtual const char* what() const throw();
+
+			CRedefinitionDescriptorException(std::string name);
+
+			virtual const char* what() const throw();
 		};
 
 	}

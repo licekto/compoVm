@@ -2,20 +2,20 @@
 
 namespace ast {
 
-    namespace nodes {
-    
-	namespace procedural {
+	namespace nodes {
 
-		CEqualityExpression::CEqualityExpression( std::shared_ptr<ast::nodes::procedural::CAbstractExpression> op1,
-		        std::shared_ptr<ast::nodes::procedural::CAbstractExpression> op2)
-			:   CNode(types::nodeType::EQUALITY_EXPRESSION),
-			    CAbstractExpression(),
-			    CBinaryExpression(types::operatorType::EQUALITY, op1, op2) {
-		}
+		namespace procedural {
 
-		void CEqualityExpression::accept(std::shared_ptr<visitors::CAbstractVisitor> visitor) {
-			visitor->visit(shared_from_this());
+			CEqualityExpression::CEqualityExpression( std::shared_ptr<ast::nodes::procedural::CAbstractExpression> op1,
+			        std::shared_ptr<ast::nodes::procedural::CAbstractExpression> op2)
+				:   CNode(types::nodeType::EQUALITY_EXPRESSION),
+				    CAbstractExpression(),
+				    CBinaryExpression(types::operatorType::EQUALITY, op1, op2) {
+			}
+
+			void CEqualityExpression::accept(std::shared_ptr<visitors::CAbstractVisitor> visitor) {
+				visitor->visit(shared_from_this());
+			}
 		}
 	}
-    }
 }

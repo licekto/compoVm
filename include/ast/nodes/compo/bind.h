@@ -7,54 +7,54 @@
 
 namespace ast {
 
-    namespace nodes {
-        
-	namespace compo {
+	namespace nodes {
 
-		/**
-		 * \class CInjectedPort
-		 * \brief Class for Compo injected port representation
-		 */
-		class CBind : public virtual CNode {
-		  protected:
-			/**< Name symbol of port 1 */
-			std::shared_ptr<compo::CPortAddress> m_portIdentification1;
-
-			/**< Name symbol of port 2 */
-			std::shared_ptr<compo::CPortAddress> m_portIdentification2;
+		namespace compo {
 
 			/**
-			* Parametric constructor with default values
-			* @param name: name of port
-			* @param atomic: is atomic
-			* @param injectedWith: name of injected port
-			*/
-			CBind(std::shared_ptr<compo::CPortAddress> portIdentification1 = nullptr,
-			      std::shared_ptr<compo::CPortAddress> portIdentification2 = nullptr);
-
-		  public:
-
-			/**
-			* Accept method for visitor acceptation.
-			* @param visitor: Pointer to abstract visitor.
-			*/
-			virtual void accept(std::shared_ptr<visitors::CAbstractVisitor> visitor) = 0;
-
-			/**
-			 * Port name getter
-			 * @return name symbol of port identification.
+			 * \class CInjectedPort
+			 * \brief Class for Compo injected port representation
 			 */
-			std::shared_ptr<compo::CPortAddress> getPortIdentification1() const;
+			class CBind : public virtual CNode {
+			  protected:
+				/**< Name symbol of port 1 */
+				std::shared_ptr<compo::CPortAddress> m_portIdentification1;
 
-			/**
-			* Port name getter
-			            * @return name symbol of port identification.
-			            */
-			std::shared_ptr<compo::CPortAddress> getPortIdentification2() const;
-		};
+				/**< Name symbol of port 2 */
+				std::shared_ptr<compo::CPortAddress> m_portIdentification2;
+
+				/**
+				* Parametric constructor with default values
+				* @param name: name of port
+				* @param atomic: is atomic
+				* @param injectedWith: name of injected port
+				*/
+				CBind(std::shared_ptr<compo::CPortAddress> portIdentification1 = nullptr,
+				      std::shared_ptr<compo::CPortAddress> portIdentification2 = nullptr);
+
+			  public:
+
+				/**
+				* Accept method for visitor acceptation.
+				* @param visitor: Pointer to abstract visitor.
+				*/
+				virtual void accept(std::shared_ptr<visitors::CAbstractVisitor> visitor) = 0;
+
+				/**
+				 * Port name getter
+				 * @return name symbol of port identification.
+				 */
+				std::shared_ptr<compo::CPortAddress> getPortIdentification1() const;
+
+				/**
+				* Port name getter
+				            * @return name symbol of port identification.
+				            */
+				std::shared_ptr<compo::CPortAddress> getPortIdentification2() const;
+			};
+
+		}
 
 	}
-        
-    }
 
 }

@@ -6,33 +6,33 @@
 
 namespace ast {
 
-    namespace nodes {
-	/**
-	 *  \addtogroup procedural
-	 *  @{
-	 */
-
-	/**
-	 * procedural Namespace to uniquely identify compo AST nodes.
-	 */
-	namespace procedural {
+	namespace nodes {
+		/**
+		 *  \addtogroup procedural
+		 *  @{
+		 */
 
 		/**
-		 * \class CAbstractExpression
-		 * \brief Class for abstract expression representation.
+		 * procedural Namespace to uniquely identify compo AST nodes.
 		 */
-		class CAbstractExpression : public virtual CAbstractStatement {
-		  public:
+		namespace procedural {
 
 			/**
-			  * Accept method for visitor acceptation.
-			  * @param visitor: Pointer to abstract visitor.
-			  */
-			virtual void accept(std::shared_ptr<visitors::CAbstractVisitor> visitor) = 0;
-		};
+			 * \class CAbstractExpression
+			 * \brief Class for abstract expression representation.
+			 */
+			class CAbstractExpression : public virtual CAbstractStatement {
+			  public:
+
+				/**
+				  * Accept method for visitor acceptation.
+				  * @param visitor: Pointer to abstract visitor.
+				  */
+				virtual void accept(std::shared_ptr<visitors::CAbstractVisitor> visitor) = 0;
+			};
+
+		}
 
 	}
-        
-    }
 
 }

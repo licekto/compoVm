@@ -2,26 +2,26 @@
 
 namespace ast {
 
-    namespace nodes {
-    
-	namespace compo {
+	namespace nodes {
 
-		CNamedPort::CNamedPort(std::shared_ptr<ast::nodes::procedural::CSymbol> name,
-		                       bool atomicity,
-		                       std::shared_ptr<ast::nodes::procedural::CSymbol> nameParam,
-		                       bool collectivity)
-			:   CNode(types::nodeType::NAMED_PORT),
-			    CPort(types::portType::NAMED, name, atomicity, collectivity),
-			    m_nameParam(nameParam) {
-		}
+		namespace compo {
 
-		void CNamedPort::accept(std::shared_ptr<visitors::CAbstractVisitor> visitor) {
-			visitor->visit(shared_from_this());
-		}
+			CNamedPort::CNamedPort(std::shared_ptr<ast::nodes::procedural::CSymbol> name,
+			                       bool atomicity,
+			                       std::shared_ptr<ast::nodes::procedural::CSymbol> nameParam,
+			                       bool collectivity)
+				:   CNode(types::nodeType::NAMED_PORT),
+				    CPort(types::portType::NAMED, name, atomicity, collectivity),
+				    m_nameParam(nameParam) {
+			}
 
-		std::shared_ptr<ast::nodes::procedural::CSymbol> CNamedPort::getParamName() const {
-			return m_nameParam;
+			void CNamedPort::accept(std::shared_ptr<visitors::CAbstractVisitor> visitor) {
+				visitor->visit(shared_from_this());
+			}
+
+			std::shared_ptr<ast::nodes::procedural::CSymbol> CNamedPort::getParamName() const {
+				return m_nameParam;
+			}
 		}
 	}
-    }
 }

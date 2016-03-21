@@ -2,9 +2,9 @@
 
 namespace ast {
 
-    namespace nodes {
-    
-	namespace procedural {
+	namespace nodes {
+
+		namespace procedural {
+		}
 	}
-    }
 }

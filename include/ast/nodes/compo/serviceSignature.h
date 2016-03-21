@@ -6,63 +6,63 @@
 
 namespace ast {
 
-    namespace nodes {
-    
-	namespace compo {
+	namespace nodes {
 
-		/**
-		 * \class CServiceSignature
-		 * \brief Class for Compo service signature representation.
-		 */
-		class CServiceSignature : public CNode, public std::enable_shared_from_this<CServiceSignature> {
-		  private:
-			/**< Name */
-			std::shared_ptr<procedural::CSymbol> m_name;
-
-			/**< Vector of parameter names */
-			std::vector<std::shared_ptr<CNode>> m_params;
-		  public:
-			/**
-			* Parametric constructor with default value
-			* @param name: Name symbol of service
-			* @param params: Vector of parameters
-			*/
-			CServiceSignature(std::shared_ptr<procedural::CSymbol> name = nullptr,
-			                  const std::vector<std::shared_ptr<CNode>>& params = std::vector<std::shared_ptr<CNode>>(0));
+		namespace compo {
 
 			/**
-			            * Accept method for visitor acceptation.
-			            * @param visitor: Pointer to abstract visitor.
-			            */
-			virtual void accept(std::shared_ptr<visitors::CAbstractVisitor> visitor);
+			 * \class CServiceSignature
+			 * \brief Class for Compo service signature representation.
+			 */
+			class CServiceSignature : public CNode, public std::enable_shared_from_this<CServiceSignature> {
+			  private:
+				/**< Name */
+				std::shared_ptr<procedural::CSymbol> m_name;
 
-			/**
-			* Name symbol getter
-			            * @return shared_ptr to CSymbol
-			            */
-			std::shared_ptr<procedural::CSymbol> getNameSymbol() const;
+				/**< Vector of parameter names */
+				std::vector<std::shared_ptr<CNode>> m_params;
+			  public:
+				/**
+				* Parametric constructor with default value
+				* @param name: Name symbol of service
+				* @param params: Vector of parameters
+				*/
+				CServiceSignature(std::shared_ptr<procedural::CSymbol> name = nullptr,
+				                  const std::vector<std::shared_ptr<CNode>>& params = std::vector<std::shared_ptr<CNode>>(0));
 
-			/**
-			* Parameter size vector size
-			            * @return number of parameters
-			            */
-			size_t getParamsSize() const;
+				/**
+				            * Accept method for visitor acceptation.
+				            * @param visitor: Pointer to abstract visitor.
+				            */
+				virtual void accept(std::shared_ptr<visitors::CAbstractVisitor> visitor);
 
-			/**
-			* Parameters setter
-			* @param Constant pointer to pointer to parameter.
-			*/
-			void setParam(std::shared_ptr<CNode> param);
+				/**
+				* Name symbol getter
+				            * @return shared_ptr to CSymbol
+				            */
+				std::shared_ptr<procedural::CSymbol> getNameSymbol() const;
 
-			/**
-			* Parameters getter
-			* @return Constant pointer to vector with parameters.
-			*/
-			std::shared_ptr<CNode> getParamAt(int index) const;
-		};
+				/**
+				* Parameter size vector size
+				            * @return number of parameters
+				            */
+				size_t getParamsSize() const;
+
+				/**
+				* Parameters setter
+				* @param Constant pointer to pointer to parameter.
+				*/
+				void setParam(std::shared_ptr<CNode> param);
+
+				/**
+				* Parameters getter
+				* @return Constant pointer to vector with parameters.
+				*/
+				std::shared_ptr<CNode> getParamAt(int index) const;
+			};
+
+		}
 
 	}
-        
-    }
 
 }

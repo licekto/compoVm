@@ -21,8 +21,8 @@ namespace ast {
 		class CSemanticCheckVisitor : public CAbstractVisitor, public std::enable_shared_from_this<CSemanticCheckVisitor> {
 		  private:
 
-                        ast::semantic::CGlobalDescriptorTable m_descriptorTable;
-                      
+			ast::semantic::CGlobalDescriptorTable m_descriptorTable;
+
 			void checkDescriptorArchitecture(std::shared_ptr<ast::nodes::compo::CDescriptor> node);
 
 			void checkNodeType(std::shared_ptr<ast::nodes::CNode> node, ast_type type);

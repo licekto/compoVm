@@ -2,20 +2,20 @@
 
 namespace ast {
 
-    namespace nodes {
-    
-	namespace procedural {
+	namespace nodes {
 
-		CGreaterExpression::CGreaterExpression( std::shared_ptr<ast::nodes::procedural::CAbstractExpression> op1,
-		                                        std::shared_ptr<ast::nodes::procedural::CAbstractExpression> op2)
-			:   CNode(types::nodeType::GREATER_EXPRESSION),
-			    CAbstractExpression(),
-			    CBinaryExpression(types::operatorType::GREATER, op1, op2) {
-		}
+		namespace procedural {
 
-		void CGreaterExpression::accept(std::shared_ptr<visitors::CAbstractVisitor> visitor) {
-			visitor->visit(shared_from_this());
+			CGreaterExpression::CGreaterExpression( std::shared_ptr<ast::nodes::procedural::CAbstractExpression> op1,
+			                                        std::shared_ptr<ast::nodes::procedural::CAbstractExpression> op2)
+				:   CNode(types::nodeType::GREATER_EXPRESSION),
+				    CAbstractExpression(),
+				    CBinaryExpression(types::operatorType::GREATER, op1, op2) {
+			}
+
+			void CGreaterExpression::accept(std::shared_ptr<visitors::CAbstractVisitor> visitor) {
+				visitor->visit(shared_from_this());
+			}
 		}
 	}
-    }
 }

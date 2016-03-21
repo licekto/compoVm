@@ -1,29 +1,29 @@
 #include "ast/nodes/compo/collectionPortLiteral.h"
 
 namespace ast {
-    
-    namespace nodes {
 
-	namespace compo {
+	namespace nodes {
 
-		CCollectionPortLiteral::CCollectionPortLiteral(std::shared_ptr<ast::nodes::procedural::CSymbol> portName,
-		        std::shared_ptr<ast::nodes::procedural::CAbstractExpression> indexExpression)
-			:   CNode(types::nodeType::COLLECTION_PORT),
-			    m_portName(portName),
-			    m_indexExpression(indexExpression) {
-		}
+		namespace compo {
 
-		void CCollectionPortLiteral::accept(std::shared_ptr<visitors::CAbstractVisitor> visitor) {
-			visitor->visit(shared_from_this());
-		}
+			CCollectionPortLiteral::CCollectionPortLiteral(std::shared_ptr<ast::nodes::procedural::CSymbol> portName,
+			        std::shared_ptr<ast::nodes::procedural::CAbstractExpression> indexExpression)
+				:   CNode(types::nodeType::COLLECTION_PORT),
+				    m_portName(portName),
+				    m_indexExpression(indexExpression) {
+			}
 
-		std::shared_ptr<ast::nodes::procedural::CSymbol> CCollectionPortLiteral::getPortName() const {
-			return m_portName;
-		}
+			void CCollectionPortLiteral::accept(std::shared_ptr<visitors::CAbstractVisitor> visitor) {
+				visitor->visit(shared_from_this());
+			}
 
-		std::shared_ptr<ast::nodes::procedural::CAbstractExpression> CCollectionPortLiteral::getIndexExpression() const {
-			return m_indexExpression;
+			std::shared_ptr<ast::nodes::procedural::CSymbol> CCollectionPortLiteral::getPortName() const {
+				return m_portName;
+			}
+
+			std::shared_ptr<ast::nodes::procedural::CAbstractExpression> CCollectionPortLiteral::getIndexExpression() const {
+				return m_indexExpression;
+			}
 		}
 	}
-    }
 }

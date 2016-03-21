@@ -4,16 +4,24 @@ namespace ast {
 
 	namespace visitors {
 
-                void CSemanticCheckVisitor::checkDescriptorArchitecture(std::shared_ptr<ast::nodes::compo::CDescriptor> node) {
-                    
-                }
-            
+		void CSemanticCheckVisitor::checkDescriptorArchitecture(std::shared_ptr<ast::nodes::compo::CDescriptor> node) {
+
+			if (m_descriptorTable.symbolFound(node->getNameSymbol()->getStringValue())) {
+				throw exceptions::semantic::CRedefinitionDescriptorException(node->getNameSymbol()->getStringValue());
+			}
+			m_descriptorTable.addSymbol(node);
+
+			if (!m_descriptorTable.symbolFound(node->getExtendsSymbol()->getStringValue())) {
+				throw exceptions::semantic::CUndefinedDescriptorException(node->getExtendsSymbol()->getStringValue());
+			}
+		}
+
 		void CSemanticCheckVisitor::checkNodeType(std::shared_ptr<ast::nodes::CNode> node, ast_type type) {
 			if (!IS_TYPE(node, type)) {
 				throw exceptions::semantic::CWrongAstNodeTypeException(type, node->getNodeType());
 			}
 		}
-                
+
 		/*---------------------- abstract nodes --------------------------*/
 		void CSemanticCheckVisitor::visit(std::shared_ptr<ast::nodes::CNode> node) {
 			checkNodeType(node, ast_type::CONSTRAINT);
@@ -47,10 +55,10 @@ namespace ast {
 		void CSemanticCheckVisitor::visit(std::shared_ptr<ast::nodes::CProgram> node) {
 			checkNodeType(node, ast_type::PROGRAM);
 
-                        if (node->getNodesSize() == 0) {
-                            //throw exceptions::semantic::CEmptyProgramException;
-                        }
-                        
+			if (node->getNodesSize() == 0) {
+				//throw exceptions::semantic::CEmptyProgramException;
+			}
+
 			for (size_t i = 0; i < node->getNodesSize(); ++i) {
 				node->getNodeAt(i)->accept(shared_from_this());
 			}
@@ -125,10 +133,8 @@ namespace ast {
 			for (size_t i = 0; i < node->getConstraintsSize(); ++i) {
 				node->getConstraintAt(i)->accept(shared_from_this());
 			}
-                        
-                        //m_descriptorTable.addSymbol(node);
-                        
-                        checkDescriptorArchitecture(node);
+
+			checkDescriptorArchitecture(node);
 		}
 
 		void CSemanticCheckVisitor::visit(std::shared_ptr<ast::nodes::compo::CDisconnection> node) {

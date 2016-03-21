@@ -2,40 +2,40 @@
 
 namespace ast {
 
-    namespace nodes {
-    
-	namespace compo {
+	namespace nodes {
 
-		CServiceSignature::CServiceSignature(std::shared_ptr<ast::nodes::procedural::CSymbol> name,
-		                                     const std::vector<std::shared_ptr<ast::nodes::CNode>>& params)
-			: CNode(types::nodeType::SERVICE_SIGNATURE), m_name(name), m_params(params) {
-		}
+		namespace compo {
 
-		void CServiceSignature::accept(std::shared_ptr<visitors::CAbstractVisitor> visitor) {
-			visitor->visit(shared_from_this());
-		}
-
-		size_t CServiceSignature::getParamsSize() const {
-			return m_params.size();
-		}
-
-		std::shared_ptr<ast::nodes::CNode> CServiceSignature::getParamAt(int index) const {
-			std::shared_ptr<ast::nodes::CNode> param = nullptr;
-			try {
-				param = m_params.at(index);
-			} catch (std::out_of_range ex) {
-				// log error message
+			CServiceSignature::CServiceSignature(std::shared_ptr<ast::nodes::procedural::CSymbol> name,
+			                                     const std::vector<std::shared_ptr<ast::nodes::CNode>>& params)
+				: CNode(types::nodeType::SERVICE_SIGNATURE), m_name(name), m_params(params) {
 			}
-			return param;
-		}
 
-		void CServiceSignature::setParam(std::shared_ptr<ast::nodes::CNode> param) {
-			m_params.push_back(param);
-		}
+			void CServiceSignature::accept(std::shared_ptr<visitors::CAbstractVisitor> visitor) {
+				visitor->visit(shared_from_this());
+			}
 
-		std::shared_ptr<ast::nodes::procedural::CSymbol> CServiceSignature::getNameSymbol() const {
-			return m_name;
+			size_t CServiceSignature::getParamsSize() const {
+				return m_params.size();
+			}
+
+			std::shared_ptr<ast::nodes::CNode> CServiceSignature::getParamAt(int index) const {
+				std::shared_ptr<ast::nodes::CNode> param = nullptr;
+				try {
+					param = m_params.at(index);
+				} catch (std::out_of_range ex) {
+					// log error message
+				}
+				return param;
+			}
+
+			void CServiceSignature::setParam(std::shared_ptr<ast::nodes::CNode> param) {
+				m_params.push_back(param);
+			}
+
+			std::shared_ptr<ast::nodes::procedural::CSymbol> CServiceSignature::getNameSymbol() const {
+				return m_name;
+			}
 		}
 	}
-    }
 }

@@ -2,22 +2,22 @@
 
 namespace ast {
 
-    namespace nodes {
-    
-	namespace procedural {
+	namespace nodes {
 
-		CStringLiteral::CStringLiteral(const std::string& val)
-			: CNode(types::nodeType::STRING_LITERAL),
-			  m_stringValue(val) {
-		}
+		namespace procedural {
 
-		void CStringLiteral::accept(std::shared_ptr<visitors::CAbstractVisitor> visitor) {
-			visitor->visit(shared_from_this());
-		}
+			CStringLiteral::CStringLiteral(const std::string& val)
+				: CNode(types::nodeType::STRING_LITERAL),
+				  m_stringValue(val) {
+			}
 
-		std::string CStringLiteral::getValue() const {
-			return m_stringValue;
+			void CStringLiteral::accept(std::shared_ptr<visitors::CAbstractVisitor> visitor) {
+				visitor->visit(shared_from_this());
+			}
+
+			std::string CStringLiteral::getValue() const {
+				return m_stringValue;
+			}
 		}
 	}
-    }
 }

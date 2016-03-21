@@ -22,7 +22,10 @@ BOOST_AUTO_TEST_CASE(basic) {
     // Testing input
     std::stringstream input;
     input.str(
-    "descriptor HTTPServer extends server {\
+    "\
+     descriptor server {}\
+     \
+     descriptor HTTPServer extends server {\
 	externally provides {\
 		default : {};\
 	}\

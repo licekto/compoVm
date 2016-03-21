@@ -8,52 +8,52 @@
 
 namespace ast {
 
-    namespace nodes {
-    
-	namespace compo {
+	namespace nodes {
 
-		/**
-		 * \class CSignaturesPort
-		 * \brief Class for port with signatures list.
-		 */
-		class CInterface : public CAbstractDescriptorInterface, public std::enable_shared_from_this<CInterface> {
-		  private:
-
-			/**< List of signatures */
-			std::vector<std::shared_ptr<compo::CServiceSignature>> m_signaturesList;
-
-		  public:
-			/**
-			* Parametric constructor with default value
-			* @param name: Name of port
-			* @param atomic: Is atomic?
-			*/
-			CInterface(std::shared_ptr<procedural::CSymbol> name = nullptr,
-			           std::shared_ptr<procedural::CSymbol> extends = nullptr,
-			           std::vector<std::shared_ptr<compo::CServiceSignature>> list = std::vector<std::shared_ptr<compo::CServiceSignature>>(0));
+		namespace compo {
 
 			/**
-			            * Accept method for visitor acceptation.
-			            * @param visitor: Pointer to abstract visitor.
-			            */
-			virtual void accept(std::shared_ptr<visitors::CAbstractVisitor> visitor);
-
-			/**
-			 * Signatures size getter
-			 * @return size_t
+			 * \class CSignaturesPort
+			 * \brief Class for port with signatures list.
 			 */
-			size_t getSignaturesSize() const;
+			class CInterface : public CAbstractDescriptorInterface, public std::enable_shared_from_this<CInterface> {
+			  private:
 
-			/**
-			 * Signatures getter
-			 * @param index
-			 * @return shared_ptr to CServiceSignature
-			 */
-			std::shared_ptr<compo::CServiceSignature> getSignatureAt(unsigned int index) const;
-		};
+				/**< List of signatures */
+				std::vector<std::shared_ptr<compo::CServiceSignature>> m_signaturesList;
+
+			  public:
+				/**
+				* Parametric constructor with default value
+				* @param name: Name of port
+				* @param atomic: Is atomic?
+				*/
+				CInterface(std::shared_ptr<procedural::CSymbol> name = nullptr,
+				           std::shared_ptr<procedural::CSymbol> extends = nullptr,
+				           std::vector<std::shared_ptr<compo::CServiceSignature>> list = std::vector<std::shared_ptr<compo::CServiceSignature>>(0));
+
+				/**
+				            * Accept method for visitor acceptation.
+				            * @param visitor: Pointer to abstract visitor.
+				            */
+				virtual void accept(std::shared_ptr<visitors::CAbstractVisitor> visitor);
+
+				/**
+				 * Signatures size getter
+				 * @return size_t
+				 */
+				size_t getSignaturesSize() const;
+
+				/**
+				 * Signatures getter
+				 * @param index
+				 * @return shared_ptr to CServiceSignature
+				 */
+				std::shared_ptr<compo::CServiceSignature> getSignatureAt(unsigned int index) const;
+			};
+
+		}
 
 	}
-        
-    }
 
 }

@@ -2,24 +2,24 @@
 
 namespace ast {
 
-    namespace nodes {
-    
-	namespace procedural {
+	namespace nodes {
 
-		CConstant::CConstant(i32 val)
-			: CNode(types::nodeType::CONSTANT),
-			  CAbstractExpression(),
-			  CAbstractPrimaryExpression(),
-			  m_intValue(val) {
-		}
+		namespace procedural {
 
-		void CConstant::accept(std::shared_ptr<visitors::CAbstractVisitor> visitor) {
-			visitor->visit(shared_from_this());
-		}
+			CConstant::CConstant(i32 val)
+				: CNode(types::nodeType::CONSTANT),
+				  CAbstractExpression(),
+				  CAbstractPrimaryExpression(),
+				  m_intValue(val) {
+			}
 
-		i32 CConstant::getValue() const {
-			return m_intValue;
+			void CConstant::accept(std::shared_ptr<visitors::CAbstractVisitor> visitor) {
+				visitor->visit(shared_from_this());
+			}
+
+			i32 CConstant::getValue() const {
+				return m_intValue;
+			}
 		}
 	}
-    }
 }

@@ -2,19 +2,19 @@
 
 namespace ast {
 
-    namespace nodes {
-    
-	namespace compo {
+	namespace nodes {
 
-		CConnection::CConnection(std::shared_ptr<ast::nodes::compo::CPortAddress> portIdentification1,
-		                         std::shared_ptr<ast::nodes::compo::CPortAddress> portIdentification2)
-			:   CNode(types::nodeType::CONNECTION),
-			    CBind(portIdentification1, portIdentification2) {
-		}
+		namespace compo {
 
-		void CConnection::accept(std::shared_ptr<visitors::CAbstractVisitor> visitor) {
-			visitor->visit(shared_from_this());
+			CConnection::CConnection(std::shared_ptr<ast::nodes::compo::CPortAddress> portIdentification1,
+			                         std::shared_ptr<ast::nodes::compo::CPortAddress> portIdentification2)
+				:   CNode(types::nodeType::CONNECTION),
+				    CBind(portIdentification1, portIdentification2) {
+			}
+
+			void CConnection::accept(std::shared_ptr<visitors::CAbstractVisitor> visitor) {
+				visitor->visit(shared_from_this());
+			}
 		}
 	}
-    }
 }
