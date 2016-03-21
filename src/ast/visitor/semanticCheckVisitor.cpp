@@ -11,7 +11,7 @@ namespace ast {
 			}
 			m_descriptorTable.addSymbol(node);
 
-			if (!m_descriptorTable.symbolFound(node->getExtendsSymbol()->getStringValue())) {
+			if (node->getExtendsSymbol().use_count() && !m_descriptorTable.symbolFound(node->getExtendsSymbol()->getStringValue())) {
 				throw exceptions::semantic::CUndefinedDescriptorException(node->getExtendsSymbol()->getStringValue());
 			}
 		}
@@ -120,11 +120,25 @@ namespace ast {
 
 			node->getNameSymbol()->accept(shared_from_this());
 
-			node->getInProvision()->accept(shared_from_this());
-			node->getExProvision()->accept(shared_from_this());
-			node->getInRequirement()->accept(shared_from_this());
-			node->getExRequirement()->accept(shared_from_this());
-			node->getArchitecture()->accept(shared_from_this());
+			if (node->getInProvision().use_count()) {
+				node->getInProvision()->accept(shared_from_this());
+			}
+
+			if (node->getExProvision().use_count()) {
+				node->getExProvision()->accept(shared_from_this());
+			}
+
+			if (node->getInRequirement().use_count()) {
+				node->getInRequirement()->accept(shared_from_this());
+			}
+
+			if (node->getExRequirement().use_count()) {
+				node->getExRequirement()->accept(shared_from_this());
+			}
+
+			if (node->getArchitecture().use_count()) {
+				node->getArchitecture()->accept(shared_from_this());
+			}
 
 			for (size_t i = 0; i < node->getServicesSize(); ++i) {
 				node->getServiceAt(i)->accept(shared_from_this());

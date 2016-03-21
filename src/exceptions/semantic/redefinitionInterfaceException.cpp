@@ -5,14 +5,11 @@ namespace exceptions {
 	namespace semantic {
 
 		CRedefinitionInterfaceException::CRedefinitionInterfaceException(std::string name)
-			: CAbstractRedefinitionException(name) {
+			: CAbstractRedefinitionException(name, "Interface") {
 		}
 
 		const char* CRedefinitionInterfaceException::what() const throw() {
-			std::string msg = "Interface ";
-			msg += getPartialMessage();
-
-			return msg.c_str();
+			return m_msg.c_str();
 		}
 	}
 

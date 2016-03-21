@@ -5,15 +5,12 @@ namespace exceptions {
 
 	namespace semantic {
 
-		CAbstractRedefinitionException::CAbstractRedefinitionException(std::string name)
-			: m_name(name) {
-		}
-
-		std::string CAbstractRedefinitionException::getPartialMessage() const {
-			std::string msg = m_name.c_str();
-			msg += " redefinition exception!";
-
-			return msg.c_str();
+		CAbstractRedefinitionException::CAbstractRedefinitionException(std::string name, std::string element)
+			: m_name(name), m_element(element), m_msg("") {
+			m_msg = m_element.c_str();
+			m_msg += " '";
+			m_msg += m_name.c_str();
+			m_msg += "' undefined exception!";
 		}
 	}
 

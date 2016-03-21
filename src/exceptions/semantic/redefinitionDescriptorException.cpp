@@ -5,14 +5,11 @@ namespace exceptions {
 	namespace semantic {
 
 		CRedefinitionDescriptorException::CRedefinitionDescriptorException(std::string name)
-			: CAbstractRedefinitionException(name) {
+			: CAbstractRedefinitionException(name, "Descriptor") {
 		}
 
 		const char* CRedefinitionDescriptorException::what() const throw() {
-			std::string msg = "Descriptor ";
-			msg += getPartialMessage();
-
-			return msg.c_str();
+			return m_msg.c_str();
 		}
 	}
 

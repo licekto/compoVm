@@ -326,13 +326,13 @@ start
                 ;
 
 descriptor_interface
-                :   descriptor descriptor_interface
+                :   descriptor_interface descriptor
                     {
-                        parser->addRootNode($1);
+                        parser->addRootNode($2);
                     }
-                |   interface descriptor_interface
+                |   descriptor_interface interface
                     {
-                        parser->addRootNode($1);
+                        parser->addRootNode($2);
                     }
                 |   empty
                 ;
