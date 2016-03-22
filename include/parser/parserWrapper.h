@@ -3,9 +3,13 @@
 #include <memory>
 #include <stack>
 
+#include "definitions.h"
+
 #include "parser/lexer.h"
 #include "ast/semantic/globalDescriptorsTable.h"
-#include "definitions.h"
+#include "exceptions/semantic/redefinedDescriptorException.h"
+#include "exceptions/semantic/redefinedInterfaceException.h"
+
 
 /**
  * \class ParserWrapper

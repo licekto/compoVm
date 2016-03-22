@@ -4,7 +4,7 @@
 #include <map>
 #include <string>
 
-#include "exceptions/semantic/redefinitionDescriptorException.h"
+#include "exceptions/semantic/redefinedDescriptorException.h"
 #include "exceptions/semantic/undefinedDescriptorException.h"
 #include "exceptions/semantic/undefinedSymbolException.h"
 

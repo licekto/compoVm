@@ -2,17 +2,17 @@
 
 #include <string>
 #include "exceptions/abstractException.h"
-#include "exceptions/semantic/abstractRedefinitionException.h"
+#include "exceptions/semantic/abstractRedefinedException.h"
 #include "definitions.h"
 
 namespace exceptions {
 
 	namespace semantic {
 
-		class CRedefinitionInterfaceException : public CAbstractRedefinitionException {
+		class CRedefinedInterfaceException : public CAbstractRedefinedException {
 		  public:
 
-			CRedefinitionInterfaceException(std::string name);
+			CRedefinedInterfaceException(std::string name);
 
 			virtual const char* what() const throw();
 		};

@@ -84,6 +84,10 @@ namespace ast {
 			std::shared_ptr<ast::nodes::compo::CPort> CDescriptor::getDefaultPort() const {
 				return m_defaultPort;
 			}
+                        
+                        std::shared_ptr<ast::nodes::compo::CPort> CDescriptor::getSelfPort() const {
+				return m_selfPort;
+			}
 		}
 	}
 }

@@ -7,6 +7,8 @@
 
 #include "exceptions/semantic/wrongAstNodeTypeException.h"
 #include "exceptions/semantic/emptyProgramException.h"
+#include "exceptions/semantic/undefinedDescriptorException.h"
+#include "exceptions/semantic/undefinedInterfaceException.h"
 #include "ast/semantic/globalDescriptorsTable.h"
 
 namespace ast {
@@ -26,7 +28,7 @@ namespace ast {
 
 			ptr(ast_descriptor) m_currentDescriptor;
 
-			void checkDescriptorArchitecture(ptr(ast_descriptor) node);
+			void checkDescriptorInterface(ptr(ast_descriptorinterface) node);
 
 			void checkNodeType(ptr(ast_node) node, ast_type type);
 		  public:

@@ -41,6 +41,9 @@ namespace ast {
 
 				/**< Every descriptor contains default port */
 				std::shared_ptr<compo::CPort> m_defaultPort;
+                                
+                                /**< Every descriptor contains self port */
+				std::shared_ptr<compo::CPort> m_selfPort;
 
 			  public:
 				/**
@@ -93,9 +96,15 @@ namespace ast {
 
 				/**
 				* Default port getter
-				            * @return Constant pointer to port
-				            */
+                                * @return Constant pointer to port
+                                */
 				std::shared_ptr<compo::CPort> getDefaultPort() const;
+                                
+                                /**
+				* Self port getter
+                                * @return Constant pointer to port
+                                */
+				std::shared_ptr<compo::CPort> getSelfPort() const;
 			};
 
 		}
