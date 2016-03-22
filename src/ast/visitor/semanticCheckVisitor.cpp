@@ -18,6 +18,8 @@ namespace ast {
 			if (node->getExtendsSymbol().use_count() && !m_descriptorTable->symbolFound(node->getExtendsSymbol()->getStringValue())) {
 				throw exceptions::semantic::CUndefinedDescriptorException(node->getExtendsSymbol()->getStringValue());
 			}
+                        
+                        
                     }
 		}
 
@@ -61,7 +63,7 @@ namespace ast {
 			checkNodeType(node, ast_type::PROGRAM);
 
 			if (node->getNodesSize() == 0) {
-				//throw exceptions::semantic::CEmptyProgramException;
+				throw exceptions::semantic::CEmptyProgramException();
 			}
 
 			for (size_t i = 0; i < node->getNodesSize(); ++i) {

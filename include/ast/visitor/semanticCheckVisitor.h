@@ -6,6 +6,7 @@
 #include "definitions.h"
 
 #include "exceptions/semantic/wrongAstNodeTypeException.h"
+#include "exceptions/semantic/emptyProgramException.h"
 #include "ast/semantic/globalDescriptorsTable.h"
 
 namespace ast {
