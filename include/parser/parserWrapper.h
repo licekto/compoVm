@@ -4,6 +4,7 @@
 #include <stack>
 
 #include "parser/lexer.h"
+#include "ast/semantic/globalDescriptorsTable.h"
 #include "definitions.h"
 
 /**
@@ -15,10 +16,10 @@ class ParserWrapper {
 	/**< Lexer pointer */
 	ptr(Lexer) m_lexer;
 
-        //ast::semantic::CGlobalDescriptorTable m_descriptorTable;
+        ptr(ast::semantic::CGlobalDescriptorTable) m_descriptorTable;
         
 	/**< Vector of root nodes */
-	ptr(ast::nodes::CProgram) m_root;
+	ptr(ast_program) m_root;
 
 	/**< Stack of nested blocks */
 	std::stack<ptr(ast_compound)> m_blockStack;
@@ -70,7 +71,7 @@ class ParserWrapper {
 	* Parametric constructor with default value
 	* @param lexer: pointer to lexer
 	*/
-	ParserWrapper(ptr(Lexer) lexer = nullptr);
+	ParserWrapper(ptr(Lexer) lexer = nullptr, ptr(ast::semantic::CGlobalDescriptorTable) descriptorTable = nullptr);
 
 	/**
 	* Destructor
@@ -105,6 +106,10 @@ class ParserWrapper {
 	*/
 	ptr(Lexer) getLexer() const;
 
+        void addSymbolToDescriptorTable(ptr(ast_descriptorinterface) node);
+        
+        ptr(ast::semantic::CGlobalDescriptorTable) getDescriptorTable();
+        
 	/**
 	* Root node setter
 	* @param node pointer
@@ -116,7 +121,7 @@ class ParserWrapper {
 	* @param index: index of wanted node
 	* @return root node at given index
 	*/
-	ptr(ast::nodes::CProgram) getRootNode();
+	ptr(ast_program) getRootNode();
 
 	/**
 	 * Pushes new block context on the stack

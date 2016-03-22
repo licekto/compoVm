@@ -340,15 +340,17 @@ descriptor_interface
 descriptor      
                 :   DESCRIPTOR IDENTIFIER inheritance '{' compo_expressions '}'
                     {
-                        $$ = new_ptr(ast_descriptor)(cast(ast_symbol)($2),
-                                                                         cast(ast_symbol)($3),
-                                                                         parser->getInProvision(),
-                                                                         parser->getExProvision(),
-                                                                         parser->getInRequirement(),
-                                                                         parser->getExRequirement(),
-                                                                         parser->getArchitecture(),
-                                                                         *parser->getDescriptorServices(),
-                                                                         *parser->getDescriptorConstraints());
+                        ptr(ast_descriptor) descriptor = new_ptr(ast_descriptor)(cast(ast_symbol)($2),
+                                                                                 cast(ast_symbol)($3),
+                                                                                 parser->getInProvision(),
+                                                                                 parser->getExProvision(),
+                                                                                 parser->getInRequirement(),
+                                                                                 parser->getExRequirement(),
+                                                                                 parser->getArchitecture(),
+                                                                                *parser->getDescriptorServices(),
+                                                                                *parser->getDescriptorConstraints());
+                        parser->addSymbolToDescriptorTable(descriptor);
+                        $$ = descriptor;
                         parser->clearAll();
                     }
                 ;
@@ -356,9 +358,11 @@ descriptor
 interface       
                 :   INTERFACE IDENTIFIER inheritance service_signatures_list
                     {
-                        $$ = new_ptr(ast_interface)(cast(ast_symbol)($2),
-                                                                        cast(ast_symbol)($3),
-                                                                        *parser->getServiceSignatures());
+                        ptr(ast_interface) interface = new_ptr(ast_interface)(cast(ast_symbol)($2),
+                                                                              cast(ast_symbol)($3),
+                                                                             *parser->getServiceSignatures());
+                        parser->addSymbolToDescriptorTable(interface);
+                        $$ = interface;
                     }
                 ;
 

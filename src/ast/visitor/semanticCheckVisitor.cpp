@@ -3,17 +3,22 @@
 namespace ast {
 
 	namespace visitors {
+            
+                CSemanticCheckVisitor::CSemanticCheckVisitor(std::shared_ptr<ast::semantic::CGlobalDescriptorTable> descriptorTable) 
+                : m_descriptorTable(descriptorTable) {
 
+                }
+            
 		void CSemanticCheckVisitor::checkDescriptorArchitecture(std::shared_ptr<ast::nodes::compo::CDescriptor> node) {
-
-			if (m_descriptorTable.symbolFound(node->getNameSymbol()->getStringValue())) {
-				throw exceptions::semantic::CRedefinitionDescriptorException(node->getNameSymbol()->getStringValue());
+                    if (m_descriptorTable.use_count()) {
+			if (!m_descriptorTable->symbolFound(node->getNameSymbol()->getStringValue())) {
+				throw exceptions::semantic::CUndefinedDescriptorException(node->getNameSymbol()->getStringValue());
 			}
-			m_descriptorTable.addSymbol(node);
 
-			if (node->getExtendsSymbol().use_count() && !m_descriptorTable.symbolFound(node->getExtendsSymbol()->getStringValue())) {
+			if (node->getExtendsSymbol().use_count() && !m_descriptorTable->symbolFound(node->getExtendsSymbol()->getStringValue())) {
 				throw exceptions::semantic::CUndefinedDescriptorException(node->getExtendsSymbol()->getStringValue());
 			}
+                    }
 		}
 
 		void CSemanticCheckVisitor::checkNodeType(std::shared_ptr<ast::nodes::CNode> node, ast_type type) {

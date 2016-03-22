@@ -3,19 +3,20 @@
 
 #include <boost/test/unit_test.hpp>
 
+#include "definitions.h"
+#include "testDefinitions.h"
+
 #include "parser/lexer.h"
 #include "parser/parserWrapper.h"
 
 #include "ast/visitor/semanticCheckVisitor.h"
-
-#include "definitions.h"
-#include "testDefinitions.h"
+#include "ast/semantic/globalDescriptorsTable.h"
 
 BOOST_AUTO_TEST_SUITE(semanticsTest)
 
 
 // Global lexer and parser for testing purposes
-ParserWrapper parser(new_ptr(Lexer)());
+ParserWrapper parser(new_ptr(Lexer)(), new_ptr(ast::semantic::CGlobalDescriptorTable)());
 
 BOOST_AUTO_TEST_CASE(basic) {
     // Testing input
@@ -47,7 +48,7 @@ BOOST_AUTO_TEST_CASE(basic) {
     
     ptr(ast_program) program = parser.getRootNode();
     
-    std::shared_ptr<ast::visitors::CSemanticCheckVisitor> visitor = std::make_shared<ast::visitors::CSemanticCheckVisitor>();
+    std::shared_ptr<ast::visitors::CSemanticCheckVisitor> visitor = std::make_shared<ast::visitors::CSemanticCheckVisitor>(parser.getDescriptorTable());
 
     try {
         program->accept(visitor);

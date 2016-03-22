@@ -2,8 +2,8 @@
 
 #include "parser/parserWrapper.h"
 
-ParserWrapper::ParserWrapper(ptr(Lexer) lexer)
-	: m_lexer(lexer), m_root(new_ptr(ast_program)()) {
+ParserWrapper::ParserWrapper(ptr(Lexer) lexer, ptr(ast::semantic::CGlobalDescriptorTable) descriptorTable)
+	: m_lexer(lexer), m_descriptorTable(descriptorTable), m_root(new_ptr(ast_program)()) {
 	pushServiceParams();
 }
 
@@ -13,6 +13,19 @@ ParserWrapper::~ParserWrapper() {
 
 ptr(Lexer) ParserWrapper::getLexer() const {
 	return m_lexer;
+}
+
+void ParserWrapper::addSymbolToDescriptorTable(ptr(ast_descriptorinterface) node) {
+    if (m_descriptorTable.use_count()) {
+        if (m_descriptorTable->symbolFound(node->getNameSymbol()->getStringValue())) {
+            throw exceptions::semantic::CRedefinitionDescriptorException(node->getNameSymbol()->getStringValue());
+        }
+        m_descriptorTable->addSymbol(node);
+    }
+}
+
+ptr(ast::semantic::CGlobalDescriptorTable) ParserWrapper::getDescriptorTable() {
+    return m_descriptorTable;
 }
 
 void ParserWrapper::addRootNode(ptr(ast_node) node) {
