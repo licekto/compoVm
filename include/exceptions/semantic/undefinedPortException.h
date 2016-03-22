@@ -8,9 +8,9 @@ namespace exceptions {
 
 	namespace semantic {
 
-		class CUndefinedDescriptorException : public CAbstractUndefinedException {
+		class CUndefinedPortException : public CAbstractUndefinedException {
 		  public:
-			CUndefinedDescriptorException(std::string name);
+			CUndefinedPortException(std::string name);
 
 			virtual const char* what() const throw();
 		};

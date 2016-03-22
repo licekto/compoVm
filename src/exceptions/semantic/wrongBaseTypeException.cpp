@@ -4,21 +4,13 @@ namespace exceptions {
 
 	namespace semantic {
 
-		CWrongBaseTypeException::CWrongBaseTypeException(ast_type expected, ast_type actual)
-			: CAbstractException(),
-			  m_expected(expected),
-			  m_actual(actual) {
+		CWrongBaseTypeException::CWrongBaseTypeException(ast_nodetype expected, ast_nodetype actual)
+			: CAbstractException("Extension of wrong base element. Actual: '" + ast::nodes::types::typeName(expected) + "', expected: '" + ast::nodes::types::typeName(actual) + "'.") {
 		}
 
 
 		const char* CWrongBaseTypeException::what() const throw() {
-			std::string msg = "Extension of wrong base element. Actual: '";
-			msg += ast::nodes::types::typeName(m_expected);
-			msg += "', expected: '";
-			msg += ast::nodes::types::typeName(m_actual);
-			msg += "'.";
-
-			return msg.c_str();
+			return m_msg.c_str();
 		}
 	}
 

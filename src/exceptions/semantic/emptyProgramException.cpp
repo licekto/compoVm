@@ -3,8 +3,13 @@
 namespace exceptions {
 
 	namespace semantic {
+
+		CEmptyProgramException::CEmptyProgramException()
+			: CAbstractException("Empty program exception!") {
+		}
+
 		const char* CEmptyProgramException::what() const throw() {
-			return "Empty program exception!";
+			return m_msg.c_str();
 		}
 	}
 

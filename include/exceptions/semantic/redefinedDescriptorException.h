@@ -10,7 +10,6 @@ namespace exceptions {
 
 		class CRedefinedDescriptorException : public CAbstractRedefinedException {
 		  public:
-
 			CRedefinedDescriptorException(std::string name);
 
 			virtual const char* what() const throw();

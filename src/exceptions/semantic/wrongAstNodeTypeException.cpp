@@ -4,21 +4,13 @@ namespace exceptions {
 
 	namespace semantic {
 
-		CWrongAstNodeTypeException::CWrongAstNodeTypeException(ast_type expected, ast_type actual)
-			: CAbstractException(),
-			  m_expected(expected),
-			  m_actual(actual) {
+		CWrongAstNodeTypeException::CWrongAstNodeTypeException(ast_nodetype expected, ast_nodetype actual)
+			: CAbstractException("Wrong type of AST node. Actual: '" + ast::nodes::types::typeName(expected) + "', expected: '" + ast::nodes::types::typeName(actual) + "'.") {
 		}
 
 
 		const char* CWrongAstNodeTypeException::what() const throw() {
-			std::string msg = "Wrong type of AST node. Actual: '";
-			msg += ast::nodes::types::typeName(m_expected);
-			msg += "', expected: '";
-			msg += ast::nodes::types::typeName(m_actual);
-			msg += "'.";
-
-			return msg.c_str();
+			return m_msg.c_str();
 		}
 	}
 

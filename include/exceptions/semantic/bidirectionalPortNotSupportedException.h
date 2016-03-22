@@ -1,16 +1,16 @@
 #pragma once
 
 #include <string>
+
 #include "exceptions/abstractException.h"
-#include "definitions.h"
 
 namespace exceptions {
 
 	namespace semantic {
 
-		class CEmptyProgramException : public CAbstractException {
+		class CBidirectionalPortNotSupportedException : public CAbstractException {
 		  public:
-			CEmptyProgramException();
+			CBidirectionalPortNotSupportedException(std::string name);
 
 			virtual const char* what() const throw();
 		};

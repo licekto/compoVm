@@ -9,12 +9,8 @@ namespace exceptions {
 	namespace semantic {
 
 		class CWrongBaseTypeException : public CAbstractException {
-		  private:
-			ast_type m_expected;
-			ast_type m_actual;
-
 		  public:
-			CWrongBaseTypeException(ast_type actual, ast_type expected);
+			CWrongBaseTypeException(ast_nodetype actual, ast_nodetype expected);
 
 			virtual const char* what() const throw();
 		};

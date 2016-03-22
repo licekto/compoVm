@@ -1,16 +1,16 @@
 #pragma once
 
 #include <string>
+
 #include "exceptions/abstractException.h"
-#include "definitions.h"
 
 namespace exceptions {
 
 	namespace semantic {
 
-		class CEmptyProgramException : public CAbstractException {
+		class CUnsupportedFeatureException : public CAbstractException {
 		  public:
-			CEmptyProgramException();
+			CUnsupportedFeatureException(std::string feature);
 
 			virtual const char* what() const throw();
 		};
