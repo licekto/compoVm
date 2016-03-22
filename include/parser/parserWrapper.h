@@ -16,8 +16,8 @@ class ParserWrapper {
 	/**< Lexer pointer */
 	ptr(Lexer) m_lexer;
 
-        ptr(ast::semantic::CGlobalDescriptorTable) m_descriptorTable;
-        
+	ptr(ast::semantic::CGlobalDescriptorTable) m_descriptorTable;
+
 	/**< Vector of root nodes */
 	ptr(ast_program) m_root;
 
@@ -106,12 +106,12 @@ class ParserWrapper {
 	*/
 	ptr(Lexer) getLexer() const;
 
-        void addSymbolToDescriptorTable(ptr(ast_descriptorinterface) node);
-        
-        ptr(ast::semantic::CGlobalDescriptorTable) getDescriptorTable();
-        
-        void clearDescriptorTable();
-        
+	void addSymbolToDescriptorTable(ptr(ast_descriptorinterface) node);
+
+	ptr(ast::semantic::CGlobalDescriptorTable) getDescriptorTable();
+
+	void clearDescriptorTable();
+
 	/**
 	* Root node setter
 	* @param node pointer
@@ -266,8 +266,8 @@ class ParserWrapper {
 	 * Clears all vectors
 	 */
 	void clearContext();
-        
-        void clearAll();
+
+	void clearAll();
 
 	/**
 	 * Current compound statement body setter

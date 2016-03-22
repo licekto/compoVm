@@ -3,24 +3,22 @@
 namespace ast {
 
 	namespace visitors {
-            
-                CSemanticCheckVisitor::CSemanticCheckVisitor(ptr(ast::semantic::CGlobalDescriptorTable) descriptorTable) 
-                : m_descriptorTable(descriptorTable) {
 
-                }
-            
+		CSemanticCheckVisitor::CSemanticCheckVisitor(ptr(ast::semantic::CGlobalDescriptorTable) descriptorTable)
+			: m_descriptorTable(descriptorTable), m_currentDescriptor(nullptr) {
+
+		}
+
 		void CSemanticCheckVisitor::checkDescriptorArchitecture(ptr(ast_descriptor) node) {
-                    if (m_descriptorTable.use_count()) {
-			if (!m_descriptorTable->symbolFound(node->getNameSymbol()->getStringValue())) {
-				throw exceptions::semantic::CUndefinedDescriptorException(node->getNameSymbol()->getStringValue());
-			}
+			if (m_descriptorTable.use_count()) {
+				if (!m_descriptorTable->symbolFound(node->getNameSymbol()->getStringValue())) {
+					throw exceptions::semantic::CUndefinedDescriptorException(node->getNameSymbol()->getStringValue());
+				}
 
-			if (node->getExtendsSymbol().use_count() && !m_descriptorTable->symbolFound(node->getExtendsSymbol()->getStringValue())) {
-				throw exceptions::semantic::CUndefinedDescriptorException(node->getExtendsSymbol()->getStringValue());
+				if (node->getExtendsSymbol().use_count() && !m_descriptorTable->symbolFound(node->getExtendsSymbol()->getStringValue())) {
+					throw exceptions::semantic::CUndefinedDescriptorException(node->getExtendsSymbol()->getStringValue());
+				}
 			}
-                        
-                        
-                    }
 		}
 
 		void CSemanticCheckVisitor::checkNodeType(ptr(ast_node) node, ast_type type) {
@@ -127,8 +125,8 @@ namespace ast {
 
 			node->getNameSymbol()->accept(shared_from_this());
 
-                        m_currentDescriptor = node;
-                        
+			m_currentDescriptor = node;
+
 			if (node->getInProvision().use_count()) {
 				node->getInProvision()->accept(shared_from_this());
 			}

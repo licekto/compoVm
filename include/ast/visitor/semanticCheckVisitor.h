@@ -23,16 +23,16 @@ namespace ast {
 		  private:
 
 			ptr(ast::semantic::CGlobalDescriptorTable) m_descriptorTable;
-                        
-                        ptr(ast_descriptor) m_currentDescriptor;
+
+			ptr(ast_descriptor) m_currentDescriptor;
 
 			void checkDescriptorArchitecture(ptr(ast_descriptor) node);
 
 			void checkNodeType(ptr(ast_node) node, ast_type type);
 		  public:
-                      
-                        CSemanticCheckVisitor(ptr(ast::semantic::CGlobalDescriptorTable) descriptorTable = nullptr);
-                      
+
+			CSemanticCheckVisitor(ptr(ast::semantic::CGlobalDescriptorTable) descriptorTable = nullptr);
+
 			virtual void visit(ptr(ast_node) node);
 			virtual void visit(ptr(ast_program) node);
 

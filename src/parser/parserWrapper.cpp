@@ -16,22 +16,22 @@ ptr(Lexer) ParserWrapper::getLexer() const {
 }
 
 void ParserWrapper::addSymbolToDescriptorTable(ptr(ast_descriptorinterface) node) {
-    if (m_descriptorTable.use_count()) {
-        if (m_descriptorTable->symbolFound(node->getNameSymbol()->getStringValue())) {
-            throw exceptions::semantic::CRedefinitionDescriptorException(node->getNameSymbol()->getStringValue());
-        }
-        m_descriptorTable->addSymbol(node);
-    }
+	if (m_descriptorTable.use_count()) {
+		if (m_descriptorTable->symbolFound(node->getNameSymbol()->getStringValue())) {
+			throw exceptions::semantic::CRedefinitionDescriptorException(node->getNameSymbol()->getStringValue());
+		}
+		m_descriptorTable->addSymbol(node);
+	}
 }
 
 ptr(ast::semantic::CGlobalDescriptorTable) ParserWrapper::getDescriptorTable() {
-    return m_descriptorTable;
+	return m_descriptorTable;
 }
 
 void ParserWrapper::clearDescriptorTable() {
-    if (m_descriptorTable.use_count()) {
-        m_descriptorTable->clear();
-    }
+	if (m_descriptorTable.use_count()) {
+		m_descriptorTable->clear();
+	}
 }
 
 void ParserWrapper::addRootNode(ptr(ast_node) node) {
@@ -187,9 +187,9 @@ void ParserWrapper::clearContext() {
 }
 
 void ParserWrapper::clearAll() {
-    clearContext();
-    clearDescriptorTable();
-    clearRootNodes();
+	clearContext();
+	clearDescriptorTable();
+	clearRootNodes();
 }
 
 void ParserWrapper::setCurrentCompoundBody(ptr(ast_compound) body) {

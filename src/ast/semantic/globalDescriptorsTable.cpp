@@ -9,7 +9,7 @@ namespace ast {
 		}
 
 		void CGlobalDescriptorTable::addSymbol(ptr(ast_descriptorinterface) node) {
-                        size_t size = m_descriptorMap.size();
+			size_t size = m_descriptorMap.size();
 			m_descriptorMap[node->getNameSymbol()->getStringValue()] = node;
 		}
 
@@ -19,9 +19,9 @@ namespace ast {
 			}
 			return m_descriptorMap[name];
 		}
-                
-                void CGlobalDescriptorTable::clear() {
-                    m_descriptorMap.clear();
-                }
+
+		void CGlobalDescriptorTable::clear() {
+			m_descriptorMap.clear();
+		}
 	}
 }

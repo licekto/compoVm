@@ -36,8 +36,8 @@ namespace ast {
 			void addSymbol(ptr(ast_descriptorinterface) node);
 
 			ptr(ast_descriptorinterface) getSymbol(std::string name);
-                        
-                        void clear();
+
+			void clear();
 		};
 
 	}
