@@ -351,7 +351,7 @@ descriptor
                                                                                 *parser->getDescriptorConstraints());
                         parser->addSymbolToDescriptorTable(descriptor);
                         $$ = descriptor;
-                        parser->clearAll();
+                        parser->clearContext();
                     }
                 ;
 
@@ -363,6 +363,7 @@ interface
                                                                              *parser->getServiceSignatures());
                         parser->addSymbolToDescriptorTable(interface);
                         $$ = interface;
+                        parser->clearContext();
                     }
                 ;
 

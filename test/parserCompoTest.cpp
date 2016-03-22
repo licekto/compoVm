@@ -74,7 +74,7 @@ BOOST_AUTO_TEST_CASE(compoBasicStructure) {
     BOOST_CHECK_EQUAL(ast::nodes::types::nodeType::ARCHITECTURE, architecture->getNodeType());
     
     // Clear AST for next test
-    parser.clearRootNodes();
+    parser.clearAll();
 }
 
 BOOST_AUTO_TEST_CASE(compoServiceParams) {
@@ -118,7 +118,7 @@ BOOST_AUTO_TEST_CASE(compoServiceParams) {
     BOOST_CHECK_EQUAL("param3", cast(ast_symbol)(service->getParamAt(2))->getStringValue());
     
     // Clear AST for next test
-    parser.clearRootNodes();
+    parser.clearAll();
 }
 
 BOOST_AUTO_TEST_CASE(compoServiceBody) {
@@ -162,7 +162,7 @@ BOOST_AUTO_TEST_CASE(compoServiceBody) {
     TEST_CONSTANT(constant, 1);
     
     // Clear AST for next test
-    parser.clearRootNodes();
+    parser.clearAll();
 }
 
 BOOST_AUTO_TEST_CASE(compoServiceTemporaries) {
@@ -196,7 +196,7 @@ BOOST_AUTO_TEST_CASE(compoServiceTemporaries) {
     TEST_SYMBOL(symbol, "b");    
     
     // Clear AST for next test
-    parser.clearRootNodes();
+    parser.clearAll();
 }
 
 BOOST_AUTO_TEST_CASE(compoProvision) {
@@ -256,7 +256,7 @@ BOOST_AUTO_TEST_CASE(compoProvision) {
     BOOST_CHECK(namedPort->getCollectivity());
     
     // Clear AST for next test
-    parser.clearRootNodes();
+    parser.clearAll();
 }
 
 BOOST_AUTO_TEST_CASE(compoArchitecture) {
@@ -348,7 +348,7 @@ BOOST_AUTO_TEST_CASE(compoArchitecture) {
     TEST_PORT_ADDRES_IDENTIFIER(portAddress, "logging", "logger");
     
     // Clear AST for next test
-    parser.clearRootNodes();
+    parser.clearAll();
 }
 
 BOOST_AUTO_TEST_CASE(compoServiceCall) {
@@ -407,7 +407,7 @@ BOOST_AUTO_TEST_CASE(compoServiceCall) {
     BOOST_CHECK_EQUAL("getPtr", cast(ast_symbol)(serviceInvocation->getSelectorName())->getStringValue());
     
     // Clear AST for next test
-    parser.clearRootNodes();
+    parser.clearAll();
 }
 
 BOOST_AUTO_TEST_CASE(compoInterface) {
@@ -436,7 +436,7 @@ BOOST_AUTO_TEST_CASE(compoInterface) {
     BOOST_CHECK_EQUAL("param", cast(ast_symbol)(interface->getSignatureAt(0)->getParamAt(1))->getStringValue());
     
     // Clear AST for next test
-    parser.clearRootNodes();
+    parser.clearAll();
 }
 
 BOOST_AUTO_TEST_SUITE_END()

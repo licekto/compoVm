@@ -110,6 +110,8 @@ class ParserWrapper {
         
         ptr(ast::semantic::CGlobalDescriptorTable) getDescriptorTable();
         
+        void clearDescriptorTable();
+        
 	/**
 	* Root node setter
 	* @param node pointer
@@ -263,7 +265,9 @@ class ParserWrapper {
 	/**
 	 * Clears all vectors
 	 */
-	void clearAll();
+	void clearContext();
+        
+        void clearAll();
 
 	/**
 	 * Current compound statement body setter

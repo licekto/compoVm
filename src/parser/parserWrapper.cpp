@@ -28,6 +28,12 @@ ptr(ast::semantic::CGlobalDescriptorTable) ParserWrapper::getDescriptorTable() {
     return m_descriptorTable;
 }
 
+void ParserWrapper::clearDescriptorTable() {
+    if (m_descriptorTable.use_count()) {
+        m_descriptorTable->clear();
+    }
+}
+
 void ParserWrapper::addRootNode(ptr(ast_node) node) {
 	m_root->addNode(node);
 }
@@ -172,12 +178,18 @@ void ParserWrapper::clearPorts() {
 	m_currentPorts.clear();
 }
 
-void ParserWrapper::clearAll() {
+void ParserWrapper::clearContext() {
 	clearPorts();
 	clearArchitectureBody();
 	clearServiceSignatures();
 	clearDescriptorServices();
 	clearDescriptorConstraints();
+}
+
+void ParserWrapper::clearAll() {
+    clearContext();
+    clearDescriptorTable();
+    clearRootNodes();
 }
 
 void ParserWrapper::setCurrentCompoundBody(ptr(ast_compound) body) {

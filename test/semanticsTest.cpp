@@ -15,10 +15,10 @@
 BOOST_AUTO_TEST_SUITE(semanticsTest)
 
 
-// Global lexer and parser for testing purposes
+// Global parser for testing purposes
 ParserWrapper parser(new_ptr(Lexer)(), new_ptr(ast::semantic::CGlobalDescriptorTable)());
 
-BOOST_AUTO_TEST_CASE(basic) {
+BOOST_AUTO_TEST_CASE(basicTest) {
     // Testing input
     std::stringstream input;
     input.str(
@@ -26,21 +26,6 @@ BOOST_AUTO_TEST_CASE(basic) {
      descriptor server {}\
      \
      descriptor HTTPServer extends server {\
-	externally provides {\
-		default : {};\
-	}\
-        externally requires {\
-            default : {};\
-        }\
-        internally provides {\
-		default : {};\
-	}\
-        internally requires {\
-            default : {};\
-        }\
-	service create() {}\
-        constraint httpOnly() {}\
-        architecture {}\
     }");
     
     // Parse input and create AST
@@ -48,17 +33,31 @@ BOOST_AUTO_TEST_CASE(basic) {
     
     ptr(ast_program) program = parser.getRootNode();
     
-    std::shared_ptr<ast::visitors::CSemanticCheckVisitor> visitor = std::make_shared<ast::visitors::CSemanticCheckVisitor>(parser.getDescriptorTable());
+    ptr(ast::visitors::CSemanticCheckVisitor) visitor = new_ptr(ast::visitors::CSemanticCheckVisitor)(parser.getDescriptorTable());
 
-    try {
-        program->accept(visitor);
-    }
-    catch (const exceptions::semantic::CWrongAstNodeTypeException& ex) {
-        ex.what();
-    }
+    program->accept(visitor);
     
     // Clear AST for next test
-    parser.clearRootNodes();
+    parser.clearAll();
+}
+
+BOOST_AUTO_TEST_CASE(undefinedDescriptorTest) {
+    // Testing input
+    std::stringstream input;
+    input.str(
+    "descriptor HTTPServer extends server {}");
+    
+    // Parse input and create AST
+    parser.parse(input);
+    
+    ptr(ast_program) program = parser.getRootNode();
+    
+    ptr(ast::visitors::CSemanticCheckVisitor) visitor = new_ptr(ast::visitors::CSemanticCheckVisitor)(parser.getDescriptorTable());
+    
+    BOOST_CHECK_THROW(program->accept(visitor), exceptions::semantic::CUndefinedDescriptorException);
+    
+    // Clear AST for next test
+    parser.clearAll();
 }
 
 BOOST_AUTO_TEST_SUITE_END()

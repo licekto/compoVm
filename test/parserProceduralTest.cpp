@@ -366,7 +366,7 @@ BOOST_AUTO_TEST_CASE(nodesProceduralBinary) {
     TEST_CONSTANT(op2, 1);
     
     // Clear parser
-    parser.clearRootNodes();
+    parser.clearAll();
 }
 
 BOOST_AUTO_TEST_CASE(compoCompoundStatement) {
@@ -413,7 +413,7 @@ BOOST_AUTO_TEST_CASE(compoCompoundStatement) {
     TEST_SYMBOL(symbol, "a");
     
     // Clear parser
-    parser.clearRootNodes();
+    parser.clearAll();
 }
 
 BOOST_AUTO_TEST_CASE(nodesForStatement) {
@@ -487,7 +487,7 @@ BOOST_AUTO_TEST_CASE(nodesForStatement) {
     TEST_SYMBOL(var, "a");
     
     // Clear parser
-    parser.clearRootNodes();
+    parser.clearAll();
 }
 
 BOOST_AUTO_TEST_CASE(nodesWhileStatement) {
@@ -534,7 +534,7 @@ BOOST_AUTO_TEST_CASE(nodesWhileStatement) {
     TEST_SYMBOL(var, "a");
     
     // Clear parser
-    parser.clearRootNodes();
+    parser.clearAll();
 }
 
 BOOST_AUTO_TEST_CASE(nodesIfStatement) {
@@ -612,7 +612,7 @@ BOOST_AUTO_TEST_CASE(nodesIfStatement) {
     TEST_SYMBOL(var, "c");
     
     // Clear parser
-    parser.clearRootNodes();
+    parser.clearAll();
 }
 
 BOOST_AUTO_TEST_CASE(nodesBreakContinueReturnStatement) {
@@ -654,7 +654,7 @@ BOOST_AUTO_TEST_CASE(nodesBreakContinueReturnStatement) {
     TEST_SYMBOL(var, "a");
     
     // Clear parser
-    parser.clearRootNodes();
+    parser.clearAll();
 }
 
 BOOST_AUTO_TEST_SUITE_END()
