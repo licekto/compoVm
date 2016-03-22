@@ -6,13 +6,11 @@
 #include "parser/parserWrapper.h"
 #include "testDefinitions.h"
 #include "definitions.h"
-#include "ast/nodes/program.h"
 
 BOOST_AUTO_TEST_SUITE(parserCompoTest)
 
 // Global lexer and parser for testing purposes
-Lexer lexer;
-ParserWrapper parser(&lexer);
+ParserWrapper parser(new_ptr(Lexer)());
 
 BOOST_AUTO_TEST_CASE(compoBasicStructure) {
     // Testing input

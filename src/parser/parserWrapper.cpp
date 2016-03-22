@@ -2,8 +2,8 @@
 
 #include "parser/parserWrapper.h"
 
-ParserWrapper::ParserWrapper(Lexer *lexer)
-	: m_lexer(lexer), m_root(std::make_shared<ast::nodes::CProgram>()) {
+ParserWrapper::ParserWrapper(ptr(Lexer) lexer)
+	: m_lexer(lexer), m_root(new_ptr(ast_program)()) {
 	pushServiceParams();
 }
 
@@ -11,28 +11,28 @@ ParserWrapper::~ParserWrapper() {
 	this->clearRootNodes();
 }
 
-Lexer * ParserWrapper::getLexer() const {
+ptr(Lexer) ParserWrapper::getLexer() const {
 	return m_lexer;
 }
 
-void ParserWrapper::addRootNode(std::shared_ptr<ast::nodes::CNode> node) {
+void ParserWrapper::addRootNode(ptr(ast_node) node) {
 	m_root->addNode(node);
 }
 
-std::shared_ptr<ast::nodes::CProgram> ParserWrapper::getRootNode() {
+ptr(ast_program) ParserWrapper::getRootNode() {
 	return m_root;
 }
 
 void ParserWrapper::clearRootNodes() {
 	m_root.reset();
-	m_root = std::make_shared<ast::nodes::CProgram>();
+	m_root = new_ptr(ast_program)();
 }
 
-void ParserWrapper::pushBlock(std::shared_ptr<ast::nodes::procedural::CCompoundBody> block) {
+void ParserWrapper::pushBlock(ptr(ast_compound) block) {
 	m_blockStack.push(block);
 }
 
-std::shared_ptr<ast::nodes::procedural::CCompoundBody> ParserWrapper::popBlock() {
+ptr(ast_compound) ParserWrapper::popBlock() {
 	if (m_blockStack.empty()) {
 		return nullptr;
 	}
@@ -45,51 +45,51 @@ bool ParserWrapper::isStackEmpty() const {
 	return m_blockStack.empty();
 }
 
-void ParserWrapper::setInProvision(std::shared_ptr<ast::nodes::compo::CProvision> inProv) {
+void ParserWrapper::setInProvision(ptr(ast_provision) inProv) {
 	m_currentInteralProvision = inProv;
 }
 
-std::shared_ptr<ast::nodes::compo::CProvision> ParserWrapper::getInProvision() {
+ptr(ast_provision) ParserWrapper::getInProvision() {
 	return m_currentInteralProvision;
 }
 
-void ParserWrapper::setExProvision(std::shared_ptr<ast::nodes::compo::CProvision> exProv) {
+void ParserWrapper::setExProvision(ptr(ast_provision) exProv) {
 	m_currentExteralProvision = exProv;
 }
 
-std::shared_ptr<ast::nodes::compo::CProvision> ParserWrapper::getExProvision() {
+ptr(ast_provision) ParserWrapper::getExProvision() {
 	return m_currentExteralProvision;
 }
 
-void ParserWrapper::setInRequirement(std::shared_ptr<ast::nodes::compo::CRequirement> inReq) {
+void ParserWrapper::setInRequirement(ptr(ast_requirement) inReq) {
 	m_currentInteralRequirement = inReq;
 }
 
-std::shared_ptr<ast::nodes::compo::CRequirement> ParserWrapper::getInRequirement() {
+ptr(ast_requirement) ParserWrapper::getInRequirement() {
 	return m_currentInteralRequirement;
 }
 
-void ParserWrapper::setExRequirement(std::shared_ptr<ast::nodes::compo::CRequirement> exReq) {
+void ParserWrapper::setExRequirement(ptr(ast_requirement) exReq) {
 	m_currentExteralRequirement = exReq;
 }
 
-std::shared_ptr<ast::nodes::compo::CRequirement> ParserWrapper::getExRequirement() {
+ptr(ast_requirement) ParserWrapper::getExRequirement() {
 	return m_currentExteralRequirement;
 }
 
-void ParserWrapper::setArchitecture(std::shared_ptr<ast::nodes::compo::CArchitecture> arch) {
+void ParserWrapper::setArchitecture(ptr(ast_architecture) arch) {
 	m_architecture = arch;
 }
 
-std::shared_ptr<ast::nodes::compo::CArchitecture> ParserWrapper::getArchitecture() {
+ptr(ast_architecture) ParserWrapper::getArchitecture() {
 	return m_architecture;
 }
 
-void ParserWrapper::addDescriptorService(std::shared_ptr<ast::nodes::compo::CService> service) {
+void ParserWrapper::addDescriptorService(ptr(ast_service) service) {
 	m_currentDescritporServices.push_back(service);
 }
 
-std::vector<std::shared_ptr<ast::nodes::compo::CService>>* ParserWrapper::getDescriptorServices() {
+std::vector<ptr(ast_service)>* ParserWrapper::getDescriptorServices() {
 	return &m_currentDescritporServices;
 }
 
@@ -97,11 +97,11 @@ void ParserWrapper::clearDescriptorServices() {
 	m_currentDescritporServices.clear();
 }
 
-void ParserWrapper::addDescriptorConstraint(std::shared_ptr<ast::nodes::compo::CConstraint> constraint) {
+void ParserWrapper::addDescriptorConstraint(ptr(ast_constraint) constraint) {
 	m_currentDescritporConstraints.push_back(constraint);
 }
 
-std::vector<std::shared_ptr<ast::nodes::compo::CConstraint>>* ParserWrapper::getDescriptorConstraints() {
+std::vector<ptr(ast_constraint)>* ParserWrapper::getDescriptorConstraints() {
 	return &m_currentDescritporConstraints;
 }
 
@@ -109,16 +109,14 @@ void ParserWrapper::clearDescriptorConstraints() {
 	m_currentDescritporConstraints.clear();
 }
 
-void ParserWrapper::addServiceParam(std::shared_ptr<ast::nodes::CNode> param) {
-	//m_currentServiceParams.push_back(param);
+void ParserWrapper::addServiceParam(ptr(ast_node) param) {
 	if (m_currentServiceParamsStack.empty()) {
 		pushServiceParams();
 	}
 	m_currentServiceParamsStack.top().push_back(param);
 }
 
-std::vector<std::shared_ptr<ast::nodes::CNode>>* ParserWrapper::getServiceParams() {
-	//return &m_currentServiceParams;
+std::vector<ptr(ast_node)>* ParserWrapper::getServiceParams() {
 	if (m_currentServiceParamsStack.empty()) {
 		pushServiceParams();
 	}
@@ -126,7 +124,7 @@ std::vector<std::shared_ptr<ast::nodes::CNode>>* ParserWrapper::getServiceParams
 }
 
 void ParserWrapper::pushServiceParams() {
-	m_currentServiceParamsStack.push(std::vector<std::shared_ptr<ast::nodes::CNode>>(0));
+	m_currentServiceParamsStack.push(std::vector<ptr(ast_node)>(0));
 }
 
 void ParserWrapper::popServiceParams() {
@@ -149,11 +147,11 @@ bool ParserWrapper::getAtomicity() const {
 	return m_atomicity;
 }
 
-void ParserWrapper::addPort(std::shared_ptr<ast::nodes::compo::CPort> port) {
+void ParserWrapper::addPort(ptr(ast_port) port) {
 	m_currentPorts.push_back(port);
 }
 
-std::vector<std::shared_ptr<ast::nodes::compo::CPort>>* ParserWrapper::getPorts() {
+std::vector<ptr(ast_port)>* ParserWrapper::getPorts() {
 	return &m_currentPorts;
 }
 
@@ -169,19 +167,19 @@ void ParserWrapper::clearAll() {
 	clearDescriptorConstraints();
 }
 
-void ParserWrapper::setCurrentCompoundBody(std::shared_ptr<ast::nodes::procedural::CCompoundBody> body) {
+void ParserWrapper::setCurrentCompoundBody(ptr(ast_compound) body) {
 	m_currentCompoundBody = body;
 }
 
-std::shared_ptr<ast::nodes::procedural::CCompoundBody> ParserWrapper::getCurrentCompoundBody() {
+ptr(ast_compound) ParserWrapper::getCurrentCompoundBody() {
 	return m_currentCompoundBody;
 }
 
-void ParserWrapper::addServiceSignature(std::shared_ptr<ast::nodes::compo::CServiceSignature> serviceSignature) {
+void ParserWrapper::addServiceSignature(ptr(ast_servicesignature) serviceSignature) {
 	m_currentSignaturesList.push_back(serviceSignature);
 }
 
-std::vector<std::shared_ptr<ast::nodes::compo::CServiceSignature>>* ParserWrapper::getServiceSignatures() {
+std::vector<ptr(ast_servicesignature)>* ParserWrapper::getServiceSignatures() {
 	return &m_currentSignaturesList;
 }
 
@@ -189,11 +187,11 @@ void ParserWrapper::clearServiceSignatures() {
 	m_currentSignaturesList.clear();
 }
 
-void ParserWrapper::setPortName(std::shared_ptr<ast::nodes::procedural::CSymbol> name) {
+void ParserWrapper::setPortName(ptr(ast_symbol) name) {
 	m_currentPortName = name;
 }
 
-std::shared_ptr<ast::nodes::procedural::CSymbol> ParserWrapper::getPortName() const {
+ptr(ast_symbol) ParserWrapper::getPortName() const {
 	return m_currentPortName;
 }
 
@@ -205,11 +203,11 @@ bool ParserWrapper::getCollectivity() const {
 	return m_collectivity;
 }
 
-void ParserWrapper::addArchitectureNode(std::shared_ptr<ast::nodes::compo::CBind> bindNode) {
+void ParserWrapper::addArchitectureNode(ptr(ast_bind) bindNode) {
 	m_currentArchitectureBody.push_back(bindNode);
 }
 
-std::vector<std::shared_ptr<ast::nodes::compo::CBind>> * ParserWrapper::getArchitectureBody() {
+std::vector<ptr(ast_bind)> * ParserWrapper::getArchitectureBody() {
 	return &m_currentArchitectureBody;
 }
 

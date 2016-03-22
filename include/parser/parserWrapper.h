@@ -4,15 +4,7 @@
 #include <stack>
 
 #include "parser/lexer.h"
-#include "ast/nodes/node.h"
-#include "ast/nodes/compo/port.h"
-#include "ast/nodes/compo/bind.h"
-#include "ast/nodes/compo/serviceSignature.h"
-#include "ast/nodes/procedural/compoundBody.h"
-#include "ast/nodes/procedural/symbol.h"
-#include "ast/nodes/types/visibilityType.h"
-#include "ast/nodes/types/portType.h"
-#include "ast/nodes/program.h"
+#include "definitions.h"
 
 /**
  * \class ParserWrapper
@@ -21,31 +13,33 @@
 class ParserWrapper {
   private:
 	/**< Lexer pointer */
-	Lexer *m_lexer;
+	ptr(Lexer) m_lexer;
 
+        //ast::semantic::CGlobalDescriptorTable m_descriptorTable;
+        
 	/**< Vector of root nodes */
-	std::shared_ptr<ast::nodes::CProgram> m_root;
+	ptr(ast::nodes::CProgram) m_root;
 
 	/**< Stack of nested blocks */
-	std::stack<std::shared_ptr<ast::nodes::procedural::CCompoundBody>> m_blockStack;
+	std::stack<ptr(ast_compound)> m_blockStack;
 
-	std::shared_ptr<ast::nodes::compo::CProvision> m_currentInteralProvision;
+	ptr(ast_provision) m_currentInteralProvision;
 
-	std::shared_ptr<ast::nodes::compo::CProvision> m_currentExteralProvision;
+	ptr(ast_provision) m_currentExteralProvision;
 
-	std::shared_ptr<ast::nodes::compo::CRequirement> m_currentInteralRequirement;
+	ptr(ast_requirement) m_currentInteralRequirement;
 
-	std::shared_ptr<ast::nodes::compo::CRequirement> m_currentExteralRequirement;
+	ptr(ast_requirement) m_currentExteralRequirement;
 
-	std::shared_ptr<ast::nodes::compo::CArchitecture> m_architecture;
+	ptr(ast_architecture) m_architecture;
 
 	/**< Body of currently parsed descriptor */
-	std::vector<std::shared_ptr<ast::nodes::compo::CService>> m_currentDescritporServices;
+	std::vector<ptr(ast_service)> m_currentDescritporServices;
 
-	std::vector<std::shared_ptr<ast::nodes::compo::CConstraint>> m_currentDescritporConstraints;
+	std::vector<ptr(ast_constraint)> m_currentDescritporConstraints;
 
 	/**< Parameters of currently parsed service */
-	std::stack<std::vector<std::shared_ptr<ast::nodes::CNode>>> m_currentServiceParamsStack;
+	std::stack<std::vector<ptr(ast_node)>> m_currentServiceParamsStack;
 
 	/**< Visibility type of current requirement/provision */
 	ast::nodes::types::visibilityType m_visibilityType;
@@ -54,29 +48,29 @@ class ParserWrapper {
 	bool m_atomicity;
 
 	/**< Currently parsed ports */
-	std::vector<std::shared_ptr<ast::nodes::compo::CPort>> m_currentPorts;
+	std::vector<ptr(ast_port)> m_currentPorts;
 
 	/**< Current body of compound statement */
-	std::shared_ptr<ast::nodes::procedural::CCompoundBody> m_currentCompoundBody;
+	ptr(ast_compound) m_currentCompoundBody;
 
 	/**< Current list of signatures (e.g. requirements, provisions) */
-	std::vector<std::shared_ptr<ast::nodes::compo::CServiceSignature>> m_currentSignaturesList;
+	std::vector<ptr(ast_servicesignature)> m_currentSignaturesList;
 
 	/**< Name of currently parsed port */
-	std::shared_ptr<ast::nodes::procedural::CSymbol> m_currentPortName;
+	ptr(ast_symbol) m_currentPortName;
 
 	/**< Is current port collecting port? */
 	bool m_collectivity;
 
 	/**< Vector of current architecture body */
-	std::vector<std::shared_ptr<ast::nodes::compo::CBind>> m_currentArchitectureBody;
+	std::vector<ptr(ast_bind)> m_currentArchitectureBody;
 
   public:
 	/**
 	* Parametric constructor with default value
 	* @param lexer: pointer to lexer
 	*/
-	ParserWrapper(Lexer *lexer = nullptr);
+	ParserWrapper(ptr(Lexer) lexer = nullptr);
 
 	/**
 	* Destructor
@@ -109,26 +103,26 @@ class ParserWrapper {
 	* Lexer getter
 	* @return Lexer pointer
 	*/
-	Lexer * getLexer() const;
+	ptr(Lexer) getLexer() const;
 
 	/**
 	* Root node setter
 	* @param node pointer
 	*/
-	void addRootNode(std::shared_ptr<ast::nodes::CNode> node);
+	void addRootNode(ptr(ast_node) node);
 
 	/**
 	* Root node getter
 	* @param index: index of wanted node
 	* @return root node at given index
 	*/
-	std::shared_ptr<ast::nodes::CProgram> getRootNode();
+	ptr(ast::nodes::CProgram) getRootNode();
 
 	/**
 	 * Pushes new block context on the stack
 	 * @param block: block smart pointer to push
 	 */
-	void pushBlock(std::shared_ptr<ast::nodes::procedural::CCompoundBody> block);
+	void pushBlock(ptr(ast_compound) block);
 
 	/**
 	 * Pops block from top of the stack
@@ -136,7 +130,7 @@ class ParserWrapper {
 	 *
 	 * No "top" method implemented. Pop actually gets the top, removes data on the top and returns poped content.
 	 */
-	std::shared_ptr<ast::nodes::procedural::CCompoundBody> popBlock();
+	ptr(ast_compound) popBlock();
 
 	/**
 	 * Is stack empty?
@@ -144,37 +138,37 @@ class ParserWrapper {
 	 */
 	bool isStackEmpty() const;
 
-	void setInProvision(std::shared_ptr<ast::nodes::compo::CProvision> inProv);
+	void setInProvision(ptr(ast_provision) inProv);
 
-	std::shared_ptr<ast::nodes::compo::CProvision> getInProvision();
+	ptr(ast_provision) getInProvision();
 
-	void setExProvision(std::shared_ptr<ast::nodes::compo::CProvision> exProv);
+	void setExProvision(ptr(ast_provision) exProv);
 
-	std::shared_ptr<ast::nodes::compo::CProvision> getExProvision();
+	ptr(ast_provision) getExProvision();
 
-	void setInRequirement(std::shared_ptr<ast::nodes::compo::CRequirement> inReq);
+	void setInRequirement(ptr(ast_requirement) inReq);
 
-	std::shared_ptr<ast::nodes::compo::CRequirement> getInRequirement();
+	ptr(ast_requirement) getInRequirement();
 
-	void setExRequirement(std::shared_ptr<ast::nodes::compo::CRequirement> exReq);
+	void setExRequirement(ptr(ast_requirement) exReq);
 
-	std::shared_ptr<ast::nodes::compo::CRequirement> getExRequirement();
+	ptr(ast_requirement) getExRequirement();
 
-	void setArchitecture(std::shared_ptr<ast::nodes::compo::CArchitecture> arch);
+	void setArchitecture(ptr(ast_architecture) arch);
 
-	std::shared_ptr<ast::nodes::compo::CArchitecture> getArchitecture();
+	ptr(ast_architecture) getArchitecture();
 
 	/**
 	 * Sets node of currently parsed descriptor
 	 * @param node: smart pointer to body node
 	 */
-	void addDescriptorService(std::shared_ptr<ast::nodes::compo::CService> service);
+	void addDescriptorService(ptr(ast_service) service);
 
 	/**
 	 * Returns vector of body nodes
 	 * @return reference to vector
 	 */
-	std::vector<std::shared_ptr<ast::nodes::compo::CService>> * getDescriptorServices();
+	std::vector<ptr(ast_service)> * getDescriptorServices();
 
 	/**
 	 * Clears vector of body nodes
@@ -185,13 +179,13 @@ class ParserWrapper {
 	* Sets node of currently parsed descriptor
 	 * @param node: smart pointer to body node
 	 */
-	void addDescriptorConstraint(std::shared_ptr<ast::nodes::compo::CConstraint> constraint);
+	void addDescriptorConstraint(ptr(ast_constraint) constraint);
 
 	/**
 	 * Returns vector of body nodes
 	 * @return reference to vector
 	 */
-	std::vector<std::shared_ptr<ast::nodes::compo::CConstraint>> * getDescriptorConstraints();
+	std::vector<ptr(ast_constraint)> * getDescriptorConstraints();
 
 	/**
 	 * Clears vector of body nodes
@@ -202,13 +196,13 @@ class ParserWrapper {
 	 * Sets parameter of currently parsed service
 	 * @param param: smart pointer to parameter name symbol
 	 */
-	void addServiceParam(std::shared_ptr<ast::nodes::CNode> param);
+	void addServiceParam(ptr(ast_node) param);
 
 	/**
 	 * Returns vector of service parameters
 	 * @return reference to vector
 	 */
-	std::vector<std::shared_ptr<ast::nodes::CNode>> * getServiceParams();
+	std::vector<ptr(ast_node)> * getServiceParams();
 
 	/**
 	 * Push service parameters vector on the stack
@@ -248,13 +242,13 @@ class ParserWrapper {
 	 * Adds currently parsed port
 	 * @param port: smart pointer to port
 	 */
-	void addPort(std::shared_ptr<ast::nodes::compo::CPort> port);
+	void addPort(ptr(ast_port) port);
 
 	/**
 	 * Returns vector of ports
 	 * @return reference to vector
 	 */
-	std::vector<std::shared_ptr<ast::nodes::compo::CPort>> * getPorts();
+	std::vector<ptr(ast_port)> * getPorts();
 
 	/**
 	 * Clears vector of ports
@@ -270,25 +264,25 @@ class ParserWrapper {
 	 * Current compound statement body setter
 	 * @param body: shared pointer to CCompoundBody
 	 */
-	void setCurrentCompoundBody(std::shared_ptr<ast::nodes::procedural::CCompoundBody> body);
+	void setCurrentCompoundBody(ptr(ast_compound) body);
 
 	/**
 	 * Current compound statement body getter
 	 * @return shared pointer to CCompoundBody
 	 */
-	std::shared_ptr<ast::nodes::procedural::CCompoundBody> getCurrentCompoundBody();
+	ptr(ast_compound) getCurrentCompoundBody();
 
 	/**
 	* Adds currently parsed port
 	 * @param port: smart pointer to port
 	 */
-	void addServiceSignature(std::shared_ptr<ast::nodes::compo::CServiceSignature> serviceSignature);
+	void addServiceSignature(ptr(ast_servicesignature) serviceSignature);
 
 	/**
 	 * Returns vector of ports
 	 * @return reference to vector
 	 */
-	std::vector<std::shared_ptr<ast::nodes::compo::CServiceSignature>> * getServiceSignatures();
+	std::vector<ptr(ast_servicesignature)> * getServiceSignatures();
 
 	/**
 	 * Clears vector of ports
@@ -299,13 +293,13 @@ class ParserWrapper {
 	* Sets name of currently parsed port
 	 * @param name
 	 */
-	void setPortName(std::shared_ptr<ast::nodes::procedural::CSymbol> name);
+	void setPortName(ptr(ast_symbol) name);
 
 	/**
 	 * Port name getter
 	 * @return name
 	 */
-	std::shared_ptr<ast::nodes::procedural::CSymbol> getPortName() const;
+	ptr(ast_symbol) getPortName() const;
 
 	/**
 	* Sets collectivity of currently parsed port
@@ -323,13 +317,13 @@ class ParserWrapper {
 	* Adds currently parsed bind node
 	 * @param port: smart pointer to bind node
 	 */
-	void addArchitectureNode(std::shared_ptr<ast::nodes::compo::CBind> bindNode);
+	void addArchitectureNode(ptr(ast_bind) bindNode);
 
 	/**
 	 * Returns vector of ports
 	 * @return pointer to vector
 	 */
-	std::vector<std::shared_ptr<ast::nodes::compo::CBind>> * getArchitectureBody();
+	std::vector<ptr(ast_bind)> * getArchitectureBody();
 
 	/**
 	 * Clears vector of architecture body nodes

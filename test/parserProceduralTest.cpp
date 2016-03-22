@@ -13,8 +13,7 @@
 BOOST_AUTO_TEST_SUITE(parserProceduralTest)
 
 // Global lexer and parser for testing purposes
-Lexer lexer;
-ParserWrapper parser(&lexer);
+ParserWrapper parser(new_ptr(Lexer)());
 
 // This is very long shit-fuck, but I decided to leave it as is because binary ops should be together
 BOOST_AUTO_TEST_CASE(nodesProceduralBinary) {

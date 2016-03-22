@@ -15,8 +15,7 @@ BOOST_AUTO_TEST_SUITE(semanticsTest)
 
 
 // Global lexer and parser for testing purposes
-Lexer lexer;
-ParserWrapper parser(&lexer);
+ParserWrapper parser(new_ptr(Lexer)());
 
 BOOST_AUTO_TEST_CASE(basic) {
     // Testing input
