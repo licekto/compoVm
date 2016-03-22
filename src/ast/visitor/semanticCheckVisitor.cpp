@@ -13,27 +13,25 @@ namespace ast {
 		void CSemanticCheckVisitor::checkDescriptorInterface(ptr(ast_descriptorinterface) node) {
 			if (m_descriptorTable.use_count()) {
 				if (!m_descriptorTable->symbolFound(node->getNameSymbol()->getStringValue())) {
-                                    if (node->getNodeType() == ast_type::DESCRIPTOR) {
-					throw exceptions::semantic::CUndefinedDescriptorException(node->getNameSymbol()->getStringValue());
-                                    }
-                                    else if (node->getNodeType() == ast_type::INTERFACE) {
-					throw exceptions::semantic::CUndefinedInterfaceException(node->getNameSymbol()->getStringValue());
-                                    }
+					if (node->getNodeType() == ast_type::DESCRIPTOR) {
+						throw exceptions::semantic::CUndefinedDescriptorException(node->getNameSymbol()->getStringValue());
+					} else if (node->getNodeType() == ast_type::INTERFACE) {
+						throw exceptions::semantic::CUndefinedInterfaceException(node->getNameSymbol()->getStringValue());
+					}
 				}
 
 				if (node->getExtendsSymbol().use_count()) {
-                                    if (!m_descriptorTable->symbolFound(node->getExtendsSymbol()->getStringValue())) {
-                                        if (node->getNodeType() == ast_type::DESCRIPTOR) {
-                                            throw exceptions::semantic::CUndefinedDescriptorException(node->getExtendsSymbol()->getStringValue());
-                                        }
-                                        else if (node->getNodeType() == ast_type::INTERFACE) {
-                                            throw exceptions::semantic::CUndefinedInterfaceException(node->getExtendsSymbol()->getStringValue());
-                                        }
-                                    }
-                                    ast_type t = m_descriptorTable->getSymbol(node->getExtendsSymbol()->getStringValue())->getNodeType();
-                                    if (t != node->getNodeType()) {
-                                        throw exceptions::semantic::CWrongBaseTypeException(t, node->getNodeType());
-                                    }
+					if (!m_descriptorTable->symbolFound(node->getExtendsSymbol()->getStringValue())) {
+						if (node->getNodeType() == ast_type::DESCRIPTOR) {
+							throw exceptions::semantic::CUndefinedDescriptorException(node->getExtendsSymbol()->getStringValue());
+						} else if (node->getNodeType() == ast_type::INTERFACE) {
+							throw exceptions::semantic::CUndefinedInterfaceException(node->getExtendsSymbol()->getStringValue());
+						}
+					}
+					ast_type t = m_descriptorTable->getSymbol(node->getExtendsSymbol()->getStringValue())->getNodeType();
+					if (t != node->getNodeType()) {
+						throw exceptions::semantic::CWrongBaseTypeException(t, node->getNodeType());
+					}
 				}
 			}
 		}
@@ -110,8 +108,8 @@ namespace ast {
 
 			node->getPortIdentification1()->accept(shared_from_this());
 			node->getPortIdentification2()->accept(shared_from_this());
-                        
-                        
+
+
 		}
 
 		void CSemanticCheckVisitor::visit(ptr(ast_constraint) node) {
@@ -197,19 +195,19 @@ namespace ast {
 		void CSemanticCheckVisitor::visit(ptr(ast_interface) node) {
 			checkNodeType(node, ast_type::INTERFACE);
 
-                        if (node->getExtendsSymbol().use_count()) {
-                            node->getExtendsSymbol()->accept(shared_from_this());
-                        }
-                        
-                        if (node->getNameSymbol().use_count()) {
-                            node->getNameSymbol()->accept(shared_from_this());
-                        }
+			if (node->getExtendsSymbol().use_count()) {
+				node->getExtendsSymbol()->accept(shared_from_this());
+			}
+
+			if (node->getNameSymbol().use_count()) {
+				node->getNameSymbol()->accept(shared_from_this());
+			}
 
 			for (size_t i = 0; i < node->getSignaturesSize(); ++i) {
 				node->getSignatureAt(i)->accept(shared_from_this());
 			}
-                        
-                        checkDescriptorInterface(node);
+
+			checkDescriptorInterface(node);
 		}
 
 		void CSemanticCheckVisitor::visit(ptr(ast_namedport) node) {

@@ -48,8 +48,8 @@ namespace ast {
 
 				/**
 				* Port name getter
-                                * @return name symbol of port identification.
-                                */
+				                * @return name symbol of port identification.
+				                */
 				std::shared_ptr<compo::CPortAddress> getPortIdentification2() const;
 			};
 

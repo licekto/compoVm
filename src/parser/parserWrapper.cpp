@@ -18,13 +18,12 @@ ptr(Lexer) ParserWrapper::getLexer() const {
 void ParserWrapper::addSymbolToDescriptorTable(ptr(ast_descriptorinterface) node) {
 	if (m_descriptorTable.use_count()) {
 		if (m_descriptorTable->symbolFound(node->getNameSymbol()->getStringValue())) {
-                    if (node->getNodeType() == ast_type::DESCRIPTOR) {
-                        throw exceptions::semantic::CRedefinedDescriptorException(node->getNameSymbol()->getStringValue());
-                    }
-                    else if (node->getNodeType() == ast_type::INTERFACE) {
-                        throw exceptions::semantic::CRedefinedInterfaceException(node->getNameSymbol()->getStringValue());
-                    }
-			
+			if (node->getNodeType() == ast_type::DESCRIPTOR) {
+				throw exceptions::semantic::CRedefinedDescriptorException(node->getNameSymbol()->getStringValue());
+			} else if (node->getNodeType() == ast_type::INTERFACE) {
+				throw exceptions::semantic::CRedefinedInterfaceException(node->getNameSymbol()->getStringValue());
+			}
+
 		}
 		m_descriptorTable->addSymbol(node);
 	}
