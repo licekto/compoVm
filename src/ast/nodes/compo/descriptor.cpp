@@ -17,10 +17,10 @@ namespace ast {
 			                         const std::vector<std::shared_ptr<ast::nodes::compo::CConstraint>>& constraints)
 				: CNode(types::nodeType::DESCRIPTOR),
 				  CAbstractDescriptorInterface(name, extends),
-				  m_interalProvision(inProv),
-				  m_exteralProvision(exProv),
-				  m_interalRequirement(inReq),
-				  m_exteralRequirement(exReq),
+				  m_internalProvision(inProv),
+				  m_externalProvision(exProv),
+				  m_internalRequirement(inReq),
+				  m_externalRequirement(exReq),
 				  m_architecture(arch),
 				  m_services(services),
 				  m_constraints(constraints),
@@ -62,19 +62,19 @@ namespace ast {
 			}
 
 			std::shared_ptr<ast::nodes::compo::CProvision> CDescriptor::getInProvision() const {
-				return m_interalProvision;
+				return m_internalProvision;
 			}
 
 			std::shared_ptr<ast::nodes::compo::CProvision> CDescriptor::getExProvision() const {
-				return m_exteralProvision;
+				return m_externalProvision;
 			}
 
 			std::shared_ptr<ast::nodes::compo::CRequirement> CDescriptor::getInRequirement() const {
-				return m_interalRequirement;
+				return m_internalRequirement;
 			}
 
 			std::shared_ptr<ast::nodes::compo::CRequirement> CDescriptor::getExRequirement() const {
-				return m_exteralRequirement;
+				return m_externalRequirement;
 			}
 
 			std::shared_ptr<ast::nodes::compo::CArchitecture> CDescriptor::getArchitecture() const {
@@ -87,6 +87,40 @@ namespace ast {
 
 			std::shared_ptr<ast::nodes::compo::CPort> CDescriptor::getSelfPort() const {
 				return m_selfPort;
+			}
+
+			bool CDescriptor::findPortIn(std::shared_ptr<compo::CAbstractReqProv> reqProv, std::string name) const {
+                            if (reqProv.use_count()) {
+				for (size_t i = 0; i < reqProv->getNumberOfPorts(); ++i) {
+					if (reqProv->getPortAt(i)->getNameSymbol()->getStringValue() == name) {
+						return true;
+					}
+				}
+                            }
+                            return false;
+			}
+
+			bool CDescriptor::portFound(std::string name) const {
+				return inProvidedPortFound(name)
+				       || exProvidedPortFound(name)
+				       || inRequiredPortFound(name)
+				       || exRequiredPortFound(name);
+			}
+
+			bool CDescriptor::inProvidedPortFound(std::string name) const {
+				return findPortIn(m_internalProvision, name);
+			}
+
+			bool CDescriptor::exProvidedPortFound(std::string name) const {
+				return findPortIn(m_externalProvision, name);
+			}
+
+			bool CDescriptor::inRequiredPortFound(std::string name) const {
+				return findPortIn(m_internalRequirement, name);
+			}
+
+			bool CDescriptor::exRequiredPortFound(std::string name) const {
+				return findPortIn(m_externalRequirement, name);
 			}
 		}
 	}

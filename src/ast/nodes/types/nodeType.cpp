@@ -55,7 +55,7 @@ namespace ast {
 				{nodeType::CONTINUE, "continue"},
 			};
 
-			const char * typeName(nodeType type) {
+			std::string typeName(nodeType type) {
 				return typeNames[type];
 			}
 

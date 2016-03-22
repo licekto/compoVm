@@ -2,6 +2,7 @@
 
 #include <memory>
 #include <stack>
+#include <algorithm>
 
 #include "definitions.h"
 
@@ -9,6 +10,7 @@
 #include "ast/semantic/globalDescriptorsTable.h"
 #include "exceptions/semantic/redefinedDescriptorException.h"
 #include "exceptions/semantic/redefinedInterfaceException.h"
+#include "exceptions/semantic/redefinedPortException.h"
 
 
 /**

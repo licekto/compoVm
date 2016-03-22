@@ -74,7 +74,7 @@ namespace ast {
 			 * Function to print names of types
 			 * @param type: type of node
 			 */
-			const char * typeName(nodeType type);
+			std::string typeName(nodeType type);
 
 		}
 

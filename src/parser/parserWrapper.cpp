@@ -1,6 +1,7 @@
 #include <memory>
 
 #include "parser/parserWrapper.h"
+#include "exceptions/semantic/redefinedPortException.h"
 
 ParserWrapper::ParserWrapper(ptr(Lexer) lexer, ptr(ast::semantic::CGlobalDescriptorTable) descriptorTable)
 	: m_lexer(lexer), m_descriptorTable(descriptorTable), m_root(new_ptr(ast_program)()) {
@@ -18,9 +19,9 @@ ptr(Lexer) ParserWrapper::getLexer() const {
 void ParserWrapper::addSymbolToDescriptorTable(ptr(ast_descriptorinterface) node) {
 	if (m_descriptorTable.use_count()) {
 		if (m_descriptorTable->symbolFound(node->getNameSymbol()->getStringValue())) {
-			if (node->getNodeType() == ast_type::DESCRIPTOR) {
+			if (node->getNodeType() == ast_nodetype::DESCRIPTOR) {
 				throw exceptions::semantic::CRedefinedDescriptorException(node->getNameSymbol()->getStringValue());
-			} else if (node->getNodeType() == ast_type::INTERFACE) {
+			} else if (node->getNodeType() == ast_nodetype::INTERFACE) {
 				throw exceptions::semantic::CRedefinedInterfaceException(node->getNameSymbol()->getStringValue());
 			}
 
@@ -172,6 +173,13 @@ bool ParserWrapper::getAtomicity() const {
 }
 
 void ParserWrapper::addPort(ptr(ast_port) port) {
+	auto it = std::find_if(m_currentPorts.begin(), m_currentPorts.end(), [port] (ptr(ast_port) definedPort) {
+		return definedPort->getNameSymbol()->getStringValue() == port->getNameSymbol()->getStringValue();
+	});
+
+	if (it != m_currentPorts.end()) {
+		throw exceptions::semantic::CRedefinedPortException(port->getNameSymbol()->getStringValue());
+	}
 	m_currentPorts.push_back(port);
 }
 

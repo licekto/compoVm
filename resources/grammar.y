@@ -275,29 +275,28 @@ selection_statement
                 :   IF '(' expression ')' statement
                     {
                         $$ = new_ptr(ast_if)(cast(ast_expression)($3),
-                                                                               cast(ast_compound)($5),
-                                                                               nullptr);
+                                             cast(ast_compound)($5),
+                                             nullptr);
                     }
                 |   IF '(' expression ')' statement ELSE statement
                     {
                         $$ = new_ptr(ast_if)(cast(ast_expression)($3),
-                                                                               cast(ast_compound)($5),
-                                                                               cast(ast_compound)($7));
+                                             cast(ast_compound)($5),
+                                             cast(ast_compound)($7));
                     }
                 ;
 
 iteration_statement
                 :   WHILE '(' expression ')' statement
                     {
-                        $$ = new_ptr(ast_while)(cast(ast_expression)($3),
-                                                                                  cast(ast_compound)($5));
+                        $$ = new_ptr(ast_while)(cast(ast_expression)($3), cast(ast_compound)($5));
                     }
                 |   FOR '(' assignment_expression ';' expression_statement expression ')' statement
                     {
                         $$ = new_ptr(ast_for)(cast(ast_assignment)($3),
-                                                                                cast(ast_expression)($5),
-                                                                                cast(ast_expression)($6),
-                                                                                cast(ast_compound)($8));
+                                                   cast(ast_expression)($5),
+                                                   cast(ast_expression)($6),
+                                                   cast(ast_compound)($8));
                     }
                 ;
 
@@ -487,22 +486,22 @@ port_signature
                 :   IDENTIFIER
                     {
                         $$ = new_ptr(ast_namedport)(parser->getPortName(),
-                                                                        parser->getAtomicity(),
-                                                                        cast(ast_symbol)($1),
-                                                                        parser->getCollectivity());
+                                                    parser->getAtomicity(),
+                                                    cast(ast_symbol)($1),
+                                                    parser->getCollectivity());
                     }
                 |   '*'
                     {
                         $$ = new_ptr(ast_universalport)(parser->getPortName(),
-                                                                            parser->getAtomicity(),
-                                                                            parser->getCollectivity());
+                                                        parser->getAtomicity(),
+                                                        parser->getCollectivity());
                     }
                 |   service_signatures_list
                     {
                         $$ = new_ptr(ast_signaturesport)(parser->getPortName(),
-                                                                             parser->getAtomicity(),
-                                                                            *parser->getServiceSignatures(),
-                                                                             parser->getCollectivity());
+                                                         parser->getAtomicity(),
+                                                        *parser->getServiceSignatures(),
+                                                         parser->getCollectivity());
                         parser->clearServiceSignatures();
                     }
                 ;
@@ -521,8 +520,7 @@ of_kind
 service         
                 :   SERVICE service_signature compound_statement
                     {
-                        parser->addDescriptorService(new_ptr(ast_service)(cast(ast_servicesignature)($2),
-                                                                                               cast(ast_compound)($3)));
+                        parser->addDescriptorService(new_ptr(ast_service)(cast(ast_servicesignature)($2), cast(ast_compound)($3)));
                     }
                 ;
 
@@ -597,8 +595,7 @@ parameter_runtime
 constraint	
                 :   CONSTRAINT service_signature compound_statement
                     {
-                        parser->addDescriptorConstraint(new_ptr(ast_constraint)(cast(ast_servicesignature)($2),
-                                                                                                  cast(ast_compound)($3)));
+                        parser->addDescriptorConstraint(new_ptr(ast_constraint)(cast(ast_servicesignature)($2), cast(ast_compound)($3)));
                     }
 		;
 
@@ -690,8 +687,7 @@ component_identifier
 collection_port_literal
                 :   IDENTIFIER '[' expression ']'
                     {
-                        $$ = new_ptr(ast_collectionportliteral)(cast(ast_symbol)($1),
-                                                                                    cast(ast_expression)($3));
+                        $$ = new_ptr(ast_collectionportliteral)(cast(ast_symbol)($1), cast(ast_expression)($3));
                     }
                 ;
 
@@ -699,8 +695,8 @@ service_invocation
                 :   IDENTIFIER '.' service_signature_call
                     {
                         $$ = new_ptr(ast_serviceinvocation)(cast(ast_symbol)($1),
-                                                                                cast(ast_servicesignature)($3)->getNameSymbol(),
-                                                                                $3);
+                                                            cast(ast_servicesignature)($3)->getNameSymbol(),
+                                                            $3);
                     }
                 ;
 

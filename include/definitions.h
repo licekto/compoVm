@@ -110,7 +110,9 @@ using ast_subtraction = ast::nodes::procedural::CSubtractionExpression;
 using ast_symbol = ast::nodes::procedural::CSymbol;
 using ast_while = ast::nodes::procedural::CWhileStatement;
 
-using ast_type = ast::nodes::types::nodeType;
+using ast_nodetype = ast::nodes::types::nodeType;
+using ast_visibilitytype = ast::nodes::types::visibilityType;
+using ast_porttype = ast::nodes::types::portType;
 
 #define ptr(x) std::shared_ptr<x>
 #define wptr(x) std::weak_ptr<x>

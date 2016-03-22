@@ -1,5 +1,8 @@
 #include "ast/visitor/semanticCheckVisitor.h"
 #include "exceptions/semantic/wrongBaseTypeException.h"
+#include "exceptions/semantic/undefinedPortException.h"
+#include "exceptions/semantic/unsupportedFeatureException.h"
+#include "exceptions/semantic/bidirectionalPortNotSupportedException.h"
 
 namespace ast {
 
@@ -13,22 +16,22 @@ namespace ast {
 		void CSemanticCheckVisitor::checkDescriptorInterface(ptr(ast_descriptorinterface) node) {
 			if (m_descriptorTable.use_count()) {
 				if (!m_descriptorTable->symbolFound(node->getNameSymbol()->getStringValue())) {
-					if (node->getNodeType() == ast_type::DESCRIPTOR) {
+					if (node->getNodeType() == ast_nodetype::DESCRIPTOR) {
 						throw exceptions::semantic::CUndefinedDescriptorException(node->getNameSymbol()->getStringValue());
-					} else if (node->getNodeType() == ast_type::INTERFACE) {
+					} else if (node->getNodeType() == ast_nodetype::INTERFACE) {
 						throw exceptions::semantic::CUndefinedInterfaceException(node->getNameSymbol()->getStringValue());
 					}
 				}
 
 				if (node->getExtendsSymbol().use_count()) {
 					if (!m_descriptorTable->symbolFound(node->getExtendsSymbol()->getStringValue())) {
-						if (node->getNodeType() == ast_type::DESCRIPTOR) {
+						if (node->getNodeType() == ast_nodetype::DESCRIPTOR) {
 							throw exceptions::semantic::CUndefinedDescriptorException(node->getExtendsSymbol()->getStringValue());
-						} else if (node->getNodeType() == ast_type::INTERFACE) {
+						} else if (node->getNodeType() == ast_nodetype::INTERFACE) {
 							throw exceptions::semantic::CUndefinedInterfaceException(node->getExtendsSymbol()->getStringValue());
 						}
 					}
-					ast_type t = m_descriptorTable->getSymbol(node->getExtendsSymbol()->getStringValue())->getNodeType();
+					ast_nodetype t = m_descriptorTable->getSymbol(node->getExtendsSymbol()->getStringValue())->getNodeType();
 					if (t != node->getNodeType()) {
 						throw exceptions::semantic::CWrongBaseTypeException(t, node->getNodeType());
 					}
@@ -36,7 +39,7 @@ namespace ast {
 			}
 		}
 
-		void CSemanticCheckVisitor::checkNodeType(ptr(ast_node) node, ast_type type) {
+		void CSemanticCheckVisitor::checkNodeType(ptr(ast_node) node, ast_nodetype type) {
 			if (!IS_TYPE(node, type)) {
 				throw exceptions::semantic::CWrongAstNodeTypeException(type, node->getNodeType());
 			}
@@ -44,36 +47,36 @@ namespace ast {
 
 		/*---------------------- abstract nodes --------------------------*/
 		void CSemanticCheckVisitor::visit(ptr(ast_node) node) {
-			checkNodeType(node, ast_type::CONSTRAINT);
+			checkNodeType(node, ast_nodetype::CONSTRAINT);
 		}
 		void CSemanticCheckVisitor::visit(ptr(ast_reqprov) node) {
-			checkNodeType(node, ast_type::CONSTRAINT);
+			checkNodeType(node, ast_nodetype::CONSTRAINT);
 		}
 		void CSemanticCheckVisitor::visit(ptr(ast_servconstr) node) {
-			checkNodeType(node, ast_type::CONSTRAINT);
+			checkNodeType(node, ast_nodetype::CONSTRAINT);
 		}
 		void CSemanticCheckVisitor::visit(ptr(ast_bind) node) {
-			checkNodeType(node, ast_type::CONSTRAINT);
+			checkNodeType(node, ast_nodetype::CONSTRAINT);
 		}
 		void CSemanticCheckVisitor::visit(ptr(ast_port) node) {
-			checkNodeType(node, ast_type::CONSTRAINT);
+			checkNodeType(node, ast_nodetype::CONSTRAINT);
 		}
 		void CSemanticCheckVisitor::visit(ptr(ast_expression) node) {
-			checkNodeType(node, ast_type::CONSTRAINT);
+			checkNodeType(node, ast_nodetype::CONSTRAINT);
 		}
 		void CSemanticCheckVisitor::visit(ptr(ast_primaryexpression) node) {
-			checkNodeType(node, ast_type::CONSTRAINT);
+			checkNodeType(node, ast_nodetype::CONSTRAINT);
 		}
 		void CSemanticCheckVisitor::visit(ptr(ast_statement) node) {
-			checkNodeType(node, ast_type::CONSTRAINT);
+			checkNodeType(node, ast_nodetype::CONSTRAINT);
 		}
 		void CSemanticCheckVisitor::visit(ptr(ast_binary) node) {
-			checkNodeType(node, ast_type::CONSTRAINT);
+			checkNodeType(node, ast_nodetype::CONSTRAINT);
 		}
 		/*----------------------------------------------------------------*/
 
 		void CSemanticCheckVisitor::visit(ptr(ast_program) node) {
-			checkNodeType(node, ast_type::PROGRAM);
+			checkNodeType(node, ast_nodetype::PROGRAM);
 
 			if (node->getNodesSize() == 0) {
 				throw exceptions::semantic::CEmptyProgramException();
@@ -85,7 +88,7 @@ namespace ast {
 		}
 
 		void CSemanticCheckVisitor::visit(ptr(ast_architecture) node) {
-			checkNodeType(node, ast_type::ARCHITECTURE);
+			checkNodeType(node, ast_nodetype::ARCHITECTURE);
 
 			if (node->getBodySize() == 0) {
 				// warning, empty architecture
@@ -97,14 +100,14 @@ namespace ast {
 		}
 
 		void CSemanticCheckVisitor::visit(ptr(ast_collectionportliteral) node) {
-			checkNodeType(node, ast_type::COLLECTION_PORT);
+			checkNodeType(node, ast_nodetype::COLLECTION_PORT);
 
 			node->getPortName()->accept(shared_from_this());
 			node->getIndexExpression()->accept(shared_from_this());
 		}
 
 		void CSemanticCheckVisitor::visit(ptr(ast_connection) node) {
-			checkNodeType(node, ast_type::CONNECTION);
+			checkNodeType(node, ast_nodetype::CONNECTION);
 
 			node->getPortIdentification1()->accept(shared_from_this());
 			node->getPortIdentification2()->accept(shared_from_this());
@@ -113,7 +116,7 @@ namespace ast {
 		}
 
 		void CSemanticCheckVisitor::visit(ptr(ast_constraint) node) {
-			checkNodeType(node, ast_type::CONSTRAINT);
+			checkNodeType(node, ast_nodetype::CONSTRAINT);
 
 			for (size_t i = 0; i < node->getBodySize(); ++i) {
 				node->getBodyNodeAt(i)->accept(shared_from_this());
@@ -125,20 +128,20 @@ namespace ast {
 		}
 
 		void CSemanticCheckVisitor::visit(ptr(ast_delegation) node) {
-			checkNodeType(node, ast_type::DELEGATION);
+			checkNodeType(node, ast_nodetype::DELEGATION);
 
 			node->getPortIdentification1()->accept(shared_from_this());
 			node->getPortIdentification2()->accept(shared_from_this());
 		}
 
 		void CSemanticCheckVisitor::visit(ptr(ast_dereference) node) {
-			checkNodeType(node, ast_type::DEREFERENCE);
+			checkNodeType(node, ast_nodetype::DEREFERENCE);
 
 			node->getParamName()->accept(shared_from_this());
 		}
 
 		void CSemanticCheckVisitor::visit(ptr(ast_descriptor) node) {
-			checkNodeType(node, ast_type::DESCRIPTOR);
+			checkNodeType(node, ast_nodetype::DESCRIPTOR);
 
 			node->getNameSymbol()->accept(shared_from_this());
 
@@ -176,14 +179,17 @@ namespace ast {
 		}
 
 		void CSemanticCheckVisitor::visit(ptr(ast_disconnection) node) {
-			checkNodeType(node, ast_type::DISCONNECTION);
+			checkNodeType(node, ast_nodetype::DISCONNECTION);
 
 			node->getPortIdentification1()->accept(shared_from_this());
 			node->getPortIdentification2()->accept(shared_from_this());
 		}
 
 		void CSemanticCheckVisitor::visit(ptr(ast_injectedport) node) {
-			checkNodeType(node, ast_type::INJECTED_PORT);
+
+			throw exceptions::semantic::CUnsupportedFeatureException("Injected port");
+
+			checkNodeType(node, ast_nodetype::INJECTED_PORT);
 
 			node->getInjectedWith()->accept(shared_from_this());
 			if (node->getKindOf()) {
@@ -193,7 +199,7 @@ namespace ast {
 		}
 
 		void CSemanticCheckVisitor::visit(ptr(ast_interface) node) {
-			checkNodeType(node, ast_type::INTERFACE);
+			checkNodeType(node, ast_nodetype::INTERFACE);
 
 			if (node->getExtendsSymbol().use_count()) {
 				node->getExtendsSymbol()->accept(shared_from_this());
@@ -211,7 +217,7 @@ namespace ast {
 		}
 
 		void CSemanticCheckVisitor::visit(ptr(ast_namedport) node) {
-			checkNodeType(node, ast_type::NAMED_PORT);
+			checkNodeType(node, ast_nodetype::NAMED_PORT);
 
 			if (node->getKindOf()) {
 				node->getKindOf()->accept(shared_from_this());
@@ -221,30 +227,63 @@ namespace ast {
 		}
 
 		void CSemanticCheckVisitor::visit(ptr(ast_portaddress) node) {
-			checkNodeType(node, ast_type::PORT_ADDRESS);
+			checkNodeType(node, ast_nodetype::PORT_ADDRESS);
 
-			node->getComponent()->accept(shared_from_this());
 			node->getPortName()->accept(shared_from_this());
+			node->getComponent()->accept(shared_from_this());
+
+			// Direct component identifier
+			if (node->getComponent()->getNodeType() == ast_nodetype::SYMBOL) {
+
+			}
+
+			if (!m_currentDescriptor->portFound(node->getPortName()->getStringValue())) {
+				throw exceptions::semantic::CUndefinedPortException(node->getPortName()->getStringValue());
+			}
 		}
 
 		void CSemanticCheckVisitor::visit(ptr(ast_provision) node) {
-			checkNodeType(node, ast_type::PROVISION);
+			checkNodeType(node, ast_nodetype::PROVISION);
 
 			for (size_t i = 0; i < node->getNumberOfPorts(); ++i) {
-				node->getPortAt(i)->accept(shared_from_this());
+				ptr(ast_port) port = node->getPortAt(i);
+				port->accept(shared_from_this());
+
+				ast_visibilitytype type = node->getVisibilityType();
+				if ((type == ast_visibilitytype::INTERNAL && m_currentDescriptor->exProvidedPortFound(port->getNameSymbol()->getStringValue()))
+				 || (type == ast_visibilitytype::EXTERNAL && m_currentDescriptor->inProvidedPortFound(port->getNameSymbol()->getStringValue()))) {
+                                    throw exceptions::semantic::CBidirectionalPortNotSupportedException(port->getNameSymbol()->getStringValue());
+				}
+                                
+                                if (m_currentDescriptor->exRequiredPortFound(port->getNameSymbol()->getStringValue())
+                                 || m_currentDescriptor->inRequiredPortFound(port->getNameSymbol()->getStringValue())) {
+                                    throw exceptions::semantic::CBidirectionalPortNotSupportedException(port->getNameSymbol()->getStringValue());
+				}
 			}
 		}
 
 		void CSemanticCheckVisitor::visit(ptr(ast_requirement) node) {
-			checkNodeType(node, ast_type::REQUIREMENT);
+			checkNodeType(node, ast_nodetype::REQUIREMENT);
 
 			for (size_t i = 0; i < node->getNumberOfPorts(); ++i) {
-				node->getPortAt(i)->accept(shared_from_this());
+				ptr(ast_port) port = node->getPortAt(i);
+				port->accept(shared_from_this());
+
+				ast_visibilitytype type = node->getVisibilityType();
+				if ((type == ast_visibilitytype::INTERNAL && m_currentDescriptor->exRequiredPortFound(port->getNameSymbol()->getStringValue()))
+				 || (type == ast_visibilitytype::EXTERNAL && m_currentDescriptor->inRequiredPortFound(port->getNameSymbol()->getStringValue()))) {
+                                    throw exceptions::semantic::CBidirectionalPortNotSupportedException(port->getNameSymbol()->getStringValue());
+				}
+                                
+                                if (m_currentDescriptor->exProvidedPortFound(port->getNameSymbol()->getStringValue())
+                                 || m_currentDescriptor->inProvidedPortFound(port->getNameSymbol()->getStringValue())) {
+                                    throw exceptions::semantic::CBidirectionalPortNotSupportedException(port->getNameSymbol()->getStringValue());
+				}
 			}
 		}
 
 		void CSemanticCheckVisitor::visit(ptr(ast_service) node) {
-			checkNodeType(node, ast_type::SERVICE);
+			checkNodeType(node, ast_nodetype::SERVICE);
 
 			for (size_t i = 0; i < node->getBodySize(); ++i) {
 				node->getBodyNodeAt(i)->accept(shared_from_this());
@@ -260,7 +299,7 @@ namespace ast {
 		}
 
 		void CSemanticCheckVisitor::visit(ptr(ast_serviceinvocation) node) {
-			checkNodeType(node, ast_type::SERVICE_INVOCATION);
+			checkNodeType(node, ast_nodetype::SERVICE_INVOCATION);
 
 			node->getParameters()->accept(shared_from_this());
 			node->getReceiverName()->accept(shared_from_this());
@@ -268,7 +307,7 @@ namespace ast {
 		}
 
 		void CSemanticCheckVisitor::visit(ptr(ast_servicesignature) node) {
-			checkNodeType(node, ast_type::SERVICE_SIGNATURE);
+			checkNodeType(node, ast_nodetype::SERVICE_SIGNATURE);
 
 			node->getNameSymbol()->accept(shared_from_this());
 			for (size_t i = 0; i < node->getParamsSize(); ++i) {
@@ -277,7 +316,7 @@ namespace ast {
 		}
 
 		void CSemanticCheckVisitor::visit(ptr(ast_signaturesport) node) {
-			checkNodeType(node, ast_type::SIGNATURES_PORT);
+			checkNodeType(node, ast_nodetype::SIGNATURES_PORT);
 
 			if (node->getKindOf()) {
 				node->getKindOf()->accept(shared_from_this());
@@ -289,7 +328,7 @@ namespace ast {
 		}
 
 		void CSemanticCheckVisitor::visit(ptr(ast_universalport) node) {
-			checkNodeType(node, ast_type::UNIVERSAL_PORT);
+			checkNodeType(node, ast_nodetype::UNIVERSAL_PORT);
 
 			if (node->getKindOf()) {
 				node->getKindOf()->accept(shared_from_this());
@@ -298,25 +337,25 @@ namespace ast {
 		}
 
 		void CSemanticCheckVisitor::visit(ptr(ast_addition) node) {
-			checkNodeType(node, ast_type::ADDITION_EXPRESSION);
+			checkNodeType(node, ast_nodetype::ADDITION_EXPRESSION);
 
 			node->getOperand1()->accept(shared_from_this());
 			node->getOperand1()->accept(shared_from_this());
 		}
 
 		void CSemanticCheckVisitor::visit(ptr(ast_assignment) node) {
-			checkNodeType(node, ast_type::ASSIGNMENT_EXPRESSION);
+			checkNodeType(node, ast_nodetype::ASSIGNMENT_EXPRESSION);
 
 			node->getRValue()->accept(shared_from_this());
 			node->getVariable()->accept(shared_from_this());
 		}
 
 		void CSemanticCheckVisitor::visit(ptr(ast_break) node) {
-			checkNodeType(node, ast_type::BREAK);
+			checkNodeType(node, ast_nodetype::BREAK);
 		}
 
 		void CSemanticCheckVisitor::visit(ptr(ast_compound) node) {
-			checkNodeType(node, ast_type::COMPOUND_BODY);
+			checkNodeType(node, ast_nodetype::COMPOUND_BODY);
 
 			for (size_t i = 0; i < node->getBodySize(); ++i) {
 				node->getBodyNodeAt(i)->accept(shared_from_this());
@@ -328,29 +367,29 @@ namespace ast {
 		}
 
 		void CSemanticCheckVisitor::visit(ptr(ast_constant) node) {
-			checkNodeType(node, ast_type::CONSTANT);
+			checkNodeType(node, ast_nodetype::CONSTANT);
 		}
 
 		void CSemanticCheckVisitor::visit(ptr(ast_continue) node) {
-			checkNodeType(node, ast_type::CONTINUE);
+			checkNodeType(node, ast_nodetype::CONTINUE);
 		}
 
 		void CSemanticCheckVisitor::visit(ptr(ast_division) node) {
-			checkNodeType(node, ast_type::DIVISION_EXPRESSION);
+			checkNodeType(node, ast_nodetype::DIVISION_EXPRESSION);
 
 			node->getOperand1()->accept(shared_from_this());
 			node->getOperand1()->accept(shared_from_this());
 		}
 
 		void CSemanticCheckVisitor::visit(ptr(ast_equality) node) {
-			checkNodeType(node, ast_type::EQUALITY_EXPRESSION);
+			checkNodeType(node, ast_nodetype::EQUALITY_EXPRESSION);
 
 			node->getOperand1()->accept(shared_from_this());
 			node->getOperand1()->accept(shared_from_this());
 		}
 
 		void CSemanticCheckVisitor::visit(ptr(ast_for) node) {
-			checkNodeType(node, ast_type::FOR);
+			checkNodeType(node, ast_nodetype::FOR);
 
 			node->getBody()->accept(shared_from_this());
 			node->getCondition()->accept(shared_from_this());
@@ -359,21 +398,21 @@ namespace ast {
 		}
 
 		void CSemanticCheckVisitor::visit(ptr(ast_greater) node) {
-			checkNodeType(node, ast_type::GREATER_EXPRESSION);
+			checkNodeType(node, ast_nodetype::GREATER_EXPRESSION);
 
 			node->getOperand1()->accept(shared_from_this());
 			node->getOperand1()->accept(shared_from_this());
 		}
 
 		void CSemanticCheckVisitor::visit(ptr(ast_greaterorequal) node) {
-			checkNodeType(node, ast_type::GREATER_OR_EQUAL_EXPRESSION);
+			checkNodeType(node, ast_nodetype::GREATER_OR_EQUAL_EXPRESSION);
 
 			node->getOperand1()->accept(shared_from_this());
 			node->getOperand1()->accept(shared_from_this());
 		}
 
 		void CSemanticCheckVisitor::visit(ptr(ast_if) node) {
-			checkNodeType(node, ast_type::IF);
+			checkNodeType(node, ast_nodetype::IF);
 
 			node->getCondition()->accept(shared_from_this());
 			node->getIfBody()->accept(shared_from_this());
@@ -383,70 +422,70 @@ namespace ast {
 		}
 
 		void CSemanticCheckVisitor::visit(ptr(ast_less) node) {
-			checkNodeType(node, ast_type::LESS_EXPRESSION);
+			checkNodeType(node, ast_nodetype::LESS_EXPRESSION);
 
 			node->getOperand1()->accept(shared_from_this());
 			node->getOperand1()->accept(shared_from_this());
 		}
 
 		void CSemanticCheckVisitor::visit(ptr(ast_lessorequal) node) {
-			checkNodeType(node, ast_type::LESS_OR_EQUAL_EXPRESSION);
+			checkNodeType(node, ast_nodetype::LESS_OR_EQUAL_EXPRESSION);
 
 			node->getOperand1()->accept(shared_from_this());
 			node->getOperand1()->accept(shared_from_this());
 		}
 
 		void CSemanticCheckVisitor::visit(ptr(ast_and) node) {
-			checkNodeType(node, ast_type::LOGICAL_AND_EXPRESSION);
+			checkNodeType(node, ast_nodetype::LOGICAL_AND_EXPRESSION);
 
 			node->getOperand1()->accept(shared_from_this());
 			node->getOperand1()->accept(shared_from_this());
 		}
 
 		void CSemanticCheckVisitor::visit(ptr(ast_or) node) {
-			checkNodeType(node, ast_type::LOGICAL_OR_EXPRESSION);
+			checkNodeType(node, ast_nodetype::LOGICAL_OR_EXPRESSION);
 
 			node->getOperand1()->accept(shared_from_this());
 			node->getOperand1()->accept(shared_from_this());
 		}
 
 		void CSemanticCheckVisitor::visit(ptr(ast_multiplication) node) {
-			checkNodeType(node, ast_type::MULTIPLICATION_EXPRESSION);
+			checkNodeType(node, ast_nodetype::MULTIPLICATION_EXPRESSION);
 
 			node->getOperand1()->accept(shared_from_this());
 			node->getOperand1()->accept(shared_from_this());
 		}
 
 		void CSemanticCheckVisitor::visit(ptr(ast_nonequality) node) {
-			checkNodeType(node, ast_type::NON_EQUALITY_EXPRESSION);
+			checkNodeType(node, ast_nodetype::NON_EQUALITY_EXPRESSION);
 
 			node->getOperand1()->accept(shared_from_this());
 			node->getOperand1()->accept(shared_from_this());
 		}
 
 		void CSemanticCheckVisitor::visit(ptr(ast_parens) node) {
-			checkNodeType(node, ast_type::PARENS);
+			checkNodeType(node, ast_nodetype::PARENS);
 
 			node->getExpression()->accept(shared_from_this());
 		}
 
 		void CSemanticCheckVisitor::visit(ptr(ast_return) node) {
-			checkNodeType(node, ast_type::RETURN);
+			checkNodeType(node, ast_nodetype::RETURN);
 		}
 
 		void CSemanticCheckVisitor::visit(ptr(ast_subtraction) node) {
-			checkNodeType(node, ast_type::SUBTRACTION_EXPRESSION);
+			checkNodeType(node, ast_nodetype::SUBTRACTION_EXPRESSION);
 
 			node->getOperand1()->accept(shared_from_this());
 			node->getOperand1()->accept(shared_from_this());
 		}
 
 		void CSemanticCheckVisitor::visit(ptr(ast_string) node) {
-			checkNodeType(node, ast_type::STRING_LITERAL);
+			checkNodeType(node, ast_nodetype::STRING_LITERAL);
 		}
 
 		void CSemanticCheckVisitor::visit(ptr(ast_symbol) node) {
-			checkNodeType(node, ast_type::SYMBOL);
+			checkNodeType(node, ast_nodetype::SYMBOL);
 
 			if (node->getStringValue() == "") {
 				// warning, empty symbol??
@@ -454,7 +493,7 @@ namespace ast {
 		}
 
 		void CSemanticCheckVisitor::visit(ptr(ast_while) node) {
-			checkNodeType(node, ast_type::WHILE);
+			checkNodeType(node, ast_nodetype::WHILE);
 
 			node->getBody()->accept(shared_from_this());
 			node->getCondition()->accept(shared_from_this());

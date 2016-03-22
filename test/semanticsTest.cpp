@@ -17,6 +17,7 @@
 #include "exceptions/semantic/redefinedDescriptorException.h"
 #include "exceptions/semantic/redefinedInterfaceException.h"
 #include "exceptions/semantic/wrongBaseTypeException.h"
+#include "exceptions/semantic/bidirectionalPortNotSupportedException.h"
 
 BOOST_AUTO_TEST_SUITE(semanticsTest)
 
@@ -179,6 +180,139 @@ BOOST_AUTO_TEST_CASE(wrongInterfaceBaseTest) {
     ptr(ast::visitors::CSemanticCheckVisitor) visitor = new_ptr(ast::visitors::CSemanticCheckVisitor)(parser.getDescriptorTable());
     
     BOOST_CHECK_THROW(program->accept(visitor), exceptions::semantic::CWrongBaseTypeException);
+    
+    // Clear AST for next test
+    parser.clearAll();
+}
+
+BOOST_AUTO_TEST_CASE(portRedefinitionTest) {
+    // Testing input
+    std::stringstream input;
+    input.str(
+    "descriptor server{\
+        provides {\
+            a : req;\
+            a : handle;\
+        }\
+     }");
+    
+    // Parse input and create AST
+    BOOST_CHECK_THROW(parser.parse(input), exceptions::semantic::CRedefinedPortException);
+
+    
+    ptr(ast_program) program = parser.getRootNode();
+    
+    ptr(ast::visitors::CSemanticCheckVisitor) visitor = new_ptr(ast::visitors::CSemanticCheckVisitor)(parser.getDescriptorTable());
+    
+    BOOST_CHECK_THROW(program->accept(visitor), exceptions::semantic::CEmptyProgramException);
+    
+    // Clear AST for next test
+    parser.clearAll();
+}
+
+BOOST_AUTO_TEST_CASE(bidirectionalProvidedPortTest) {
+    // Testing input
+    std::stringstream input;
+    input.str(
+    "descriptor server{\
+        provides {\
+            a : req;\
+        }\
+        requires {\
+            a : bla;\
+        }\
+     }");
+    
+    // Parse input and create AST
+    parser.parse(input);
+
+    
+    ptr(ast_program) program = parser.getRootNode();
+    
+    ptr(ast::visitors::CSemanticCheckVisitor) visitor = new_ptr(ast::visitors::CSemanticCheckVisitor)(parser.getDescriptorTable());
+    
+    BOOST_CHECK_THROW(program->accept(visitor), exceptions::semantic::CBidirectionalPortNotSupportedException);
+    
+    // Clear AST for next test
+    parser.clearAll();
+}
+
+BOOST_AUTO_TEST_CASE(bidirectionalRequiredPortTest) {
+    // Testing input
+    std::stringstream input;
+    input.str(
+    "descriptor server{\
+        requires {\
+            a : bla;\
+        }\
+        provides {\
+            a : req;\
+        }\
+     }");
+    
+    // Parse input and create AST
+    parser.parse(input);
+
+    
+    ptr(ast_program) program = parser.getRootNode();
+    
+    ptr(ast::visitors::CSemanticCheckVisitor) visitor = new_ptr(ast::visitors::CSemanticCheckVisitor)(parser.getDescriptorTable());
+    
+    BOOST_CHECK_THROW(program->accept(visitor), exceptions::semantic::CBidirectionalPortNotSupportedException);
+    
+    // Clear AST for next test
+    parser.clearAll();
+}
+
+BOOST_AUTO_TEST_CASE(bidirectionalProvidedVisibilityPortTest) {
+    // Testing input
+    std::stringstream input;
+    input.str(
+    "descriptor server{\
+        provides {\
+            a : req;\
+        }\
+        internally provides{\
+            a : bla;\
+        }\
+     }");
+    
+    // Parse input and create AST
+    parser.parse(input);
+
+    
+    ptr(ast_program) program = parser.getRootNode();
+    
+    ptr(ast::visitors::CSemanticCheckVisitor) visitor = new_ptr(ast::visitors::CSemanticCheckVisitor)(parser.getDescriptorTable());
+    
+    BOOST_CHECK_THROW(program->accept(visitor), exceptions::semantic::CBidirectionalPortNotSupportedException);
+    
+    // Clear AST for next test
+    parser.clearAll();
+}
+
+BOOST_AUTO_TEST_CASE(bidirectionalRequiredVisibilityPortTest) {
+    // Testing input
+    std::stringstream input;
+    input.str(
+    "descriptor server{\
+        requires {\
+            a : bla;\
+        }\
+        internally requires {\
+            a : req;\
+        }\
+     }");
+    
+    // Parse input and create AST
+    parser.parse(input);
+
+    
+    ptr(ast_program) program = parser.getRootNode();
+    
+    ptr(ast::visitors::CSemanticCheckVisitor) visitor = new_ptr(ast::visitors::CSemanticCheckVisitor)(parser.getDescriptorTable());
+    
+    BOOST_CHECK_THROW(program->accept(visitor), exceptions::semantic::CBidirectionalPortNotSupportedException);
     
     // Clear AST for next test
     parser.clearAll();

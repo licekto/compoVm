@@ -24,13 +24,13 @@ namespace ast {
 			 */
 			class CDescriptor : public CAbstractDescriptorInterface, public std::enable_shared_from_this<CDescriptor> {
 			  private:
-				std::shared_ptr<compo::CProvision> m_interalProvision;
+				std::shared_ptr<compo::CProvision> m_internalProvision;
 
-				std::shared_ptr<compo::CProvision> m_exteralProvision;
+				std::shared_ptr<compo::CProvision> m_externalProvision;
 
-				std::shared_ptr<compo::CRequirement> m_interalRequirement;
+				std::shared_ptr<compo::CRequirement> m_internalRequirement;
 
-				std::shared_ptr<compo::CRequirement> m_exteralRequirement;
+				std::shared_ptr<compo::CRequirement> m_externalRequirement;
 
 				std::shared_ptr<compo::CArchitecture> m_architecture;
 
@@ -45,6 +45,7 @@ namespace ast {
 				/**< Every descriptor contains self port */
 				std::shared_ptr<compo::CPort> m_selfPort;
 
+				bool findPortIn(std::shared_ptr<compo::CAbstractReqProv> reqProv, std::string name) const;
 			  public:
 				/**
 				* Parametric constructor with default values
@@ -102,9 +103,19 @@ namespace ast {
 
 				/**
 				* Self port getter
-				                            * @return Constant pointer to port
-				                            */
+				                * @return Constant pointer to port
+				                */
 				std::shared_ptr<compo::CPort> getSelfPort() const;
+
+				bool portFound(std::string name) const;
+
+				bool inProvidedPortFound(std::string name) const;
+
+				bool exProvidedPortFound(std::string name) const;
+
+				bool inRequiredPortFound(std::string name) const;
+
+				bool exRequiredPortFound(std::string name) const;
 			};
 
 		}
