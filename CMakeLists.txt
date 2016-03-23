@@ -19,7 +19,8 @@ set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} -std=c++11 -pedantic -Wa
 # Include directories
 #------------------------------
 set(INCLUDE_DIRS ${CMAKE_CURRENT_SOURCE_DIR}/include
-                 ${CMAKE_CURRENT_SOURCE_DIR}/lib)
+                 ${CMAKE_CURRENT_SOURCE_DIR}/lib
+                 ${CMAKE_CURRENT_SOURCE_DIR}/test)
 include_directories(${INCLUDE_DIRS})
 #------------------------------
 
@@ -101,7 +102,7 @@ LIST(REMOVE_ITEM SOURCE_FILES "src/main.cpp")
 
 set(SOURCE_FILES_ALL ${SOURCE_FILES} ${BISON_OUTPUT} ${FLEX_OUTPUT})
 
-FILE(GLOB TEST_FILES RELATIVE "${CMAKE_CURRENT_SOURCE_DIR}/" test/*.cpp)
+FILE(GLOB_RECURSE TEST_FILES RELATIVE "${CMAKE_CURRENT_SOURCE_DIR}/" test/*.cpp)
 
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/bin)
 #------------------------------

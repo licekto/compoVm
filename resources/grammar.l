@@ -24,21 +24,21 @@ Identifier                  [a-zA-Z][a-zA-Z_0-9]*
 
 <INITIAL>{Whitespace}+                  {}
 
-<INITIAL>\"                             {BEGIN(COMMENT);}
+<INITIAL>"/*"                           {BEGIN(COMMENT);}
 
-<INITIAL>\'                             {BEGIN(STRING);}
+<INITIAL>\"                             {BEGIN(STRING);}
 
-<COMMENT>\"                             {BEGIN(INITIAL);}
+<COMMENT>"*/"                           {BEGIN(INITIAL);}
 
     /* Multi-line comments allowed */
 <COMMENT>\n                             {}
 <COMMENT>.                              {}
 
-<STRING>[^\\']                          {buffer.append(yytext);}
+<STRING>[^\\"]                          {buffer.append(yytext);}
 
 <STRING>\\.?                            {buffer.append(yytext+1);} // skip backslash
 
-<STRING>\'                              {
+<STRING>\"                              {
                                             yylval = new_ptr(ast_string)(buffer);
                                             BEGIN(INITIAL);
                                             buffer.clear();

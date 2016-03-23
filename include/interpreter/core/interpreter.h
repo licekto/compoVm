@@ -5,6 +5,7 @@
 #include "ast/semantic/globalDescriptorsTable.h"
 #include "exceptions/runtime/mainComponentMissingException.h"
 #include "exceptions/runtime/mainServiceMissingException.h"
+#include "kernelLoader.h"
 
 /**
  *  \addtogroup interpreter
@@ -29,18 +30,22 @@ namespace interpreter {
 		 * \class CExecutor
 		 * \brief AST executor class.
 		 */
-		class CExecutor {
+		class CInterpreter {
 		  private:
 
 			ptr(ast_program) m_ast;
 
 			ptr(ast::semantic::CGlobalDescriptorTable) m_descriptorTable;
+                        
+                        ptr(CKernelLoader) m_kernelLoader;
 
+                        void checkMainContainer() const;
+                        
 			void bootstrap();
 
 		  public:
 
-			CExecutor(ptr(ast_program) ast, ptr(ast::semantic::CGlobalDescriptorTable) table);
+			CInterpreter(ptr(ast_program) ast = nullptr, ptr(ast::semantic::CGlobalDescriptorTable) table = nullptr, ptr(CKernelLoader) loader = nullptr);
 
 			void run();
 		};
