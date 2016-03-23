@@ -23,7 +23,7 @@ BOOST_AUTO_TEST_CASE(nodesProceduralBinary) {
         service main() {\
             a;\
             b := 1;\
-            c := 'testString';\
+            c := \"testString\";\
             d := (55);\
             e := 15 + 64;\
             f := 18 - 2;\
@@ -369,7 +369,7 @@ BOOST_AUTO_TEST_CASE(nodesProceduralBinary) {
     parser.clearAll();
 }
 
-BOOST_AUTO_TEST_CASE(compoCompoundStatement) {
+BOOST_AUTO_TEST_CASE(nodesCompoundStatement) {
     // Testing input
     std::stringstream input;
     input.str("descriptor test {\
@@ -657,4 +657,27 @@ BOOST_AUTO_TEST_CASE(nodesBreakContinueReturnStatement) {
     parser.clearAll();
 }
 
+BOOST_AUTO_TEST_CASE(comments) {
+    // Testing input
+    std::stringstream input;
+    input.str("descriptor test {\
+        service main() {\
+            /*This is comment*/\
+        }\
+    }");
+    
+    // Parse input and create AST
+    parser.parse(input);
+    
+    // Check descriptor
+    ptr(ast_descriptor) descriptor = cast(ast_descriptor)(parser.getRootNode()->getNodeAt(0));
+    TEST_DESCRIPTOR(descriptor, "test", "", 1, 0);
+    
+    // Check service
+    ptr(ast_service) service = cast(ast_service)(descriptor->getServiceAt(0));
+    TEST_SERVICE(service, "main", 0, 0, 0);
+    
+    // Clear parser
+    parser.clearAll();
+}
 BOOST_AUTO_TEST_SUITE_END()

@@ -357,7 +357,7 @@ BOOST_AUTO_TEST_CASE(compoServiceCall) {
     input.str(
     "descriptor test {\
 	architecture {\
-            connect handlers@self to default@(RequestHandler.new(handler.getName('a', 1, var, handler.getPtr())));\
+            connect handlers@self to default@(RequestHandler.new(handler.getName(\"a\", 1, var, handler.getPtr())));\
 	}\
     }");
     

@@ -18,13 +18,14 @@
 #include "exceptions/semantic/redefinedInterfaceException.h"
 #include "exceptions/semantic/wrongBaseTypeException.h"
 #include "exceptions/semantic/bidirectionalPortNotSupportedException.h"
-#include "interpreter/core/executor.h"
+#include "interpreter/core/interpreter.h"
+#include "interpreter/core/kernelLoader.h"
 
 BOOST_AUTO_TEST_SUITE(interpreterTest)
 
 
 // Global parser for testing purposes
-ParserWrapper parser(new_ptr(Lexer)(), new_ptr(ast::semantic::CGlobalDescriptorTable)());
+ptr(ParserWrapper) parser = new_ptr(ParserWrapper)(new_ptr(Lexer)(), new_ptr(ast::semantic::CGlobalDescriptorTable)());
 
 BOOST_AUTO_TEST_CASE(basicTest) {
     // Testing input
@@ -71,20 +72,22 @@ BOOST_AUTO_TEST_CASE(basicTest) {
     }");
     
     // Parse input and create AST
-    parser.parse(input);
+    parser->parse(input);
     
-    ptr(ast_program) program = parser.getRootNode();
+    ptr(ast_program) program = parser->getRootNode();
     
-    ptr(ast::visitors::CSemanticCheckVisitor) visitor = new_ptr(ast::visitors::CSemanticCheckVisitor)(parser.getDescriptorTable());
+    ptr(ast::visitors::CSemanticCheckVisitor) visitor = new_ptr(ast::visitors::CSemanticCheckVisitor)(parser->getDescriptorTable());
 
     program->accept(visitor);
     
-    interpreter::core::CExecutor exec(program, parser.getDescriptorTable());
+    ptr(interpreter::core::CKernelLoader) loader = new_ptr(interpreter::core::CKernelLoader)(parser);
     
-    exec.run();
+    interpreter::core::CInterpreter interpreter(program, parser->getDescriptorTable(), loader);
+    
+    interpreter.run();
     
     // Clear AST for next test
-    parser.clearAll();
+    parser->clearAll();
 }
 
 BOOST_AUTO_TEST_SUITE_END()
