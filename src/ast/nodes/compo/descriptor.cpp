@@ -1,4 +1,5 @@
 #include "ast/nodes/compo/descriptor.h"
+#include "ast/nodes/compo/service.h"
 
 namespace ast {
 
@@ -89,39 +90,52 @@ namespace ast {
 				return m_selfPort;
 			}
 
-			bool CDescriptor::findPortIn(std::shared_ptr<compo::CAbstractReqProv> reqProv, std::string name) const {
-                            if (reqProv.use_count()) {
-				for (size_t i = 0; i < reqProv->getNumberOfPorts(); ++i) {
-					if (reqProv->getPortAt(i)->getNameSymbol()->getStringValue() == name) {
-						return true;
+			bool CDescriptor::findPortIn(std::shared_ptr<compo::CAbstractReqProv> reqProv, const std::string& name) const {
+				if (reqProv.use_count()) {
+					for (size_t i = 0; i < reqProv->getNumberOfPorts(); ++i) {
+						if (reqProv->getPortAt(i)->getNameSymbol()->getStringValue() == name) {
+							return true;
+						}
 					}
 				}
-                            }
-                            return false;
+				return false;
 			}
 
-			bool CDescriptor::portFound(std::string name) const {
-				return inProvidedPortFound(name)
+			bool CDescriptor::portFound(const std::string& name) const {
+				return name == "default"
+				       || inProvidedPortFound(name)
 				       || exProvidedPortFound(name)
 				       || inRequiredPortFound(name)
 				       || exRequiredPortFound(name);
 			}
 
-			bool CDescriptor::inProvidedPortFound(std::string name) const {
+			bool CDescriptor::inProvidedPortFound(const std::string& name) const {
 				return findPortIn(m_internalProvision, name);
 			}
 
-			bool CDescriptor::exProvidedPortFound(std::string name) const {
+			bool CDescriptor::exProvidedPortFound(const std::string& name) const {
 				return findPortIn(m_externalProvision, name);
 			}
 
-			bool CDescriptor::inRequiredPortFound(std::string name) const {
+			bool CDescriptor::inRequiredPortFound(const std::string& name) const {
 				return findPortIn(m_internalRequirement, name);
 			}
 
-			bool CDescriptor::exRequiredPortFound(std::string name) const {
+			bool CDescriptor::exRequiredPortFound(const std::string& name) const {
 				return findPortIn(m_externalRequirement, name);
 			}
+
+			std::shared_ptr<compo::CService> CDescriptor::getServiceByName(const std::string& name) const {
+				auto it = std::find_if(m_services.begin(), m_services.end(), [&name] (std::shared_ptr<CService> srv) {
+					return srv->getNameSymbol()->getStringValue() == name;
+				});
+
+				if (it == m_services.end()) {
+					return nullptr;
+				}
+				return *it;
+			}
+
 		}
 	}
 }

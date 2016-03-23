@@ -1,6 +1,8 @@
 #pragma once
 
 #include <memory>
+#include <algorithm>
+
 #include "ast/nodes/node.h"
 #include "ast/nodes/compo/port.h"
 #include "ast/nodes/procedural/symbol.h"
@@ -45,7 +47,7 @@ namespace ast {
 				/**< Every descriptor contains self port */
 				std::shared_ptr<compo::CPort> m_selfPort;
 
-				bool findPortIn(std::shared_ptr<compo::CAbstractReqProv> reqProv, std::string name) const;
+				bool findPortIn(std::shared_ptr<compo::CAbstractReqProv> reqProv, const std::string& name) const;
 			  public:
 				/**
 				* Parametric constructor with default values
@@ -73,17 +75,17 @@ namespace ast {
 				 * Body vector size getter
 				 * @return number of elements in body
 				 */
-				size_t getServicesSize () const;
+				size_t getServicesSize() const;
 
-				size_t getConstraintsSize () const;
+				size_t getConstraintsSize() const;
 
 				/**
 				* Body getter
 				* @return Constant pointer to body vector
 				*/
-				std::shared_ptr<compo::CService> getServiceAt (int index) const;
+				std::shared_ptr<compo::CService> getServiceAt(int index) const;
 
-				std::shared_ptr<compo::CConstraint> getConstraintAt (int index) const;
+				std::shared_ptr<compo::CConstraint> getConstraintAt(int index) const;
 
 				std::shared_ptr<compo::CProvision> getInProvision() const;
 
@@ -107,15 +109,17 @@ namespace ast {
 				                */
 				std::shared_ptr<compo::CPort> getSelfPort() const;
 
-				bool portFound(std::string name) const;
+				bool portFound(const std::string& name) const;
 
-				bool inProvidedPortFound(std::string name) const;
+				bool inProvidedPortFound(const std::string& name) const;
 
-				bool exProvidedPortFound(std::string name) const;
+				bool exProvidedPortFound(const std::string& name) const;
 
-				bool inRequiredPortFound(std::string name) const;
+				bool inRequiredPortFound(const std::string& name) const;
 
-				bool exRequiredPortFound(std::string name) const;
+				bool exRequiredPortFound(const std::string& name) const;
+
+				std::shared_ptr<compo::CService> getServiceByName(const std::string& name) const;
 			};
 
 		}

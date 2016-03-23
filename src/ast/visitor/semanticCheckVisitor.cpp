@@ -78,6 +78,8 @@ namespace ast {
 		void CSemanticCheckVisitor::visit(ptr(ast_program) node) {
 			checkNodeType(node, ast_nodetype::PROGRAM);
 
+
+
 			if (node->getNodesSize() == 0) {
 				throw exceptions::semantic::CEmptyProgramException();
 			}
@@ -111,8 +113,6 @@ namespace ast {
 
 			node->getPortIdentification1()->accept(shared_from_this());
 			node->getPortIdentification2()->accept(shared_from_this());
-
-
 		}
 
 		void CSemanticCheckVisitor::visit(ptr(ast_constraint) node) {
@@ -251,13 +251,13 @@ namespace ast {
 
 				ast_visibilitytype type = node->getVisibilityType();
 				if ((type == ast_visibilitytype::INTERNAL && m_currentDescriptor->exProvidedPortFound(port->getNameSymbol()->getStringValue()))
-				 || (type == ast_visibilitytype::EXTERNAL && m_currentDescriptor->inProvidedPortFound(port->getNameSymbol()->getStringValue()))) {
-                                    throw exceptions::semantic::CBidirectionalPortNotSupportedException(port->getNameSymbol()->getStringValue());
+				        || (type == ast_visibilitytype::EXTERNAL && m_currentDescriptor->inProvidedPortFound(port->getNameSymbol()->getStringValue()))) {
+					throw exceptions::semantic::CBidirectionalPortNotSupportedException(port->getNameSymbol()->getStringValue());
 				}
-                                
-                                if (m_currentDescriptor->exRequiredPortFound(port->getNameSymbol()->getStringValue())
-                                 || m_currentDescriptor->inRequiredPortFound(port->getNameSymbol()->getStringValue())) {
-                                    throw exceptions::semantic::CBidirectionalPortNotSupportedException(port->getNameSymbol()->getStringValue());
+
+				if (m_currentDescriptor->exRequiredPortFound(port->getNameSymbol()->getStringValue())
+				        || m_currentDescriptor->inRequiredPortFound(port->getNameSymbol()->getStringValue())) {
+					throw exceptions::semantic::CBidirectionalPortNotSupportedException(port->getNameSymbol()->getStringValue());
 				}
 			}
 		}
@@ -271,13 +271,13 @@ namespace ast {
 
 				ast_visibilitytype type = node->getVisibilityType();
 				if ((type == ast_visibilitytype::INTERNAL && m_currentDescriptor->exRequiredPortFound(port->getNameSymbol()->getStringValue()))
-				 || (type == ast_visibilitytype::EXTERNAL && m_currentDescriptor->inRequiredPortFound(port->getNameSymbol()->getStringValue()))) {
-                                    throw exceptions::semantic::CBidirectionalPortNotSupportedException(port->getNameSymbol()->getStringValue());
+				        || (type == ast_visibilitytype::EXTERNAL && m_currentDescriptor->inRequiredPortFound(port->getNameSymbol()->getStringValue()))) {
+					throw exceptions::semantic::CBidirectionalPortNotSupportedException(port->getNameSymbol()->getStringValue());
 				}
-                                
-                                if (m_currentDescriptor->exProvidedPortFound(port->getNameSymbol()->getStringValue())
-                                 || m_currentDescriptor->inProvidedPortFound(port->getNameSymbol()->getStringValue())) {
-                                    throw exceptions::semantic::CBidirectionalPortNotSupportedException(port->getNameSymbol()->getStringValue());
+
+				if (m_currentDescriptor->exProvidedPortFound(port->getNameSymbol()->getStringValue())
+				        || m_currentDescriptor->inProvidedPortFound(port->getNameSymbol()->getStringValue())) {
+					throw exceptions::semantic::CBidirectionalPortNotSupportedException(port->getNameSymbol()->getStringValue());
 				}
 			}
 		}
