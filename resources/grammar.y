@@ -63,12 +63,8 @@
 
 /*-------------------------- grammar-procedural ------------------------------*/
 
-primary_expression
-                :   IDENTIFIER
-                    {
-                        $$ = $1;
-                    }
-                |   CONSTANT
+literal
+                :   CONSTANT
                     {
                         $$ = $1;
                     }
@@ -76,9 +72,23 @@ primary_expression
                     {
                         $$ = $1;
                     }
+
+primary_expression
+                :   IDENTIFIER
+                    {
+                        $$ = $1;
+                    }
+                |   literal
+                    {
+                        $$ = $1;
+                    }
                 |   '(' expression ')'
                     {
                         $$ = new_ptr(ast_parens)($2);
+                    }
+                |   service_invocation
+                    {
+                        $$ = $1;
                     }
                 ;
 
@@ -178,7 +188,7 @@ assignment_expression
                     {
                         $$ = $1;
                     }
-                |   primary_expression ASSIGNMENT expression
+                |   IDENTIFIER ASSIGNMENT expression
                     {
                         $$ = new_ptr(ast_assignment)(cast(ast_symbol)($1), $3);
                     }
@@ -212,6 +222,18 @@ statement
                         $$ = $1;
                     }
                 |   compound_statement
+                    {
+                        $$ = $1;
+                    }
+                |   disconnections
+                    {
+                        $$ = $1;
+                    }
+                |   connections
+                    {
+                        $$ = $1;
+                    }
+                |   delegations
                     {
                         $$ = $1;
                     }
@@ -581,11 +603,7 @@ service_runtime_params
                 ;
 
 parameter_runtime   
-                :   service_invocation
-                    {
-                        parser->addServiceParam($1);
-                    }
-                |   primary_expression
+                :   primary_expression
                     {
                         parser->addServiceParam($1);
                     }
@@ -611,6 +629,7 @@ bindings
                 :   disconnections
                 |   connections
                 |   delegations
+                |   empty
                 ;
 
 connections     
@@ -618,7 +637,6 @@ connections
                     {
                         parser->addArchitectureNode(cast(ast_bind)($1));
                     }
-                |   empty
                 ;
 
 connection      
