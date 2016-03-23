@@ -5,7 +5,7 @@
 #include "parser/parserWrapper.h"
 #include "parser/lexer.h"
 
-#include "definitions.h"
+#include "astDefinitions.h"
 
 #define yylex()                  parser->getLexer()->yylex()
 #define yyerror(parser, message) parser->error(message)

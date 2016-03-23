@@ -11,7 +11,7 @@
 #include "parser/parserWrapper.h"
 #include "generated/parser.h"
 
-#include "definitions.h"
+#include "astDefinitions.h"
 
 std::string buffer;
 %}
@@ -81,7 +81,7 @@ Identifier                  [a-zA-Z][a-zA-Z_0-9]*
 
 <INITIAL>inject-with                    {return INJECTWITH;}
 
-<INITIAL>of-kind                        {return OFKIND;}
+<INITIAL>ofKind                         {return OFKIND;}
 
 <INITIAL>for				{return FOR;}
 

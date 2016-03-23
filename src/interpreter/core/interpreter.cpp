@@ -25,6 +25,8 @@ namespace interpreter {
                         
                         m_coreModules->loadModules();
                         
+                        ptr(ast_descriptor) component = m_coreModules->getKernelModuleAst(coreModuleType::COMPONENT);
+                        ptr(ast_descriptor) descriptor = m_coreModules->getKernelModuleAst(coreModuleType::DESCRIPTOR);
 		}
 
 		void CInterpreter::run() {
