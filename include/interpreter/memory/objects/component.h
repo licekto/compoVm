@@ -2,7 +2,7 @@
 
 #include <map>
 
-#include "definitions.h"
+#include "astDefinitions.h"
 
 namespace interpreter {
 

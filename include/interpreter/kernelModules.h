@@ -2,7 +2,7 @@
 
 namespace interpreter {
     
-    enum kernelModules {
+    enum coreModuleType {
         COLLECTION_PORT,
         COMPONENT,
         CONNECTION_DESCRIPTION,

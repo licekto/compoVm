@@ -3,7 +3,7 @@
 
 #include <boost/test/unit_test.hpp>
 
-#include "definitions.h"
+#include "astDefinitions.h"
 #include "testDefinitions.h"
 
 #include "parser/lexer.h"

@@ -7,7 +7,7 @@
 #include "parser/lexer.h"
 #include "parser/parserWrapper.h"
 
-#include "definitions.h"
+#include "astDefinitions.h"
 #include "testDefinitions.h"
 
 BOOST_AUTO_TEST_SUITE(parserProceduralTest)

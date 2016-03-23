@@ -3,7 +3,7 @@
 #include <memory>
 
 #include "abstractVisitor.h"
-#include "definitions.h"
+#include "astDefinitions.h"
 
 #include "exceptions/semantic/wrongAstNodeTypeException.h"
 #include "exceptions/semantic/emptyProgramException.h"

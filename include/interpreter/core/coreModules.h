@@ -5,7 +5,7 @@
 #include <string>
 #include <map>
 
-#include "definitions.h"
+#include "astDefinitions.h"
 #include "interpreter/config.h"
 #include "interpreter/kernelModules.h"
 #include "parser/parserWrapper.h"
@@ -19,9 +19,9 @@ namespace interpreter {
 		 */
 		class CCoreModules {
 		  private:
-                      std::map<kernelModules, std::string> m_kernelComponentsCode;
+                      std::map<coreModuleType, std::string> m_kernelComponentsCode;
                       
-                      std::map<kernelModules, ptr(ast_descriptor)> m_kernelComponentsAst;                      
+                      std::map<coreModuleType, ptr(ast_descriptor)> m_kernelComponentsAst;                      
                       
                       ptr(ParserWrapper) m_parser;
                       
@@ -33,9 +33,9 @@ namespace interpreter {
                       
                       void loadModules();
                       
-                      std::string getKernelModuleCode(kernelModules module) const;
+                      std::string getKernelModuleCode(coreModuleType module) const;
                       
-                      ptr(ast_descriptor) getKernelModuleAst(kernelModules module) const;
+                      ptr(ast_descriptor) getKernelModuleAst(coreModuleType module) const;
 		};
 
 	}

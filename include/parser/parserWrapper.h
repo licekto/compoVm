@@ -4,7 +4,7 @@
 #include <stack>
 #include <algorithm>
 
-#include "definitions.h"
+#include "astDefinitions.h"
 
 #include "parser/lexer.h"
 #include "ast/semantic/globalDescriptorsTable.h"

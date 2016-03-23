@@ -8,7 +8,7 @@
 #include "exceptions/semantic/undefinedDescriptorException.h"
 #include "exceptions/semantic/undefinedSymbolException.h"
 
-#include "definitions.h"
+#include "astDefinitions.h"
 
 namespace ast {
 	/**

@@ -6,7 +6,7 @@
 
 #include "ast/visitor/abstractVisitor.h"
 #include "testDefinitions.h"
-#include "definitions.h"
+#include "astDefinitions.h"
 
 BOOST_AUTO_TEST_SUITE(visitorTest)
 

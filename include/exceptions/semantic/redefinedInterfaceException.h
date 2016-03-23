@@ -3,7 +3,7 @@
 #include <string>
 #include "exceptions/abstractException.h"
 #include "exceptions/semantic/abstractRedefinedException.h"
-#include "definitions.h"
+#include "astDefinitions.h"
 
 namespace exceptions {
 

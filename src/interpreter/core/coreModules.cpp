@@ -29,21 +29,21 @@ namespace interpreter {
             }
             
             void CCoreModules::loadModules() {
-                m_kernelComponentsCode[kernelModules::COLLECTION_PORT] = readFile(KERNEL_COLLECTION_PORT_PATH);
-                m_kernelComponentsCode[kernelModules::COMPONENT] = readFile(KERNEL_COMPONENT_PATH);
-                m_kernelComponentsCode[kernelModules::CONNECTION_DESCRIPTION] = readFile(KERNEL_CONNECTION_DESCRIPTION_PATH);
-                m_kernelComponentsCode[kernelModules::DESCRIPTOR] = readFile(KERNEL_DESCRIPTOR_PATH);
-                m_kernelComponentsCode[kernelModules::PORT] = readFile(KERNEL_PORT_PATH);
-                m_kernelComponentsCode[kernelModules::PORT_DESCRIPTION] = readFile(KERNEL_PORT_DESCRIPTION_PATH);
-                m_kernelComponentsCode[kernelModules::SERVICE] = readFile(KERNEL_SERVICE_PATH);
-                m_kernelComponentsCode[kernelModules::SERVICE_SIGNATURE] = readFile(KERNEL_SERVICE_SIGNATURE_PATH);
+                m_kernelComponentsCode[coreModuleType::COLLECTION_PORT] = readFile(KERNEL_COLLECTION_PORT_PATH);
+                m_kernelComponentsCode[coreModuleType::COMPONENT] = readFile(KERNEL_COMPONENT_PATH);
+                m_kernelComponentsCode[coreModuleType::CONNECTION_DESCRIPTION] = readFile(KERNEL_CONNECTION_DESCRIPTION_PATH);
+                m_kernelComponentsCode[coreModuleType::DESCRIPTOR] = readFile(KERNEL_DESCRIPTOR_PATH);
+                m_kernelComponentsCode[coreModuleType::PORT] = readFile(KERNEL_PORT_PATH);
+                m_kernelComponentsCode[coreModuleType::PORT_DESCRIPTION] = readFile(KERNEL_PORT_DESCRIPTION_PATH);
+                m_kernelComponentsCode[coreModuleType::SERVICE] = readFile(KERNEL_SERVICE_PATH);
+                m_kernelComponentsCode[coreModuleType::SERVICE_SIGNATURE] = readFile(KERNEL_SERVICE_SIGNATURE_PATH);
             }
 
-            std::string CCoreModules::getKernelModuleCode(kernelModules module) const {
+            std::string CCoreModules::getKernelModuleCode(coreModuleType module) const {
                 return m_kernelComponentsCode.at(module);
             }
             
-            ptr(ast_descriptor) CCoreModules::getKernelModuleAst(kernelModules module) const {
+            ptr(ast_descriptor) CCoreModules::getKernelModuleAst(coreModuleType module) const {
                 if (m_parser.use_count()) {
                     std::stringstream input;
                     input.str(m_kernelComponentsCode.at(module));

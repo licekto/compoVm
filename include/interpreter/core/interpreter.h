@@ -1,6 +1,6 @@
 #pragma once
 
-#include "definitions.h"
+#include "astDefinitions.h"
 #include "interpreter/config.h"
 #include "ast/semantic/globalDescriptorsTable.h"
 #include "exceptions/runtime/mainComponentMissingException.h"
@@ -37,7 +37,7 @@ namespace interpreter {
 
 			ptr(ast::semantic::CGlobalDescriptorTable) m_descriptorTable;
                         
-                        ptr(CCoreModules) m_kernelLoader;
+                        ptr(CCoreModules) m_coreModules;
 
                         void checkMainContainer() const;
                         
