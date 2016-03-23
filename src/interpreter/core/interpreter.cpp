@@ -4,7 +4,7 @@ namespace interpreter {
 
 	namespace core {
 
-		CInterpreter::CInterpreter(ptr(ast_program) ast, ptr(ast::semantic::CGlobalDescriptorTable) table, ptr(CKernelLoader) loader)
+		CInterpreter::CInterpreter(ptr(ast_program) ast, ptr(ast::semantic::CGlobalDescriptorTable) table, ptr(CCoreModules) loader)
 			: m_ast(ast), m_descriptorTable(table), m_kernelLoader(loader) {
 		}
                 

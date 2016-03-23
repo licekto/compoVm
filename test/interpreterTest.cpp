@@ -19,7 +19,7 @@
 #include "exceptions/semantic/wrongBaseTypeException.h"
 #include "exceptions/semantic/bidirectionalPortNotSupportedException.h"
 #include "interpreter/core/interpreter.h"
-#include "interpreter/core/kernelLoader.h"
+#include "interpreter/core/coreModules.h"
 
 BOOST_AUTO_TEST_SUITE(interpreterTest)
 
@@ -80,7 +80,7 @@ BOOST_AUTO_TEST_CASE(basicTest) {
 
     program->accept(visitor);
     
-    ptr(interpreter::core::CKernelLoader) loader = new_ptr(interpreter::core::CKernelLoader)(parser);
+    ptr(interpreter::core::CCoreModules) loader = new_ptr(interpreter::core::CCoreModules)(parser);
     
     interpreter::core::CInterpreter interpreter(program, parser->getDescriptorTable(), loader);
     

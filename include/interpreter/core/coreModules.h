@@ -17,7 +17,7 @@ namespace interpreter {
 		 * \class CKernelLoader
 		 * \brief Kernel code loader class.
 		 */
-		class CKernelLoader {
+		class CCoreModules {
 		  private:
                       std::map<kernelModules, std::string> m_kernelComponentsCode;
                       
@@ -29,7 +29,7 @@ namespace interpreter {
                       
 		  public:
                       
-                      CKernelLoader(ptr(ParserWrapper) parser = nullptr);
+                      CCoreModules(ptr(ParserWrapper) parser = nullptr);
                       
                       void loadModules();
                       

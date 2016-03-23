@@ -5,7 +5,7 @@
 #include "ast/semantic/globalDescriptorsTable.h"
 #include "exceptions/runtime/mainComponentMissingException.h"
 #include "exceptions/runtime/mainServiceMissingException.h"
-#include "kernelLoader.h"
+#include "coreModules.h"
 
 /**
  *  \addtogroup interpreter
@@ -37,7 +37,7 @@ namespace interpreter {
 
 			ptr(ast::semantic::CGlobalDescriptorTable) m_descriptorTable;
                         
-                        ptr(CKernelLoader) m_kernelLoader;
+                        ptr(CCoreModules) m_kernelLoader;
 
                         void checkMainContainer() const;
                         
@@ -45,7 +45,7 @@ namespace interpreter {
 
 		  public:
 
-			CInterpreter(ptr(ast_program) ast = nullptr, ptr(ast::semantic::CGlobalDescriptorTable) table = nullptr, ptr(CKernelLoader) loader = nullptr);
+			CInterpreter(ptr(ast_program) ast = nullptr, ptr(ast::semantic::CGlobalDescriptorTable) table = nullptr, ptr(CCoreModules) loader = nullptr);
 
 			void run();
 		};

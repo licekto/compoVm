@@ -1,4 +1,4 @@
-#include "interpreter/core/kernelLoader.h"
+#include "interpreter/core/coreModules.h"
 #include "exceptions/runtime/kernelModuleNotFoundException.h"
 #include "parser/parserWrapper.h"
 
@@ -6,11 +6,11 @@ namespace interpreter {
 
 	namespace core {
             
-            CKernelLoader::CKernelLoader(std::shared_ptr<ParserWrapper> parser)
+            CCoreModules::CCoreModules(std::shared_ptr<ParserWrapper> parser)
             : m_parser(parser) {
             }
             
-            std::string CKernelLoader::readFile(std::string path) const {
+            std::string CCoreModules::readFile(std::string path) const {
                 std::string line, content;
                 
                 std::ifstream file(path);
@@ -28,7 +28,7 @@ namespace interpreter {
                 }
             }
             
-            void CKernelLoader::loadModules() {
+            void CCoreModules::loadModules() {
                 m_kernelComponentsCode[kernelModules::COLLECTION_PORT] = readFile(KERNEL_COLLECTION_PORT_PATH);
                 m_kernelComponentsCode[kernelModules::COMPONENT] = readFile(KERNEL_COMPONENT_PATH);
                 m_kernelComponentsCode[kernelModules::CONNECTION_DESCRIPTION] = readFile(KERNEL_CONNECTION_DESCRIPTION_PATH);
@@ -39,11 +39,11 @@ namespace interpreter {
                 m_kernelComponentsCode[kernelModules::SERVICE_SIGNATURE] = readFile(KERNEL_SERVICE_SIGNATURE_PATH);
             }
 
-            std::string CKernelLoader::getKernelModuleCode(kernelModules module) const {
+            std::string CCoreModules::getKernelModuleCode(kernelModules module) const {
                 return m_kernelComponentsCode.at(module);
             }
             
-            ptr(ast_descriptor) CKernelLoader::getKernelModuleAst(kernelModules module) const {
+            ptr(ast_descriptor) CCoreModules::getKernelModuleAst(kernelModules module) const {
                 if (m_parser.use_count()) {
                     std::stringstream input;
                     input.str(m_kernelComponentsCode.at(module));
