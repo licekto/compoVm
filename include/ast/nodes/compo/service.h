@@ -29,14 +29,14 @@ namespace ast {
 				/**< Name */
 				std::shared_ptr<compo::CServiceSignature> m_signature;
 
-                                std::shared_ptr<procedural::CStringLiteral> m_code;
-                                
+				std::shared_ptr<procedural::CStringLiteral> m_code;
+
 				/**< Compound body node */
 				std::shared_ptr<procedural::CCompoundBody> m_body;
 
-                                void checkBodyCompiled() const;
-                                
-                        public:
+				void checkBodyCompiled() const;
+
+			  public:
 				/**
 				* Parametric constructor with default values
 				* Constructor is made protected to prevent from creation of object of this (abstract) type.
@@ -45,7 +45,7 @@ namespace ast {
 				* @param body: vector of body expressions
 				*/
 				CService(std::shared_ptr<compo::CServiceSignature> signature = nullptr,
-				                    std::shared_ptr<procedural::CStringLiteral> code = nullptr);
+				         std::shared_ptr<procedural::CStringLiteral> code = nullptr);
 
 				/**
 				* Accept method for visitor acceptation.
@@ -59,12 +59,12 @@ namespace ast {
 				*/
 				std::shared_ptr<procedural::CSymbol> getNameSymbol() const;
 
-                                void setBodyNode(std::shared_ptr<procedural::CCompoundBody> body);
-                                
+				void setBodyNode(std::shared_ptr<procedural::CCompoundBody> body);
+
 				/**
 				* Body size getter
-                                * @return size of body vector
-                                */
+				                * @return size of body vector
+				                */
 				size_t getBodySize() const;
 
 				/**
@@ -75,8 +75,8 @@ namespace ast {
 
 				/**
 				* Temporaries size getter
-                                * @return size of temporaries vector
-                                */
+				                * @return size of temporaries vector
+				                */
 				size_t getTemporariesSize() const;
 
 				/**
@@ -103,8 +103,8 @@ namespace ast {
 				* @return Constant pointer to vector with parameters.
 				*/
 				std::shared_ptr<CNode> getParamAt(int index) const;
-                                
-                                std::string getBodyCode() const;
+
+				std::string getBodyCode() const;
 			};
 
 		}

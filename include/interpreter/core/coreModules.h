@@ -7,8 +7,9 @@
 
 #include "definitions/allDefinitions.h"
 #include "interpreter/config.h"
-#include "interpreter/kernelModules.h"
+#include "interpreter/core/coreModuleType.h"
 #include "parser/parserWrapper.h"
+#include "exceptions/runtime/coreModuleNotFoundException.h"
 
 namespace interpreter {
 
@@ -19,23 +20,23 @@ namespace interpreter {
 		 */
 		class CCoreModules {
 		  private:
-                      std::map<coreModuleType, std::string> m_kernelComponentsCode;
-                      
-                      std::map<coreModuleType, ptr(ast_descriptor)> m_kernelComponentsAst;                      
-                      
-                      ptr(ParserWrapper) m_parser;
-                      
-                      std::string readFile(std::string path) const;
-                      
+			std::map<coreModuleType, ptr(ast_descriptor)> m_kernelComponents;
+
+			ptr(ParserWrapper) m_parser;
+
+			std::string readFile(std::string path) const;
+
+                        void getModule(coreModuleType module, std::string path);
+                        
 		  public:
-                      
-                      CCoreModules(ptr(ParserWrapper) parser = nullptr);
-                      
-                      void loadModules();
-                      
-                      std::string getKernelModuleCode(coreModuleType module) const;
-                      
-                      ptr(ast_descriptor) getKernelModuleAst(coreModuleType module) const;
+
+			CCoreModules(ptr(ParserWrapper) parser = nullptr);
+
+			void loadModules();
+
+			ptr(ast_descriptor) getKernelModule(coreModuleType module) const;
+                        
+                        void bootstrap();
 		};
 
 	}

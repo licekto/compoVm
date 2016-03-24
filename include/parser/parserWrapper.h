@@ -71,9 +71,9 @@ class ParserWrapper {
 
 	/**< Vector of current architecture body */
 	std::vector<ptr(ast_bind)> m_currentArchitectureBody;
-        
-        ptr(ast_compound) m_serviceBody;
-        
+
+	ptr(ast_compound) m_serviceBody;
+
   public:
 	/**
 	* Parametric constructor with default value
@@ -86,6 +86,8 @@ class ParserWrapper {
 	*/
 	~ParserWrapper();
 
+        int parse(std::string code);
+        
 	/**
 	* Launch parsing
 	* @param is: input stream
@@ -346,8 +348,8 @@ class ParserWrapper {
 	 * Clears vector of architecture body nodes
 	 */
 	void clearArchitectureBody();
-        
-        void addServiceBody(ptr(ast_compound) body);
-        
-        void parseServices();
+
+	void addServiceBody(ptr(ast_compound) body);
+
+	void parseServices();
 };

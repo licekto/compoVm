@@ -2,7 +2,7 @@
 
 #include <string>
 #include "exceptions/abstractException.h"
-#include "definitions/allDefinitions.h"
+#include "definitions/astTypesDefinitions.h"
 
 namespace exceptions {
 

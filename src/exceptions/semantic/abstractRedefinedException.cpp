@@ -1,4 +1,3 @@
-
 #include "exceptions/semantic/abstractRedefinedException.h"
 
 namespace exceptions {

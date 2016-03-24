@@ -10,25 +10,25 @@ namespace ast {
 			                         std::shared_ptr<procedural::CCompoundBody> body)
 				:   CNode(types::nodeType::CONSTRAINT),
 				    m_signature(signature),
-                                    m_body(body) {
+				    m_body(body) {
 			}
 
 			void CConstraint::accept(std::shared_ptr<visitors::CAbstractVisitor> visitor) {
 				visitor->visit(shared_from_this());
 			}
 
-                        std::shared_ptr<procedural::CSymbol> CConstraint::getNameSymbol() const {
+			std::shared_ptr<procedural::CSymbol> CConstraint::getNameSymbol() const {
 				return m_signature->getNameSymbol();
 			}
-                        
-                        size_t CConstraint::getBodySize() const {
+
+			size_t CConstraint::getBodySize() const {
 				if (m_body) {
 					return m_body->getBodySize();
 				}
 				return 0;
 			}
-                        
-                        std::shared_ptr<ast::nodes::CNode> CConstraint::getBodyNodeAt(int index) const {
+
+			std::shared_ptr<ast::nodes::CNode> CConstraint::getBodyNodeAt(int index) const {
 				if (m_body) {
 					return m_body->getBodyNodeAt(index);
 				}
@@ -40,8 +40,8 @@ namespace ast {
 					m_body->addBodyNode(node);
 				}
 			}
-                        
-                        size_t CConstraint::getParamsSize() const {
+
+			size_t CConstraint::getParamsSize() const {
 				if (m_signature) {
 					return m_signature->getParamsSize();
 				}
@@ -60,7 +60,7 @@ namespace ast {
 					return m_signature->setParam(param);
 				}
 			}
-                        
+
 		}
 	}
 }

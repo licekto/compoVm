@@ -4,12 +4,18 @@ namespace interpreter {
 
 	namespace core {
 
-		CInterpreter::CInterpreter(ptr(ast_program) ast, ptr(ast::semantic::CGlobalDescriptorTable) table, ptr(CCoreModules) loader)
-			: m_ast(ast), m_descriptorTable(table), m_coreModules(loader) {
+		CInterpreter::CInterpreter(ptr(ast_program) ast,
+                                           ptr(ast::semantic::CGlobalDescriptorTable) table,
+                                           ptr(CCoreModules) loader,
+                                           ptr(memory::manager::CManager) manager)
+			: m_ast(ast),
+                          m_descriptorTable(table),
+                          m_coreModules(loader),
+                          m_memory(manager) {
 		}
-                
-                void CInterpreter::checkMainContainer() const {
-                        if (!m_descriptorTable->symbolFound(COMPO_MAIN_COMPONENT_NAME)) {
+
+		void CInterpreter::checkMainContainer() const {
+			if (!m_descriptorTable->symbolFound(COMPO_MAIN_COMPONENT_NAME)) {
 				throw exceptions::runtime::CMainComponentMissingException();
 			}
 
@@ -18,19 +24,13 @@ namespace interpreter {
 			if (!container->getServiceByName(COMPO_MAIN_SERVICE_NAME).use_count()) {
 				throw exceptions::runtime::CMainServiceMissingException();
 			}
-                }
-                
-		void CInterpreter::bootstrap() {
-                        checkMainContainer();
-                        
-                        m_coreModules->loadModules();
-                        
-                        ptr(ast_descriptor) component = m_coreModules->getKernelModuleAst(coreModuleType::COMPONENT);
-                        ptr(ast_descriptor) descriptor = m_coreModules->getKernelModuleAst(coreModuleType::DESCRIPTOR);
 		}
 
 		void CInterpreter::run() {
-                    bootstrap();
+                    if (!m_memory.use_count()) {
+                        // throw memoryNotPresentException
+                    }
+                    m_memory->bootstrap();
 		}
 
 	}

@@ -41,12 +41,6 @@ namespace ast {
 
 				std::vector<std::shared_ptr<compo::CConstraint>> m_constraints;
 
-				/**< Every descriptor contains default port */
-				std::shared_ptr<compo::CPort> m_defaultPort;
-
-				/**< Every descriptor contains self port */
-				std::shared_ptr<compo::CPort> m_selfPort;
-
 				bool findPortIn(std::shared_ptr<compo::CAbstractReqProv> reqProv, const std::string& name) const;
 			  public:
 				/**
@@ -96,18 +90,6 @@ namespace ast {
 				std::shared_ptr<compo::CRequirement> getExRequirement() const;
 
 				std::shared_ptr<compo::CArchitecture> getArchitecture() const;
-
-				/**
-				* Default port getter
-				                * @return Constant pointer to port
-				                */
-				std::shared_ptr<compo::CPort> getDefaultPort() const;
-
-				/**
-				* Self port getter
-				                * @return Constant pointer to port
-				                */
-				std::shared_ptr<compo::CPort> getSelfPort() const;
 
 				bool portFound(const std::string& name) const;
 

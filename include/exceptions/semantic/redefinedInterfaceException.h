@@ -1,9 +1,7 @@
 #pragma once
 
 #include <string>
-#include "exceptions/abstractException.h"
 #include "exceptions/semantic/abstractRedefinedException.h"
-#include "definitions/allDefinitions.h"
 
 namespace exceptions {
 

@@ -24,10 +24,7 @@ namespace ast {
 				  m_externalRequirement(exReq),
 				  m_architecture(arch),
 				  m_services(services),
-				  m_constraints(constraints),
-				  m_defaultPort(std::make_shared<ast::nodes::compo::CSignaturesPort>(std::make_shared<ast::nodes::procedural::CSymbol>("default"),
-				                false,
-				                std::vector<std::shared_ptr<ast::nodes::compo::CServiceSignature>>(0))) {
+				  m_constraints(constraints) {
 			}
 
 			void CDescriptor::accept(std::shared_ptr<visitors::CAbstractVisitor> visitor) {
@@ -80,14 +77,6 @@ namespace ast {
 
 			std::shared_ptr<ast::nodes::compo::CArchitecture> CDescriptor::getArchitecture() const {
 				return m_architecture;
-			}
-
-			std::shared_ptr<ast::nodes::compo::CPort> CDescriptor::getDefaultPort() const {
-				return m_defaultPort;
-			}
-
-			std::shared_ptr<ast::nodes::compo::CPort> CDescriptor::getSelfPort() const {
-				return m_selfPort;
 			}
 
 			bool CDescriptor::findPortIn(std::shared_ptr<compo::CAbstractReqProv> reqProv, const std::string& name) const {

@@ -3,7 +3,6 @@
 #include <string>
 
 #include "exceptions/abstractException.h"
-#include "interpreter/config.h"
 
 namespace exceptions {
 

@@ -18,7 +18,6 @@ do { \
     if (descriptor->getExtendsSymbol()) { \
         BOOST_CHECK_EQUAL(extends, descriptor->getExtendsSymbol()->getStringValue()); \
     } \
-    BOOST_CHECK_EQUAL("default", descriptor->getDefaultPort()->getNameSymbol()->getStringValue()); \
     BOOST_CHECK_EQUAL(servicesSize, descriptor->getServicesSize()); \
     BOOST_CHECK_EQUAL(constraintsSize, descriptor->getConstraintsSize()); \
 } while(0)

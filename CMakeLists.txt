@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.3)
+cmake_minimum_required(VERSION 3.0)
 project(compoVm)
 
 # Directories creation
@@ -40,8 +40,8 @@ set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
 # Boost settings
 #------------------------------
-set(Boost_ADDITIONAL_VERSIONS "1.60" "1.60.0")
-find_package(Boost 1.60 REQUIRED COMPONENTS log log_setup thread date_time filesystem system unit_test_framework)
+set(Boost_ADDITIONAL_VERSIONS "1.50" "1.50.0")
+find_package(Boost 1.50 REQUIRED COMPONENTS log log_setup thread date_time filesystem system unit_test_framework)
 find_package(Threads)
 
 if(Boost_FOUND)

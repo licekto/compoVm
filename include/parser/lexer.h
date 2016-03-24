@@ -16,16 +16,16 @@ class Lexer : public yyFlexLexer {
 	* Constructor
 	*/
 	Lexer();
-        
+
 	/**
 	* Overriden method from generated lexer for lexical analysis
 	*/
 	virtual int yylex();
-        
+
 	/**
 	* Resets state of lexer
 	*/
 	void resetState();
-        
-        void setServiceState();
+
+	void setServiceState();
 };
