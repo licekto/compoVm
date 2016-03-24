@@ -2,7 +2,7 @@
 
 #include <boost/test/unit_test.hpp>
 
-#include "astDefinitions.h"
+#include "definitions/allDefinitions.h"
 
 BOOST_AUTO_TEST_SUITE(nodesProceduralBinaryTest)
 

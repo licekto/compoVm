@@ -1,6 +1,6 @@
 #pragma once
 
-#include "astDefinitions.h"
+#include "definitions/allDefinitions.h"
 #include "interpreter/config.h"
 #include "ast/semantic/globalDescriptorsTable.h"
 #include "exceptions/runtime/mainComponentMissingException.h"

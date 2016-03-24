@@ -252,3 +252,28 @@ std::vector<ptr(ast_bind)> * ParserWrapper::getArchitectureBody() {
 void ParserWrapper::clearArchitectureBody() {
 	m_currentArchitectureBody.clear();
 }
+
+void ParserWrapper::addServiceBody(std::shared_ptr<ast_compound> body) {
+    m_serviceBody = body;
+}
+
+void ParserWrapper::parseServices() {
+    for (size_t i = 0; i < m_root->getNodesSize(); ++i) {
+        if (m_root->getNodeAt(i)->getNodeType() == ast_nodetype::DESCRIPTOR) {
+            ptr(ast_descriptor) descriptor = cast(ast_descriptor)(m_root->getNodeAt(i));
+            for (size_t j = 0; j < descriptor->getServicesSize(); ++j) {
+                ptr(ast_service) service = descriptor->getServiceAt(j);
+                
+                std::stringstream input;
+                std::string serviceCode = service->getBodyCode();
+                input.str(serviceCode);
+                
+                m_serviceBody.reset();
+                
+                parse(input);
+                
+                service->setBodyNode(m_serviceBody);
+            }
+        }
+    }
+}

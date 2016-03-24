@@ -4,7 +4,7 @@
 #include <stack>
 #include <algorithm>
 
-#include "astDefinitions.h"
+#include "definitions/allDefinitions.h"
 
 #include "parser/lexer.h"
 #include "ast/semantic/globalDescriptorsTable.h"
@@ -71,7 +71,9 @@ class ParserWrapper {
 
 	/**< Vector of current architecture body */
 	std::vector<ptr(ast_bind)> m_currentArchitectureBody;
-
+        
+        ptr(ast_compound) m_serviceBody;
+        
   public:
 	/**
 	* Parametric constructor with default value
@@ -344,4 +346,8 @@ class ParserWrapper {
 	 * Clears vector of architecture body nodes
 	 */
 	void clearArchitectureBody();
+        
+        void addServiceBody(ptr(ast_compound) body);
+        
+        void parseServices();
 };

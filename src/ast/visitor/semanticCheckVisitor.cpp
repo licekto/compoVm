@@ -1,8 +1,4 @@
 #include "ast/visitor/semanticCheckVisitor.h"
-#include "exceptions/semantic/wrongBaseTypeException.h"
-#include "exceptions/semantic/undefinedPortException.h"
-#include "exceptions/semantic/unsupportedFeatureException.h"
-#include "exceptions/semantic/bidirectionalPortNotSupportedException.h"
 
 namespace ast {
 
@@ -50,9 +46,6 @@ namespace ast {
 			checkNodeType(node, ast_nodetype::CONSTRAINT);
 		}
 		void CSemanticCheckVisitor::visit(ptr(ast_reqprov) node) {
-			checkNodeType(node, ast_nodetype::CONSTRAINT);
-		}
-		void CSemanticCheckVisitor::visit(ptr(ast_servconstr) node) {
 			checkNodeType(node, ast_nodetype::CONSTRAINT);
 		}
 		void CSemanticCheckVisitor::visit(ptr(ast_bind) node) {

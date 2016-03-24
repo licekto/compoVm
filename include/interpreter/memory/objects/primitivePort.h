@@ -2,7 +2,7 @@
 
 #include <string>
 
-#include "astDefinitions.h"
+#include "definitions/allDefinitions.h"
 #include "interpreter/memory/objects/component.h"
 
 namespace interpreter {

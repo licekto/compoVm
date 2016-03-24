@@ -7,7 +7,7 @@
 #include "parser/lexer.h"
 #include "parser/parserWrapper.h"
 
-#include "astDefinitions.h"
+#include "definitions/allDefinitions.h"
 #include "testDefinitions.h"
 
 BOOST_AUTO_TEST_SUITE(parserProceduralTest)
@@ -41,7 +41,7 @@ BOOST_AUTO_TEST_CASE(nodesProceduralBinary) {
     }");
     
     // Parse input and create AST
-    parser.parse(input);
+    parser.parseAll(input);
     
     // Check descriptor
     ptr(ast_descriptor) descriptor = cast(ast_descriptor)(parser.getRootNode()->getNodeAt(0));
@@ -387,7 +387,7 @@ BOOST_AUTO_TEST_CASE(nodesCompoundStatement) {
     }");
     
     // Parse input and create AST
-    parser.parse(input);
+    parser.parseAll(input);
     
     // Check descriptor
     ptr(ast_descriptor) descriptor = cast(ast_descriptor)(parser.getRootNode()->getNodeAt(0));
@@ -428,7 +428,7 @@ BOOST_AUTO_TEST_CASE(nodesForStatement) {
     }");
     
     // Parse input and create AST
-    parser.parse(input);
+    parser.parseAll(input);
     
     // Check descriptor
     ptr(ast_descriptor) descriptor = cast(ast_descriptor)(parser.getRootNode()->getNodeAt(0));
@@ -502,7 +502,7 @@ BOOST_AUTO_TEST_CASE(nodesWhileStatement) {
     }");
     
     // Parse input and create AST
-    parser.parse(input);
+    parser.parseAll(input);
     
     // Check descriptor
     ptr(ast_descriptor) descriptor = cast(ast_descriptor)(parser.getRootNode()->getNodeAt(0));
@@ -554,7 +554,7 @@ BOOST_AUTO_TEST_CASE(nodesIfStatement) {
     }");
     
     // Parse input and create AST
-    parser.parse(input);
+    parser.parseAll(input);
     
     // Check descriptor
     ptr(ast_descriptor) descriptor = cast(ast_descriptor)(parser.getRootNode()->getNodeAt(0));
@@ -627,7 +627,7 @@ BOOST_AUTO_TEST_CASE(nodesBreakContinueReturnStatement) {
     }");
     
     // Parse input and create AST
-    parser.parse(input);
+    parser.parseAll(input);
     
     // Check descriptor
     ptr(ast_descriptor) descriptor = cast(ast_descriptor)(parser.getRootNode()->getNodeAt(0));
@@ -667,7 +667,7 @@ BOOST_AUTO_TEST_CASE(comments) {
     }");
     
     // Parse input and create AST
-    parser.parse(input);
+    parser.parseAll(input);
     
     // Check descriptor
     ptr(ast_descriptor) descriptor = cast(ast_descriptor)(parser.getRootNode()->getNodeAt(0));

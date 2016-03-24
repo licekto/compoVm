@@ -5,7 +5,7 @@
 #include "parser/lexer.h"
 #include "parser/parserWrapper.h"
 #include "testDefinitions.h"
-#include "astDefinitions.h"
+#include "definitions/allDefinitions.h"
 
 BOOST_AUTO_TEST_SUITE(parserCompoTest)
 
@@ -35,7 +35,7 @@ BOOST_AUTO_TEST_CASE(compoBasicStructure) {
     }");
     
     // Parse input and create AST
-    parser.parse(input);
+    parser.parseAll(input);
     
     // Check descriptor
     ptr(ast_descriptor) descriptor = cast(ast_descriptor)(parser.getRootNode()->getNodeAt(0));
@@ -89,7 +89,7 @@ BOOST_AUTO_TEST_CASE(compoServiceParams) {
     }");
 
     // Parse input and create AST
-    parser.parse(input);
+    parser.parseAll(input);
     
     // Check descriptor
     ptr(ast_descriptor) descriptor = cast(ast_descriptor)(parser.getRootNode()->getNodeAt(0));
@@ -131,7 +131,7 @@ BOOST_AUTO_TEST_CASE(compoServiceBody) {
     }");
     
     // Parse input and create AST
-    parser.parse(input);    
+    parser.parseAll(input);
     
     // Check descriptor
     ptr(ast_descriptor) descriptor = cast(ast_descriptor)(parser.getRootNode()->getNodeAt(0));
@@ -177,7 +177,7 @@ BOOST_AUTO_TEST_CASE(compoServiceTemporaries) {
     }");
     
     // Parse input and create AST
-    parser.parse(input);    
+    parser.parseAll(input);    
     
     // Check descriptor
     ptr(ast_descriptor) descriptor = cast(ast_descriptor)(parser.getRootNode()->getNodeAt(0));
@@ -215,7 +215,7 @@ BOOST_AUTO_TEST_CASE(compoProvision) {
     }");
     
     // Parse input and create AST
-    parser.parse(input);
+    parser.parseAll(input);
     
     // Check descriptor
     ptr(ast_descriptor) descriptor = cast(ast_descriptor)(parser.getRootNode()->getNodeAt(0));
@@ -274,7 +274,7 @@ BOOST_AUTO_TEST_CASE(compoArchitecture) {
     }");
     
     // Parse input and create AST
-    parser.parse(input);
+    parser.parseAll(input);
     
     // Check descriptor
     ptr(ast_descriptor) descriptor = cast(ast_descriptor)(parser.getRootNode()->getNodeAt(0));
@@ -362,7 +362,7 @@ BOOST_AUTO_TEST_CASE(compoServiceCall) {
     }");
     
     // Parse input and create AST
-    parser.parse(input);
+    parser.parseAll(input);
     
     // Check descriptor
     ptr(ast_descriptor) descriptor = cast(ast_descriptor)(parser.getRootNode()->getNodeAt(0));
@@ -420,7 +420,7 @@ BOOST_AUTO_TEST_CASE(compoInterface) {
     }");
     
     // Parse input and create AST
-    parser.parse(input);
+    parser.parseAll(input);
     
     // Check interface
     ptr(ast_interface) interface = cast(ast_interface)(parser.getRootNode()->getNodeAt(0));

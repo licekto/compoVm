@@ -1,7 +1,7 @@
 #pragma once
 
 #include <memory>
-#include "ast/nodes/compo/abstractServConstr.h"
+#include "ast/nodes/compo/service.h"
 
 namespace ast {
 
@@ -13,7 +13,14 @@ namespace ast {
 			 * \class CConstraint
 			 * \brief Class for Compo constraint representation.
 			 */
-			class CConstraint : public CAbstractServConstr, public std::enable_shared_from_this<CConstraint> {
+			class CConstraint : public CNode, public std::enable_shared_from_this<CConstraint> {
+                        private:
+                                /**< Name */
+				std::shared_ptr<compo::CServiceSignature> m_signature;
+                                
+				/**< Compound body node */
+				std::shared_ptr<procedural::CCompoundBody> m_body;
+                            
 			  public:
 				/**
 				* Parametric constructor with default values
@@ -29,25 +36,48 @@ namespace ast {
 				* @param visitor: Pointer to abstract visitor.
 				*/
 				virtual void accept(std::shared_ptr<visitors::CAbstractVisitor> visitor);
-
-				/**
-				* Temporaries size getter
-				            * @return size of temporaries vector
-				            */
-				size_t getTemporariesSize() const = delete;
+                                
+                                /**
+				* Name getter
+				* @return Name of entity
+				*/
+				std::shared_ptr<procedural::CSymbol> getNameSymbol() const;
+                                
+                                /**
+				* Body size getter
+                                * @return size of body vector
+                                */
+				size_t getBodySize() const;
 
 				/**
 				* Adds new body node
-				            * @param node: shared pointer to node
-				            */
-				void addTemporary(std::shared_ptr<procedural::CSymbol> temporary) = delete;
+                                * @param node: shared pointer to node
+                                */
+				void addBodyNode(std::shared_ptr<CNode> node);
 
 				/**
-				 * Temporaries getter
-				 * @param index: index of wanted temporary
-				 * @return shared pointer to temporary symbol name
+				* Body getter
+				* @return Constant pointer to vector with body expressions.
+				*/
+				std::shared_ptr<CNode> getBodyNodeAt(int index) const;
+                                
+                                /**
+				 * Parameter size vector size
+				 * @return number of parameters
 				 */
-				std::shared_ptr<procedural::CSymbol> getTemporaryAt (int index) const = delete;
+				size_t getParamsSize() const;
+
+				/**
+				* Parameters setter
+				* @param Constant pointer to pointer to parameter.
+				*/
+				void setParam(std::shared_ptr<procedural::CSymbol> param);
+
+				/**
+				* Parameters getter
+				* @return Constant pointer to vector with parameters.
+				*/
+				std::shared_ptr<CNode> getParamAt(int index) const;
 			};
 
 		}

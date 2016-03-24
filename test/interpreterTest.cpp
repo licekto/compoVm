@@ -3,7 +3,7 @@
 
 #include <boost/test/unit_test.hpp>
 
-#include "astDefinitions.h"
+#include "definitions/allDefinitions.h"
 #include "testDefinitions.h"
 
 #include "parser/lexer.h"
@@ -72,7 +72,7 @@ BOOST_AUTO_TEST_CASE(basicTest) {
     }");
     
     // Parse input and create AST
-    parser->parse(input);
+    parser->parseAll(input);
     
     ptr(ast_program) program = parser->getRootNode();
     

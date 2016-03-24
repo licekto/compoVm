@@ -9,10 +9,10 @@ namespace exceptions {
 
 	namespace runtime {
 
-		class CKernelModuleNotFoundException : public CAbstractException {
+		class CServiceNotCompiledException : public CAbstractException {
 		  public:
 
-			CKernelModuleNotFoundException(std::string module);
+			CServiceNotCompiledException(std::string name);
 
 			virtual const char* what() const throw();
 		};

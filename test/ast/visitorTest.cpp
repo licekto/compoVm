@@ -6,7 +6,7 @@
 
 #include "ast/visitor/abstractVisitor.h"
 #include "testDefinitions.h"
-#include "astDefinitions.h"
+#include "definitions/allDefinitions.h"
 
 BOOST_AUTO_TEST_SUITE(visitorTest)
 
@@ -21,7 +21,6 @@ class testVisitor : public ast::visitors::CAbstractVisitor, public std::enable_s
         virtual void visit(ptr(ast_program)  /* node */) {nodes += " CProgram";}
 
         virtual void visit(ptr(ast_reqprov)  /* node */) {nodes += " CAbstractReqProv";}
-        virtual void visit(ptr(ast_servconstr)  /* node */) {nodes += " CAbstractServConstr";}
         virtual void visit(ptr(ast_architecture)  /* node */) {nodes += " CArchitecture";}
         virtual void visit(ptr(ast_bind)  /* node */) {nodes += " CBind";}
         virtual void visit(ptr(ast_collectionportliteral)  /* node */) {nodes += " CCollectionPortLiteral";}

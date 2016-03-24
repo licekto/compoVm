@@ -1,6 +1,6 @@
 #pragma once
 
-#include "astDefinitions.h"
+#include "definitions/allDefinitions.h"
 
 namespace interpreter {
 

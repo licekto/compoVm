@@ -3,7 +3,7 @@
 
 #include <boost/test/unit_test.hpp>
 
-#include "astDefinitions.h"
+#include "definitions/allDefinitions.h"
 #include "testDefinitions.h"
 
 #include "parser/lexer.h"
@@ -36,7 +36,7 @@ BOOST_AUTO_TEST_CASE(basicTest) {
     }");
     
     // Parse input and create AST
-    parser.parse(input);
+    parser.parseAll(input);
     
     ptr(ast_program) program = parser.getRootNode();
     
@@ -55,7 +55,7 @@ BOOST_AUTO_TEST_CASE(emptyTest) {
     "");
     
     // Parse input and create AST
-    parser.parse(input);
+    parser.parseAll(input);
     
     ptr(ast_program) program = parser.getRootNode();
     
@@ -74,7 +74,7 @@ BOOST_AUTO_TEST_CASE(undefinedDescriptorTest) {
     "descriptor HTTPServer extends server {}");
     
     // Parse input and create AST
-    parser.parse(input);
+    parser.parseAll(input);
     
     ptr(ast_program) program = parser.getRootNode();
     
@@ -94,7 +94,7 @@ BOOST_AUTO_TEST_CASE(redefinedDescriptorTest) {
      descriptor HTTPServer{}");
     
     // Parse input and create AST
-    BOOST_CHECK_THROW(parser.parse(input), exceptions::semantic::CRedefinedDescriptorException);
+    BOOST_CHECK_THROW(parser.parseAll(input), exceptions::semantic::CRedefinedDescriptorException);
     
     ptr(ast_program) program = parser.getRootNode();
     
@@ -114,7 +114,7 @@ BOOST_AUTO_TEST_CASE(wrongDescriptorBaseTest) {
      descriptor HTTPServer extends server{}");
     
     // Parse input and create AST
-    parser.parse(input);
+    parser.parseAll(input);
     
     ptr(ast_program) program = parser.getRootNode();
     
@@ -133,7 +133,7 @@ BOOST_AUTO_TEST_CASE(undefinedInterfaceTest) {
     "interface HTTPServer extends server {}");
     
     // Parse input and create AST
-    parser.parse(input);
+    parser.parseAll(input);
     
     ptr(ast_program) program = parser.getRootNode();
     
@@ -153,7 +153,7 @@ BOOST_AUTO_TEST_CASE(redefinedInterfaceTest) {
      interface HTTPServer{}");
     
     // Parse input and create AST
-    BOOST_CHECK_THROW(parser.parse(input), exceptions::semantic::CRedefinedInterfaceException);
+    BOOST_CHECK_THROW(parser.parseAll(input), exceptions::semantic::CRedefinedInterfaceException);
     
     ptr(ast_program) program = parser.getRootNode();
     
@@ -173,7 +173,7 @@ BOOST_AUTO_TEST_CASE(wrongInterfaceBaseTest) {
      interface HTTPServer extends server{}");
     
     // Parse input and create AST
-    parser.parse(input);
+    parser.parseAll(input);
     
     ptr(ast_program) program = parser.getRootNode();
     
@@ -197,7 +197,7 @@ BOOST_AUTO_TEST_CASE(portRedefinitionTest) {
      }");
     
     // Parse input and create AST
-    BOOST_CHECK_THROW(parser.parse(input), exceptions::semantic::CRedefinedPortException);
+    BOOST_CHECK_THROW(parser.parseAll(input), exceptions::semantic::CRedefinedPortException);
 
     
     ptr(ast_program) program = parser.getRootNode();
@@ -224,7 +224,7 @@ BOOST_AUTO_TEST_CASE(bidirectionalProvidedPortTest) {
      }");
     
     // Parse input and create AST
-    parser.parse(input);
+    parser.parseAll(input);
 
     
     ptr(ast_program) program = parser.getRootNode();
@@ -251,7 +251,7 @@ BOOST_AUTO_TEST_CASE(bidirectionalRequiredPortTest) {
      }");
     
     // Parse input and create AST
-    parser.parse(input);
+    parser.parseAll(input);
 
     
     ptr(ast_program) program = parser.getRootNode();
@@ -278,7 +278,7 @@ BOOST_AUTO_TEST_CASE(bidirectionalProvidedVisibilityPortTest) {
      }");
     
     // Parse input and create AST
-    parser.parse(input);
+    parser.parseAll(input);
 
     
     ptr(ast_program) program = parser.getRootNode();
@@ -305,7 +305,7 @@ BOOST_AUTO_TEST_CASE(bidirectionalRequiredVisibilityPortTest) {
      }");
     
     // Parse input and create AST
-    parser.parse(input);
+    parser.parseAll(input);
 
     
     ptr(ast_program) program = parser.getRootNode();

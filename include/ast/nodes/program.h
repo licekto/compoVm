@@ -28,8 +28,8 @@ namespace ast {
 
 			/**
 			* Accept method for visitor acceptation.
-				 * @param visitor: Pointer to abstract visitor.
-				 */
+                        * @param visitor: Pointer to abstract visitor.
+                        */
 			virtual void accept(std::shared_ptr<visitors::CAbstractVisitor> visitor);
 
 			void addNode(std::shared_ptr<CNode> node);
@@ -37,8 +37,6 @@ namespace ast {
 			size_t getNodesSize() const;
 
 			std::shared_ptr<CNode> getNodeAt(size_t i) const;
-
-
 		};
 
 	}

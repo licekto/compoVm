@@ -5,7 +5,7 @@
 #include "parser/parserWrapper.h"
 #include "parser/lexer.h"
 
-#include "astDefinitions.h"
+#include "definitions/allDefinitions.h"
 
 #define yylex()                  parser->getLexer()->yylex()
 #define yyerror(parser, message) parser->error(message)
@@ -17,7 +17,7 @@
 
 %debug
 
-%parse-param {ParserWrapper* parser}
+%parse-param {ParserWrapper *parser}
 
 %start start
 
@@ -247,7 +247,8 @@ compound_statement
                     }
                 |   push_context '{' '}'
                     {
-                        $$ = nullptr;
+                        $$ = parser->getCurrentCompoundBody();
+                        parser->setCurrentCompoundBody(parser->popBlock());
                     }
                 ;
 
@@ -344,7 +345,17 @@ start
                     {
                          YYACCEPT; return 0;
                     }
+                |   service_body END
+                    {
+                         YYACCEPT; return 0;
+                    }
                 ;
+
+service_body
+                :   compound_statement
+                    {
+                         parser->addServiceBody(cast(ast_compound)$1);
+                    }
 
 descriptor_interface
                 :   descriptor_interface descriptor
@@ -540,9 +551,16 @@ of_kind
                 ;
 
 service         
-                :   SERVICE service_signature compound_statement
+                :   SERVICE service_signature service_code
                     {
-                        parser->addDescriptorService(new_ptr(ast_service)(cast(ast_servicesignature)($2), cast(ast_compound)($3)));
+                        parser->addDescriptorService(new_ptr(ast_service)(cast(ast_servicesignature)($2), cast(ast_string)($3)));
+                    }
+                ;
+
+service_code
+                :   { parser->getLexer()->setServiceState(); } STRING_LITERAL
+                    {
+                        $$ = $2;
                     }
                 ;
 
@@ -744,12 +762,7 @@ int ParserWrapper::parse(std::istream& is) {
 
 void ParserWrapper::parseAll(std::istream& is) {
 
-    m_lexer->switch_streams(&is, &std::cout);
-    m_lexer->resetState();
+    parse(is);
 
-    while(1) {
-        if (!yyparse(this)) {
-            break;
-        }
-    }
+    parseServices();
 }

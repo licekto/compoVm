@@ -5,7 +5,7 @@
 #include <string>
 #include <map>
 
-#include "astDefinitions.h"
+#include "definitions/allDefinitions.h"
 #include "interpreter/config.h"
 #include "interpreter/kernelModules.h"
 #include "parser/parserWrapper.h"

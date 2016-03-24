@@ -3,13 +3,17 @@
 #include <memory>
 
 #include "abstractVisitor.h"
-#include "astDefinitions.h"
+#include "definitions/allDefinitions.h"
 
 #include "exceptions/semantic/wrongAstNodeTypeException.h"
 #include "exceptions/semantic/emptyProgramException.h"
 #include "exceptions/semantic/undefinedDescriptorException.h"
 #include "exceptions/semantic/undefinedInterfaceException.h"
 #include "ast/semantic/globalDescriptorsTable.h"
+#include "exceptions/semantic/wrongBaseTypeException.h"
+#include "exceptions/semantic/undefinedPortException.h"
+#include "exceptions/semantic/unsupportedFeatureException.h"
+#include "exceptions/semantic/bidirectionalPortNotSupportedException.h"
 
 namespace ast {
 
@@ -39,7 +43,6 @@ namespace ast {
 			virtual void visit(ptr(ast_program) node);
 
 			virtual void visit(ptr(ast_reqprov) node);
-			virtual void visit(ptr(ast_servconstr) node);
 			virtual void visit(ptr(ast_architecture) node);
 			virtual void visit(ptr(ast_bind) node);
 			virtual void visit(ptr(ast_collectionportliteral) node);

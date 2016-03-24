@@ -1,5 +1,6 @@
 %state COMMENT
 %state STRING
+%state SERVICE_CODE
 
 %option c++
 %option yyclass="Lexer"
@@ -11,9 +12,11 @@
 #include "parser/parserWrapper.h"
 #include "generated/parser.h"
 
-#include "astDefinitions.h"
+#include "definitions/allDefinitions.h"
 
 std::string buffer;
+
+int nestedBraces = 0;
 %}
 
 IntegerLiteral              ([+-]?[0-9]+)
@@ -43,6 +46,26 @@ Identifier                  [a-zA-Z][a-zA-Z_0-9]*
                                             BEGIN(INITIAL);
                                             buffer.clear();
                                             return STRING_LITERAL;
+                                        }
+
+<SERVICE_CODE>"{"                       {
+                                            ++nestedBraces;
+                                            buffer.append(yytext);
+                                        }
+
+<SERVICE_CODE>"}"                       {
+                                            --nestedBraces;
+                                            buffer.append(yytext);
+                                            if (!nestedBraces) {
+                                                BEGIN(INITIAL);
+                                                yylval = new_ptr(ast_string)(buffer);
+                                                buffer.clear();
+                                                return STRING_LITERAL;
+                                            }
+                                        }
+
+<SERVICE_CODE>.                         {
+                                            buffer.append(yytext);
                                         }
 
 <INITIAL>descriptor                     {return DESCRIPTOR;}
@@ -173,4 +196,8 @@ Lexer::Lexer() : yyFlexLexer()
 void Lexer::resetState()
 {
     yy_start = 1;
+}
+
+void Lexer::setServiceState() {
+    BEGIN(SERVICE_CODE);
 }

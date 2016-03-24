@@ -12,7 +12,6 @@ namespace ast {
 
 		namespace compo {
 			class CAbstractReqProv;
-			class CAbstractServConstr;
 			class CArchitecture;
 			class CBind;
 			class CCollectionPortLiteral;
@@ -91,7 +90,6 @@ namespace ast {
 			virtual void visit(std::shared_ptr<ast::nodes::CProgram> node) = 0;
 
 			virtual void visit(std::shared_ptr<ast::nodes::compo::CAbstractReqProv> node) = 0;
-			virtual void visit(std::shared_ptr<ast::nodes::compo::CAbstractServConstr> node) = 0;
 			virtual void visit(std::shared_ptr<ast::nodes::compo::CArchitecture> node) = 0;
 			virtual void visit(std::shared_ptr<ast::nodes::compo::CBind> node) = 0;
 			virtual void visit(std::shared_ptr<ast::nodes::compo::CCollectionPortLiteral> node) = 0;

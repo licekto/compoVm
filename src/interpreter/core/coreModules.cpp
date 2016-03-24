@@ -1,5 +1,5 @@
 #include "interpreter/core/coreModules.h"
-#include "exceptions/runtime/kernelModuleNotFoundException.h"
+#include "exceptions/runtime/coreModuleNotFoundException.h"
 #include "parser/parserWrapper.h"
 
 namespace interpreter {
@@ -24,7 +24,7 @@ namespace interpreter {
                     return content;
                 }
                 else {
-                    throw exceptions::runtime::CKernelModuleNotFoundException(path);
+                    throw exceptions::runtime::CCoreModuleNotFoundException(path);
                 }
             }
             
