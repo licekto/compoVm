@@ -16,18 +16,9 @@ int main(int argc, char **argv) {
 	std::ifstream infile;
 	infile.open(filename);
 
-	Lexer lexer;
-	ParserWrapper parser(&lexer);
-
-	parser.parseAll(infile);
-
 	infile.close();
 
-	for (unsigned int i = 0; i < parser.getRootNodesSize(); ++i) {
-		std::cout << *parser.getRootNodeAt(i) << std::endl;
-	}
-
-	parser.clearRootNodes();
+	// TĚPÉRO
 
 	return 0;
 }
