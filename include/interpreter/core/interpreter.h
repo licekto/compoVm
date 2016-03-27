@@ -38,20 +38,29 @@ namespace interpreter {
 
 			ptr(ast::semantic::CGlobalDescriptorTable) m_descriptorTable;
 
-			ptr(CCoreModules) m_coreModules;
+			ptr(memory::manager::CMemoryManager) m_memory;
                         
-                        ptr(memory::manager::CManager) m_memory;
+                        ptr(CCoreModules) m_coreModules;
 
 			void checkMainContainer() const;
 
+                        void execProgram(ptr(ast_program) node);
+                        
+                        void execDescriptor(ptr(ast_descriptor) node);
+                        
+                        void exec(ptr(ast_node));
+                        
+                        void loadCoreToDescriptorTable();
+                        
 		  public:
 
-			CInterpreter(ptr(ast_program) ast = nullptr,
-                                     ptr(ast::semantic::CGlobalDescriptorTable) table = nullptr,
-                                     ptr(CCoreModules) loader = nullptr,
-                                     ptr(memory::manager::CManager) manager = nullptr);
+			CInterpreter(ptr(ast::semantic::CGlobalDescriptorTable) table = nullptr,
+			             ptr(memory::manager::CMemoryManager) manager = nullptr,
+                                     ptr(CCoreModules) modules = nullptr);
 
-			void run();
+			void run(ptr(ast_program) ast);
+                        
+                        ptr(memory::objects::CComponent) createComponentFromDescriptor(ptr(ast_descriptor) descriptor);
 		};
 
 	}

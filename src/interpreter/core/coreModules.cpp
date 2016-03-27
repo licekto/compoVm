@@ -8,7 +8,7 @@ namespace interpreter {
 			: m_parser(parser) {
 		}
 
-		std::string CCoreModules::readFile(std::string path) const {
+		std::string CCoreModules::readFile(const std::string& path) const {
 			std::string line, content;
 
 			std::ifstream file(path);
@@ -25,37 +25,46 @@ namespace interpreter {
 			}
 		}
 
-                void CCoreModules::getModule(coreModuleType module, std::string path) {
-                        m_parser->parse(readFile(path));
+		void CCoreModules::loadDescriptor(const std::string& path) {
+			m_parser->parse(readFile(path));
+
+			m_coreDescriptors.push_back(cast(ast_descriptor)(m_parser->getRootNode()->getNodeAt(0)));
+			m_parser->clearAll();
+		}
+
+                ptr(ast_descriptor) CCoreModules::getCoreDescriptor(const std::string& module) const {
+                        auto it = std::find_if(m_coreDescriptors.begin(), m_coreDescriptors.end(), [&module] (ptr(ast_descriptor) descriptor) {
+                            return descriptor->getNameSymbol()->getStringValue() == module;
+                        });
                         
-                        m_kernelComponents[module] = cast(ast_descriptor)(m_parser->getRootNode()->getNodeAt(0));
-                        m_parser->clearAll();
-                }
-                
-		void CCoreModules::loadModules() {
-                        getModule(coreModuleType::COLLECTION_PORT, KERNEL_COLLECTION_PORT_PATH);
-                        getModule(coreModuleType::COMPONENT, KERNEL_COMPONENT_PATH);
-                        getModule(coreModuleType::CONNECTION_DESCRIPTION, KERNEL_CONNECTION_DESCRIPTION_PATH);
-                        getModule(coreModuleType::DESCRIPTOR, KERNEL_DESCRIPTOR_PATH);
-                        getModule(coreModuleType::PORT, KERNEL_PORT_PATH);
-                        getModule(coreModuleType::PORT_DESCRIPTION, KERNEL_PORT_DESCRIPTION_PATH);
-                        getModule(coreModuleType::SERVICE, KERNEL_SERVICE_PATH);
-                        getModule(coreModuleType::SERVICE_SIGNATURE, KERNEL_SERVICE_SIGNATURE_PATH);
-		}
-
-		ptr(ast_descriptor) CCoreModules::getKernelModule(coreModuleType module) const {
-			return m_kernelComponents.at(module);
+                        if (it == m_coreDescriptors.end()) {
+                            return nullptr;
+                        }
+                        return *it;
 		}
                 
-                void CCoreModules::bootstrap() {
-                    loadModules();
-                    
-                    ptr(ast_descriptor) component = getKernelModule(core::coreModuleType::COMPONENT);
-                    ptr(ast_descriptor) descriptor = getKernelModule(core::coreModuleType::DESCRIPTOR);
-                    
-                    
+		void CCoreModules::loadCoreModules() {
+			loadDescriptor(KERNEL_COLLECTION_PORT_PATH);
+			loadDescriptor(KERNEL_COMPONENT_PATH);
+			loadDescriptor(KERNEL_CONNECTION_DESCRIPTION_PATH);
+			loadDescriptor(KERNEL_DESCRIPTOR_PATH);
+			loadDescriptor(KERNEL_PORT_PATH);
+			loadDescriptor(KERNEL_PORT_DESCRIPTION_PATH);
+			loadDescriptor(KERNEL_SERVICE_PATH);
+			loadDescriptor(KERNEL_SERVICE_SIGNATURE_PATH);
                 }
 
+                ptr(ast_descriptor) CCoreModules::getCoreDescriptorAt(size_t i) const {
+                    if (i < m_coreDescriptors.size()) {
+                        return m_coreDescriptors.at(i);
+                    }
+                    return nullptr;
+                }
+
+                size_t CCoreModules::getCoreDescriptorsSize() const {
+                    return m_coreDescriptors.size();
+                }
+                
 	}
 
 }

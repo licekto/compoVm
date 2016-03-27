@@ -253,7 +253,7 @@ BOOST_AUTO_TEST_CASE(compoProvision) {
     // Check port
     namedPort = cast(ast_namedport)(provision->getPortAt(5));
     TEST_NAMED_PORT(namedPort, "handlers", "RequestHandler");
-    BOOST_CHECK(namedPort->getCollectivity());
+    BOOST_CHECK(namedPort->isCollection());
     
     // Clear AST for next test
     parser.clearAll();

@@ -29,3 +29,12 @@
 
 // Name of kernel Service Signature file
 #define KERNEL_SERVICE_SIGNATURE_PATH "../coreModules/serviceSignature.cp"
+
+// Name of core component representing string
+#define COMPONENT_STRING_NAME "String"
+
+// Name of core component representing integer
+#define COMPONENT_INTEGER_NAME "Integer"
+
+// Name of core component representing boolean
+#define COMPONENT_BOOLEAN_NAME "Boolean"

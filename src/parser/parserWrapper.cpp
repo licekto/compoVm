@@ -13,10 +13,10 @@ ParserWrapper::~ParserWrapper() {
 }
 
 int ParserWrapper::parse(std::string code) {
-    std::stringstream input;
-    input.str(code);
-    
-    return parse(input);
+	std::stringstream input;
+	input.str(code);
+
+	return parse(input);
 }
 
 ptr(Lexer) ParserWrapper::getLexer() const {

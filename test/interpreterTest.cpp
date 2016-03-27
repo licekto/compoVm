@@ -20,6 +20,7 @@
 #include "exceptions/semantic/bidirectionalPortNotSupportedException.h"
 #include "interpreter/core/interpreter.h"
 #include "interpreter/core/coreModules.h"
+#include "interpreter/memory/manager/manager.h"
 
 BOOST_AUTO_TEST_SUITE(interpreterTest)
 
@@ -28,6 +29,35 @@ BOOST_AUTO_TEST_SUITE(interpreterTest)
 ptr(ParserWrapper) parser = new_ptr(ParserWrapper)(new_ptr(Lexer)(), new_ptr(ast::semantic::CGlobalDescriptorTable)());
 
 BOOST_AUTO_TEST_CASE(basicTest) {
+    // Testing input
+    std::stringstream input;
+    input.str(
+   "descriptor Test {\
+    }\
+    descriptor CompoContainer {\
+        service main() {\
+            c := Test.new();\
+        }\
+    }");
+    
+    // Parse input and create AST
+    parser->parseAll(input);
+    
+    ptr(ast_program) program = parser->getRootNode();
+    
+    ptr(ast::visitors::CSemanticCheckVisitor) visitor = new_ptr(ast::visitors::CSemanticCheckVisitor)(parser->getDescriptorTable());
+
+    program->accept(visitor);
+    
+    interpreter::core::CInterpreter interpreter(parser->getDescriptorTable(), new_ptr(interpreter::memory::manager::CMemoryManager)());
+    
+    interpreter.run(program);
+    
+    // Clear AST for next test
+    parser->clearAll();
+}
+
+BOOST_AUTO_TEST_CASE(calcTest) {
     // Testing input
     std::stringstream input;
     input.str(
@@ -80,11 +110,9 @@ BOOST_AUTO_TEST_CASE(basicTest) {
 
     program->accept(visitor);
     
-    ptr(interpreter::core::CCoreModules) loader = new_ptr(interpreter::core::CCoreModules)(parser);
+    interpreter::core::CInterpreter interpreter(parser->getDescriptorTable(), new_ptr(interpreter::memory::manager::CMemoryManager)());
     
-    interpreter::core::CInterpreter interpreter(program, parser->getDescriptorTable(), loader);
-    
-    interpreter.run();
+    interpreter.run(program);
     
     // Clear AST for next test
     parser->clearAll();

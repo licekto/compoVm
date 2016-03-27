@@ -86,8 +86,8 @@ class ParserWrapper {
 	*/
 	~ParserWrapper();
 
-        int parse(std::string code);
-        
+	int parse(std::string code);
+
 	/**
 	* Launch parsing
 	* @param is: input stream

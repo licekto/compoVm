@@ -1,12 +1,12 @@
 descriptor Port extends Component {
     requires {
-        owner : IComponent;
+        owner : Component;
         connectedPorts[] : IPort;
         delegatedPorts[] : IPort;
     }
 
     internally requires {
-        name : IString;
+        name : String;
         interfaceDescription : IInterface;
     }
 

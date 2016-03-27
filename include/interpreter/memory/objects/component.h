@@ -1,33 +1,36 @@
 #pragma once
 
-#include <map>
+#include <vector>
+#include <algorithm>
 
 #include "definitions/allDefinitions.h"
+#include "interpreter/memory/objects/portProperties.h"
+#include "interpreter/memory/objects/primitivePort.h"
 
 namespace interpreter {
 
 	namespace memory {
 
 		namespace objects {
-
-			class CComponent : public std::enable_shared_from_this<CComponent> {
+                        
+			class CComponent {
 			  private:
 
-				ptr(CComponent) m_defaultPort;
-
-				ptr(CComponent) m_selfPort;
-
-				ptr(CComponent) m_superPort;
-
-				std::map<std::string, ptr(CComponent)> m_ports;
-
-				std::map<std::string, ptr(CComponent)> m_services;
+                                std::vector<ptr(TPortProperties)> m_ports;
+                                
+                                std::vector<ptr(CComponent)> m_services;
 
 			  public:
-                              
-                              CComponent(ptr(CComponent) defaultPort = nullptr, ptr(CComponent) selfPort = nullptr, ptr(CComponent) superPort = nullptr);
-                              
-                              
+
+				void addPort(ptr(TPortProperties));
+                                
+                                size_t getNumberOfPorts() const;
+                                
+                                ptr(TPortProperties) getPortAt(size_t index);
+                                
+                                ptr(CPrimitivePort) getPrimitivePortByName(const std::string& name);
+                                
+				void addService(ptr(CComponent) service);
 			};
 
 		}

@@ -87,7 +87,7 @@ namespace ast {
 				* Collectivity getter
 						* @return is collective?
 						*/
-				bool getCollectivity() const;
+				bool isCollection() const;
 			};
 
 		}
