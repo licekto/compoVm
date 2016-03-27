@@ -21,7 +21,7 @@ namespace ast {
 				std::shared_ptr<ast::nodes::CNode> node = nullptr;
 				try {
 					node = m_body.at(index);
-				} catch (std::out_of_range ex) {
+				} catch (const std::out_of_range& ex) {
 					// log error message
 				}
 				return node;
@@ -31,7 +31,7 @@ namespace ast {
 				std::shared_ptr<ast::nodes::procedural::CSymbol> symbol = nullptr;
 				try {
 					symbol = m_temporaries.at(index);
-				} catch (std::out_of_range ex) {
+				} catch (const std::out_of_range& ex) {
 					// log error message
 				}
 				return symbol;

@@ -26,7 +26,7 @@ namespace ast {
 				std::shared_ptr<ast::nodes::compo::CServiceSignature> signature = nullptr;
 				try {
 					signature = m_signaturesList.at(index);
-				} catch (std::out_of_range ex) {
+				} catch (const std::out_of_range& ex) {
 					// log error message
 				}
 				return signature;

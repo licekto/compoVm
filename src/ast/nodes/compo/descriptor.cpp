@@ -39,7 +39,7 @@ namespace ast {
 				std::shared_ptr<ast::nodes::compo::CService> node;
 				try {
 					node = m_services.at(index);
-				} catch (std::out_of_range ex) {
+				} catch (const std::out_of_range& ex) {
 					// log error message
 				}
 				return node;
@@ -53,7 +53,7 @@ namespace ast {
 				std::shared_ptr<ast::nodes::compo::CConstraint> node;
 				try {
 					node = m_constraints.at(index);
-				} catch (std::out_of_range ex) {
+				} catch (const std::out_of_range& ex) {
 					// log error message
 				}
 				return node;

@@ -23,7 +23,7 @@ namespace ast {
 				std::shared_ptr<ast::nodes::CNode> param = nullptr;
 				try {
 					param = m_params.at(index);
-				} catch (std::out_of_range ex) {
+				} catch (const std::out_of_range& ex) {
 					// log error message
 				}
 				return param;

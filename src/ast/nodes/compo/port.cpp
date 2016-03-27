@@ -34,7 +34,7 @@ namespace ast {
 				return m_kindOf;
 			}
 
-			bool CPort::getCollectivity() const {
+			bool CPort::isCollection() const {
 				return m_collectivity;
 			}
 		}

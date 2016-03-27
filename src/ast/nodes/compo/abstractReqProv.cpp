@@ -24,7 +24,7 @@ namespace ast {
 				std::shared_ptr<ast::nodes::compo::CPort> port = nullptr;
 				try {
 					port = m_ports.at(index);
-				} catch (std::out_of_range ex) {
+				} catch (const std::out_of_range& ex) {
 					// log error message
 				}
 				return port;

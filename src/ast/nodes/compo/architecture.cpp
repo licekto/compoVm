@@ -22,7 +22,7 @@ namespace ast {
 				std::shared_ptr<ast::nodes::compo::CBind> node = nullptr;
 				try {
 					node = m_architectureBody.at(index);
-				} catch (std::out_of_range ex) {
+				} catch (const std::out_of_range& ex) {
 					// log error message
 				}
 				return node;

@@ -27,7 +27,7 @@ namespace ast {
 			std::shared_ptr<CNode> node = nullptr;
 			try {
 				node = m_rootNodes.at(i);
-			} catch (std::out_of_range ex) {
+			} catch (const std::out_of_range& ex) {
 				// log error message
 			}
 			return node;
