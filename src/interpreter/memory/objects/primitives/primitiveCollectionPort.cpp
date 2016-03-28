@@ -5,34 +5,34 @@ namespace interpreter {
 	namespace memory {
 
 		namespace objects {
-                    
-                    namespace primitives {
-                    
-                        CPrimitiveCollectionPort::CPrimitiveCollectionPort(const std::string& name, ptr(objects::CComponent) owner)
-                        : CAbstractPrimitive(name, owner) {
-                        }
 
-                        CPrimitiveCollectionPort::~CPrimitiveCollectionPort() {
-                        }
+			namespace primitives {
 
-                        size_t CPrimitiveCollectionPort::getPortsSize() const {
-                            return m_connectedPorts.size();
-                        }
+				CPrimitiveCollectionPort::CPrimitiveCollectionPort(const std::string& name, ptr(objects::CComponent) owner)
+					: CAbstractPrimitive(name, owner) {
+				}
 
-                        void CPrimitiveCollectionPort::connectComponent(ptr(objects::CComponent) port) {
-                            m_connectedPorts.push_back(port);
-                        }
+				CPrimitiveCollectionPort::~CPrimitiveCollectionPort() {
+				}
 
-                        ptr(objects::CComponent) CPrimitiveCollectionPort::getConnectedComponentAt(size_t index) const {
-                            if (index < m_connectedPorts.size()) {
-                                return m_connectedPorts.at(index);
-                            }
-                            //throw exception
-                            return nullptr;
-                        }
-                    
-                    }
-                    
+				size_t CPrimitiveCollectionPort::getPortsSize() const {
+					return m_connectedPorts.size();
+				}
+
+				void CPrimitiveCollectionPort::connectComponent(ptr(objects::CComponent) port) {
+					m_connectedPorts.push_back(port);
+				}
+
+				ptr(objects::CComponent) CPrimitiveCollectionPort::getConnectedComponentAt(size_t index) const {
+					if (index < m_connectedPorts.size()) {
+						return m_connectedPorts.at(index);
+					}
+					//throw exception
+					return nullptr;
+				}
+
+			}
+
 		}
 	}
 }

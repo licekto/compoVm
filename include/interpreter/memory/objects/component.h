@@ -13,37 +13,37 @@ namespace interpreter {
 	namespace memory {
 
 		namespace objects {
-                        
-                        namespace primitives {
-                            class CPrimitiveService;
-                        }
-                    
+
+			namespace primitives {
+				class CPrimitiveService;
+			}
+
 			class CComponent {
 			  private:
 
-                                std::vector<ptr(TPortProperties)> m_ports;
-                                
-                                std::vector<ptr(CComponent)> m_services;
-                                
-                                std::vector<ptr(primitives::CPrimitiveService)> m_primitiveServices;
+				std::vector<ptr(TPortProperties)> m_ports;
+
+				std::vector<ptr(CComponent)> m_services;
+
+				std::vector<ptr(primitives::CPrimitiveService)> m_primitiveServices;
 
 			  public:
 
 				void addPort(ptr(TPortProperties));
-                                
-                                size_t getNumberOfPorts() const;
-                                
-                                ptr(TPortProperties) getPortAt(size_t index);
-                                
-                                ptr(primitives::CAbstractPrimitive) getPrimitiveNamePort();
-                                
-                                ptr(primitives::CAbstractPrimitive) getPrimitivePortByName(const std::string& name);
-                                
-                                ptr(CComponent) getPortByName(const std::string& name);
-                                
+
+				size_t getNumberOfPorts() const;
+
+				ptr(TPortProperties) getPortAt(size_t index);
+
+				ptr(primitives::CAbstractPrimitive) getPrimitiveNamePort();
+
+				ptr(primitives::CAbstractPrimitive) getPrimitivePortByName(const std::string& name);
+
+				ptr(CComponent) getPortByName(const std::string& name);
+
 				void addService(ptr(CComponent) service);
-                                
-                                void addPrimitiveService(ptr(primitives::CPrimitiveService) service);
+
+				void addPrimitiveService(ptr(primitives::CPrimitiveService) service);
 			};
 
 		}

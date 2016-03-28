@@ -20,7 +20,7 @@
 #include "exceptions/semantic/bidirectionalPortNotSupportedException.h"
 #include "interpreter/core/interpreter.h"
 #include "interpreter/core/coreModules.h"
-#include "interpreter/core/manager.h"
+#include "interpreter/core/bootstrap.h"
 
 BOOST_AUTO_TEST_SUITE(interpreterTest)
 
@@ -49,7 +49,7 @@ BOOST_AUTO_TEST_CASE(basicTest) {
 
     program->accept(visitor);
     
-    interpreter::core::CInterpreter interpreter(parser->getDescriptorTable(), new_ptr(interpreter::core::CMemoryManager)());
+    interpreter::core::CInterpreter interpreter(parser->getDescriptorTable(), new_ptr(interpreter::core::CBootstrap)());
     
     interpreter.run(program);
     
@@ -110,7 +110,7 @@ BOOST_AUTO_TEST_CASE(calcTest) {
 
     program->accept(visitor);
     
-    interpreter::core::CInterpreter interpreter(parser->getDescriptorTable(), new_ptr(interpreter::memory::manager::CMemoryManager)());
+    interpreter::core::CInterpreter interpreter(parser->getDescriptorTable(), new_ptr(interpreter::core::CBootstrap)());
     
     interpreter.run(program);
     

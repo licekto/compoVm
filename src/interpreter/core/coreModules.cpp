@@ -32,17 +32,17 @@ namespace interpreter {
 			m_parser->clearAll();
 		}
 
-                ptr(ast_descriptor) CCoreModules::getCoreDescriptor(const std::string& module) const {
-                        auto it = std::find_if(m_coreDescriptors.begin(), m_coreDescriptors.end(), [&module] (ptr(ast_descriptor) descriptor) {
-                            return descriptor->getNameSymbol()->getStringValue() == module;
-                        });
-                        
-                        if (it == m_coreDescriptors.end()) {
-                            return nullptr;
-                        }
-                        return *it;
+		ptr(ast_descriptor) CCoreModules::getCoreDescriptor(const std::string& module) const {
+			auto it = std::find_if(m_coreDescriptors.begin(), m_coreDescriptors.end(), [&module] (ptr(ast_descriptor) descriptor) {
+				return descriptor->getNameSymbol()->getStringValue() == module;
+			});
+
+			if (it == m_coreDescriptors.end()) {
+				return nullptr;
+			}
+			return *it;
 		}
-                
+
 		void CCoreModules::loadCoreModules() {
 			loadDescriptor(KERNEL_COLLECTION_PORT_PATH);
 			loadDescriptor(KERNEL_COMPONENT_PATH);
@@ -52,19 +52,19 @@ namespace interpreter {
 			loadDescriptor(KERNEL_PORT_DESCRIPTION_PATH);
 			loadDescriptor(KERNEL_SERVICE_PATH);
 			loadDescriptor(KERNEL_SERVICE_SIGNATURE_PATH);
-                }
+		}
 
-                ptr(ast_descriptor) CCoreModules::getCoreDescriptorAt(size_t i) const {
-                    if (i < m_coreDescriptors.size()) {
-                        return m_coreDescriptors.at(i);
-                    }
-                    return nullptr;
-                }
+		ptr(ast_descriptor) CCoreModules::getCoreDescriptorAt(size_t i) const {
+			if (i < m_coreDescriptors.size()) {
+				return m_coreDescriptors.at(i);
+			}
+			return nullptr;
+		}
 
-                size_t CCoreModules::getCoreDescriptorsSize() const {
-                    return m_coreDescriptors.size();
-                }
-                
+		size_t CCoreModules::getCoreDescriptorsSize() const {
+			return m_coreDescriptors.size();
+		}
+
 	}
 
 }

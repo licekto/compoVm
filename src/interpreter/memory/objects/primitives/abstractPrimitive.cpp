@@ -5,25 +5,25 @@ namespace interpreter {
 	namespace memory {
 
 		namespace objects {
-                    
-                    namespace primitives {
 
-                        CAbstractPrimitive::CAbstractPrimitive(const std::string& name, std::shared_ptr<CComponent> owner)
-                        : m_name(name), m_owner(owner) {
-                        }
+			namespace primitives {
 
-                        CAbstractPrimitive::~CAbstractPrimitive() {
-                        }
-                        
-                        std::string CAbstractPrimitive::getName() const {
-                            return m_name;
-                        }
+				CAbstractPrimitive::CAbstractPrimitive(const std::string& name, std::shared_ptr<CComponent> owner)
+					: m_name(name), m_owner(owner) {
+				}
 
-                        std::shared_ptr<CComponent> CAbstractPrimitive::getOwner() {
-                            return m_owner;
-                        }
+				CAbstractPrimitive::~CAbstractPrimitive() {
+				}
 
-                    }
+				std::string CAbstractPrimitive::getName() const {
+					return m_name;
+				}
+
+				std::shared_ptr<CComponent> CAbstractPrimitive::getOwner() {
+					return m_owner;
+				}
+
+			}
 
 		}
 	}

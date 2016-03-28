@@ -1,60 +1,60 @@
 #include "interpreter/memory/objects/primitives/primitiveService.h"
 
 namespace interpreter {
-    
-    namespace memory {
-        
-        namespace objects {
-            
-            namespace primitives {
 
-                CPrimitiveService::CPrimitiveService(const std::string& name,
-                                                     std::vector<std::string> params,
-                                                     ptr(objects::CComponent) context,
-                                                     std::function<void()> callback)
-                : CAbstractPrimitive(name, nullptr),
-                  m_params(params),
-                  m_context(context),
-                  m_callback(callback) {
-                }
+	namespace memory {
 
-                CPrimitiveService::~CPrimitiveService() {
-                }
+		namespace objects {
 
-                void CPrimitiveService::operator()() {
-                    m_callback();
-                }
+			namespace primitives {
 
-                size_t CPrimitiveService::getParamsCount() const {
-                    return m_params.size();
-                }
+				CPrimitiveService::CPrimitiveService(const std::string& name,
+				                                     std::vector<std::string> params,
+				                                     ptr(objects::CComponent) context,
+				                                     std::function<void()> callback)
+					: CAbstractPrimitive(name, nullptr),
+					  m_params(params),
+					  m_context(context),
+					  m_callback(callback) {
+				}
 
-                std::string CPrimitiveService::getParamName(size_t index) const {
-                    if (index < m_params.size()) {
-                        return m_params.at(index);
-                    }
-                    //throw exception
-                    return "";
-                }
+				CPrimitiveService::~CPrimitiveService() {
+				}
 
-                void CPrimitiveService::setParam(std::string param) {
-                    m_params.push_back(param);
-                }
+				void CPrimitiveService::operator()() {
+					m_callback();
+				}
 
-                std::string CPrimitiveService::getName() const {
-                    return m_name;
-                }
+				size_t CPrimitiveService::getParamsCount() const {
+					return m_params.size();
+				}
 
-                ptr(objects::CComponent) CPrimitiveService::getContext() {
-                    return m_context;
-                }
+				std::string CPrimitiveService::getParamName(size_t index) const {
+					if (index < m_params.size()) {
+						return m_params.at(index);
+					}
+					//throw exception
+					return "";
+				}
 
-                void CPrimitiveService::setCallback(std::function<void()> callback) {
-                    m_callback = callback;
-                }
+				void CPrimitiveService::setParam(std::string param) {
+					m_params.push_back(param);
+				}
 
-            }
-            
-        }
-    }
+				std::string CPrimitiveService::getName() const {
+					return m_name;
+				}
+
+				ptr(objects::CComponent) CPrimitiveService::getContext() {
+					return m_context;
+				}
+
+				void CPrimitiveService::setCallback(std::function<void()> callback) {
+					m_callback = callback;
+				}
+
+			}
+
+		}
+	}
 }

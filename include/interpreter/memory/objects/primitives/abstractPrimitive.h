@@ -9,28 +9,28 @@ namespace interpreter {
 	namespace memory {
 
 		namespace objects {
-                    
-                    class CComponent;
-                    
-                    namespace primitives {    
 
-			class CAbstractPrimitive {
-			  protected:
-				std::string m_name;
+			class CComponent;
 
-				ptr(CComponent) m_owner;
+			namespace primitives {
 
-			  public:
-				CAbstractPrimitive(const std::string& name = "", ptr(CComponent) owner = nullptr);
-                                
-                                virtual ~CAbstractPrimitive();
+				class CAbstractPrimitive {
+				  protected:
+					std::string m_name;
 
-				std::string getName() const;
+					ptr(CComponent) m_owner;
 
-				ptr(CComponent) getOwner();
-			};
-                        
-                    }
+				  public:
+					CAbstractPrimitive(const std::string& name = "", ptr(CComponent) owner = nullptr);
+
+					virtual ~CAbstractPrimitive();
+
+					std::string getName() const;
+
+					ptr(CComponent) getOwner();
+				};
+
+			}
 
 		}
 	}

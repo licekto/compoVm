@@ -29,18 +29,18 @@ namespace interpreter {
 			std::string readFile(const std::string& path) const;
 
 			void loadDescriptor(const std::string& path);
-                        
+
 		  public:
 
 			CCoreModules(ptr(ParserWrapper) parser = nullptr);
 
 			void loadCoreModules();
-                        
-                        ptr(ast_descriptor) getCoreDescriptor(const std::string& module) const;
-                        
-                        ptr(ast_descriptor) getCoreDescriptorAt(size_t i) const;
-                        
-                        size_t getCoreDescriptorsSize() const;
+
+			ptr(ast_descriptor) getCoreDescriptor(const std::string& module) const;
+
+			ptr(ast_descriptor) getCoreDescriptorAt(size_t i) const;
+
+			size_t getCoreDescriptorsSize() const;
 		};
 
 	}

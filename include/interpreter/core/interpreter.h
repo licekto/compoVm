@@ -6,7 +6,7 @@
 #include "exceptions/runtime/mainComponentMissingException.h"
 #include "exceptions/runtime/mainServiceMissingException.h"
 #include "coreModules.h"
-#include "interpreter/core/manager.h"
+#include "interpreter/core/bootstrap.h"
 
 /**
  *  \addtogroup interpreter
@@ -38,31 +38,31 @@ namespace interpreter {
 
 			ptr(ast::semantic::CGlobalDescriptorTable) m_descriptorTable;
 
-			ptr(memory::manager::CMemoryManager) m_memory;
-                        
-                        ptr(CCoreModules) m_coreModules;
+			ptr(core::CBootstrap) m_memory;
+
+			ptr(CCoreModules) m_coreModules;
 
 			void checkMainContainer() const;
 
-                        void execProgram(ptr(ast_program) node);
-                        
-                        void execDescriptor(ptr(ast_descriptor) node);
-                        
-                        void exec(ptr(ast_node));
-                        
-                        void loadCoreToDescriptorTable();
-                        
-                        
-                        
+			void execProgram(ptr(ast_program) node);
+
+			void execDescriptor(ptr(ast_descriptor) node);
+
+			void exec(ptr(ast_node));
+
+			void loadCoreToDescriptorTable();
+
+
+
 		  public:
 
 			CInterpreter(ptr(ast::semantic::CGlobalDescriptorTable) table = nullptr,
-			             ptr(core::CMemoryManager) manager = nullptr,
-                                     ptr(CCoreModules) modules = nullptr);
+			             ptr(core::CBootstrap) manager = nullptr,
+			             ptr(CCoreModules) modules = nullptr);
 
 			void run(ptr(ast_program) ast);
-                        
-                        ptr(memory::objects::CComponent) createComponentFromDescriptor(ptr(ast_descriptor) descriptor);
+
+			ptr(memory::objects::CComponent) createComponentFromDescriptor(ptr(ast_descriptor) descriptor);
 		};
 
 	}
