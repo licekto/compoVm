@@ -1,13 +1,13 @@
 #include "interpreter/core/interpreter.h"
 #include "interpreter/memory/objects/stringComponent.h"
-#include "interpreter/memory/objects/primitivePort.h"
+#include "interpreter/memory/objects/primitives/primitivePort.h"
 
 namespace interpreter {
 
 	namespace core {
 
 		CInterpreter::CInterpreter(ptr(ast::semantic::CGlobalDescriptorTable) table,
-		                           ptr(memory::manager::CMemoryManager) manager,
+		                           ptr(core::CMemoryManager) manager,
                                            ptr(CCoreModules) modules)
 			: m_ast(nullptr),
 			  m_descriptorTable(table),

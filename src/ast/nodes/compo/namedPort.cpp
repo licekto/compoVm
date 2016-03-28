@@ -12,15 +12,15 @@ namespace ast {
 			                       bool collectivity)
 				:   CNode(types::nodeType::NAMED_PORT),
 				    CPort(types::portType::NAMED, name, atomicity, collectivity),
-				    m_nameParam(nameParam) {
+				    m_componentName(nameParam) {
 			}
 
 			void CNamedPort::accept(std::shared_ptr<visitors::CAbstractVisitor> visitor) {
 				visitor->visit(shared_from_this());
 			}
 
-			std::shared_ptr<ast::nodes::procedural::CSymbol> CNamedPort::getParamName() const {
-				return m_nameParam;
+			std::shared_ptr<ast::nodes::procedural::CSymbol> CNamedPort::getComponentName() const {
+				return m_componentName;
 			}
 		}
 	}

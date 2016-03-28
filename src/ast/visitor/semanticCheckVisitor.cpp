@@ -216,7 +216,7 @@ namespace ast {
 				node->getKindOf()->accept(shared_from_this());
 			}
 			node->getNameSymbol()->accept(shared_from_this());
-			node->getParamName()->accept(shared_from_this());
+			node->getComponentName()->accept(shared_from_this());
 		}
 
 		void CSemanticCheckVisitor::visit(ptr(ast_portaddress) node) {

@@ -3,6 +3,7 @@
 #include <vector>
 
 #include "definitions/allDefinitions.h"
+#include "interpreter/memory/objects/primitives/abstractPrimitive.h"
 
 namespace interpreter {
 
@@ -13,23 +14,23 @@ namespace interpreter {
                     class CComponent;
                     class CPrimitivePort;
                     
-                    enum visibility {
+                    enum portVisibility {
                         EXTERNAL,
                         INTERNAL
                     };
                     
-                    enum type {
+                    enum portType {
                         REQUIREMENT,
                         PROVISION
                     };
                     
                     struct TPortProperties {
-                        visibility m_visibility;
-                        type m_type;
+                        portVisibility m_visibility;
+                        portType m_type;
                         ptr(CComponent) m_port;
-                        ptr(CPrimitivePort) m_primitivePort;
+                        ptr(primitives::CAbstractPrimitive) m_primitivePort;
                         
-                        TPortProperties(visibility v = visibility::EXTERNAL, type t = type::PROVISION, ptr(CComponent) port = nullptr, ptr(CPrimitivePort) pPort = nullptr);
+                        TPortProperties(portVisibility v = portVisibility::EXTERNAL, portType t = portType::PROVISION, ptr(CComponent) port = nullptr, ptr(primitives::CAbstractPrimitive) pPort = nullptr);
                     };
 
 		}

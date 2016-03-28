@@ -81,7 +81,11 @@ namespace ast {
 					return m_code->getValue();
 				}
 				return "";
-			}
+                        }
+
+                        std::shared_ptr<compo::CServiceSignature> CService::getSignature() const {
+                            return m_signature;
+                        }
 
 		}
 

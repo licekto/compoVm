@@ -6,7 +6,7 @@
 #include "exceptions/runtime/mainComponentMissingException.h"
 #include "exceptions/runtime/mainServiceMissingException.h"
 #include "coreModules.h"
-#include "interpreter/memory/manager/manager.h"
+#include "interpreter/core/manager.h"
 
 /**
  *  \addtogroup interpreter
@@ -52,10 +52,12 @@ namespace interpreter {
                         
                         void loadCoreToDescriptorTable();
                         
+                        
+                        
 		  public:
 
 			CInterpreter(ptr(ast::semantic::CGlobalDescriptorTable) table = nullptr,
-			             ptr(memory::manager::CMemoryManager) manager = nullptr,
+			             ptr(core::CMemoryManager) manager = nullptr,
                                      ptr(CCoreModules) modules = nullptr);
 
 			void run(ptr(ast_program) ast);

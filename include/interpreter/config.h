@@ -38,3 +38,6 @@
 
 // Name of core component representing boolean
 #define COMPONENT_BOOLEAN_NAME "Boolean"
+
+// Name of port that is always connected to the name of the component
+#define NAME_OF_NAMEPORT "name"

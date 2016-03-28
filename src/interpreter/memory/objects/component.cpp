@@ -22,7 +22,11 @@ namespace interpreter {
                             return nullptr;
                         }
 
-                        ptr(CPrimitivePort) CComponent::getPrimitivePortByName(const std::string& name) {
+                        std::shared_ptr<primitives::CAbstractPrimitive> CComponent::getPrimitiveNamePort() {
+                            return getPrimitivePortByName(NAME_OF_NAMEPORT);
+                        }
+
+                        ptr(primitives::CAbstractPrimitive) CComponent::getPrimitivePortByName(const std::string& name) {
                             auto it = std::find_if(m_ports.begin(), m_ports.end(), [&name](ptr(TPortProperties) port) {
                                 return port->m_primitivePort.use_count() && port->m_primitivePort->getName() == name;
                             });
@@ -33,10 +37,25 @@ namespace interpreter {
                             return (*it)->m_primitivePort;
                         }
 
+                        std::shared_ptr<CComponent> CComponent::getPortByName(const std::string& name) {
+                            auto it = std::find_if(m_ports.begin(), m_ports.end(), [&name](ptr(TPortProperties) port) {
+                                return port->m_port.use_count() && port->m_port->getPrimitiveNamePort()->getName() == name;
+                            });
+                            
+                            if (it == m_ports.end()) {
+                                //throw exception
+                            }
+                            return (*it)->m_port;
+                        }
+
 			void CComponent::addService(std::shared_ptr<CComponent> service) {
                             m_services.push_back(service);
-			}
-                        
+                        }
+
+                        void CComponent::addPrimitiveService(std::shared_ptr<primitives::CPrimitiveService> service) {
+                            m_primitiveServices.push_back(service);
+                        }
+
 		}
 	}
 }

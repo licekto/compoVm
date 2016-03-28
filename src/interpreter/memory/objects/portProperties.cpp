@@ -6,7 +6,7 @@ namespace interpreter {
 
 		namespace objects {
                         
-                        TPortProperties::TPortProperties(visibility v, type t, ptr(CComponent) port, ptr(CPrimitivePort) pPort)
+                        TPortProperties::TPortProperties(portVisibility v, portType t, ptr(CComponent) port, ptr(primitives::CAbstractPrimitive) pPort)
                                 : m_visibility(v), m_type(t), m_port(port), m_primitivePort(pPort) {
                         }
 

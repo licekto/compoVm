@@ -83,7 +83,7 @@ do { \
 #define TEST_NAMED_PORT(namedPort, portName, paramName) \
 do { \
     BOOST_CHECK_EQUAL(portName, namedPort->getNameSymbol()->getStringValue()); \
-    TEST_SYMBOL(namedPort->getParamName(), paramName); \
+    TEST_SYMBOL(namedPort->getComponentName(), paramName); \
 } while(0)
 
 #define TEST_ARCHITECTURE(architecture, bodySize) \

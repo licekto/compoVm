@@ -5,7 +5,8 @@
 
 #include "definitions/allDefinitions.h"
 #include "interpreter/memory/objects/portProperties.h"
-#include "interpreter/memory/objects/primitivePort.h"
+#include "interpreter/memory/objects/primitives/primitivePort.h"
+#include "interpreter/config.h"
 
 namespace interpreter {
 
@@ -13,12 +14,18 @@ namespace interpreter {
 
 		namespace objects {
                         
+                        namespace primitives {
+                            class CPrimitiveService;
+                        }
+                    
 			class CComponent {
 			  private:
 
                                 std::vector<ptr(TPortProperties)> m_ports;
                                 
                                 std::vector<ptr(CComponent)> m_services;
+                                
+                                std::vector<ptr(primitives::CPrimitiveService)> m_primitiveServices;
 
 			  public:
 
@@ -28,9 +35,15 @@ namespace interpreter {
                                 
                                 ptr(TPortProperties) getPortAt(size_t index);
                                 
-                                ptr(CPrimitivePort) getPrimitivePortByName(const std::string& name);
+                                ptr(primitives::CAbstractPrimitive) getPrimitiveNamePort();
+                                
+                                ptr(primitives::CAbstractPrimitive) getPrimitivePortByName(const std::string& name);
+                                
+                                ptr(CComponent) getPortByName(const std::string& name);
                                 
 				void addService(ptr(CComponent) service);
+                                
+                                void addPrimitiveService(ptr(primitives::CPrimitiveService) service);
 			};
 
 		}

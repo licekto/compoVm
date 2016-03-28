@@ -17,7 +17,7 @@ namespace ast {
 			class CNamedPort : public CPort, public std::enable_shared_from_this<CNamedPort> {
 			  protected:
 				/**< Name parameter symbol of port */
-				std::shared_ptr<procedural::CSymbol> m_nameParam;
+				std::shared_ptr<procedural::CSymbol> m_componentName;
 
 			  public:
 				/**
@@ -41,7 +41,7 @@ namespace ast {
 				 * @param index
 				 * @return shared_ptr to CServiceSignature
 				 */
-				std::shared_ptr<procedural::CSymbol> getParamName() const;
+				std::shared_ptr<procedural::CSymbol> getComponentName() const;
 			};
 
 		}
