@@ -32,7 +32,7 @@ namespace ast {
 				return m_signature->getNameSymbol();
 			}
 
-			void CService::setBodyNode(std::shared_ptr<procedural::CCompoundBody> body) {
+			void CService::setParsedBodyNode(std::shared_ptr<procedural::CCompoundBody> body) {
 				m_body = body;
 			}
 
@@ -74,7 +74,12 @@ namespace ast {
 				if (m_signature.use_count()) {
 					return m_signature->setParam(param);
 				}
-			}
+                        }
+
+                        void CService::setBodyCode(const std::string& code) {
+                            m_code = std::make_shared<ast::nodes::procedural::CStringLiteral>(code);
+                            m_body.reset();
+                        }
 
 			std::string CService::getBodyCode() const {
 				if (m_code.use_count()) {

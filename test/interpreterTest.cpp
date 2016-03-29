@@ -49,9 +49,13 @@ BOOST_AUTO_TEST_CASE(basicTest) {
 
     program->accept(visitor);
     
-    interpreter::core::CInterpreter interpreter(parser->getDescriptorTable(), new_ptr(interpreter::core::CBootstrap)());
+    ptr(interpreter::core::CCoreModules) coreModules = new_ptr(interpreter::core::CCoreModules)();
     
-    interpreter.run(program);
+    ptr(interpreter::core::CInterpreter) interpreter = new_ptr(interpreter::core::CInterpreter)(parser, coreModules);
+    
+    ptr(interpreter::core::CBootstrap) bootstrap = new_ptr(interpreter::core::CBootstrap)(new_ptr(interpreter::core::CCoreModules)(parser), interpreter);
+    
+    //interpreter->run(program);
     
     // Clear AST for next test
     parser->clearAll();
@@ -106,13 +110,14 @@ BOOST_AUTO_TEST_CASE(calcTest) {
     
     ptr(ast_program) program = parser->getRootNode();
     
-    ptr(ast::visitors::CSemanticCheckVisitor) visitor = new_ptr(ast::visitors::CSemanticCheckVisitor)(parser->getDescriptorTable());
+    
+    //ptr(ast::visitors::CSemanticCheckVisitor) visitor = new_ptr(ast::visitors::CSemanticCheckVisitor)(parser->getDescriptorTable());
 
-    program->accept(visitor);
+    //program->accept(visitor);
     
-    interpreter::core::CInterpreter interpreter(parser->getDescriptorTable(), new_ptr(interpreter::core::CBootstrap)());
+    //interpreter::core::CInterpreter interpreter(parser, new_ptr(interpreter::core::CBootstrap)());
     
-    interpreter.run(program);
+    //interpreter.run(program);
     
     // Clear AST for next test
     parser->clearAll();

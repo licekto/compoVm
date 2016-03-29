@@ -7,8 +7,8 @@ namespace interpreter {
 		namespace objects {
 
 			namespace primitives {
-
-				CPrimitivePort::CPrimitivePort(const std::string& name, ptr(objects::CComponent) owner, ptr(objects::CComponent) connected)
+                            
+                                CPrimitivePort::CPrimitivePort(const std::string& name, std::shared_ptr<objects::CComponent> owner, ptr(objects::CComponent) connected)
 					: CAbstractPrimitive(name, owner),
 					  m_connectedComponent(connected) {
 				}

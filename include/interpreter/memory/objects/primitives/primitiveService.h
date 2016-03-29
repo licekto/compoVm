@@ -21,14 +21,15 @@ namespace interpreter {
 
 					ptr(objects::CComponent) m_context;
 
-					std::function<void()> m_callback;
+					std::function<void(const std::vector<std::string>&, const ptr(objects::CComponent)&)> m_callback;
 
 				  public:
 
 					CPrimitiveService(const std::string& name = "",
 					                  std::vector<std::string> params = std::vector<std::string>(0),
 					                  ptr(CComponent) context = nullptr,
-					                  std::function<void()> callback = std::function<void()>());
+					                  std::function<void(const std::vector<std::string>&, const ptr(objects::CComponent)&)> callback
+                                                            = std::function<void(const std::vector<std::string>&, const ptr(objects::CComponent)&)>());
 
 					virtual ~CPrimitiveService();
 
@@ -44,7 +45,7 @@ namespace interpreter {
 
 					ptr(objects::CComponent) getContext();
 
-					void setCallback(std::function<void()> callback);
+					void setCallback(std::function<void(const std::vector<std::string>&, const ptr(objects::CComponent)&)> callback);
 				};
 
 			}

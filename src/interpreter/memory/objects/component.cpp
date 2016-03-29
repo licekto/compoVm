@@ -6,6 +6,9 @@ namespace interpreter {
 
 		namespace objects {
 
+                        CComponent::~CComponent() {
+                        }
+
 			void CComponent::addPort(ptr(TPortProperties) port) {
 				m_ports.push_back(port);
 			}
@@ -27,7 +30,7 @@ namespace interpreter {
 			}
 
 			ptr(primitives::CAbstractPrimitive) CComponent::getPrimitivePortByName(const std::string& name) {
-				auto it = std::find_if(m_ports.begin(), m_ports.end(), [&name](ptr(TPortProperties) port) {
+				auto it = std::find_if(m_ports.begin(), m_ports.end(), [&name](const ptr(TPortProperties)& port) {
 					return port->m_primitivePort.use_count() && port->m_primitivePort->getName() == name;
 				});
 

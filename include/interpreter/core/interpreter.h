@@ -6,7 +6,6 @@
 #include "exceptions/runtime/mainComponentMissingException.h"
 #include "exceptions/runtime/mainServiceMissingException.h"
 #include "coreModules.h"
-#include "interpreter/core/bootstrap.h"
 
 /**
  *  \addtogroup interpreter
@@ -36,9 +35,7 @@ namespace interpreter {
 
 			ptr(ast_program) m_ast;
 
-			ptr(ast::semantic::CGlobalDescriptorTable) m_descriptorTable;
-
-			ptr(core::CBootstrap) m_memory;
+			ptr(ParserWrapper) m_parser;
 
 			ptr(CCoreModules) m_coreModules;
 
@@ -56,10 +53,11 @@ namespace interpreter {
 
 		  public:
 
-			CInterpreter(ptr(ast::semantic::CGlobalDescriptorTable) table = nullptr,
-			             ptr(core::CBootstrap) manager = nullptr,
+			CInterpreter(ptr(ParserWrapper) parser = nullptr,
 			             ptr(CCoreModules) modules = nullptr);
 
+                        void execService(const std::string& code);
+                        
 			void run(ptr(ast_program) ast);
 
 			ptr(memory::objects::CComponent) createComponentFromDescriptor(ptr(ast_descriptor) descriptor);

@@ -7,15 +7,8 @@ descriptor Service extends Component {
         serviceSign : ServiceSignature;
         tempsN[] : Symbol;
         tempsV[] : *;
-        code : AST;
+        code : String;
     }
 
-    service execute() {
-        | bool1 bool2 |
-        bool1 := $context.isConnected();
-        bool1 := $paramsV.isConnected();
-        if (bool1 & bool2) {
-            /* Primitive execute */
-        }
-    }
+    service execute() {}
 }

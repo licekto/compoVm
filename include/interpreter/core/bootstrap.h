@@ -3,6 +3,7 @@
 #include <map>
 #include <functional>
 
+#include "interpreter/core/interpreter.h"
 #include "interpreter/core/coreModules.h"
 #include "interpreter/core/coreModuleType.h"
 #include "interpreter/memory/objects/component.h"
@@ -16,9 +17,13 @@ namespace interpreter {
 
 	namespace core {
 
+                class CInterpreter;
+            
 		class CBootstrap {
 		  private:
 			ptr(core::CCoreModules) m_coreModules;
+                        
+                        ptr(core::CInterpreter) m_interpreter;
 
 			std::map<core::coreModuleType, ptr(memory::objects::CComponent)> m_coreComponentsMap;
 
@@ -38,9 +43,11 @@ namespace interpreter {
 
 		  public:
 
-			CBootstrap(ptr(core::CCoreModules) coreModules = nullptr);
+			CBootstrap(ptr(core::CCoreModules) coreModules = nullptr, const ptr(core::CInterpreter)& interpreter = nullptr);
 
 			void boostrap();
+                        
+                        ptr(memory::objects::CComponent) getCoreComponent(core::coreModuleType type);
 		};
 	}
 }

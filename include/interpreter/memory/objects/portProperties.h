@@ -12,7 +12,6 @@ namespace interpreter {
 		namespace objects {
 
 			class CComponent;
-			class CPrimitivePort;
 
 			enum portVisibility {
 				EXTERNAL,

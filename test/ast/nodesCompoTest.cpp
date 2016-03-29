@@ -3,6 +3,7 @@
 #include <boost/test/unit_test.hpp>
 
 #include "definitions/allDefinitions.h"
+#include "testDefinitions.h"
 
 BOOST_AUTO_TEST_SUITE(nodesCompoTest)
 
@@ -460,21 +461,19 @@ BOOST_AUTO_TEST_CASE(constraintTest) {
     BOOST_CHECK_EQUAL(0, constraintNew1.getBodySize());
 }
 
-/*
+
 BOOST_AUTO_TEST_CASE(descriptorTest) {
-    // Descriptor body preparation
-    std::vector<ptr(ast::nodes::CNode)) body;
-    body.push_back(new_ptr(ast_symbol)("Expr1"));
-    body.push_back(new_ptr(ast_symbol)("Expr2"));
-    
     // Descriptor creation
-    ast_descriptor descriptor(new_ptr(ast_symbol)("descriptorName"), new_ptr(ast_symbol)("descriptorExtends"), body);
+    ptr(ast_descriptor) descriptor = new_ptr(ast_descriptor)(new_ptr(ast_symbol)("descriptorName"), new_ptr(ast_symbol)("descriptorExtends"));
+    TEST_DESCRIPTOR(descriptor, "descriptorName", "descriptorExtends", 0, 0);
+    /*
     BOOST_CHECK_EQUAL("descriptorName", descriptor.getName());
     BOOST_CHECK_EQUAL("descriptorExtends", descriptor.getExtends());
     BOOST_CHECK_EQUAL(2, descriptor.getBodySize());
     BOOST_CHECK_EQUAL("Expr1", cast(ast_symbol)(descriptor.getBodyNodeAt(0))->getStringValue());
     BOOST_CHECK_EQUAL("Expr2", cast(ast_symbol)(descriptor.getBodyNodeAt(1))->getStringValue());
-    
+    */
+    /*
     // Copy constructor test
     ast_descriptor descriptorCopy1(descriptor);
     BOOST_CHECK_EQUAL("descriptorName", descriptorCopy1.getName());
@@ -526,6 +525,7 @@ BOOST_AUTO_TEST_CASE(descriptorTest) {
     BOOST_CHECK_EQUAL("", descriptorNew1.getName());
     BOOST_CHECK_EQUAL("", descriptorNew1.getExtends());
     BOOST_CHECK_EQUAL(0, descriptorNew1.getBodySize());
+     * */
 }
-*/
+
 BOOST_AUTO_TEST_SUITE_END()

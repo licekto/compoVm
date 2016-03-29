@@ -6,6 +6,9 @@ namespace interpreter {
 
 		namespace objects {
 
+                        CStringComponent::~CStringComponent() {
+                        }
+
 			CStringComponent::CStringComponent(std::string value)
 				: m_value(value) {
 			}

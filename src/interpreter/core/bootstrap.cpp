@@ -4,11 +4,14 @@ namespace interpreter {
 
 	namespace core {
 
-		CBootstrap::CBootstrap(std::shared_ptr<core::CCoreModules> coreModules)
-			: m_coreModules(coreModules) {
+		CBootstrap::CBootstrap(std::shared_ptr<core::CCoreModules> coreModules,
+                                       const ptr(core::CInterpreter)& interpreter)
+			: m_coreModules(coreModules),
+                          m_interpreter(interpreter) {
 		}
 
 		void CBootstrap::iterateAddPorts(std::shared_ptr<ast_reqprov> reqprov, std::function<void(memory::objects::portVisibility, memory::objects::portType, ptr(ast_port))> callback) {
+                    if (reqprov.use_count()) {
 			for (size_t i = 0; i < reqprov->getNumberOfPorts(); ++i) {
 				memory::objects::portVisibility v = reqprov->getVisibilityType() == ast::nodes::types::visibilityType::EXTERNAL
 				                                    ? memory::objects::portVisibility::EXTERNAL : memory::objects::portVisibility::INTERNAL;
@@ -18,6 +21,7 @@ namespace interpreter {
 
 				callback(v, t, reqprov->getPortAt(i));
 			}
+                    }
 		}
 
 		void CBootstrap::addPrimitivePorts(ptr(memory::objects::CComponent) component, ptr(ast_descriptor) descriptor) {
@@ -75,8 +79,22 @@ namespace interpreter {
 			connectComponentFunc("context", context);
 			connectComponentFunc("serviceSign", bootstrapServiceSignatureComponent(astService->getSignature()));
 			connectComponentFunc("code", new_ptr(memory::objects::CStringComponent)(astService->getBodyCode()));
+                        
+                        std::function<void(const std::vector<std::string>&, const ptr(memory::objects::CComponent)&)> executeCallback = 
+                        // No parameters for primitive service "execute"
+                            [this](const std::vector<std::string>& /*params*/, const ptr(memory::objects::CComponent)& currentContext) {
+                                if (currentContext.use_count()) {
+                                    // Obtain code
+                                    ptr(memory::objects::CComponent) component = cast(memory::objects::primitives::CPrimitiveCollectionPort)
+                                        (currentContext->getPortByName("code")->getPrimitivePortByName("connectedPorts"))->getConnectedComponentAt(0);
 
-			service->addPrimitiveService(new_ptr(memory::objects::primitives::CPrimitiveService)("execute", std::vector<std::string>(0), service));
+                                    ptr(memory::objects::CStringComponent) code = cast(memory::objects::CStringComponent)(component);
+
+                                    m_interpreter->execService(code->getValue());
+                                }
+                            };
+                        
+			service->addPrimitiveService(new_ptr(memory::objects::primitives::CPrimitiveService)("execute", std::vector<std::string>(0), service, executeCallback));
 
 			return service;
 		}
@@ -86,7 +104,7 @@ namespace interpreter {
 
 			addPorts(serviceSignature, m_coreModules->getCoreDescriptor("ServiceSignature"));
 
-			return nullptr;
+			return serviceSignature;
 		}
 
 		ptr(memory::objects::CComponent) CBootstrap::bootstrapDescriptorComponent() {
@@ -95,16 +113,21 @@ namespace interpreter {
 
 			addPorts(component, descriptor);
 
-			return nullptr;
+			return component;
 
-		}
+                }
 
 		void CBootstrap::boostrap() {
 			if (m_coreModules.use_count()) {
-				for (size_t i = 0; i < m_coreModules->getCoreDescriptorsSize(); ++i) {
-					m_coreModules->getCoreDescriptorAt(i);
-				}
+                            m_coreModules->loadCoreModules();
+                            
+                            m_coreComponentsMap[core::coreModuleType::DESCRIPTOR] = bootstrapDescriptorComponent();
 			}
-		}
+                }
+
+                ptr(memory::objects::CComponent) CBootstrap::getCoreComponent(core::coreModuleType type) {
+                    return m_coreComponentsMap[type];
+                }
+
 	}
 }

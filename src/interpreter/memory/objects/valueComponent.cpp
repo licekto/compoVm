@@ -6,6 +6,9 @@ namespace interpreter {
 
 		namespace objects {
 
+                    CValueComponent::~CValueComponent() {
+                    }
+
 		}
 	}
 }

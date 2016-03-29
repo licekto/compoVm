@@ -29,6 +29,8 @@ namespace interpreter {
 
 			  public:
 
+                                virtual ~CComponent();
+                              
 				void addPort(ptr(TPortProperties));
 
 				size_t getNumberOfPorts() const;

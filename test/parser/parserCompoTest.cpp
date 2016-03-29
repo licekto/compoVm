@@ -439,4 +439,123 @@ BOOST_AUTO_TEST_CASE(compoInterface) {
     parser.clearAll();
 }
 
+BOOST_AUTO_TEST_CASE(compoDescriptor) {
+    // Testing input
+    std::stringstream input;
+    input.str(
+    "descriptor Test{\
+    }");
+    // Parse input and create AST
+    parser.parseAll(input);
+    
+    // Check descriptor
+    ptr(ast_descriptor) descriptor = cast(ast_descriptor)(parser.getRootNode()->getNodeAt(0));
+    TEST_DESCRIPTOR(descriptor, "Test", "", 0, 0);
+    
+    TEST_REQUIREMENT(descriptor->getInRequirement(), ast::nodes::types::visibilityType::INTERNAL, 0);
+    TEST_REQUIREMENT(descriptor->getExRequirement(), ast::nodes::types::visibilityType::EXTERNAL, 0);
+    TEST_PROVISION(descriptor->getInProvision(), ast::nodes::types::visibilityType::INTERNAL, 0);
+    TEST_PROVISION(descriptor->getExProvision(), ast::nodes::types::visibilityType::EXTERNAL, 0);
+    
+    // Clear AST for next test
+    parser.clearAll();
+}
+
+BOOST_AUTO_TEST_CASE(compoCollectionPort) {
+    // Testing input
+    std::stringstream input;
+    input.str(
+    "descriptor CollectionPort extends Component {\
+        service invoke() {}\
+        service connectTo() {}\
+        service disconnectPort(index) {}\
+    }");
+    
+    // Parse input and create AST
+    parser.parseAll(input);
+    
+    // Check interface
+    ptr(ast_descriptor) descriptor = cast(ast_descriptor)(parser.getRootNode()->getNodeAt(0));
+    TEST_DESCRIPTOR(descriptor, "CollectionPort", "Component", 3, 0);
+    
+    // Clear AST for next test
+    parser.clearAll();
+}
+
+BOOST_AUTO_TEST_CASE(compoMultiple) {
+    // Testing input
+    std::stringstream input;
+    input.str(
+    "descriptor HTTPServer extends server {\
+	externally provides {\
+		default : {};\
+	}\
+        externally requires {\
+            default : {};\
+        }\
+        internally provides {\
+		default : {};\
+	}\
+        internally requires {\
+            default : {};\
+        }\
+	service create() {}\
+        constraint httpOnly() {}\
+        architecture {}\
+    }\
+    descriptor ab {\
+    }\
+    ");
+    
+    // Parse input and create AST
+    parser.parseAll(input);
+    
+    // Check descriptor
+    ptr(ast_descriptor) descriptor = cast(ast_descriptor)(parser.getRootNode()->getNodeAt(0));
+    TEST_DESCRIPTOR(descriptor, "HTTPServer", "server", 1, 1);
+    
+    // Check provision
+    ptr(ast_provision) provision = cast(ast_provision)(descriptor->getExProvision());
+    TEST_PROVISION(provision, ast::nodes::types::visibilityType::EXTERNAL, 1);
+    BOOST_CHECK_EQUAL("default", provision->getPortAt(0)->getNameSymbol()->getStringValue());
+    
+    // Check requirement
+    ptr(ast_requirement) requirement = cast(ast_requirement)(descriptor->getExRequirement());
+    TEST_REQUIREMENT(requirement, ast::nodes::types::visibilityType::EXTERNAL, 1);
+    BOOST_CHECK_EQUAL("default", requirement->getPortAt(0)->getNameSymbol()->getStringValue());
+    
+    // Check provision
+    provision = cast(ast_provision)(descriptor->getInProvision());
+    TEST_PROVISION(provision, ast::nodes::types::visibilityType::INTERNAL, 1);
+    BOOST_CHECK_EQUAL("default", provision->getPortAt(0)->getNameSymbol()->getStringValue());
+    
+    // Check requirement
+    requirement = cast(ast_requirement)(descriptor->getInRequirement());
+    TEST_REQUIREMENT(requirement, ast::nodes::types::visibilityType::INTERNAL, 1);
+    BOOST_CHECK_EQUAL("default", requirement->getPortAt(0)->getNameSymbol()->getStringValue());
+    
+    // Check service
+    ptr(ast_service) service = cast(ast_service)(descriptor->getServiceAt(0));
+    TEST_SERVICE(service, "create", 0, 0, 0);
+    
+    // Check constraint
+    ptr(ast_constraint) constraint = cast(ast_constraint)(descriptor->getConstraintAt(0));
+    TEST_CONSTRAINT(constraint, "httpOnly", 0, 0);
+    
+    // Check architecture
+    ptr(ast_architecture) architecture = cast(ast_architecture)(descriptor->getArchitecture());
+    BOOST_CHECK_EQUAL(ast::nodes::types::nodeType::ARCHITECTURE, architecture->getNodeType());
+    
+    descriptor = cast(ast_descriptor)(parser.getRootNode()->getNodeAt(1));
+    TEST_DESCRIPTOR(descriptor, "ab", "", 0, 0);
+    
+    TEST_REQUIREMENT(descriptor->getInRequirement(), ast::nodes::types::visibilityType::INTERNAL, 0);
+    TEST_REQUIREMENT(descriptor->getExRequirement(), ast::nodes::types::visibilityType::EXTERNAL, 0);
+    TEST_PROVISION(descriptor->getInProvision(), ast::nodes::types::visibilityType::INTERNAL, 0);
+    TEST_PROVISION(descriptor->getExProvision(), ast::nodes::types::visibilityType::EXTERNAL, 0);
+    
+    // Clear AST for next test
+    parser.clearAll();
+}
+
 BOOST_AUTO_TEST_SUITE_END()

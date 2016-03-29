@@ -59,12 +59,12 @@ namespace ast {
 				*/
 				std::shared_ptr<procedural::CSymbol> getNameSymbol() const;
 
-				void setBodyNode(std::shared_ptr<procedural::CCompoundBody> body);
+				void setParsedBodyNode(std::shared_ptr<procedural::CCompoundBody> body);
 
 				/**
 				* Body size getter
-				                * @return size of body vector
-				                */
+                                * @return size of body vector
+                                */
 				size_t getBodySize() const;
 
 				/**
@@ -75,8 +75,8 @@ namespace ast {
 
 				/**
 				* Temporaries size getter
-				                * @return size of temporaries vector
-				                */
+                                * @return size of temporaries vector
+                                */
 				size_t getTemporariesSize() const;
 
 				/**
@@ -104,6 +104,8 @@ namespace ast {
 				*/
 				std::shared_ptr<CNode> getParamAt(int index) const;
 
+                                void setBodyCode(const std::string& code);
+                                
 				std::string getBodyCode() const;
 
 				std::shared_ptr<compo::CServiceSignature> getSignature() const;

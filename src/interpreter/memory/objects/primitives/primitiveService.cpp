@@ -11,7 +11,7 @@ namespace interpreter {
 				CPrimitiveService::CPrimitiveService(const std::string& name,
 				                                     std::vector<std::string> params,
 				                                     ptr(objects::CComponent) context,
-				                                     std::function<void()> callback)
+				                                     std::function<void(const std::vector<std::string>&, const ptr(objects::CComponent)&)> callback)
 					: CAbstractPrimitive(name, nullptr),
 					  m_params(params),
 					  m_context(context),
@@ -22,7 +22,7 @@ namespace interpreter {
 				}
 
 				void CPrimitiveService::operator()() {
-					m_callback();
+					m_callback(m_params, m_context);
 				}
 
 				size_t CPrimitiveService::getParamsCount() const {
@@ -49,7 +49,7 @@ namespace interpreter {
 					return m_context;
 				}
 
-				void CPrimitiveService::setCallback(std::function<void()> callback) {
+				void CPrimitiveService::setCallback(std::function<void(const std::vector<std::string>&, const ptr(objects::CComponent)&)> callback) {
 					m_callback = callback;
 				}
 

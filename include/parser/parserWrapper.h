@@ -277,6 +277,8 @@ class ParserWrapper {
 	 */
 	void clearContext();
 
+        void clearRefs();
+        
 	void clearAll();
 
 	/**
@@ -350,6 +352,8 @@ class ParserWrapper {
 	void clearArchitectureBody();
 
 	void addServiceBody(ptr(ast_compound) body);
+        
+        ptr(ast_compound) getServiceBody() const;
 
 	void parseServices();
 };

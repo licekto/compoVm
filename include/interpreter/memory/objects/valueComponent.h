@@ -14,6 +14,8 @@ namespace interpreter {
 
 			  public:
 
+                                virtual ~CValueComponent();
+                              
 				void setDefaultPort(ptr(CComponent) defaultPort) = delete;
 
 				void setSelfPort(ptr(CComponent) selfPort) = delete;

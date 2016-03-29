@@ -204,12 +204,26 @@ void ParserWrapper::clearContext() {
 	clearServiceSignatures();
 	clearDescriptorServices();
 	clearDescriptorConstraints();
+        clearRefs();
+}
+
+void ParserWrapper::clearRefs() {
+        m_currentInteralProvision = nullptr;
+        m_currentExteralProvision = nullptr;
+        m_currentInteralRequirement = nullptr;
+        m_currentExteralRequirement = nullptr;
+        m_architecture = nullptr;
+        m_currentCompoundBody = nullptr;
+        m_currentPortName = nullptr;
+        m_serviceBody = nullptr;
 }
 
 void ParserWrapper::clearAll() {
 	clearContext();
 	clearDescriptorTable();
+        clearPorts();
 	clearRootNodes();
+        clearRefs();
 }
 
 void ParserWrapper::setCurrentCompoundBody(ptr(ast_compound) body) {
@@ -264,6 +278,10 @@ void ParserWrapper::addServiceBody(std::shared_ptr<ast_compound> body) {
 	m_serviceBody = body;
 }
 
+std::shared_ptr<ast_compound> ParserWrapper::getServiceBody() const {
+        return m_serviceBody;
+}
+
 void ParserWrapper::parseServices() {
 	for (size_t i = 0; i < m_root->getNodesSize(); ++i) {
 		if (m_root->getNodeAt(i)->getNodeType() == ast_nodetype::DESCRIPTOR) {
@@ -279,7 +297,7 @@ void ParserWrapper::parseServices() {
 
 				parse(input);
 
-				service->setBodyNode(m_serviceBody);
+				service->setParsedBodyNode(m_serviceBody);
 			}
 		}
 	}

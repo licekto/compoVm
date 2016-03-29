@@ -18,6 +18,10 @@ do { \
     if (descriptor->getExtendsSymbol()) { \
         BOOST_CHECK_EQUAL(extends, descriptor->getExtendsSymbol()->getStringValue()); \
     } \
+    std::string extendsStr = extends; \
+    if (!descriptor->getExtendsSymbol() && !extendsStr.empty()) { \
+        BOOST_CHECK(0); \
+    } \
     BOOST_CHECK_EQUAL(servicesSize, descriptor->getServicesSize()); \
     BOOST_CHECK_EQUAL(constraintsSize, descriptor->getConstraintsSize()); \
 } while(0)
@@ -32,16 +36,20 @@ do { \
 
 #define TEST_PROVISION(provision, visibility, numOfPorts) \
 do { \
-    BOOST_CHECK_EQUAL(ast::nodes::types::nodeType::PROVISION, provision->getNodeType()); \
-    BOOST_CHECK_EQUAL(visibility, provision->getVisibilityType()); \
-    BOOST_CHECK_EQUAL(numOfPorts, provision->getNumberOfPorts()); \
+    if (provision.use_count()) { \
+        BOOST_CHECK_EQUAL(ast::nodes::types::nodeType::PROVISION, provision->getNodeType()); \
+        BOOST_CHECK_EQUAL(visibility, provision->getVisibilityType()); \
+        BOOST_CHECK_EQUAL(numOfPorts, provision->getNumberOfPorts()); \
+    } \
 } while(0)
 
 #define TEST_REQUIREMENT(requirement, visibility, numOfPorts) \
 do { \
-    BOOST_CHECK_EQUAL(ast::nodes::types::nodeType::REQUIREMENT, requirement->getNodeType()); \
-    BOOST_CHECK_EQUAL(visibility, requirement->getVisibilityType()); \
-    BOOST_CHECK_EQUAL(numOfPorts, requirement->getNumberOfPorts()); \
+    if (requirement.use_count()) { \
+        BOOST_CHECK_EQUAL(ast::nodes::types::nodeType::REQUIREMENT, requirement->getNodeType()); \
+        BOOST_CHECK_EQUAL(visibility, requirement->getVisibilityType()); \
+        BOOST_CHECK_EQUAL(numOfPorts, requirement->getNumberOfPorts()); \
+    } \
 } while(0)
 
 #define TEST_SERVICE(service, name, numOfParams, bodySize, temporariesSize) \

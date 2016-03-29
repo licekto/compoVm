@@ -16,7 +16,9 @@ namespace interpreter {
 				std::string m_value;
 
 			  public:
-
+                              
+                                virtual ~CStringComponent();
+                              
 				CStringComponent(std::string value = "");
 
 				std::string getValue();
