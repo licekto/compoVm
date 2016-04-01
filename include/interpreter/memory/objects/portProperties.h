@@ -1,9 +1,7 @@
 #pragma once
 
-#include <vector>
-
 #include "definitions/allDefinitions.h"
-#include "interpreter/memory/objects/primitives/abstractPrimitive.h"
+#include "interpreter/"
 
 namespace interpreter {
 
@@ -12,26 +10,21 @@ namespace interpreter {
 		namespace objects {
 
 			class CComponent;
-
-			enum portVisibility {
-				EXTERNAL,
-				INTERNAL
-			};
-
-			enum portType {
-				REQUIREMENT,
-				PROVISION
-			};
-
-			struct TPortProperties {
-				portVisibility m_visibility;
-				portType m_type;
-				ptr(CComponent) m_port;
-				ptr(primitives::CAbstractPrimitive) m_primitivePort;
-
-				TPortProperties(portVisibility v = portVisibility::EXTERNAL, portType t = portType::PROVISION, ptr(CComponent) port = nullptr, ptr(primitives::CAbstractPrimitive) pPort = nullptr);
-			};
-
+                        
+                        class CPortProperties : public CAbstractPortProperties {
+                        private:
+                            ptr(CComponent) m_port;
+                            
+                        public:
+                            CPortProperties(ptr(CComponent) port = nullptr,
+                                            portVisibility v = portVisibility::EXTERNAL,
+                                            portType t = portType::PROVISION,
+                                            bool primitive = false);
+                            
+                            virtual ~CPortProperties();
+                            
+                            ptr(CComponent) getPort();
+                        };
 		}
 	}
 }
