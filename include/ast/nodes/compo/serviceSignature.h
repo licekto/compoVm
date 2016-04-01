@@ -31,21 +31,21 @@ namespace ast {
 				                  const std::vector<std::shared_ptr<CNode>>& params = std::vector<std::shared_ptr<CNode>>(0));
 
 				/**
-				            * Accept method for visitor acceptation.
-				            * @param visitor: Pointer to abstract visitor.
-				            */
+                                * Accept method for visitor acceptation.
+                                * @param visitor: Pointer to abstract visitor.
+                                */
 				virtual void accept(std::shared_ptr<visitors::CAbstractVisitor> visitor);
 
 				/**
 				* Name symbol getter
-				            * @return shared_ptr to CSymbol
-				            */
+                                * @return shared_ptr to CSymbol
+                                */
 				std::shared_ptr<procedural::CSymbol> getNameSymbol() const;
 
 				/**
 				* Parameter size vector size
-				            * @return number of parameters
-				            */
+                                * @return number of parameters
+                                */
 				size_t getParamsSize() const;
 
 				/**

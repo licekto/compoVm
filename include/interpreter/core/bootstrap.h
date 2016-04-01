@@ -27,6 +27,11 @@ namespace interpreter {
 
 			std::map<core::coreModuleType, ptr(memory::objects::CComponent)> m_coreComponentsMap;
 
+                        void bootstrapComponent(ptr(memory::objects::CComponent) component);
+                        
+                        void addPrimitiveServices(ptr(memory::objects::CComponent) component, ptr(ast_descriptor) descriptor,
+                                                  std::map<std::string, ptr(memory::objects::primitives::CPrimitiveService)>& servicesNames);
+                        
 			void iterateAddPorts(ptr(ast_reqprov) reqprov, std::function<void(memory::objects::portVisibility, memory::objects::portType, ptr(ast_port))> callback);
 
 			void addPrimitivePorts(ptr(memory::objects::CComponent) component, ptr(ast_descriptor) descriptor);

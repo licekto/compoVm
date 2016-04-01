@@ -11,20 +11,29 @@ namespace interpreter {
 		namespace objects {
 
 			class CValueComponent : public CComponent {
-
+                        protected:
+                            
 			  public:
 
                                 virtual ~CValueComponent();
                               
-				void setDefaultPort(ptr(CComponent) defaultPort) = delete;
+				void addPort(ptr(CAbstractPortProperties) port) = delete;
 
-				void setSelfPort(ptr(CComponent) selfPort) = delete;
+				size_t getNumberOfPorts() const = delete;
 
-				void setSuperPort(ptr(CComponent) superPort) = delete;
+				ptr(CAbstractPortProperties) getPortAt(size_t index) = delete;
 
-				void addPort(ptr(CComponent) port) = delete;
+				ptr(primitives::CPrimitivePortProperties) getPrimitiveNamePort() = delete;
+
+				ptr(CAbstractPortProperties) getPortByName(const std::string& name) = delete;
+                                
+                                ptr(CComponent) getServiceByName(const std::string& name) = delete;
+                                
+                                ptr(primitives::CPrimitiveService) getPrimitiveServiceByName(const std::string& name) = delete;
 
 				void addService(ptr(CComponent) service) = delete;
+
+				void addPrimitiveService(ptr(primitives::CPrimitiveService) service) = delete;
 			};
 		}
 	}

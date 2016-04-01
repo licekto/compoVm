@@ -32,12 +32,14 @@ BOOST_AUTO_TEST_CASE(basicTest) {
     ptr(interpreter::memory::objects::CComponent) descriptor = bootstrap->getCoreComponent(interpreter::core::coreModuleType::DESCRIPTOR);
     
     // Check Descriptor component
+    /*
     BOOST_CHECK_EQUAL(descriptor->getNumberOfPorts(), 4);
     BOOST_CHECK_EQUAL(descriptor->getPortAt(0)->m_port->getPrimitivePortByName("name")->getName(), "name");
     BOOST_CHECK_EQUAL(descriptor->getPortAt(0)->m_type, interpreter::memory::objects::portType::REQUIREMENT);
     BOOST_CHECK_EQUAL(descriptor->getPortAt(0)->m_visibility, interpreter::memory::objects::portVisibility::INTERNAL);
     ptr(interpreter::memory::objects::primitives::CPrimitivePort) primitivePort = cast(interpreter::memory::objects::primitives::CPrimitivePort)
             (descriptor->getPortAt(0)->m_port->getPrimitivePortByName("name"));
+     * */
 }
 
 BOOST_AUTO_TEST_SUITE_END()

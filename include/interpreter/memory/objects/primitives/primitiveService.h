@@ -15,37 +15,35 @@ namespace interpreter {
 
 				class CPrimitiveService : public CAbstractPrimitive {
 
-					std::string m_name;
-
 					std::vector<std::string> m_params;
 
 					ptr(objects::CComponent) m_context;
 
-					std::function<void(const std::vector<std::string>&, const ptr(objects::CComponent)&)> m_callback;
+					std::function<ptr(objects::CComponent)(const std::vector<ptr(objects::CComponent)>&, const ptr(objects::CComponent)&)> m_callback;
 
 				  public:
 
 					CPrimitiveService(const std::string& name = "",
-					                  std::vector<std::string> params = std::vector<std::string>(0),
-					                  ptr(CComponent) context = nullptr,
-					                  std::function<void(const std::vector<std::string>&, const ptr(objects::CComponent)&)> callback
-                                                            = std::function<void(const std::vector<std::string>&, const ptr(objects::CComponent)&)>());
+                                                          ptr(CComponent) context = nullptr,
+					                  std::function<ptr(objects::CComponent)(const std::vector<ptr(objects::CComponent)>&, const ptr(objects::CComponent)&)> callback
+                                                            = std::function<ptr(objects::CComponent)(const std::vector<ptr(objects::CComponent)>&, const ptr(objects::CComponent)&)>(),
+                                                          std::vector<std::string> params = std::vector<std::string>(0));
 
 					virtual ~CPrimitiveService();
 
-					void operator()();
+					ptr(objects::CComponent) operator()(const std::vector<ptr(objects::CComponent)>& params);
 
 					size_t getParamsCount() const;
 
-					std::string getParamName(size_t index) const;
-
 					void setParam(std::string param);
+                                        
+                                        std::string getParamAt(size_t index);
 
 					std::string getName() const;
 
 					ptr(objects::CComponent) getContext();
 
-					void setCallback(std::function<void(const std::vector<std::string>&, const ptr(objects::CComponent)&)> callback);
+					void setCallback(std::function<ptr(objects::CComponent)(const std::vector<ptr(objects::CComponent)>&, const ptr(objects::CComponent)&)> callback);
 				};
 
 			}

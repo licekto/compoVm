@@ -9,9 +9,9 @@ namespace interpreter {
 			namespace primitives {
 
 				CPrimitiveService::CPrimitiveService(const std::string& name,
-				                                     std::vector<std::string> params,
 				                                     ptr(objects::CComponent) context,
-				                                     std::function<void(const std::vector<std::string>&, const ptr(objects::CComponent)&)> callback)
+				                                     std::function<ptr(objects::CComponent)(const std::vector<ptr(objects::CComponent)>&, const ptr(objects::CComponent)&)> callback,
+				                                     std::vector<std::string> params)
 					: CAbstractPrimitive(name, nullptr),
 					  m_params(params),
 					  m_context(context),
@@ -21,25 +21,24 @@ namespace interpreter {
 				CPrimitiveService::~CPrimitiveService() {
 				}
 
-				void CPrimitiveService::operator()() {
-					m_callback(m_params, m_context);
+				ptr(objects::CComponent) CPrimitiveService::operator()(const std::vector<ptr(objects::CComponent)>& params) {
+                                        if (params.size() != m_params.size()) {
+                                            // throw
+                                        }
+					return m_callback(params, m_context);
 				}
 
 				size_t CPrimitiveService::getParamsCount() const {
 					return m_params.size();
 				}
 
-				std::string CPrimitiveService::getParamName(size_t index) const {
-					if (index < m_params.size()) {
-						return m_params.at(index);
-					}
-					//throw exception
-					return "";
-				}
-
 				void CPrimitiveService::setParam(std::string param) {
 					m_params.push_back(param);
-				}
+                                }
+
+                                std::string CPrimitiveService::getParamAt(size_t index) {
+                                    return m_params.at(index);
+                                }
 
 				std::string CPrimitiveService::getName() const {
 					return m_name;
@@ -49,7 +48,7 @@ namespace interpreter {
 					return m_context;
 				}
 
-				void CPrimitiveService::setCallback(std::function<void(const std::vector<std::string>&, const ptr(objects::CComponent)&)> callback) {
+				void CPrimitiveService::setCallback(std::function<ptr(objects::CComponent)(const std::vector<ptr(objects::CComponent)>&, const ptr(objects::CComponent)&)> callback) {
 					m_callback = callback;
 				}
 

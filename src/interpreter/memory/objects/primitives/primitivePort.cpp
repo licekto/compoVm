@@ -9,7 +9,7 @@ namespace interpreter {
 			namespace primitives {
                             
                                 CPrimitivePort::CPrimitivePort(const std::string& name, std::shared_ptr<objects::CComponent> owner, ptr(objects::CComponent) connected)
-					: CAbstractPrimitive(name, owner),
+					: CAbstractPrimitivePort(name, owner),
 					  m_connectedComponent(connected) {
 				}
 

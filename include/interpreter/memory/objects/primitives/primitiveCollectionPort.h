@@ -4,6 +4,7 @@
 
 #include "definitions/allDefinitions.h"
 #include "interpreter/memory/objects/primitives/abstractPrimitive.h"
+#include "interpreter/memory/objects/primitives/abstractPrimitivePort.h"
 
 namespace interpreter {
 
@@ -15,7 +16,7 @@ namespace interpreter {
 
 			namespace primitives {
 
-				class CPrimitiveCollectionPort : public CAbstractPrimitive {
+				class CPrimitiveCollectionPort : public CAbstractPrimitivePort {
 				  private:
 
 					std::vector<ptr(objects::CComponent)> m_connectedPorts;

@@ -3,7 +3,7 @@
 #include <string>
 
 #include "definitions/allDefinitions.h"
-#include "interpreter/memory/objects/primitives/abstractPrimitive.h"
+#include "interpreter/memory/objects/primitives/abstractPrimitivePort.h"
 
 namespace interpreter {
 
@@ -15,7 +15,7 @@ namespace interpreter {
 
 			namespace primitives {
 
-				class CPrimitivePort : public CAbstractPrimitive {
+				class CPrimitivePort : public CAbstractPrimitivePort {
 				  private:
 					ptr(objects::CComponent) m_connectedComponent;
 

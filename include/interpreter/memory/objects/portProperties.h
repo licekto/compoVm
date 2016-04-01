@@ -1,7 +1,7 @@
 #pragma once
 
 #include "definitions/allDefinitions.h"
-#include "interpreter/"
+#include "interpreter/memory/objects/abstractPortProperties.h"
 
 namespace interpreter {
 

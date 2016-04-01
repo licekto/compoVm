@@ -6,10 +6,18 @@ namespace interpreter {
 
 		namespace objects {
 
-			TPortProperties::TPortProperties(portVisibility v, portType t, ptr(CComponent) port, ptr(primitives::CAbstractPrimitive) pPort)
-				: m_visibility(v), m_type(t), m_port(port), m_primitivePort(pPort) {
-			}
+                    CPortProperties::CPortProperties(ptr(CComponent) port, portVisibility v, portType t, bool primitive)
+                    : CAbstractPortProperties(v, t, primitive), m_port(port) {
 
+                    }
+
+                    CPortProperties::~CPortProperties() {
+                    }
+
+                    ptr(CComponent) CPortProperties::getPort() {
+                        return m_port;
+                    }
+                    
 		}
 	}
 }

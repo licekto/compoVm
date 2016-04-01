@@ -9,7 +9,7 @@ namespace interpreter {
 			namespace primitives {
 
 				CPrimitiveCollectionPort::CPrimitiveCollectionPort(const std::string& name, ptr(objects::CComponent) owner)
-					: CAbstractPrimitive(name, owner) {
+					: CAbstractPrimitivePort(name, owner) {
 				}
 
 				CPrimitiveCollectionPort::~CPrimitiveCollectionPort() {

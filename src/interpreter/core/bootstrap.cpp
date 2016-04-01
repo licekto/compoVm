@@ -1,4 +1,7 @@
 #include "interpreter/core/bootstrap.h"
+#include "interpreter/memory/objects/primitives/primitivePortProperties.h"
+#include "interpreter/memory/objects/portProperties.h"
+#include "interpreter/memory/objects/unsignedIntComponent.h"
 
 namespace interpreter {
 
@@ -8,7 +11,75 @@ namespace interpreter {
                                        const ptr(core::CInterpreter)& interpreter)
 			: m_coreModules(coreModules),
                           m_interpreter(interpreter) {
-		}
+                }
+
+                void CBootstrap::bootstrapComponent(std::shared_ptr<memory::objects::CComponent> component) {
+                    ptr(ast_descriptor) componentDescriptor = m_coreModules->getCoreDescriptor("Component");
+                    
+                    std::map<std::string, ptr(memory::objects::primitives::CPrimitiveService)> servicesNames;
+                    
+                    addPrimitivePorts(component, componentDescriptor);
+                    addPrimitiveServices(component, componentDescriptor, servicesNames);
+                    
+                    std::function<ptr(memory::objects::CComponent)(const std::vector<ptr(memory::objects::CComponent)>&, const ptr(memory::objects::CComponent)&)> callback = 
+                            [](const std::vector<ptr(memory::objects::CComponent)>& /*params*/, const ptr(memory::objects::CComponent)& context) -> ptr(memory::objects::CComponent){
+                        
+                        ptr(memory::objects::CComponent) nameComponent = cast(memory::objects::primitives::CPrimitiveCollectionPort)
+                                (cast(memory::objects::primitives::CPrimitivePortProperties)(context->getPortByName("args"))->getPrimitivePort())->getConnectedComponentAt(0);
+                        
+                        ptr(memory::objects::CStringComponent) name = cast(memory::objects::CStringComponent)(nameComponent);
+                        
+                        ptr(memory::objects::CAbstractPortProperties) properties = context->getPortByName(name->getValue());
+                        
+                        if (!context->getPortByName(name->getValue())->isPrimitive()) {
+                            return cast(memory::objects::CPortProperties)(properties)->getPort();
+                        }
+                        return nullptr;
+                    };
+                    
+                    servicesNames.at("getPortNamed")->setCallback(callback);
+                    
+                    callback = [](const std::vector<ptr(memory::objects::CComponent)>& /*params*/, const ptr(memory::objects::CComponent)& /*context*/) -> ptr(memory::objects::CComponent){
+                        return nullptr;
+                    };
+                    
+                    servicesNames.at("getPorts")->setCallback(callback);
+                    servicesNames.at("getDescriptor")->setCallback(callback);
+                    
+                    callback = [](const std::vector<ptr(memory::objects::CComponent)>& /*params*/, const ptr(memory::objects::CComponent)& context) -> ptr(memory::objects::CComponent){
+                        return context;
+                    };
+                    
+                    servicesNames.at("getOwner")->setCallback(callback);
+                    
+                    callback = [](const std::vector<ptr(memory::objects::CComponent)>& /*params*/, const ptr(memory::objects::CComponent)& /*context*/) -> ptr(memory::objects::CComponent){
+                        //return new_ptr(memory::objects::CUnsignedIntComponent)(std::hash<memory::objects::CComponent>()(context.get()));
+                        return 0;
+                    };
+                    
+                    servicesNames.at("getIdentityHash")->setCallback(callback);
+                }
+
+                void CBootstrap::addPrimitiveServices(std::shared_ptr<memory::objects::CComponent> component, std::shared_ptr<ast_descriptor> descriptor,
+                                                      std::map<std::string, ptr(memory::objects::primitives::CPrimitiveService)>& servicesNames) {
+                    
+                    for(size_t i = 0; i < descriptor->getServicesSize(); ++i) {
+                        ptr(ast_service) astService = descriptor->getServiceAt(i);
+                        
+                        std::string serviceName = astService->getNameSymbol()->getStringValue();
+                        
+                        ptr(memory::objects::primitives::CPrimitiveService) primitiveService =
+                                new_ptr(memory::objects::primitives::CPrimitiveService)(serviceName, component);
+                        
+                        for (size_t j = 0; j < astService->getParamsSize(); ++j) {
+                            primitiveService->setParam(cast(ast::nodes::procedural::CSymbol)(astService->getParamAt(j))->getStringValue());
+                        }
+                        
+                        servicesNames[serviceName] = primitiveService;
+                        component->addPrimitiveService(primitiveService);
+                    }
+                    
+                }
 
 		void CBootstrap::iterateAddPorts(std::shared_ptr<ast_reqprov> reqprov, std::function<void(memory::objects::portVisibility, memory::objects::portType, ptr(ast_port))> callback) {
                     if (reqprov.use_count()) {
@@ -27,10 +98,13 @@ namespace interpreter {
 		void CBootstrap::addPrimitivePorts(ptr(memory::objects::CComponent) component, ptr(ast_descriptor) descriptor) {
 			// lambda function
 			auto callback = [this, &component](memory::objects::portVisibility v, memory::objects::portType t, ptr(ast_port) port) {
+                                bool primitive = true;
 				if (port->isCollection()) {
-					component->addPort(new_ptr(memory::objects::TPortProperties)(v, t, nullptr, new_ptr(memory::objects::primitives::CPrimitiveCollectionPort)(port->getNameSymbol()->getStringValue(), component)));
+					component->addPort(new_ptr(memory::objects::primitives::CPrimitivePortProperties)
+                                            (new_ptr(memory::objects::primitives::CPrimitiveCollectionPort)(port->getNameSymbol()->getStringValue(), component), v, t, primitive));
 				} else {
-					component->addPort(new_ptr(memory::objects::TPortProperties)(v, t, nullptr, new_ptr(memory::objects::primitives::CPrimitivePort)(port->getNameSymbol()->getStringValue(), component)));
+                                        component->addPort(new_ptr(memory::objects::primitives::CPrimitivePortProperties)
+                                            (new_ptr(memory::objects::primitives::CPrimitivePort)(port->getNameSymbol()->getStringValue(), component), v, t, primitive));
 				}
 			};
 
@@ -48,8 +122,8 @@ namespace interpreter {
 
 			std::string name = astPort->getNameSymbol()->getStringValue();
 
-			cast(memory::objects::primitives::CPrimitivePort)(port->getPrimitivePortByName("name"))->setConnectedComponent(new_ptr(memory::objects::CStringComponent)(name));
-			cast(memory::objects::primitives::CPrimitivePort)(port->getPrimitivePortByName("owner"))->setConnectedComponent(owner);
+			cast(memory::objects::primitives::CPrimitivePort)(port->getPortByName("name"))->setConnectedComponent(new_ptr(memory::objects::CStringComponent)(name));
+			cast(memory::objects::primitives::CPrimitivePort)(port->getPortByName("owner"))->setConnectedComponent(owner);
 
 			return port;
 		}
@@ -57,7 +131,8 @@ namespace interpreter {
 		void CBootstrap::addPorts(ptr(memory::objects::CComponent) component, ptr(ast_descriptor) descriptor) {
 			// lambda function
 			auto callback = [this, &component](memory::objects::portVisibility v, memory::objects::portType t, ptr(ast_port) port) {
-				component->addPort(new_ptr(memory::objects::TPortProperties)(v, t, bootstrapPortComponent(port, component)));
+                                bool primitive = false;
+				component->addPort(new_ptr(memory::objects::CPortProperties)(bootstrapPortComponent(port, component), v, t, primitive));
 			};
 
 			iterateAddPorts(descriptor->getInRequirement(), callback);
@@ -69,32 +144,33 @@ namespace interpreter {
 		ptr(memory::objects::CComponent) CBootstrap::bootstrapServiceComponent(ptr(ast_service) astService, ptr(memory::objects::CComponent) context) {
 			ptr(memory::objects::CComponent) service = new_ptr(memory::objects::CComponent)();
 
-			addPorts(service, m_coreModules->getCoreDescriptor("Service"));
+			addPrimitivePorts(service, m_coreModules->getCoreDescriptor("Service"));
 
 			auto connectComponentFunc = [&service](const std::string& name, ptr(memory::objects::CComponent) component) {
 				cast(memory::objects::primitives::CPrimitiveCollectionPort)
-				(service->getPortByName(name)->getPrimitivePortByName("connectedPorts"))->connectComponent(component);
+				(cast(memory::objects::CPortProperties)(service->getPortByName(name))->getPort()->getPortByName("connectedPorts"))->connectComponent(component);
 			};
 
 			connectComponentFunc("context", context);
 			connectComponentFunc("serviceSign", bootstrapServiceSignatureComponent(astService->getSignature()));
 			connectComponentFunc("code", new_ptr(memory::objects::CStringComponent)(astService->getBodyCode()));
                         
-                        std::function<void(const std::vector<std::string>&, const ptr(memory::objects::CComponent)&)> executeCallback = 
+                        std::function<ptr(memory::objects::CComponent)(const std::vector<ptr(memory::objects::CComponent)>&, const ptr(memory::objects::CComponent)&)> executeCallback = 
                         // No parameters for primitive service "execute"
-                            [this](const std::vector<std::string>& /*params*/, const ptr(memory::objects::CComponent)& currentContext) {
+                            [this](const std::vector<ptr(memory::objects::CComponent)>& /*params*/, const ptr(memory::objects::CComponent)& currentContext) -> ptr(memory::objects::CComponent) {
                                 if (currentContext.use_count()) {
                                     // Obtain code
                                     ptr(memory::objects::CComponent) component = cast(memory::objects::primitives::CPrimitiveCollectionPort)
-                                        (currentContext->getPortByName("code")->getPrimitivePortByName("connectedPorts"))->getConnectedComponentAt(0);
+                                        (cast(memory::objects::CPortProperties)(currentContext->getPortByName("code"))->getPort()->getPortByName("connectedPorts"))->getConnectedComponentAt(0);
 
                                     ptr(memory::objects::CStringComponent) code = cast(memory::objects::CStringComponent)(component);
 
                                     m_interpreter->execService(code->getValue());
                                 }
+                                return nullptr;
                             };
                         
-			service->addPrimitiveService(new_ptr(memory::objects::primitives::CPrimitiveService)("execute", std::vector<std::string>(0), service, executeCallback));
+			service->addPrimitiveService(new_ptr(memory::objects::primitives::CPrimitiveService)("execute", service, executeCallback));
 
 			return service;
 		}
