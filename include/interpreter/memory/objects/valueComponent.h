@@ -3,6 +3,7 @@
 #include <string>
 
 #include "interpreter/memory/objects/component.h"
+#include "interpreter/memory/objects/primitives/primitivePortProperties.h"
 
 namespace interpreter {
 

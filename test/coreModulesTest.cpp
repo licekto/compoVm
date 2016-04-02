@@ -34,9 +34,9 @@ BOOST_AUTO_TEST_CASE(basicTest) {
     
     descriptor = coreModules->getCoreDescriptor("Component");
     TEST_DESCRIPTOR(descriptor, "Component", "", 5, 0);
-    TEST_REQUIREMENT(descriptor->getInRequirement(), ast::nodes::types::visibilityType::INTERNAL, 2);
+    TEST_REQUIREMENT(descriptor->getInRequirement(), ast::nodes::types::visibilityType::INTERNAL, 0);
     TEST_REQUIREMENT(descriptor->getExRequirement(), ast::nodes::types::visibilityType::EXTERNAL, 1);
-    TEST_PROVISION(descriptor->getInProvision(), ast::nodes::types::visibilityType::INTERNAL, 0);
+    TEST_PROVISION(descriptor->getInProvision(), ast::nodes::types::visibilityType::INTERNAL, 2);
     TEST_PROVISION(descriptor->getExProvision(), ast::nodes::types::visibilityType::EXTERNAL, 1);
     
     descriptor = coreModules->getCoreDescriptor("ConnectionDescription");

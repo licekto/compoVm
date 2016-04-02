@@ -4,9 +4,11 @@
 #include <algorithm>
 
 #include "definitions/allDefinitions.h"
-#include "interpreter/memory/objects/portProperties.h"
+#include "interpreter/memory/objects/generalService.h"
+#include "interpreter/memory/objects/abstractPortProperties.h"
 #include "interpreter/memory/objects/primitives/primitivePortProperties.h"
 #include "interpreter/config.h"
+#include "primitives/primitivePortProperties.h"
 
 namespace interpreter {
 
@@ -14,18 +16,12 @@ namespace interpreter {
 
 		namespace objects {
 
-			namespace primitives {
-				class CPrimitiveService;
-			}
-
 			class CComponent {
 			  private:
 
 				std::vector<ptr(CAbstractPortProperties)> m_ports;
 
-				std::vector<ptr(CComponent)> m_services;
-
-				std::vector<ptr(primitives::CPrimitiveService)> m_primitiveServices;
+				std::vector<ptr(CGeneralService)> m_services;
                                 
 			  public:
 
@@ -41,13 +37,9 @@ namespace interpreter {
 
 				ptr(CAbstractPortProperties) getPortByName(const std::string& name);
                                 
-                                ptr(CComponent) getServiceByName(const std::string& name);
-                                
-                                ptr(primitives::CPrimitiveService) getPrimitiveServiceByName(const std::string& name);
+                                ptr(CGeneralService) getServiceByName(const std::string& name);
 
-				void addService(ptr(CComponent) service);
-
-				void addPrimitiveService(ptr(primitives::CPrimitiveService) service);
+				void addService(ptr(CGeneralService) service);
 			};
 
 		}

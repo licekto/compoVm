@@ -49,8 +49,8 @@ namespace interpreter {
                                 
                         }
 
-                        std::shared_ptr<CComponent> CComponent::getServiceByName(const std::string& name) {
-                                auto it = std::find_if(m_services.begin(), m_services.end(), [&name](ptr(CComponent) service) {
+                        std::shared_ptr<CGeneralService> CComponent::getServiceByName(const std::string& name) {
+                                auto it = std::find_if(m_services.begin(), m_services.end(), [&name](ptr(CGeneralService) service) {
 					//return port->m_port.use_count() && port->m_port->getPrimitiveNamePort()->getName() == name;
                                         return true;
 				});
@@ -61,23 +61,8 @@ namespace interpreter {
 				return *it;
                         }
 
-                        std::shared_ptr<primitives::CPrimitiveService> CComponent::getPrimitiveServiceByName(const std::string& name) {
-                                auto it = std::find_if(m_primitiveServices.begin(), m_primitiveServices.end(), [&name](ptr(primitives::CPrimitiveService) service) {
-					return service->getName() == name;
-				});
-
-				if (it == m_primitiveServices.end()) {
-					//throw exception
-				}
-				return *it;
-                        }
-
-			void CComponent::addService(std::shared_ptr<CComponent> service) {
+			void CComponent::addService(std::shared_ptr<CGeneralService> service) {
 				m_services.push_back(service);
-			}
-
-			void CComponent::addPrimitiveService(std::shared_ptr<primitives::CPrimitiveService> service) {
-				m_primitiveServices.push_back(service);
 			}
 
 		}

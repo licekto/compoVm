@@ -3,7 +3,7 @@ descriptor Component {
     
     requires { args[] : *; }
     
-    internally requires {
+    internally provides {
         super : * ofKind SuperPort;
         self : * ofKind SelfPort;
     }
@@ -12,5 +12,5 @@ descriptor Component {
     service getPortNamed(name) {}
     service getDescriptor() {}
     service getOwner() {}
-    service getIndentityHash() {}
+    service getIdentityHash() {}
 }

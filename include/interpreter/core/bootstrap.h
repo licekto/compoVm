@@ -27,7 +27,7 @@ namespace interpreter {
 
 			std::map<core::coreModuleType, ptr(memory::objects::CComponent)> m_coreComponentsMap;
 
-                        void bootstrapComponent(ptr(memory::objects::CComponent) component);
+                        ptr(memory::objects::CComponent) bootstrapComponent();
                         
                         void addPrimitiveServices(ptr(memory::objects::CComponent) component, ptr(ast_descriptor) descriptor,
                                                   std::map<std::string, ptr(memory::objects::primitives::CPrimitiveService)>& servicesNames);

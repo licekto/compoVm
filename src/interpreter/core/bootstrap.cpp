@@ -13,10 +13,12 @@ namespace interpreter {
                           m_interpreter(interpreter) {
                 }
 
-                void CBootstrap::bootstrapComponent(std::shared_ptr<memory::objects::CComponent> component) {
+                ptr(memory::objects::CComponent) CBootstrap::bootstrapComponent() {
                     ptr(ast_descriptor) componentDescriptor = m_coreModules->getCoreDescriptor("Component");
                     
                     std::map<std::string, ptr(memory::objects::primitives::CPrimitiveService)> servicesNames;
+                    
+                    ptr(memory::objects::CComponent) component = new_ptr(memory::objects::CComponent)();
                     
                     addPrimitivePorts(component, componentDescriptor);
                     addPrimitiveServices(component, componentDescriptor, servicesNames);
@@ -58,6 +60,18 @@ namespace interpreter {
                     };
                     
                     servicesNames.at("getIdentityHash")->setCallback(callback);
+                    
+                    ptr(interpreter::memory::objects::primitives::CPrimitivePort) defaultPort = cast(interpreter::memory::objects::primitives::CPrimitivePort)
+                            (cast(interpreter::memory::objects::primitives::CPrimitivePortProperties)(component->getPortByName("default"))->getPrimitivePort());
+                    ptr(interpreter::memory::objects::primitives::CPrimitivePort) selfPort = cast(interpreter::memory::objects::primitives::CPrimitivePort)
+                            (cast(interpreter::memory::objects::primitives::CPrimitivePortProperties)(component->getPortByName("self"))->getPrimitivePort());
+                    
+                    for(auto const &record : servicesNames) {
+                        defaultPort->setConnectedService(new_ptr(interpreter::memory::objects::CGeneralService)(record.second));
+                        selfPort->setConnectedService(new_ptr(interpreter::memory::objects::CGeneralService)(record.second));
+                    }
+                    
+                    return component;
                 }
 
                 void CBootstrap::addPrimitiveServices(std::shared_ptr<memory::objects::CComponent> component, std::shared_ptr<ast_descriptor> descriptor,
@@ -76,7 +90,7 @@ namespace interpreter {
                         }
                         
                         servicesNames[serviceName] = primitiveService;
-                        component->addPrimitiveService(primitiveService);
+                        component->addService(new_ptr(memory::objects::CGeneralService)(primitiveService));
                     }
                     
                 }
@@ -170,7 +184,7 @@ namespace interpreter {
                                 return nullptr;
                             };
                         
-			service->addPrimitiveService(new_ptr(memory::objects::primitives::CPrimitiveService)("execute", service, executeCallback));
+			service->addService(new_ptr(memory::objects::CGeneralService)(new_ptr(memory::objects::primitives::CPrimitiveService)("execute", service, executeCallback)));
 
 			return service;
 		}
@@ -190,14 +204,14 @@ namespace interpreter {
 			addPorts(component, descriptor);
 
 			return component;
-
                 }
 
 		void CBootstrap::boostrap() {
 			if (m_coreModules.use_count()) {
                             m_coreModules->loadCoreModules();
                             
-                            m_coreComponentsMap[core::coreModuleType::DESCRIPTOR] = bootstrapDescriptorComponent();
+                            //m_coreComponentsMap[core::coreModuleType::DESCRIPTOR] = bootstrapDescriptorComponent();
+                            m_coreComponentsMap[core::coreModuleType::COMPONENT] = bootstrapComponent();
 			}
                 }
 
