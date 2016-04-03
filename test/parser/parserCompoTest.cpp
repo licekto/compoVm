@@ -6,6 +6,7 @@
 #include "parser/parserWrapper.h"
 #include "testDefinitions.h"
 #include "definitions/allDefinitions.h"
+#include "types.h"
 
 BOOST_AUTO_TEST_SUITE(parserCompoTest)
 
@@ -39,8 +40,12 @@ BOOST_AUTO_TEST_CASE(compoBasicStructure) {
     
     // Check descriptor
     ptr(ast_descriptor) descriptor = cast(ast_descriptor)(parser.getRootNode()->getNodeAt(0));
-    TEST_DESCRIPTOR(descriptor, "HTTPServer", "server", 1, 1);
-    
+    TEST_DESCRIPTOR(descriptor, "HTTPServer", "server", 4, 1, 1);
+    TEST_PORT(descriptor->getPortAt(0), "default", types::visibilityType::EXTERNAL, types::roleType::PROVIDES);
+    TEST_PORT(descriptor->getPortAt(1), "default1", types::visibilityType::EXTERNAL, types::roleType::REQUIRES);
+    TEST_PORT(descriptor->getPortAt(2), "default2", types::visibilityType::INTERNAL, types::roleType::PROVIDES);
+    TEST_PORT(descriptor->getPortAt(3), "default3", types::visibilityType::INTERNAL, types::roleType::REQUIRES);
+
     // Check service
     ptr(ast_service) service = cast(ast_service)(descriptor->getServiceAt(0));
     TEST_SERVICE(service, "create", 0, 0, 0);
@@ -73,7 +78,7 @@ BOOST_AUTO_TEST_CASE(compoServiceParams) {
     
     // Check descriptor
     ptr(ast_descriptor) descriptor = cast(ast_descriptor)(parser.getRootNode()->getNodeAt(0));
-    TEST_DESCRIPTOR(descriptor, "test", "", 4, 0);
+    TEST_DESCRIPTOR(descriptor, "test", "", 0, 4, 0);
     
     // Check service
     ptr(ast_service) service = cast(ast_service)(descriptor->getServiceAt(0));
@@ -115,7 +120,7 @@ BOOST_AUTO_TEST_CASE(compoServiceBody) {
     
     // Check descriptor
     ptr(ast_descriptor) descriptor = cast(ast_descriptor)(parser.getRootNode()->getNodeAt(0));
-    TEST_DESCRIPTOR(descriptor, "test", "", 2, 0);
+    TEST_DESCRIPTOR(descriptor, "test", "", 0, 2, 0);
     
     // Check service
     ptr(ast_service) service = cast(ast_service)(descriptor->getServiceAt(0));
@@ -161,7 +166,7 @@ BOOST_AUTO_TEST_CASE(compoServiceTemporaries) {
     
     // Check descriptor
     ptr(ast_descriptor) descriptor = cast(ast_descriptor)(parser.getRootNode()->getNodeAt(0));
-    TEST_DESCRIPTOR(descriptor, "test", "", 1, 0);
+    TEST_DESCRIPTOR(descriptor, "test", "", 0, 1, 0);
     
     // Check service
     ptr(ast_service) service = cast(ast_service)(descriptor->getServiceAt(0));
@@ -199,7 +204,13 @@ BOOST_AUTO_TEST_CASE(compoProvision) {
     
     // Check descriptor
     ptr(ast_descriptor) descriptor = cast(ast_descriptor)(parser.getRootNode()->getNodeAt(0));
-    TEST_DESCRIPTOR(descriptor, "test", "", 0, 0);
+    TEST_DESCRIPTOR(descriptor, "test", "", 6, 0, 0);
+    TEST_SIGNATURES_PORT2(cast(ast_signaturesport)(descriptor->getPortAt(0)), "default", types::visibilityType::EXTERNAL, types::roleType::PROVIDES, "run", "stop");
+    TEST_SIGNATURES_PORT2(cast(ast_signaturesport)(descriptor->getPortAt(1)), "port1", types::visibilityType::EXTERNAL, types::roleType::PROVIDES, "start", "close");
+    TEST_NAMED_PORT(cast(ast_namedport)(descriptor->getPortAt(2)), "port2", types::visibilityType::EXTERNAL, types::roleType::PROVIDES, "IPrinting");
+    TEST_NAMED_PORT(cast(ast_namedport)(descriptor->getPortAt(3)), "fE", types::visibilityType::EXTERNAL, types::roleType::PROVIDES, "FrontEnd");
+    TEST_PORT(descriptor->getPortAt(4), "bE", types::visibilityType::EXTERNAL, types::roleType::PROVIDES);
+    TEST_PORT(descriptor->getPortAt(5), "handlers", types::visibilityType::EXTERNAL, types::roleType::PROVIDES);
     
     // Clear AST for next test
     parser.clearAll();
@@ -224,7 +235,7 @@ BOOST_AUTO_TEST_CASE(compoArchitecture) {
     
     // Check descriptor
     ptr(ast_descriptor) descriptor = cast(ast_descriptor)(parser.getRootNode()->getNodeAt(0));
-    TEST_DESCRIPTOR(descriptor, "test", "", 0, 0);
+    TEST_DESCRIPTOR(descriptor, "test", "", 0, 0, 0);
     
     // Check architecture
     ptr(ast_architecture) architecture = cast(ast_architecture)(descriptor->getArchitecture());
@@ -312,7 +323,7 @@ BOOST_AUTO_TEST_CASE(compoServiceCall) {
     
     // Check descriptor
     ptr(ast_descriptor) descriptor = cast(ast_descriptor)(parser.getRootNode()->getNodeAt(0));
-    TEST_DESCRIPTOR(descriptor, "test", "", 0, 0);
+    TEST_DESCRIPTOR(descriptor, "test", "", 0, 0, 0);
     
     // Check architecture
     ptr(ast_architecture) architecture = cast(ast_architecture)(descriptor->getArchitecture());
@@ -396,7 +407,7 @@ BOOST_AUTO_TEST_CASE(compoDescriptor) {
     
     // Check descriptor
     ptr(ast_descriptor) descriptor = cast(ast_descriptor)(parser.getRootNode()->getNodeAt(0));
-    TEST_DESCRIPTOR(descriptor, "Test", "", 0, 0);
+    TEST_DESCRIPTOR(descriptor, "Test", "", 0, 0, 0);
     
     // Clear AST for next test
     parser.clearAll();
@@ -417,7 +428,7 @@ BOOST_AUTO_TEST_CASE(compoCollectionPort) {
     
     // Check interface
     ptr(ast_descriptor) descriptor = cast(ast_descriptor)(parser.getRootNode()->getNodeAt(0));
-    TEST_DESCRIPTOR(descriptor, "CollectionPort", "Component", 3, 0);
+    TEST_DESCRIPTOR(descriptor, "CollectionPort", "Component", 0, 3, 0);
     
     // Clear AST for next test
     parser.clearAll();
@@ -453,7 +464,11 @@ BOOST_AUTO_TEST_CASE(compoMultiple) {
     
     // Check descriptor
     ptr(ast_descriptor) descriptor = cast(ast_descriptor)(parser.getRootNode()->getNodeAt(0));
-    TEST_DESCRIPTOR(descriptor, "HTTPServer", "server", 1, 1);
+    TEST_DESCRIPTOR(descriptor, "HTTPServer", "server", 4, 1, 1);
+    TEST_PORT(descriptor->getPortAt(0), "default", types::visibilityType::EXTERNAL, types::roleType::PROVIDES);
+    TEST_PORT(descriptor->getPortAt(1), "default1", types::visibilityType::EXTERNAL, types::roleType::REQUIRES);
+    TEST_PORT(descriptor->getPortAt(2), "default2", types::visibilityType::INTERNAL, types::roleType::PROVIDES);
+    TEST_PORT(descriptor->getPortAt(3), "default3", types::visibilityType::INTERNAL, types::roleType::REQUIRES);    
     
     // Check service
     ptr(ast_service) service = cast(ast_service)(descriptor->getServiceAt(0));
@@ -468,7 +483,7 @@ BOOST_AUTO_TEST_CASE(compoMultiple) {
     BOOST_CHECK_EQUAL(types::nodeType::ARCHITECTURE, architecture->getNodeType());
     
     descriptor = cast(ast_descriptor)(parser.getRootNode()->getNodeAt(1));
-    TEST_DESCRIPTOR(descriptor, "ab", "", 0, 0);
+    TEST_DESCRIPTOR(descriptor, "ab", "", 0, 0, 0);
     
     // Clear AST for next test
     parser.clearAll();

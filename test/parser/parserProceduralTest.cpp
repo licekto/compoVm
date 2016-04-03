@@ -45,7 +45,7 @@ BOOST_AUTO_TEST_CASE(nodesProceduralBinary) {
     
     // Check descriptor
     ptr(ast_descriptor) descriptor = cast(ast_descriptor)(parser.getRootNode()->getNodeAt(0));
-    TEST_DESCRIPTOR(descriptor, "test", "", 1, 0);
+    TEST_DESCRIPTOR(descriptor, "test", "", 0, 1, 0);
     
     // Check service
     ptr(ast_service) service = cast(ast_service)(descriptor->getServiceAt(0));
@@ -391,7 +391,7 @@ BOOST_AUTO_TEST_CASE(nodesCompoundStatement) {
     
     // Check descriptor
     ptr(ast_descriptor) descriptor = cast(ast_descriptor)(parser.getRootNode()->getNodeAt(0));
-    TEST_DESCRIPTOR(descriptor, "test", "", 1, 0);
+    TEST_DESCRIPTOR(descriptor, "test", "", 0, 1, 0);
     
     // Check service
     ptr(ast_service) service = cast(ast_service)(descriptor->getServiceAt(0));
@@ -432,7 +432,7 @@ BOOST_AUTO_TEST_CASE(nodesForStatement) {
     
     // Check descriptor
     ptr(ast_descriptor) descriptor = cast(ast_descriptor)(parser.getRootNode()->getNodeAt(0));
-    TEST_DESCRIPTOR(descriptor, "test", "", 1, 0);
+    TEST_DESCRIPTOR(descriptor, "test", "", 0, 1, 0);
     
     // Check service
     ptr(ast_service) service = cast(ast_service)(descriptor->getServiceAt(0));
@@ -506,7 +506,7 @@ BOOST_AUTO_TEST_CASE(nodesWhileStatement) {
     
     // Check descriptor
     ptr(ast_descriptor) descriptor = cast(ast_descriptor)(parser.getRootNode()->getNodeAt(0));
-    TEST_DESCRIPTOR(descriptor, "test", "", 1, 0);
+    TEST_DESCRIPTOR(descriptor, "test", "", 0, 1, 0);
     
     // Check service
     ptr(ast_service) service = cast(ast_service)(descriptor->getServiceAt(0));
@@ -558,7 +558,7 @@ BOOST_AUTO_TEST_CASE(nodesIfStatement) {
     
     // Check descriptor
     ptr(ast_descriptor) descriptor = cast(ast_descriptor)(parser.getRootNode()->getNodeAt(0));
-    TEST_DESCRIPTOR(descriptor, "test", "", 1, 0);
+    TEST_DESCRIPTOR(descriptor, "test", "", 0, 1, 0);
     
     // Check service
     ptr(ast_service) service = cast(ast_service)(descriptor->getServiceAt(0));
@@ -631,7 +631,7 @@ BOOST_AUTO_TEST_CASE(nodesBreakContinueReturnStatement) {
     
     // Check descriptor
     ptr(ast_descriptor) descriptor = cast(ast_descriptor)(parser.getRootNode()->getNodeAt(0));
-    TEST_DESCRIPTOR(descriptor, "test", "", 1, 0);
+    TEST_DESCRIPTOR(descriptor, "test", "", 0, 1, 0);
     
     // Check service
     ptr(ast_service) service = cast(ast_service)(descriptor->getServiceAt(0));
@@ -671,7 +671,7 @@ BOOST_AUTO_TEST_CASE(comments) {
     
     // Check descriptor
     ptr(ast_descriptor) descriptor = cast(ast_descriptor)(parser.getRootNode()->getNodeAt(0));
-    TEST_DESCRIPTOR(descriptor, "test", "", 1, 0);
+    TEST_DESCRIPTOR(descriptor, "test", "", 0, 1, 0);
     
     // Check service
     ptr(ast_service) service = cast(ast_service)(descriptor->getServiceAt(0));

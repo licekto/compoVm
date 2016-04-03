@@ -329,7 +329,7 @@ BOOST_AUTO_TEST_CASE(constraintTest) {
 BOOST_AUTO_TEST_CASE(descriptorTest) {
     // Descriptor creation
     ptr(ast_descriptor) descriptor = new_ptr(ast_descriptor)(new_ptr(ast_symbol)("descriptorName"), new_ptr(ast_symbol)("descriptorExtends"));
-    TEST_DESCRIPTOR(descriptor, "descriptorName", "descriptorExtends", 0, 0);
+    TEST_DESCRIPTOR(descriptor, "descriptorName", "descriptorExtends", 0, 0, 0);
     /*
     BOOST_CHECK_EQUAL("descriptorName", descriptor.getName());
     BOOST_CHECK_EQUAL("descriptorExtends", descriptor.getExtends());
