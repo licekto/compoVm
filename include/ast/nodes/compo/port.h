@@ -52,7 +52,9 @@ namespace ast {
 				CPort(nodes::types::portType type = nodes::types::portType::UNIVERSAL,
 				      std::shared_ptr<nodes::procedural::CSymbol> name = nullptr,
 				      bool atomicity = false,
-				      bool collectivity = false);
+				      bool collectivity = false,
+                                      nodes::types::visibilityType visibility = nodes::types::visibilityType::EXTERNAL,
+                                      nodes::types::portRoleType role = nodes::types::portRoleType::PROVIDES);
 
 				/**
                                 * Accept method for visitor acceptation.

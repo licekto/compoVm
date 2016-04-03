@@ -30,14 +30,6 @@ class ParserWrapper {
 	/**< Stack of nested blocks */
 	std::stack<ptr(ast_compound)> m_blockStack;
 
-	ptr(ast_provision) m_currentInteralProvision;
-
-	ptr(ast_provision) m_currentExteralProvision;
-
-	ptr(ast_requirement) m_currentInteralRequirement;
-
-	ptr(ast_requirement) m_currentExteralRequirement;
-
 	ptr(ast_architecture) m_architecture;
 
 	/**< Body of currently parsed descriptor */
@@ -50,6 +42,8 @@ class ParserWrapper {
 
 	/**< Visibility type of current requirement/provision */
 	ast::nodes::types::visibilityType m_visibilityType;
+        
+        ast::nodes::types::portRoleType m_role;
 
 	/**< Is current port atomic? */
 	bool m_atomicity;
@@ -154,22 +148,6 @@ class ParserWrapper {
 	 * @return bool value
 	 */
 	bool isStackEmpty() const;
-
-	void setInProvision(ptr(ast_provision) inProv);
-
-	ptr(ast_provision) getInProvision();
-
-	void setExProvision(ptr(ast_provision) exProv);
-
-	ptr(ast_provision) getExProvision();
-
-	void setInRequirement(ptr(ast_requirement) inReq);
-
-	ptr(ast_requirement) getInRequirement();
-
-	void setExRequirement(ptr(ast_requirement) exReq);
-
-	ptr(ast_requirement) getExRequirement();
 
 	void setArchitecture(ptr(ast_architecture) arch);
 
@@ -356,4 +334,8 @@ class ParserWrapper {
         ptr(ast_compound) getServiceBody() const;
 
 	void parseServices();
+        
+        void setRole(ast::nodes::types::portRoleType role);
+        
+        ast::nodes::types::portRoleType getRole() const;
 };

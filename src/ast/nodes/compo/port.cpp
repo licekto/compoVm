@@ -6,12 +6,15 @@ namespace ast {
 
 		namespace compo {
 
-			CPort::CPort(ast::nodes::types::portType type, std::shared_ptr<ast::nodes::procedural::CSymbol> name, bool atomicity, bool collectivity)
+			CPort::CPort(ast::nodes::types::portType type, std::shared_ptr<ast::nodes::procedural::CSymbol> name,
+                                     bool atomicity, bool collectivity, nodes::types::visibilityType visibility, nodes::types::portRoleType role)
 				:   CNode(types::nodeType::PORT),
 				    m_portType(type),
 				    m_name(name),
 				    m_atomicity(atomicity),
-				    m_collectivity(collectivity) {
+				    m_collectivity(collectivity),
+                                    m_visibilityType(visibility),
+                                    m_role(role) {
 			}
 
 			std::shared_ptr<ast::nodes::procedural::CSymbol> CPort::getNameSymbol() const {

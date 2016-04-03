@@ -42,7 +42,6 @@ namespace ast {
 			virtual void visit(ptr(ast_node) node);
 			virtual void visit(ptr(ast_program) node);
 
-			virtual void visit(ptr(ast_reqprov) node);
 			virtual void visit(ptr(ast_architecture) node);
 			virtual void visit(ptr(ast_bind) node);
 			virtual void visit(ptr(ast_collectionportliteral) node);
@@ -57,8 +56,6 @@ namespace ast {
 			virtual void visit(ptr(ast_namedport) node);
 			virtual void visit(ptr(ast_port) node);
 			virtual void visit(ptr(ast_portaddress) node);
-			virtual void visit(ptr(ast_provision) node);
-			virtual void visit(ptr(ast_requirement) node);
 			virtual void visit(ptr(ast_service) node);
 			virtual void visit(ptr(ast_serviceinvocation) node);
 			virtual void visit(ptr(ast_servicesignature) node);

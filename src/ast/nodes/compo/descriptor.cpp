@@ -1,5 +1,4 @@
 #include "ast/nodes/compo/descriptor.h"
-#include "ast/nodes/compo/service.h"
 
 namespace ast {
 
@@ -9,20 +8,14 @@ namespace ast {
 
 			CDescriptor::CDescriptor(std::shared_ptr<ast::nodes::procedural::CSymbol> name,
 			                         std::shared_ptr<ast::nodes::procedural::CSymbol> extends,
-			                         std::shared_ptr<ast::nodes::compo::CProvision> inProv,
-			                         std::shared_ptr<ast::nodes::compo::CProvision> exProv,
-			                         std::shared_ptr<ast::nodes::compo::CRequirement> inReq,
-			                         std::shared_ptr<ast::nodes::compo::CRequirement> exReq,
 			                         std::shared_ptr<ast::nodes::compo::CArchitecture> arch,
-			                         const std::vector<std::shared_ptr<ast::nodes::compo::CService>>& services,
+			                         const std::vector<std::shared_ptr<ast::nodes::compo::CPort>>& ports,
+                                                 const std::vector<std::shared_ptr<ast::nodes::compo::CService>>& services,
 			                         const std::vector<std::shared_ptr<ast::nodes::compo::CConstraint>>& constraints)
 				: CNode(types::nodeType::DESCRIPTOR),
 				  CAbstractDescriptorInterface(name, extends),
-				  m_internalProvision(inProv),
-				  m_externalProvision(exProv),
-				  m_internalRequirement(inReq),
-				  m_externalRequirement(exReq),
 				  m_architecture(arch),
+                                  m_ports(ports),
 				  m_services(services),
 				  m_constraints(constraints) {
 			}
@@ -33,9 +26,13 @@ namespace ast {
 
 			size_t CDescriptor::getServicesSize() const {
 				return m_services.size();
-			}
+                        }
 
-			std::shared_ptr<ast::nodes::compo::CService> CDescriptor::getServiceAt(int index) const {
+                        size_t CDescriptor::getPortsSize() const {
+                                return m_ports.size();
+                        }
+
+			std::shared_ptr<ast::nodes::compo::CService> CDescriptor::getServiceAt(size_t index) const {
 				std::shared_ptr<ast::nodes::compo::CService> node;
 				try {
 					node = m_services.at(index);
@@ -49,7 +46,7 @@ namespace ast {
 				return m_constraints.size();
 			}
 
-			std::shared_ptr<ast::nodes::compo::CConstraint> CDescriptor::getConstraintAt(int index) const {
+			std::shared_ptr<ast::nodes::compo::CConstraint> CDescriptor::getConstraintAt(size_t index) const {
 				std::shared_ptr<ast::nodes::compo::CConstraint> node;
 				try {
 					node = m_constraints.at(index);
@@ -57,61 +54,29 @@ namespace ast {
 					// log error message
 				}
 				return node;
-			}
+                        }
 
-			std::shared_ptr<ast::nodes::compo::CProvision> CDescriptor::getInProvision() const {
-				return m_internalProvision;
-			}
+                        std::shared_ptr<compo::CPort> CDescriptor::getPortAt(size_t index) const {
+                            if (index < m_ports.size()) {
+                                return m_ports.at(index);
+                            }
+                            // throw
+                            return nullptr;
+                        }
 
-			std::shared_ptr<ast::nodes::compo::CProvision> CDescriptor::getExProvision() const {
-				return m_externalProvision;
-			}
+                        std::shared_ptr<compo::CPort> CDescriptor::getPortByName(const std::string& name) const {
+                                auto it = std::find_if(m_ports.begin(), m_ports.end(), [&name] (std::shared_ptr<CPort> port) {
+					return port->getNameSymbol()->getStringValue() == name;
+				});
 
-			std::shared_ptr<ast::nodes::compo::CRequirement> CDescriptor::getInRequirement() const {
-				return m_internalRequirement;
-			}
-
-			std::shared_ptr<ast::nodes::compo::CRequirement> CDescriptor::getExRequirement() const {
-				return m_externalRequirement;
-			}
+				if (it == m_ports.end()) {
+					return nullptr;
+				}
+				return *it;
+                        }
 
 			std::shared_ptr<ast::nodes::compo::CArchitecture> CDescriptor::getArchitecture() const {
 				return m_architecture;
-			}
-
-			bool CDescriptor::findPortIn(std::shared_ptr<compo::CAbstractReqProv> reqProv, const std::string& name) const {
-				if (reqProv.use_count()) {
-					for (size_t i = 0; i < reqProv->getNumberOfPorts(); ++i) {
-						if (reqProv->getPortAt(i)->getNameSymbol()->getStringValue() == name) {
-							return true;
-						}
-					}
-				}
-				return false;
-			}
-
-			bool CDescriptor::portFound(const std::string& name) const {
-				return name == "default"
-				       || inProvidedPortFound(name)
-				       || exProvidedPortFound(name)
-				       || inRequiredPortFound(name)
-				       || exRequiredPortFound(name);
-			}
-
-			bool CDescriptor::inProvidedPortFound(const std::string& name) const {
-				return findPortIn(m_internalProvision, name);
-			}
-
-			bool CDescriptor::exProvidedPortFound(const std::string& name) const {
-				return findPortIn(m_externalProvision, name);
-			}
-
-			bool CDescriptor::inRequiredPortFound(const std::string& name) const {
-				return findPortIn(m_internalRequirement, name);
-			}
-
-			bool CDescriptor::exRequiredPortFound(const std::string& name) const {
-				return findPortIn(m_externalRequirement, name);
 			}
 
 			std::shared_ptr<compo::CService> CDescriptor::getServiceByName(const std::string& name) const {

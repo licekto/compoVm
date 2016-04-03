@@ -20,7 +20,6 @@ class testVisitor : public ast::visitors::CAbstractVisitor, public std::enable_s
         virtual void visit(ptr(ast_node)  /* node */) {nodes += " CNode";}
         virtual void visit(ptr(ast_program)  /* node */) {nodes += " CProgram";}
 
-        virtual void visit(ptr(ast_reqprov)  /* node */) {nodes += " CAbstractReqProv";}
         virtual void visit(ptr(ast_architecture)  /* node */) {nodes += " CArchitecture";}
         virtual void visit(ptr(ast_bind)  /* node */) {nodes += " CBind";}
         virtual void visit(ptr(ast_collectionportliteral)  /* node */) {nodes += " CCollectionPortLiteral";}
@@ -35,8 +34,6 @@ class testVisitor : public ast::visitors::CAbstractVisitor, public std::enable_s
         virtual void visit(ptr(ast_namedport)  /* node */) {nodes += " CNamedPort";}
         virtual void visit(ptr(ast_port)  /* node */) {nodes += " CPort";}
         virtual void visit(ptr(ast_portaddress)  /* node */) {nodes += " CPortAddress";}
-        virtual void visit(ptr(ast_provision)  /* node */) {nodes += " CProvision";}
-        virtual void visit(ptr(ast_requirement)  /* node */) {nodes += " CRequirement";}
         virtual void visit(ptr(ast_service)  /* node */) {nodes += " CService";}
         virtual void visit(ptr(ast_serviceinvocation)  /* node */) {nodes += " CServiceInvocation";}
         virtual void visit(ptr(ast_servicesignature)  /* node */) {nodes += " CServiceSignature";}
@@ -87,12 +84,6 @@ BOOST_AUTO_TEST_CASE(basic) {
     ptr(ast_architecture) architecture = new_ptr(ast_architecture)();
     architecture->accept(visitor);
     
-    ptr(ast_provision) provision = new_ptr(ast_provision)();
-    provision->accept(visitor);
-    
-    ptr(ast_requirement) requirement = new_ptr(ast_requirement)();
-    requirement->accept(visitor);
-    
     ptr(ast_service) service = new_ptr(ast_service)();
     service->accept(visitor);
     
@@ -105,7 +96,7 @@ BOOST_AUTO_TEST_CASE(basic) {
     ptr(ast_disconnection) disconnection = new_ptr(ast_disconnection)();
     disconnection->accept(visitor);
     
-    BOOST_CHECK_EQUAL(" CDescriptor CArchitecture CProvision CRequirement CService CConstraint CConnection CDisconnection", visitor->getNodes());
+    BOOST_CHECK_EQUAL(" CDescriptor CArchitecture CService CConstraint CConnection CDisconnection", visitor->getNodes());
 }
 
 BOOST_AUTO_TEST_SUITE_END()

@@ -17,8 +17,6 @@
 #include "ast/nodes/compo/interface.h"
 #include "ast/nodes/compo/namedPort.h"
 #include "ast/nodes/compo/portAddress.h"
-#include "ast/nodes/compo/provision.h"
-#include "ast/nodes/compo/requirement.h"
 #include "ast/nodes/compo/service.h"
 #include "ast/nodes/compo/serviceInvocation.h"
 #include "ast/nodes/compo/serviceSignature.h"
@@ -56,7 +54,6 @@ using ast_node = ast::nodes::CNode;
 using ast_program = ast::nodes::CProgram;
 
 using ast_descriptorinterface = ast::nodes::compo::CAbstractDescriptorInterface;
-using ast_reqprov = ast::nodes::compo::CAbstractReqProv;
 using ast_architecture = ast::nodes::compo::CArchitecture;
 using ast_bind = ast::nodes::compo::CBind;
 using ast_collectionportliteral = ast::nodes::compo::CCollectionPortLiteral;
@@ -71,8 +68,6 @@ using ast_interface = ast::nodes::compo::CInterface;
 using ast_namedport = ast::nodes::compo::CNamedPort;
 using ast_port = ast::nodes::compo::CPort;
 using ast_portaddress = ast::nodes::compo::CPortAddress;
-using ast_provision = ast::nodes::compo::CProvision;
-using ast_requirement = ast::nodes::compo::CRequirement;
 using ast_service = ast::nodes::compo::CService;
 using ast_serviceinvocation = ast::nodes::compo::CServiceInvocation;
 using ast_servicesignature = ast::nodes::compo::CServiceSignature;

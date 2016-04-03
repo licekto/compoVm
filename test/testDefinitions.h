@@ -34,24 +34,6 @@ do { \
     BOOST_CHECK_EQUAL(signaturesListSize, interface->getSignaturesSize()); \
 } while(0)
 
-#define TEST_PROVISION(provision, visibility, numOfPorts) \
-do { \
-    if (provision.use_count()) { \
-        BOOST_CHECK_EQUAL(ast::nodes::types::nodeType::PROVISION, provision->getNodeType()); \
-        BOOST_CHECK_EQUAL(visibility, provision->getVisibilityType()); \
-        BOOST_CHECK_EQUAL(numOfPorts, provision->getNumberOfPorts()); \
-    } \
-} while(0)
-
-#define TEST_REQUIREMENT(requirement, visibility, numOfPorts) \
-do { \
-    if (requirement.use_count()) { \
-        BOOST_CHECK_EQUAL(ast::nodes::types::nodeType::REQUIREMENT, requirement->getNodeType()); \
-        BOOST_CHECK_EQUAL(visibility, requirement->getVisibilityType()); \
-        BOOST_CHECK_EQUAL(numOfPorts, requirement->getNumberOfPorts()); \
-    } \
-} while(0)
-
 #define TEST_SERVICE(service, name, numOfParams, bodySize, temporariesSize) \
 do { \
     BOOST_CHECK_EQUAL(ast::nodes::types::nodeType::SERVICE, service->getNodeType()); \

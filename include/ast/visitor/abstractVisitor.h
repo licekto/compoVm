@@ -26,8 +26,6 @@ namespace ast {
 			class CNamedPort;
 			class CPort;
 			class CPortAddress;
-			class CProvision;
-			class CRequirement;
 			class CService;
 			class CServiceInvocation;
 			class CServiceSignature;
@@ -89,7 +87,6 @@ namespace ast {
 			virtual void visit(std::shared_ptr<ast::nodes::CNode> node) = 0;
 			virtual void visit(std::shared_ptr<ast::nodes::CProgram> node) = 0;
 
-			virtual void visit(std::shared_ptr<ast::nodes::compo::CAbstractReqProv> node) = 0;
 			virtual void visit(std::shared_ptr<ast::nodes::compo::CArchitecture> node) = 0;
 			virtual void visit(std::shared_ptr<ast::nodes::compo::CBind> node) = 0;
 			virtual void visit(std::shared_ptr<ast::nodes::compo::CCollectionPortLiteral> node) = 0;
@@ -104,8 +101,6 @@ namespace ast {
 			virtual void visit(std::shared_ptr<ast::nodes::compo::CNamedPort> node) = 0;
 			virtual void visit(std::shared_ptr<ast::nodes::compo::CPort> node) = 0;
 			virtual void visit(std::shared_ptr<ast::nodes::compo::CPortAddress> node) = 0;
-			virtual void visit(std::shared_ptr<ast::nodes::compo::CProvision> node) = 0;
-			virtual void visit(std::shared_ptr<ast::nodes::compo::CRequirement> node) = 0;
 			virtual void visit(std::shared_ptr<ast::nodes::compo::CService> node) = 0;
 			virtual void visit(std::shared_ptr<ast::nodes::compo::CServiceInvocation> node) = 0;
 			virtual void visit(std::shared_ptr<ast::nodes::compo::CServiceSignature> node) = 0;

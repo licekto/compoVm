@@ -23,12 +23,14 @@ namespace ast {
 				*/
 				CUniversalPort(std::shared_ptr<procedural::CSymbol> name = nullptr,
 				               bool atomicity = false,
-				               bool collectivity = false);
+				               bool collectivity = false,
+                                               nodes::types::visibilityType visibility = nodes::types::visibilityType::EXTERNAL,
+                                               nodes::types::portRoleType role = nodes::types::portRoleType::PROVIDES);
 
 				/**
-				            * Accept method for visitor acceptation.
-				            * @param visitor: Pointer to abstract visitor.
-				            */
+                                * Accept method for visitor acceptation.
+                                * @param visitor: Pointer to abstract visitor.
+                                */
 				virtual void accept(std::shared_ptr<visitors::CAbstractVisitor> visitor);
 			};
 

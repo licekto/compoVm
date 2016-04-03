@@ -374,11 +374,8 @@ descriptor
                     {
                         ptr(ast_descriptor) descriptor = new_ptr(ast_descriptor)(cast(ast_symbol)($2),
                                                                                  cast(ast_symbol)($3),
-                                                                                 parser->getInProvision(),
-                                                                                 parser->getExProvision(),
-                                                                                 parser->getInRequirement(),
-                                                                                 parser->getExRequirement(),
                                                                                  parser->getArchitecture(),
+                                                                                *parser->getPorts(),
                                                                                 *parser->getDescriptorServices(),
                                                                                 *parser->getDescriptorConstraints());
                         parser->addSymbolToDescriptorTable(descriptor);
@@ -427,30 +424,14 @@ compo_expression
 provision     
                 :   visibility PROVIDES provision_requirement_signature
 		    {
-                        if (parser->getVisibility() == ast::nodes::types::visibilityType::EXTERNAL)
-                        {
-                            parser->setExProvision(new_ptr(ast_provision)(parser->getVisibility(), *parser->getPorts()));
-                        }
-                        else
-                        {
-                            parser->setInProvision(new_ptr(ast_provision)(parser->getVisibility(), *parser->getPorts()));
-                        }
-                        parser->clearPorts();
+                        parser->setRole(ast_roletype::PROVIDES);
 		    }
                 ;
 
 requirement   
                 :   visibility REQUIRES provision_requirement_signature
                     {
-                        if (parser->getVisibility() == ast::nodes::types::visibilityType::EXTERNAL)
-                        {
-                            parser->setExRequirement(new_ptr(ast_requirement)(parser->getVisibility(), *parser->getPorts()));
-                        }
-                        else
-                        {
-                            parser->setInRequirement(new_ptr(ast_requirement)(parser->getVisibility(), *parser->getPorts()));
-                        }
-                        parser->clearPorts();
+                        parser->setRole(ast_roletype::REQUIRES);
 		    }
                 ;
 
@@ -520,21 +501,27 @@ port_signature
                     {
                         $$ = new_ptr(ast_namedport)(parser->getPortName(),
                                                     parser->getAtomicity(),
-                                                    cast(ast_symbol)($1),
-                                                    parser->getCollectivity());
+                                                    parser->getCollectivity(),
+                                                    parser->getVisibility(),
+                                                    parser->getRole(),
+                                                    cast(ast_symbol)($1));
                     }
                 |   '*'
                     {
                         $$ = new_ptr(ast_universalport)(parser->getPortName(),
                                                         parser->getAtomicity(),
-                                                        parser->getCollectivity());
+                                                        parser->getCollectivity(),
+                                                        parser->getVisibility(),
+                                                        parser->getRole());
                     }
                 |   service_signatures_list
                     {
                         $$ = new_ptr(ast_signaturesport)(parser->getPortName(),
                                                          parser->getAtomicity(),
-                                                        *parser->getServiceSignatures(),
-                                                         parser->getCollectivity());
+                                                         parser->getCollectivity(),
+                                                         parser->getVisibility(),
+                                                         parser->getRole(),
+                                                        *parser->getServiceSignatures());
                         parser->clearServiceSignatures();
                     }
                 ;

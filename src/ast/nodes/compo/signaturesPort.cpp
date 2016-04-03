@@ -9,10 +9,12 @@ namespace ast {
 
 			CSignaturesPort::CSignaturesPort(std::shared_ptr<ast::nodes::procedural::CSymbol> name,
 			                                 bool atomicity,
-			                                 std::vector<std::shared_ptr<ast::nodes::compo::CServiceSignature>> list,
-			                                 bool collectivity)
+                                                         bool collectivity,
+                                                         nodes::types::visibilityType visibility,
+                                                         nodes::types::portRoleType role,
+			                                 std::vector<std::shared_ptr<ast::nodes::compo::CServiceSignature>> list)
 				:   CNode(types::nodeType::SIGNATURES_PORT),
-				    CPort(types::portType::EXPLICIT_LIST, name, atomicity, collectivity),
+				    CPort(types::portType::EXPLICIT_LIST, name, atomicity, collectivity, visibility, role),
 				    m_signaturesList(list) {
 			}
 

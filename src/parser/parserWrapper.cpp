@@ -77,38 +77,6 @@ bool ParserWrapper::isStackEmpty() const {
 	return m_blockStack.empty();
 }
 
-void ParserWrapper::setInProvision(ptr(ast_provision) inProv) {
-	m_currentInteralProvision = inProv;
-}
-
-ptr(ast_provision) ParserWrapper::getInProvision() {
-	return m_currentInteralProvision;
-}
-
-void ParserWrapper::setExProvision(ptr(ast_provision) exProv) {
-	m_currentExteralProvision = exProv;
-}
-
-ptr(ast_provision) ParserWrapper::getExProvision() {
-	return m_currentExteralProvision;
-}
-
-void ParserWrapper::setInRequirement(ptr(ast_requirement) inReq) {
-	m_currentInteralRequirement = inReq;
-}
-
-ptr(ast_requirement) ParserWrapper::getInRequirement() {
-	return m_currentInteralRequirement;
-}
-
-void ParserWrapper::setExRequirement(ptr(ast_requirement) exReq) {
-	m_currentExteralRequirement = exReq;
-}
-
-ptr(ast_requirement) ParserWrapper::getExRequirement() {
-	return m_currentExteralRequirement;
-}
-
 void ParserWrapper::setArchitecture(ptr(ast_architecture) arch) {
 	m_architecture = arch;
 }
@@ -208,10 +176,6 @@ void ParserWrapper::clearContext() {
 }
 
 void ParserWrapper::clearRefs() {
-        m_currentInteralProvision = nullptr;
-        m_currentExteralProvision = nullptr;
-        m_currentInteralRequirement = nullptr;
-        m_currentExteralRequirement = nullptr;
         m_architecture = nullptr;
         m_currentCompoundBody = nullptr;
         m_currentPortName = nullptr;
@@ -301,4 +265,12 @@ void ParserWrapper::parseServices() {
 			}
 		}
 	}
+}
+
+void ParserWrapper::setRole(ast::nodes::types::portRoleType role) {
+    m_role = role;
+}
+
+ast::nodes::types::portRoleType ParserWrapper::getRole() const {
+    return m_role;
 }

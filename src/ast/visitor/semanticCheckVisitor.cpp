@@ -45,9 +45,6 @@ namespace ast {
 		void CSemanticCheckVisitor::visit(ptr(ast_node) node) {
 			checkNodeType(node, ast_nodetype::CONSTRAINT);
 		}
-		void CSemanticCheckVisitor::visit(ptr(ast_reqprov) node) {
-			checkNodeType(node, ast_nodetype::CONSTRAINT);
-		}
 		void CSemanticCheckVisitor::visit(ptr(ast_bind) node) {
 			checkNodeType(node, ast_nodetype::CONSTRAINT);
 		}
@@ -140,22 +137,6 @@ namespace ast {
 
 			m_currentDescriptor = node;
 
-			if (node->getInProvision().use_count()) {
-				node->getInProvision()->accept(shared_from_this());
-			}
-
-			if (node->getExProvision().use_count()) {
-				node->getExProvision()->accept(shared_from_this());
-			}
-
-			if (node->getInRequirement().use_count()) {
-				node->getInRequirement()->accept(shared_from_this());
-			}
-
-			if (node->getExRequirement().use_count()) {
-				node->getExRequirement()->accept(shared_from_this());
-			}
-
 			if (node->getArchitecture().use_count()) {
 				node->getArchitecture()->accept(shared_from_this());
 			}
@@ -228,50 +209,6 @@ namespace ast {
 			// Direct component identifier
 			if (node->getComponent()->getNodeType() == ast_nodetype::SYMBOL) {
 
-			}
-
-			if (!m_currentDescriptor->portFound(node->getPortName()->getStringValue())) {
-				throw exceptions::semantic::CUndefinedPortException(node->getPortName()->getStringValue());
-			}
-		}
-
-		void CSemanticCheckVisitor::visit(ptr(ast_provision) node) {
-			checkNodeType(node, ast_nodetype::PROVISION);
-
-			for (size_t i = 0; i < node->getNumberOfPorts(); ++i) {
-				ptr(ast_port) port = node->getPortAt(i);
-				port->accept(shared_from_this());
-
-				ast_visibilitytype type = node->getVisibilityType();
-				if ((type == ast_visibilitytype::INTERNAL && m_currentDescriptor->exProvidedPortFound(port->getNameSymbol()->getStringValue()))
-				        || (type == ast_visibilitytype::EXTERNAL && m_currentDescriptor->inProvidedPortFound(port->getNameSymbol()->getStringValue()))) {
-					throw exceptions::semantic::CBidirectionalPortNotSupportedException(port->getNameSymbol()->getStringValue());
-				}
-
-				if (m_currentDescriptor->exRequiredPortFound(port->getNameSymbol()->getStringValue())
-				        || m_currentDescriptor->inRequiredPortFound(port->getNameSymbol()->getStringValue())) {
-					throw exceptions::semantic::CBidirectionalPortNotSupportedException(port->getNameSymbol()->getStringValue());
-				}
-			}
-		}
-
-		void CSemanticCheckVisitor::visit(ptr(ast_requirement) node) {
-			checkNodeType(node, ast_nodetype::REQUIREMENT);
-
-			for (size_t i = 0; i < node->getNumberOfPorts(); ++i) {
-				ptr(ast_port) port = node->getPortAt(i);
-				port->accept(shared_from_this());
-
-				ast_visibilitytype type = node->getVisibilityType();
-				if ((type == ast_visibilitytype::INTERNAL && m_currentDescriptor->exRequiredPortFound(port->getNameSymbol()->getStringValue()))
-				        || (type == ast_visibilitytype::EXTERNAL && m_currentDescriptor->inRequiredPortFound(port->getNameSymbol()->getStringValue()))) {
-					throw exceptions::semantic::CBidirectionalPortNotSupportedException(port->getNameSymbol()->getStringValue());
-				}
-
-				if (m_currentDescriptor->exProvidedPortFound(port->getNameSymbol()->getStringValue())
-				        || m_currentDescriptor->inProvidedPortFound(port->getNameSymbol()->getStringValue())) {
-					throw exceptions::semantic::CBidirectionalPortNotSupportedException(port->getNameSymbol()->getStringValue());
-				}
 			}
 		}
 
