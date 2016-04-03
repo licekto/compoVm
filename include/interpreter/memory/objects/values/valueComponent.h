@@ -3,30 +3,31 @@
 #include <string>
 
 #include "interpreter/memory/objects/component.h"
-#include "interpreter/memory/objects/primitives/primitivePortProperties.h"
 
 namespace interpreter {
 
 	namespace memory {
 
 		namespace objects {
+                    
+                    namespace values {
 
 			class CValueComponent : public CComponent {
-                        protected:
-                            
 			  public:
+                              
+                                CValueComponent();
+                              
+                                CValueComponent(ptr(CValueComponent) instance);
 
                                 virtual ~CValueComponent();
                               
-				void addPort(ptr(CAbstractPortProperties) port) = delete;
+				void addPort(ptr(CGeneralPort) port) = delete;
 
 				size_t getNumberOfPorts() const = delete;
 
-				ptr(CAbstractPortProperties) getPortAt(size_t index) = delete;
+				ptr(CGeneralPort) getPortAt(size_t index) = delete;
 
-				ptr(primitives::CPrimitivePortProperties) getPrimitiveNamePort() = delete;
-
-				ptr(CAbstractPortProperties) getPortByName(const std::string& name) = delete;
+				ptr(CGeneralPort) getPortByName(const std::string& name) = delete;
                                 
                                 ptr(CComponent) getServiceByName(const std::string& name) = delete;
                                 
@@ -36,6 +37,7 @@ namespace interpreter {
 
 				void addPrimitiveService(ptr(primitives::CPrimitiveService) service) = delete;
 			};
+                    }
 		}
 	}
 }

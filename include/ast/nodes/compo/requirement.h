@@ -2,6 +2,7 @@
 
 #include <memory>
 #include "ast/nodes/compo/abstractReqProv.h"
+#include "ast/nodes/compo/port.h"
 
 namespace ast {
 
@@ -24,9 +25,9 @@ namespace ast {
 				             const std::vector<std::shared_ptr<compo::CPort>>& ports = std::vector<std::shared_ptr<compo::CPort>>(0));
 
 				/**
-				            * Accept method for visitor acceptation.
-				            * @param visitor: Pointer to abstract visitor.
-				            */
+                                * Accept method for visitor acceptation.
+                                * @param visitor: Pointer to abstract visitor.
+                                */
 				virtual void accept(std::shared_ptr<visitors::CAbstractVisitor> visitor);
 			};
 

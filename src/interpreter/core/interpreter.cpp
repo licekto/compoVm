@@ -1,6 +1,4 @@
 #include "interpreter/core/interpreter.h"
-#include "interpreter/memory/objects/stringComponent.h"
-#include "interpreter/memory/objects/primitives/primitivePort.h"
 
 namespace interpreter {
 

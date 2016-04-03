@@ -42,7 +42,7 @@ namespace ast {
 				* @param ports: vector of ports
 				*/
 				CAbstractReqProv(nodes::types::visibilityType type = nodes::types::visibilityType::EXTERNAL,
-				                 const std::vector<std::shared_ptr<compo::CPort> >& ports = std::vector<std::shared_ptr<compo::CPort>>(0));
+				                 const std::vector<std::shared_ptr<compo::CPort>>& ports = std::vector<std::shared_ptr<compo::CPort>>(0));
 
 			  public:
 

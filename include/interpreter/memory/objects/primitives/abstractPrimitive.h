@@ -22,12 +22,16 @@ namespace interpreter {
 
 				  public:
 					CAbstractPrimitive(const std::string& name = "", ptr(CComponent) owner = nullptr);
+                                        
+                                        CAbstractPrimitive(ptr(CAbstractPrimitive) instance);
 
 					virtual ~CAbstractPrimitive();
 
 					std::string getName() const;
 
 					ptr(CComponent) getOwner();
+                                        
+                                        void setOwner(ptr(CComponent) owner);
 				};
 
 			}

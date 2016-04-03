@@ -1,7 +1,4 @@
 #include "interpreter/memory/objects/component.h"
-#include "interpreter/memory/objects/primitives/primitivePortProperties.h"
-#include "interpreter/memory/objects/portProperties.h"
-#include "interpreter/memory/objects/primitives/primitiveService.h"
 
 namespace interpreter {
 
@@ -9,10 +6,22 @@ namespace interpreter {
 
 		namespace objects {
 
+                        CComponent::CComponent() {
+                        }
+
+                        CComponent::CComponent(ptr(CComponent) instance) {
+                            for (ptr(CGeneralPort) port : instance->m_ports) {
+                                this->m_ports.push_back(new_ptr(CGeneralPort)(port));
+                            }
+                            for (ptr(CGeneralService) service : instance->m_services) {
+                                this->m_services.push_back(new_ptr(CGeneralService)(service));
+                            }
+                        }
+
                         CComponent::~CComponent() {
                         }
 
-			void CComponent::addPort(ptr(CAbstractPortProperties) port) {
+			void CComponent::addPort(ptr(CGeneralPort) port) {
 				m_ports.push_back(port);
                         }
 
@@ -20,7 +29,7 @@ namespace interpreter {
 				return m_ports.size();
                         }
 
-			ptr(CAbstractPortProperties) CComponent::getPortAt(size_t index) {
+			ptr(CGeneralPort) CComponent::getPortAt(size_t index) {
 				if (index < m_ports.size()) {
 					return m_ports.at(index);
 				}
@@ -28,31 +37,20 @@ namespace interpreter {
 				return nullptr;
                         }
 
-			ptr(primitives::CPrimitivePortProperties) CComponent::getPrimitiveNamePort() {
-				return cast(primitives::CPrimitivePortProperties)(getPortByName(NAME_OF_NAMEPORT));
-			}
-
-			ptr(CAbstractPortProperties) CComponent::getPortByName(const std::string& name) {
-				auto it = std::find_if(m_ports.begin(), m_ports.end(), [&name](ptr(CAbstractPortProperties) port) {
-                                    if (port->isPrimitive()) {
-                                        return cast(primitives::CPrimitivePortProperties)(port)->getPrimitivePort()->getName() == name;
-                                    }
-                                    else {
-                                        return cast(CPortProperties)(port)->getPort()->getPrimitiveNamePort()->getPrimitivePort()->getName() == name;
-                                    }
+			ptr(CGeneralPort) CComponent::getPortByName(const std::string& name) {
+				auto it = std::find_if(m_ports.begin(), m_ports.end(), [&name](ptr(CGeneralPort) port) {
+                                    return port->getName() == name;
 				});
 
 				if (it == m_ports.end()) {
 					//throw exception
 				}
 				return *it;
-                                
                         }
 
                         std::shared_ptr<CGeneralService> CComponent::getServiceByName(const std::string& name) {
                                 auto it = std::find_if(m_services.begin(), m_services.end(), [&name](ptr(CGeneralService) service) {
-					//return port->m_port.use_count() && port->m_port->getPrimitiveNamePort()->getName() == name;
-                                        return true;
+                                    return service->getName() == name;
 				});
 
 				if (it == m_services.end()) {

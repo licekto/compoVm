@@ -1,4 +1,5 @@
 #include "interpreter/memory/objects/generalService.h"
+#include "interpreter/memory/objects/primitives/primitiveService.h"
 
 namespace interpreter {
 
@@ -18,6 +19,11 @@ namespace interpreter {
                               m_primitive(true) {
                             }
                             
+                            CGeneralService::CGeneralService(ptr(CGeneralService) instance)
+                            : m_service(instance->m_service), m_primitiveService(instance->m_primitiveService),
+                              m_primitive(instance->m_primitive){   
+                            }
+                            
                             ptr(CComponent) CGeneralService::getService() {
                                 return m_service;
                             }
@@ -29,6 +35,17 @@ namespace interpreter {
                             bool CGeneralService::isPrimitive() const {
                                 return m_primitive;
                             }
+
+                            std::string CGeneralService::getName() const {
+                                if (m_primitive) {
+                                    return m_primitiveService->getName();
+                                }
+                                else {
+                                    //return m_service->getPortByName("serviceSign")->getPrimitivePort()->getConnectedPortAt(0)
+                                    return "";
+                                }
+                            }
+
 		}
 	}
 }

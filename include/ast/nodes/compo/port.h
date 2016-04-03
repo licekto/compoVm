@@ -5,6 +5,8 @@
 #include "ast/nodes/node.h"
 #include "ast/nodes/procedural/symbol.h"
 #include "ast/nodes/types/portType.h"
+#include "ast/nodes/types/portRoleType.h"
+#include "ast/nodes/types/visibilityType.h"
 
 namespace ast {
 
@@ -35,6 +37,11 @@ namespace ast {
 
 				/**< Is atomic? */
 				bool m_collectivity;
+                                
+                                /**< Type of visibility */
+				nodes::types::visibilityType m_visibilityType;
+                                
+                                nodes::types::portRoleType m_role;
 
 			  public:
 				/**
@@ -48,9 +55,9 @@ namespace ast {
 				      bool collectivity = false);
 
 				/**
-				            * Accept method for visitor acceptation.
-				            * @param visitor: Pointer to abstract visitor.
-				            */
+                                * Accept method for visitor acceptation.
+                                * @param visitor: Pointer to abstract visitor.
+                                */
 				virtual void accept(std::shared_ptr<visitors::CAbstractVisitor> visitor) = 0;
 
 				/**
@@ -67,8 +74,8 @@ namespace ast {
 
 				/**
 				* Port type getter
-						* @return nodes::types::portType
-						*/
+                                * @return nodes::types::portType
+                                */
 				nodes::types::portType getPortType() const;
 
 				/**
@@ -85,9 +92,17 @@ namespace ast {
 
 				/**
 				* Collectivity getter
-						* @return is collective?
-						*/
+                                * @return is collective?
+                                */
 				bool isCollection() const;
+                                
+                                void setVisibility(nodes::types::visibilityType visibility);
+                                
+                                nodes::types::visibilityType getVisibility() const;
+                                
+                                void setRole(nodes::types::portRoleType role);
+                                
+                                nodes::types::portRoleType getRole() const;
 			};
 
 		}

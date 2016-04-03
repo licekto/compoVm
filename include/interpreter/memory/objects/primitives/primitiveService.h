@@ -15,11 +15,11 @@ namespace interpreter {
 
 				class CPrimitiveService : public CAbstractPrimitive {
 
-					std::vector<std::string> m_params;
-
-					ptr(objects::CComponent) m_context;
-
 					std::function<ptr(objects::CComponent)(const std::vector<ptr(objects::CComponent)>&, const ptr(objects::CComponent)&)> m_callback;
+                                        
+                                        std::vector<std::string> m_argumentsNames;
+                                        
+                                        std::vector<ptr(objects::CComponent)> m_arguments;
 
 				  public:
 
@@ -27,21 +27,35 @@ namespace interpreter {
                                                           ptr(CComponent) context = nullptr,
 					                  std::function<ptr(objects::CComponent)(const std::vector<ptr(objects::CComponent)>&, const ptr(objects::CComponent)&)> callback
                                                             = std::function<ptr(objects::CComponent)(const std::vector<ptr(objects::CComponent)>&, const ptr(objects::CComponent)&)>(),
-                                                          std::vector<std::string> params = std::vector<std::string>(0));
+                                                          std::vector<std::string> argumentsNames = std::vector<std::string>(0));
 
-					virtual ~CPrimitiveService();
-
-					ptr(objects::CComponent) operator()(const std::vector<ptr(objects::CComponent)>& params);
-
-					size_t getParamsCount() const;
-
-					void setParam(std::string param);
+                                        CPrimitiveService(ptr(CPrimitiveService) instance);
                                         
-                                        std::string getParamAt(size_t index);
+					virtual ~CPrimitiveService();
+                                        
+                                        ptr(CComponent) getOwner() = delete;
+                                        
+                                        void setOwner(ptr(CComponent) owner) = delete;
+                                        
+                                        void setContext(ptr(CComponent) context);
+                                        
+                                        ptr(CComponent) getContext();
+
+					ptr(objects::CComponent) invoke();
+
+					size_t getArgumentsNamesCount() const;
+
+					void setArgumentName(std::string argumentName);
+                                        
+                                        std::string getArgumentNameAt(size_t index);
 
 					std::string getName() const;
-
-					ptr(objects::CComponent) getContext();
+                                        
+                                        void addArgument(ptr(objects::CComponent) arg);
+                                        
+                                        size_t getArgumentCount() const;
+                                        
+                                        ptr(objects::CComponent) getArgumentAt(size_t index);
 
 					void setCallback(std::function<ptr(objects::CComponent)(const std::vector<ptr(objects::CComponent)>&, const ptr(objects::CComponent)&)> callback);
 				};

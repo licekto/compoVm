@@ -36,7 +36,24 @@ namespace ast {
 
 			bool CPort::isCollection() const {
 				return m_collectivity;
-			}
+                        }
+
+                        void CPort::setVisibility(nodes::types::visibilityType visibility) {
+                            m_visibilityType = visibility;
+                        }
+
+                        nodes::types::visibilityType CPort::getVisibility() const {
+                            return m_visibilityType;
+                        }
+
+                        void CPort::setRole(nodes::types::portRoleType role) {
+                            m_role = role;
+                        }
+
+                        nodes::types::portRoleType CPort::getRole() const {
+                            return m_role;
+                        }
+
 		}
 	}
 }

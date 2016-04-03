@@ -8,23 +8,40 @@ namespace interpreter {
 
 			namespace primitives {
                             
-                                CPrimitivePort::CPrimitivePort(const std::string& name, std::shared_ptr<objects::CComponent> owner, ptr(objects::CComponent) connected)
-					: CAbstractPrimitivePort(name, owner),
-					  m_connectedComponent(connected) {
+                                CPrimitivePort::CPrimitivePort(const std::string& name, std::shared_ptr<objects::CComponent> owner)
+					: CAbstractPrimitive(name, owner) {
 				}
 
+                                CPrimitivePort::CPrimitivePort(ptr(CPrimitivePort) instance)
+                                : CAbstractPrimitive(instance) {
+                                    for (ptr(CGeneralPort) port : instance->m_connectedPorts) {
+                                        this->m_connectedPorts.push_back(new_ptr(CGeneralPort)(port));
+                                    }
+                                    for (ptr(CGeneralService) service : instance->m_connectedServices) {
+                                        this->m_connectedServices.push_back(new_ptr(CGeneralService)(service));
+                                    }
+                                }
+                                
 				CPrimitivePort::~CPrimitivePort() {
-				}
-
-				void CPrimitivePort::setConnectedComponent(ptr(objects::CComponent) component) {
-					m_connectedComponent = component;
-				}
-
-				ptr(objects::CComponent) CPrimitivePort::getConnectedComponent() {
-					return m_connectedComponent;
                                 }
 
-                                void CPrimitivePort::setConnectedService(std::shared_ptr<objects::CGeneralService> service) {
+                                size_t CPrimitivePort::getConnectedPortsNumber() const {
+                                    return m_connectedPorts.size();
+                                }
+
+				void CPrimitivePort::connectPort(ptr(objects::CGeneralPort) component) {
+					m_connectedPorts.push_back(component);
+				}
+
+				ptr(objects::CGeneralPort) CPrimitivePort::getConnectedPortAt(size_t index) {
+                                        if (index < m_connectedPorts.size()) {
+                                            return m_connectedPorts.at(index);
+                                        }
+                                        // throw
+                                        return nullptr;
+                                }
+
+                                void CPrimitivePort::connectService(std::shared_ptr<objects::CGeneralService> service) {
                                     m_connectedServices.push_back(service);
                                 }
 

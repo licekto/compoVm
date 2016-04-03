@@ -7,11 +7,11 @@
 #include "interpreter/core/coreModules.h"
 #include "interpreter/core/coreModuleType.h"
 #include "interpreter/memory/objects/component.h"
-#include "interpreter/memory/objects/stringComponent.h"
+#include "interpreter/memory/objects/values/stringComponent.h"
 #include "interpreter/memory/objects/primitives/abstractPrimitive.h"
 #include "interpreter/memory/objects/primitives/primitiveService.h"
 #include "interpreter/memory/objects/primitives/primitivePort.h"
-#include "interpreter/memory/objects/primitives/primitiveCollectionPort.h"
+#include "types.h"
 
 namespace interpreter {
 
@@ -26,25 +26,31 @@ namespace interpreter {
                         ptr(core::CInterpreter) m_interpreter;
 
 			std::map<core::coreModuleType, ptr(memory::objects::CComponent)> m_coreComponentsMap;
-
-                        ptr(memory::objects::CComponent) bootstrapComponent();
                         
-                        void addPrimitiveServices(ptr(memory::objects::CComponent) component, ptr(ast_descriptor) descriptor,
-                                                  std::map<std::string, ptr(memory::objects::primitives::CPrimitiveService)>& servicesNames);
-                        
-			void iterateAddPorts(ptr(ast_reqprov) reqprov, std::function<void(memory::objects::portVisibility, memory::objects::portType, ptr(ast_port))> callback);
-
-			void addPrimitivePorts(ptr(memory::objects::CComponent) component, ptr(ast_descriptor) descriptor);
-
-			ptr(memory::objects::CComponent) bootstrapPortComponent(ptr(ast_port) astPort, ptr(memory::objects::CComponent) owner);
-
-			void addPorts(ptr(memory::objects::CComponent) component, ptr(ast_descriptor) descriptor);
-
-			ptr(memory::objects::CComponent) bootstrapServiceComponent(ptr(ast_service) astService, ptr(memory::objects::CComponent) context);
-
-			ptr(memory::objects::CComponent) bootstrapServiceSignatureComponent(ptr(ast_servicesignature) astSignature);
-
-			ptr(memory::objects::CComponent) bootstrapDescriptorComponent();
+//                        void addPrimitiveServices(ptr(memory::objects::CComponent) component, ptr(ast_descriptor) descriptor,
+//                                                  std::map<std::string, ptr(memory::objects::primitives::CPrimitiveService)>& servicesNames);
+//                        
+//			void iterateAddPorts(ptr(ast_reqprov) reqprov, std::function<void(memory::objects::portVisibility, memory::objects::portType, ptr(ast_port))> callback);
+//
+//			void addPrimitivePorts(ptr(memory::objects::CComponent) component, ptr(ast_descriptor) descriptor);
+//
+//			void addPorts(ptr(memory::objects::CComponent) component, ptr(ast_descriptor) descriptor);
+//
+//                        std::function<ptr(memory::objects::CComponent)(const std::vector<ptr(memory::objects::CComponent)>&, const ptr(memory::objects::CComponent)&)> prepareSymbolSetter(const std::string& portName);
+//                        
+//                        std::function<ptr(memory::objects::CComponent)(const std::vector<ptr(memory::objects::CComponent)>&, const ptr(memory::objects::CComponent)&)> prepareSymbolGetter(const std::string& portName);
+//                        
+//                        ptr(memory::objects::CComponent) bootstrapComponent();
+//                        
+//                        ptr(memory::objects::CComponent) bootstrapPortComponent(ptr(ast_port) astPort, ptr(memory::objects::CComponent) owner);
+//                        
+//			ptr(memory::objects::CComponent) bootstrapServiceComponent(ptr(ast_service) astService, ptr(memory::objects::CComponent) context);
+//
+//			ptr(memory::objects::CComponent) bootstrapServiceSignatureComponent(ptr(ast_servicesignature) astSignature);
+//                        
+//                        ptr(memory::objects::CComponent) bootstrapPortDescriptionComponent(ptr(ast_port) astPort);
+//
+//			ptr(memory::objects::CComponent) bootstrapDescriptorComponent();
 
 		  public:
 
