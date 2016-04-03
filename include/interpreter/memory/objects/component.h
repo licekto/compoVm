@@ -16,7 +16,7 @@ namespace interpreter {
 		namespace objects {
 
 			class CComponent {
-			  private:
+			  protected:
 
 				std::vector<ptr(CGeneralPort)> m_ports;
 
@@ -41,6 +41,8 @@ namespace interpreter {
                                 ptr(CGeneralService) getServiceByName(const std::string& name);
 
 				void addService(ptr(CGeneralService) service);
+                                
+                                ptr(CGeneralPort) getPortOfService(const std::string& serviceName);
 			};
 
 		}

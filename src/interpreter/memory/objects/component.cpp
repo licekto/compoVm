@@ -61,7 +61,23 @@ namespace interpreter {
 
 			void CComponent::addService(std::shared_ptr<CGeneralService> service) {
 				m_services.push_back(service);
-			}
+                        }
+
+                        std::shared_ptr<CGeneralPort> CComponent::getPortOfService(const std::string& serviceName) {
+                            for (ptr(CGeneralPort) port : m_ports) {
+                                if (port->isPrimitive()) {
+                                    ptr(primitives::CPrimitivePort) primitivePort = port->getPrimitivePort();
+                                    for (size_t i = 0; i < primitivePort->getConnectedServicesNumber(); ++i) {
+                                        if (primitivePort->getConnectedServiceAt(i)->getName() == serviceName) {
+                                            return port;
+                                        }
+                                    }
+                                }
+                                else {
+                                    //ptr(CGeneralPort) generalPort = port->getPort()->getPortByName("connectedPorts");
+                                }
+                            }
+                        }
 
 		}
 	}

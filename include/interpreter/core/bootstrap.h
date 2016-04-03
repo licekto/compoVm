@@ -29,20 +29,16 @@ namespace interpreter {
                         
                         void addPrimitiveServices(ptr(memory::objects::CComponent) component, ptr(ast_descriptor) descriptor,
                                                   std::map<std::string, ptr(memory::objects::primitives::CPrimitiveService)>& servicesNames);
-                        
-			void iterateAddPorts(std::function<void(types::visibilityType, types::portType, ptr(ast_port))> callback);
 
 			void addPrimitivePorts(ptr(memory::objects::CComponent) component, ptr(ast_descriptor) descriptor);
-
-			void addPorts(ptr(memory::objects::CComponent) component, ptr(ast_descriptor) descriptor);
 //
 //                        std::function<ptr(memory::objects::CComponent)(const std::vector<ptr(memory::objects::CComponent)>&, const ptr(memory::objects::CComponent)&)> prepareSymbolSetter(const std::string& portName);
 //                        
 //                        std::function<ptr(memory::objects::CComponent)(const std::vector<ptr(memory::objects::CComponent)>&, const ptr(memory::objects::CComponent)&)> prepareSymbolGetter(const std::string& portName);
 //                        
                         ptr(memory::objects::CComponent) bootstrapComponent();
-//                        
-//                        ptr(memory::objects::CComponent) bootstrapPortComponent(ptr(ast_port) astPort, ptr(memory::objects::CComponent) owner);
+                        
+                        ptr(memory::objects::CComponent) bootstrapPortComponent(ptr(ast_port) astPort, ptr(memory::objects::CComponent) owner);
 //                        
 //			ptr(memory::objects::CComponent) bootstrapServiceComponent(ptr(ast_service) astService, ptr(memory::objects::CComponent) context);
 //

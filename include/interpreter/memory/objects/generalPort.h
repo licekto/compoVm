@@ -3,7 +3,7 @@
 #include <vector>
 
 #include "definitions/allDefinitions.h"
-#include "interpreter/memory/objects/types.h"
+#include "types.h"
 
 namespace interpreter {
 
@@ -23,26 +23,26 @@ namespace interpreter {
                             
                             ptr(primitives::CPrimitivePort) m_primitivePort;
                             
-                            portVisibility m_visibility;
+                            types::visibilityType m_visibility;
                             
-                            portType m_type;
+                            types::roleType m_type;
                             
                             bool m_primitive;
                             
                         public:
                             CGeneralPort(ptr(CComponent) port,
-                                         portVisibility v = portVisibility::EXTERNAL,
-                                         portType t = portType::PROVISION);
+                                         types::visibilityType v = types::visibilityType::EXTERNAL,
+                                         types::roleType t = types::roleType::PROVIDES);
 
                             CGeneralPort(ptr(primitives::CPrimitivePort) port,
-                                         portVisibility v = portVisibility::EXTERNAL,
-                                         portType t = portType::PROVISION);
+                                         types::visibilityType v = types::visibilityType::EXTERNAL,
+                                         types::roleType t = types::roleType::PROVIDES);
                             
                             CGeneralPort(ptr(CGeneralPort) instance);
                             
-                            portVisibility getVisibility() const;
+                            types::visibilityType getVisibility() const;
                             
-                            portType getType() const;
+                            types::roleType getRole() const;
                             
                             bool isPrimitive() const;
                             
@@ -51,6 +51,8 @@ namespace interpreter {
                             ptr(primitives::CPrimitivePort) getPrimitivePort();
                             
                             std::string getName() const;
+                            
+                            ptr(CComponent) getOwner();
                         };
 		}
 	}

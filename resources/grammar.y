@@ -414,25 +414,14 @@ compo_expressions
 
 
 compo_expression	
-                :   provision
-		|   requirement
+                :   provision_requirement
 		|   constraint
 		|   service
 		|   architecture
                 ;
 
-provision     
-                :   visibility PROVIDES provision_requirement_signature
-		    {
-                        parser->setRole(ast_roletype::PROVIDES);
-		    }
-                ;
-
-requirement   
-                :   visibility REQUIRES provision_requirement_signature
-                    {
-                        parser->setRole(ast_roletype::REQUIRES);
-		    }
+provision_requirement
+                :   visibility role provision_requirement_signature
                 ;
 
 visibility
@@ -448,6 +437,17 @@ visibility
                     {
                         parser->setVisibility(types::visibilityType::EXTERNAL);
                     }
+                ;
+
+role
+                :   PROVIDES
+		    {
+                        parser->setRole(ast_roletype::PROVIDES);
+		    }
+                |   REQUIRES
+                    {
+                        parser->setRole(ast_roletype::REQUIRES);
+		    }
                 ;
 
 provision_requirement_signature     

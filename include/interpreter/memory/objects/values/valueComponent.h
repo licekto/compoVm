@@ -12,7 +12,7 @@ namespace interpreter {
                     
                     namespace values {
 
-			class CValueComponent : public CComponent {
+			class CValueComponent : public CComponent, public std::enable_shared_from_this<CValueComponent> {
 			  public:
                               
                                 CValueComponent();
@@ -20,7 +20,9 @@ namespace interpreter {
                                 CValueComponent(ptr(CValueComponent) instance);
 
                                 virtual ~CValueComponent();
-                              
+                                
+                                ptr(CGeneralPort) getDefaultPort();
+                                
 				void addPort(ptr(CGeneralPort) port) = delete;
 
 				size_t getNumberOfPorts() const = delete;
