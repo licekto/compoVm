@@ -1,6 +1,7 @@
 #pragma once
 
 #include <memory>
+#include "types.h"
 #include "ast/nodes/compo/port.h"
 #include "ast/nodes/procedural/symbol.h"
 
@@ -24,8 +25,8 @@ namespace ast {
 				CUniversalPort(std::shared_ptr<procedural::CSymbol> name = nullptr,
 				               bool atomicity = false,
 				               bool collectivity = false,
-                                               nodes::types::visibilityType visibility = nodes::types::visibilityType::EXTERNAL,
-                                               nodes::types::portRoleType role = nodes::types::portRoleType::PROVIDES);
+                                               types::visibilityType visibility = types::visibilityType::EXTERNAL,
+                                               types::roleType role = types::roleType::PROVIDES);
 
 				/**
                                 * Accept method for visitor acceptation.

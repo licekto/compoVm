@@ -8,7 +8,7 @@ namespace ast {
 
 			CService::CService(std::shared_ptr<ast::nodes::compo::CServiceSignature> signature,
 			                   std::shared_ptr<ast::nodes::procedural::CStringLiteral> code)
-				: CNode(ast::nodes::types::nodeType::SERVICE),
+				: CNode(types::nodeType::SERVICE),
 				  m_signature(signature),
 				  m_code(code),
 				  m_body(nullptr) {

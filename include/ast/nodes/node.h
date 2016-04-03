@@ -4,7 +4,7 @@
 #include <iostream>
 #include <vector>
 
-#include "ast/nodes/types/nodeType.h"
+#include "types.h"
 #include "ast/visitor/abstractVisitor.h"
 
 /**

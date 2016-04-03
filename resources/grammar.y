@@ -438,15 +438,15 @@ requirement
 visibility
                 :   EXTERNALLY
                     {
-                        parser->setVisibility(ast::nodes::types::visibilityType::EXTERNAL);
+                        parser->setVisibility(types::visibilityType::EXTERNAL);
                     }
                 |   INTERNALLY
                     {
-                        parser->setVisibility(ast::nodes::types::visibilityType::INTERNAL);
+                        parser->setVisibility(types::visibilityType::INTERNAL);
                     }
                 |   empty
                     {
-                        parser->setVisibility(ast::nodes::types::visibilityType::EXTERNAL);
+                        parser->setVisibility(types::visibilityType::EXTERNAL);
                     }
                 ;
 

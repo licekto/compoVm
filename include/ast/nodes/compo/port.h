@@ -4,9 +4,7 @@
 
 #include "ast/nodes/node.h"
 #include "ast/nodes/procedural/symbol.h"
-#include "ast/nodes/types/portType.h"
-#include "ast/nodes/types/portRoleType.h"
-#include "ast/nodes/types/visibilityType.h"
+#include "types.h"
 
 namespace ast {
 
@@ -24,7 +22,7 @@ namespace ast {
 			class CPort : public virtual CNode {
 			  protected:
 				/**< Type of port */
-				nodes::types::portType m_portType;
+				types::portType m_portType;
 
 				/**< Name symbol of port */
 				std::shared_ptr<nodes::procedural::CSymbol> m_name;
@@ -39,9 +37,9 @@ namespace ast {
 				bool m_collectivity;
                                 
                                 /**< Type of visibility */
-				nodes::types::visibilityType m_visibilityType;
+				types::visibilityType m_visibilityType;
                                 
-                                nodes::types::portRoleType m_role;
+                                types::roleType m_role;
 
 			  public:
 				/**
@@ -49,12 +47,12 @@ namespace ast {
 				* @param name: Name of port
 				* @param atomic: Is atomic?
 				*/
-				CPort(nodes::types::portType type = nodes::types::portType::UNIVERSAL,
+				CPort(types::portType type = types::portType::UNIVERSAL,
 				      std::shared_ptr<nodes::procedural::CSymbol> name = nullptr,
 				      bool atomicity = false,
 				      bool collectivity = false,
-                                      nodes::types::visibilityType visibility = nodes::types::visibilityType::EXTERNAL,
-                                      nodes::types::portRoleType role = nodes::types::portRoleType::PROVIDES);
+                                      types::visibilityType visibility = types::visibilityType::EXTERNAL,
+                                      types::roleType role = types::roleType::PROVIDES);
 
 				/**
                                 * Accept method for visitor acceptation.
@@ -76,9 +74,9 @@ namespace ast {
 
 				/**
 				* Port type getter
-                                * @return nodes::types::portType
+                                * @return types::portType
                                 */
-				nodes::types::portType getPortType() const;
+				types::portType getPortType() const;
 
 				/**
 				 * Kind of name setter
@@ -98,13 +96,13 @@ namespace ast {
                                 */
 				bool isCollection() const;
                                 
-                                void setVisibility(nodes::types::visibilityType visibility);
+                                void setVisibility(types::visibilityType visibility);
                                 
-                                nodes::types::visibilityType getVisibility() const;
+                                types::visibilityType getVisibility() const;
                                 
-                                void setRole(nodes::types::portRoleType role);
+                                void setRole(types::roleType role);
                                 
-                                nodes::types::portRoleType getRole() const;
+                                types::roleType getRole() const;
 			};
 
 		}

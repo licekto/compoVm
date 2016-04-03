@@ -10,7 +10,7 @@ namespace ast {
 			                              bool atomic,
 			                              std::shared_ptr<ast::nodes::procedural::CSymbol> injectedWith  )
 				:   CNode(types::nodeType::INJECTED_PORT),
-				    CPort(ast::nodes::types::portType::INJECTED, name, atomic),
+				    CPort(types::portType::INJECTED, name, atomic),
 				    m_injectedWith(injectedWith) {
 			}
 

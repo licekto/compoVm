@@ -28,8 +28,8 @@ namespace ast {
 				CNamedPort(std::shared_ptr<procedural::CSymbol> name = nullptr,
 				           bool atomicity = false,
                                            bool collectivity = false,
-                                           nodes::types::visibilityType visibility = nodes::types::visibilityType::EXTERNAL,
-                                           nodes::types::portRoleType role = nodes::types::portRoleType::PROVIDES,
+                                           types::visibilityType visibility = types::visibilityType::EXTERNAL,
+                                           types::roleType role = types::roleType::PROVIDES,
 				           std::shared_ptr<procedural::CSymbol> componentName = nullptr);
 
 				/**

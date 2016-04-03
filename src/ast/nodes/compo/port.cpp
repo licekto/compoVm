@@ -6,8 +6,8 @@ namespace ast {
 
 		namespace compo {
 
-			CPort::CPort(ast::nodes::types::portType type, std::shared_ptr<ast::nodes::procedural::CSymbol> name,
-                                     bool atomicity, bool collectivity, nodes::types::visibilityType visibility, nodes::types::portRoleType role)
+			CPort::CPort(types::portType type, std::shared_ptr<ast::nodes::procedural::CSymbol> name,
+                                     bool atomicity, bool collectivity, types::visibilityType visibility, types::roleType role)
 				:   CNode(types::nodeType::PORT),
 				    m_portType(type),
 				    m_name(name),
@@ -25,7 +25,7 @@ namespace ast {
 				return m_atomicity;
 			}
 
-			ast::nodes::types::portType CPort::getPortType() const {
+			types::portType CPort::getPortType() const {
 				return m_portType;
 			}
 
@@ -41,19 +41,19 @@ namespace ast {
 				return m_collectivity;
                         }
 
-                        void CPort::setVisibility(nodes::types::visibilityType visibility) {
+                        void CPort::setVisibility(types::visibilityType visibility) {
                             m_visibilityType = visibility;
                         }
 
-                        nodes::types::visibilityType CPort::getVisibility() const {
+                        types::visibilityType CPort::getVisibility() const {
                             return m_visibilityType;
                         }
 
-                        void CPort::setRole(nodes::types::portRoleType role) {
+                        void CPort::setRole(types::roleType role) {
                             m_role = role;
                         }
 
-                        nodes::types::portRoleType CPort::getRole() const {
+                        types::roleType CPort::getRole() const {
                             return m_role;
                         }
 

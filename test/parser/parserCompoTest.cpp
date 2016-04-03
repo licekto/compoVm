@@ -51,7 +51,7 @@ BOOST_AUTO_TEST_CASE(compoBasicStructure) {
     
     // Check architecture
     ptr(ast_architecture) architecture = cast(ast_architecture)(descriptor->getArchitecture());
-    BOOST_CHECK_EQUAL(ast::nodes::types::nodeType::ARCHITECTURE, architecture->getNodeType());
+    BOOST_CHECK_EQUAL(types::nodeType::ARCHITECTURE, architecture->getNodeType());
     
     // Clear AST for next test
     parser.clearAll();
@@ -131,7 +131,7 @@ BOOST_AUTO_TEST_CASE(compoServiceBody) {
     
     // Check assignment
     ptr(ast_assignment) assignment = cast(ast_assignment)(service->getBodyNodeAt(0));
-    BOOST_CHECK_EQUAL(ast::nodes::types::nodeType::ASSIGNMENT_EXPRESSION, assignment->getNodeType());
+    BOOST_CHECK_EQUAL(types::nodeType::ASSIGNMENT_EXPRESSION, assignment->getNodeType());
     
     // Check symbol
     symbol = cast(ast_symbol)(assignment->getVariable());
@@ -340,14 +340,14 @@ BOOST_AUTO_TEST_CASE(compoServiceCall) {
     BOOST_CHECK_EQUAL("getName", cast(ast_symbol)(serviceInvocation->getSelectorName())->getStringValue());
     
     signature = cast(ast_servicesignature)(serviceInvocation->getParameters());
-    BOOST_CHECK_EQUAL(ast::nodes::types::nodeType::SERVICE_SIGNATURE, signature->getNodeType());
+    BOOST_CHECK_EQUAL(types::nodeType::SERVICE_SIGNATURE, signature->getNodeType());
     BOOST_CHECK_EQUAL("getName", signature->getNameSymbol()->getStringValue());
     
     BOOST_CHECK_EQUAL("a", cast(ast_string)(signature->getParamAt(0))->getValue());
     BOOST_CHECK_EQUAL(1, cast(ast_constant)(signature->getParamAt(1))->getValue());
     BOOST_CHECK_EQUAL("var", cast(ast_symbol)(signature->getParamAt(2))->getStringValue());
     
-    BOOST_CHECK_EQUAL(ast::nodes::types::nodeType::SERVICE_INVOCATION, cast(ast::nodes::CNode)(signature->getParamAt(3))->getNodeType());
+    BOOST_CHECK_EQUAL(types::nodeType::SERVICE_INVOCATION, cast(ast::nodes::CNode)(signature->getParamAt(3))->getNodeType());
     serviceInvocation = cast(ast_serviceinvocation)(signature->getParamAt(3));
     BOOST_CHECK_EQUAL("handler", cast(ast_symbol)(serviceInvocation->getReceiverName())->getStringValue());
     BOOST_CHECK_EQUAL("getPtr", cast(ast_symbol)(serviceInvocation->getSelectorName())->getStringValue());
@@ -465,7 +465,7 @@ BOOST_AUTO_TEST_CASE(compoMultiple) {
     
     // Check architecture
     ptr(ast_architecture) architecture = cast(ast_architecture)(descriptor->getArchitecture());
-    BOOST_CHECK_EQUAL(ast::nodes::types::nodeType::ARCHITECTURE, architecture->getNodeType());
+    BOOST_CHECK_EQUAL(types::nodeType::ARCHITECTURE, architecture->getNodeType());
     
     descriptor = cast(ast_descriptor)(parser.getRootNode()->getNodeAt(1));
     TEST_DESCRIPTOR(descriptor, "ab", "", 0, 0);

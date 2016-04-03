@@ -2,7 +2,7 @@
 
 #include <memory>
 #include "ast/nodes/procedural/abstractExpression.h"
-#include "ast/nodes/types/operatorType.h"
+#include "types.h"
 #include "ast/visitor/abstractVisitor.h"
 
 namespace ast {

@@ -41,9 +41,9 @@ class ParserWrapper {
 	std::stack<std::vector<ptr(ast_node)>> m_currentServiceParamsStack;
 
 	/**< Visibility type of current requirement/provision */
-	ast::nodes::types::visibilityType m_visibilityType;
+	types::visibilityType m_visibilityType;
         
-        ast::nodes::types::portRoleType m_role;
+        types::roleType m_role;
 
 	/**< Is current port atomic? */
 	bool m_atomicity;
@@ -213,13 +213,13 @@ class ParserWrapper {
 	 * Sets visibility type of currently parsed provision/requirement
 	 * @param type: visibility type
 	 */
-	void setVisibility(ast::nodes::types::visibilityType type);
+	void setVisibility(types::visibilityType type);
 
 	/**
 	 * Visibility getter
 	 * @return visibilityType
 	 */
-	ast::nodes::types::visibilityType getVisibility() const;
+	types::visibilityType getVisibility() const;
 
 	/**
 	 * Sets atomicity of currently parsed port
@@ -335,7 +335,7 @@ class ParserWrapper {
 
 	void parseServices();
         
-        void setRole(ast::nodes::types::portRoleType role);
+        void setRole(types::roleType role);
         
-        ast::nodes::types::portRoleType getRole() const;
+        types::roleType getRole() const;
 };

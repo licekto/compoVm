@@ -8,7 +8,7 @@ namespace ast {
 
 			CCompoundBody::CCompoundBody(const std::vector<std::shared_ptr<ast::nodes::procedural::CSymbol> >& temporaries,
 			                             const std::vector<std::shared_ptr<ast::nodes::CNode> >& body)
-				:   CNode(ast::nodes::types::nodeType::COMPOUND_BODY),
+				:   CNode(types::nodeType::COMPOUND_BODY),
 				    m_temporaries(temporaries),
 				    m_body(body) {
 			}

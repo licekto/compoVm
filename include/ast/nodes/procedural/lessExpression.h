@@ -3,7 +3,7 @@
 #include <memory>
 
 #include "ast/nodes/procedural/binaryExpression.h"
-#include "ast/nodes/types/operatorType.h"
+#include "types.h"
 
 namespace ast {
 

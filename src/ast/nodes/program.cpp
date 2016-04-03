@@ -5,7 +5,7 @@ namespace ast {
 	namespace nodes {
 
 		CProgram::CProgram()
-			: CNode(ast::nodes::types::nodeType::PROGRAM),
+			: CNode(types::nodeType::PROGRAM),
 			  m_rootNodes(std::vector<std::shared_ptr<CNode>>(0)) {
 
 		}

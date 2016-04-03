@@ -131,11 +131,11 @@ void ParserWrapper::popServiceParams() {
 	m_currentServiceParamsStack.pop();
 }
 
-void ParserWrapper::setVisibility(ast::nodes::types::visibilityType type) {
+void ParserWrapper::setVisibility(types::visibilityType type) {
 	m_visibilityType = type;
 }
 
-ast::nodes::types::visibilityType ParserWrapper::getVisibility() const {
+types::visibilityType ParserWrapper::getVisibility() const {
 	return m_visibilityType;
 }
 
@@ -267,10 +267,10 @@ void ParserWrapper::parseServices() {
 	}
 }
 
-void ParserWrapper::setRole(ast::nodes::types::portRoleType role) {
+void ParserWrapper::setRole(types::roleType role) {
     m_role = role;
 }
 
-ast::nodes::types::portRoleType ParserWrapper::getRole() const {
+types::roleType ParserWrapper::getRole() const {
     return m_role;
 }

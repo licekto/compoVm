@@ -3,6 +3,7 @@
 #include <map>
 #include <functional>
 
+#include "types.h"
 #include "interpreter/core/interpreter.h"
 #include "interpreter/core/coreModules.h"
 #include "interpreter/core/coreModuleType.h"
@@ -11,7 +12,6 @@
 #include "interpreter/memory/objects/primitives/abstractPrimitive.h"
 #include "interpreter/memory/objects/primitives/primitiveService.h"
 #include "interpreter/memory/objects/primitives/primitivePort.h"
-#include "types.h"
 
 namespace interpreter {
 
@@ -27,20 +27,20 @@ namespace interpreter {
 
 			std::map<core::coreModuleType, ptr(memory::objects::CComponent)> m_coreComponentsMap;
                         
-//                        void addPrimitiveServices(ptr(memory::objects::CComponent) component, ptr(ast_descriptor) descriptor,
-//                                                  std::map<std::string, ptr(memory::objects::primitives::CPrimitiveService)>& servicesNames);
-//                        
-//			void iterateAddPorts(ptr(ast_reqprov) reqprov, std::function<void(memory::objects::portVisibility, memory::objects::portType, ptr(ast_port))> callback);
-//
-//			void addPrimitivePorts(ptr(memory::objects::CComponent) component, ptr(ast_descriptor) descriptor);
-//
-//			void addPorts(ptr(memory::objects::CComponent) component, ptr(ast_descriptor) descriptor);
+                        void addPrimitiveServices(ptr(memory::objects::CComponent) component, ptr(ast_descriptor) descriptor,
+                                                  std::map<std::string, ptr(memory::objects::primitives::CPrimitiveService)>& servicesNames);
+                        
+			void iterateAddPorts(std::function<void(types::visibilityType, types::portType, ptr(ast_port))> callback);
+
+			void addPrimitivePorts(ptr(memory::objects::CComponent) component, ptr(ast_descriptor) descriptor);
+
+			void addPorts(ptr(memory::objects::CComponent) component, ptr(ast_descriptor) descriptor);
 //
 //                        std::function<ptr(memory::objects::CComponent)(const std::vector<ptr(memory::objects::CComponent)>&, const ptr(memory::objects::CComponent)&)> prepareSymbolSetter(const std::string& portName);
 //                        
 //                        std::function<ptr(memory::objects::CComponent)(const std::vector<ptr(memory::objects::CComponent)>&, const ptr(memory::objects::CComponent)&)> prepareSymbolGetter(const std::string& portName);
 //                        
-//                        ptr(memory::objects::CComponent) bootstrapComponent();
+                        ptr(memory::objects::CComponent) bootstrapComponent();
 //                        
 //                        ptr(memory::objects::CComponent) bootstrapPortComponent(ptr(ast_port) astPort, ptr(memory::objects::CComponent) owner);
 //                        

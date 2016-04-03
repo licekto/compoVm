@@ -9,62 +9,63 @@ namespace interpreter {
 			: m_coreModules(coreModules),
                           m_interpreter(interpreter) {
                 }
-//
-//                void CBootstrap::addPrimitiveServices(std::shared_ptr<memory::objects::CComponent> component, std::shared_ptr<ast_descriptor> descriptor,
-//                                                      std::map<std::string, ptr(memory::objects::primitives::CPrimitiveService)>& servicesNames) {
-//                    
-//                    for(size_t i = 0; i < descriptor->getServicesSize(); ++i) {
-//                        ptr(ast_service) astService = descriptor->getServiceAt(i);
-//                        
-//                        std::string serviceName = astService->getNameSymbol()->getStringValue();
-//                        
-//                        ptr(memory::objects::primitives::CPrimitiveService) primitiveService =
-//                                new_ptr(memory::objects::primitives::CPrimitiveService)(serviceName, component);
-//                        
-//                        for (size_t j = 0; j < astService->getParamsSize(); ++j) {
-//                            primitiveService->setArgumentName(cast(ast::nodes::procedural::CSymbol)(astService->getParamAt(j))->getStringValue());
-//                        }
-//                        
-//                        servicesNames[serviceName] = primitiveService;
-//                        component->addService(new_ptr(memory::objects::CGeneralService)(primitiveService));
-//                    }
-//                    
-//                }
-//                
-//                void CBootstrap::iterateAddPorts(std::shared_ptr<ast_reqprov> reqprov, std::function<void(memory::objects::portVisibility, memory::objects::portType, ptr(ast_port))> callback) {
+
+                void CBootstrap::addPrimitiveServices(std::shared_ptr<memory::objects::CComponent> component, std::shared_ptr<ast_descriptor> descriptor,
+                                                      std::map<std::string, ptr(memory::objects::primitives::CPrimitiveService)>& servicesNames) {
+                    
+                    for(size_t i = 0; i < descriptor->getServicesSize(); ++i) {
+                        ptr(ast_service) astService = descriptor->getServiceAt(i);
+                        
+                        std::string serviceName = astService->getNameSymbol()->getStringValue();
+                        
+                        ptr(memory::objects::primitives::CPrimitiveService) primitiveService =
+                                new_ptr(memory::objects::primitives::CPrimitiveService)(serviceName, component);
+                        
+                        for (size_t j = 0; j < astService->getParamsSize(); ++j) {
+                            primitiveService->setArgumentName(cast(ast::nodes::procedural::CSymbol)(astService->getParamAt(j))->getStringValue());
+                        }
+                        
+                        servicesNames[serviceName] = primitiveService;
+                        component->addService(new_ptr(memory::objects::CGeneralService)(primitiveService));
+                    }
+                    
+                }
+                
+                void CBootstrap::iterateAddPorts(std::function<void(types::visibilityType, types::portType, ptr(ast_port))> callback) {
 //                    if (reqprov.use_count()) {
 //			for (size_t i = 0; i < reqprov->getNumberOfPorts(); ++i) {
-//				memory::objects::portVisibility v = reqprov->getVisibilityType() == ast::nodes::types::visibilityType::EXTERNAL
+//				memory::objects::portVisibility v = reqprov->getVisibilityType() == types::visibilityType::EXTERNAL
 //				                                    ? memory::objects::portVisibility::EXTERNAL : memory::objects::portVisibility::INTERNAL;
 //
-//				memory::objects::portType t = reqprov->getNodeType() == ast::nodes::types::REQUIREMENT
+//				memory::objects::portType t = reqprov->getNodeType() == types::REQUIREMENT
 //				                              ? memory::objects::portType::REQUIREMENT : memory::objects::portType::PROVISION;
 //
 //				callback(v, t, reqprov->getPortAt(i));
 //			}
 //                    }
-//		}
-//                
-//                void CBootstrap::addPrimitivePorts(ptr(memory::objects::CComponent) component, ptr(ast_descriptor) descriptor) {
-//			// lambda function
-//			auto callback = [this, &component](memory::objects::portVisibility v, memory::objects::portType t, ptr(ast_port) port) {
-//                                bool primitive = true;
-//				if (port->isCollection()) {
-//					component->addPort(new_ptr(memory::objects::primitives::CPrimitivePortProperties)
-//                                            (new_ptr(memory::objects::primitives::CPrimitiveCollectionPort)(port->getNameSymbol()->getStringValue(), component), v, t, primitive));
-//				} else {
-//                                        component->addPort(new_ptr(memory::objects::primitives::CPrimitivePortProperties)
-//                                            (new_ptr(memory::objects::primitives::CPrimitivePort)(port->getNameSymbol()->getStringValue(), component), v, t, primitive));
-//				}
-//			};
+		}
+                
+                void CBootstrap::addPrimitivePorts(ptr(memory::objects::CComponent) component, ptr(ast_descriptor) descriptor) {                        
+//                        for (size_t i = 0; i < descriptor->getPortsSize(); ++i) {
+//                            ptr(ast_port) port = descriptor->getPortAt(i);
+//                            
+//                            memory::objects::portVisibility v = reqprov->getVisibilityType() == types::visibilityType::EXTERNAL
+//				                                    ? memory::objects::portVisibility::EXTERNAL : memory::objects::portVisibility::INTERNAL;
 //
-//			iterateAddPorts(descriptor->getInRequirement(), callback);
-//			iterateAddPorts(descriptor->getExRequirement(), callback);
-//			iterateAddPorts(descriptor->getInProvision(), callback);
-//			iterateAddPorts(descriptor->getExProvision(), callback);
-//		}
-//                
-//                void CBootstrap::addPorts(ptr(memory::objects::CComponent) component, ptr(ast_descriptor) descriptor) {
+//				memory::objects::portType t = reqprov->getNodeType() == types::REQUIREMENT
+//				                              ? memory::objects::portType::REQUIREMENT : memory::objects::portType::PROVISION;
+//                            
+//                            if (port->isCollection()) {
+//                                component->addPort(new_ptr(memory::objects::primitives::CPrimitivePortProperties)
+//                                    (new_ptr(memory::objects::primitives::CPrimitiveCollectionPort)(port->getNameSymbol()->getStringValue(), component), v, t, primitive));
+//                            } else {
+//                                component->addPort(new_ptr(memory::objects::primitives::CPrimitivePortProperties)
+//                                    (new_ptr(memory::objects::primitives::CPrimitivePort)(port->getNameSymbol()->getStringValue(), component), v, t, primitive));
+//                            }
+//                        }
+		}
+                
+                void CBootstrap::addPorts(ptr(memory::objects::CComponent) component, ptr(ast_descriptor) descriptor) {
 //			// lambda function
 //			auto callback = [this, &component](memory::objects::portVisibility v, memory::objects::portType t, ptr(ast_port) port) {
 //                                bool primitive = false;
@@ -75,9 +76,9 @@ namespace interpreter {
 //			iterateAddPorts(descriptor->getExRequirement(), callback);
 //			iterateAddPorts(descriptor->getInProvision(), callback);
 //			iterateAddPorts(descriptor->getExProvision(), callback);
-//		}
-//                
-//                ptr(memory::objects::CComponent) CBootstrap::bootstrapComponent() {
+		}
+                
+                ptr(memory::objects::CComponent) CBootstrap::bootstrapComponent() {
 //                    ptr(ast_descriptor) componentDescriptor = m_coreModules->getCoreDescriptor("Component");
 //                    
 //                    std::map<std::string, ptr(memory::objects::primitives::CPrimitiveService)> servicesNames;
@@ -136,8 +137,8 @@ namespace interpreter {
 //                    }
 //                    
 //                    return component;
-//                    }
-//
+                    }
+
 //                    std::function<std::shared_ptr<memory::objects::CComponent>(const std::vector<std::shared_ptr<memory::objects::CComponent> >&, const std::shared_ptr<memory::objects::CComponent>&)>
 //                    CBootstrap::prepareSymbolSetter(const std::string& portName) {
 //                        

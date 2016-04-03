@@ -5,6 +5,8 @@
 #include "abstractVisitor.h"
 #include "definitions/allDefinitions.h"
 
+#include "types.h"
+
 #include "exceptions/semantic/wrongAstNodeTypeException.h"
 #include "exceptions/semantic/emptyProgramException.h"
 #include "exceptions/semantic/undefinedDescriptorException.h"

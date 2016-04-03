@@ -9,8 +9,8 @@ namespace ast {
 			CNamedPort::CNamedPort(std::shared_ptr<ast::nodes::procedural::CSymbol> name,
 			                       bool atomicity,
 			                       bool collectivity,
-                                               nodes::types::visibilityType visibility,
-                                               nodes::types::portRoleType role,
+                                               types::visibilityType visibility,
+                                               types::roleType role,
                                                std::shared_ptr<ast::nodes::procedural::CSymbol> componentName)
 				:   CNode(types::nodeType::NAMED_PORT),
 				    CPort(types::portType::NAMED, name, atomicity, collectivity, visibility, role),
