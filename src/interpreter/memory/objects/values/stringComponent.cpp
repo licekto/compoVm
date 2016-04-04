@@ -9,7 +9,7 @@ namespace interpreter {
 			namespace values {
 
 				CStringComponent::CStringComponent(const std::string& value)
-					: m_value(value) {
+					: CValueComponent(), m_value(value) {
 				}
 
 				CStringComponent::CStringComponent(ptr(CStringComponent) instance)

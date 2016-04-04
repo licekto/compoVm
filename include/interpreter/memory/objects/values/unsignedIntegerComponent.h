@@ -14,7 +14,7 @@ namespace interpreter {
 
 			namespace values {
 
-				class CUnsignedIntegerComponent : public CValueComponent {
+				class CUnsignedIntegerComponent : public CValueComponent, public std::enable_shared_from_this<CValueComponent> {
 				  private:
 					u64 m_value;
 

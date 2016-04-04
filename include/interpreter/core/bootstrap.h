@@ -8,6 +8,7 @@
 #include "interpreter/core/coreModules.h"
 #include "interpreter/core/coreModuleType.h"
 #include "interpreter/memory/objects/component.h"
+#include "interpreter/memory/objects/values/unsignedIntegerComponent.h"
 #include "interpreter/memory/objects/values/stringComponent.h"
 #include "interpreter/memory/objects/values/boolComponent.h"
 #include "interpreter/memory/objects/primitives/abstractPrimitive.h"
@@ -37,6 +38,14 @@ namespace interpreter {
 
 			std::function<ptr(memory::objects::CComponent)(const std::vector<ptr(memory::objects::CComponent)>&, const ptr(memory::objects::CComponent)&)> prepareSymbolGetter(const std::string& portName);
 
+                        void addDefaultPort(ptr(memory::objects::values::CValueComponent) value);
+                        
+                        ptr(memory::objects::values::CUnsignedIntegerComponent) bootstrapValue(u64 value);
+                        
+                        ptr(memory::objects::values::CStringComponent) bootstrapValue(const std::string& value);
+                        
+                        ptr(memory::objects::values::CBoolComponent) bootstrapValue(bool value);
+                        
 			ptr(memory::objects::CComponent) bootstrapComponent();
 
 			ptr(memory::objects::CComponent) bootstrapPortComponent(ptr(ast_port) astPort, ptr(memory::objects::CComponent) owner);

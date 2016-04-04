@@ -13,7 +13,7 @@ namespace interpreter {
 
 			namespace values {
 
-				class CBoolComponent : public CValueComponent {
+				class CBoolComponent : public CValueComponent, public std::enable_shared_from_this<CValueComponent> {
 				  private:
 					bool m_value;
 
