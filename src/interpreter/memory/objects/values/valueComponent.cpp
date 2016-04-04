@@ -16,11 +16,11 @@ namespace interpreter {
 				}
 
 				CValueComponent::~CValueComponent() {
-                                }
+				}
 
-                                void CValueComponent::addDefaultPort(std::shared_ptr<CGeneralPort> port) {
-                                    m_ports.push_back(port);
-                                }
+				void CValueComponent::addDefaultPort(std::shared_ptr<CGeneralPort> port) {
+					m_ports.push_back(port);
+				}
 
 				ptr(CGeneralPort) CValueComponent::getDefaultPort() {
 					return m_ports.at(0);

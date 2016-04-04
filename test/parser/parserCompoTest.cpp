@@ -246,11 +246,11 @@ BOOST_AUTO_TEST_CASE(compoArchitecture) {
     TEST_DELEGATION(delegation);
     
     // Check port address
-    ptr(ast_portaddress) portAddress = cast(ast_portaddress)(delegation->getPortIdentification1());
+    ptr(ast_portaddress) portAddress = cast(ast_portaddress)(delegation->getSourcePortIdentification());
     TEST_PORT_ADDRES_IDENTIFIER(portAddress, "logger", "analyzer");
     
     // Check port address
-    portAddress = cast(ast_portaddress)(delegation->getPortIdentification2());
+    portAddress = cast(ast_portaddress)(delegation->getDestinationPortIdentification());
     TEST_PORT_ADDRES_IDENTIFIER(portAddress, "logging", "logger");
     
     // Check bind node
@@ -258,11 +258,11 @@ BOOST_AUTO_TEST_CASE(compoArchitecture) {
     TEST_DISCONNECTION(disconnection);
     
     // Check port address
-    portAddress = cast(ast_portaddress)(disconnection->getPortIdentification1());
+    portAddress = cast(ast_portaddress)(disconnection->getSourcePortIdentification());
     TEST_PORT_ADDRES_IDENTIFIER(portAddress, "logger", "analyzer");
     
     // Check port address
-    portAddress = cast(ast_portaddress)(disconnection->getPortIdentification2());
+    portAddress = cast(ast_portaddress)(disconnection->getDestinationPortIdentification());
     TEST_PORT_ADDRES_IDENTIFIER(portAddress, "logging", "logger");
     
     // Check bind node
@@ -270,11 +270,11 @@ BOOST_AUTO_TEST_CASE(compoArchitecture) {
     TEST_CONNECTION(connection);
     
     // Check port address
-    portAddress = cast(ast_portaddress)(connection->getPortIdentification1());
+    portAddress = cast(ast_portaddress)(connection->getSourcePortIdentification());
     TEST_PORT_ADDRES_DEREFERENCE(portAddress, "logger", "analyzer");
     
     // Check port address
-    portAddress = cast(ast_portaddress)(connection->getPortIdentification2());
+    portAddress = cast(ast_portaddress)(connection->getDestinationPortIdentification());
     TEST_PORT_ADDRES_DEREFERENCE(portAddress, "logging", "logger");
     
     // Check bind node
@@ -282,11 +282,11 @@ BOOST_AUTO_TEST_CASE(compoArchitecture) {
     TEST_CONNECTION(connection);
     
     // Check port address
-    portAddress = cast(ast_portaddress)(connection->getPortIdentification1());
+    portAddress = cast(ast_portaddress)(connection->getSourcePortIdentification());
     TEST_PORT_ADDRES_IDENTIFIER(portAddress, "outReqHa", "analyzer");
     
     // Check port address
-    portAddress = cast(ast_portaddress)(connection->getPortIdentification2());
+    portAddress = cast(ast_portaddress)(connection->getDestinationPortIdentification());
     BOOST_CHECK_EQUAL("reqHa", portAddress->getPortName()->getStringValue());
     ptr(ast_collectionportliteral) collectionPortLiteral = cast(ast_collectionportliteral)(portAddress->getComponent());
     BOOST_CHECK_EQUAL("handlers", collectionPortLiteral->getPortName()->getStringValue());
@@ -297,11 +297,11 @@ BOOST_AUTO_TEST_CASE(compoArchitecture) {
     TEST_CONNECTION(connection);
     
     // Check port address
-    portAddress = cast(ast_portaddress)(connection->getPortIdentification1());
+    portAddress = cast(ast_portaddress)(connection->getSourcePortIdentification());
     TEST_PORT_ADDRES_IDENTIFIER(portAddress, "logger", "analyzer");
     
     // Check port address
-    portAddress = cast(ast_portaddress)(connection->getPortIdentification2());
+    portAddress = cast(ast_portaddress)(connection->getDestinationPortIdentification());
     TEST_PORT_ADDRES_IDENTIFIER(portAddress, "logging", "logger");
     
     // Clear AST for next test
@@ -334,11 +334,11 @@ BOOST_AUTO_TEST_CASE(compoServiceCall) {
     TEST_CONNECTION(connection);
     
     // Check port address
-    ptr(ast_portaddress) portAddress = cast(ast_portaddress)(connection->getPortIdentification1());
+    ptr(ast_portaddress) portAddress = cast(ast_portaddress)(connection->getSourcePortIdentification());
     TEST_PORT_ADDRES_IDENTIFIER(portAddress, "handlers", "self");
     
     // Check port address
-    portAddress = cast(ast_portaddress)(connection->getPortIdentification2());
+    portAddress = cast(ast_portaddress)(connection->getDestinationPortIdentification());
     BOOST_CHECK_EQUAL("default", portAddress->getPortName()->getStringValue());
     
     ptr(ast_serviceinvocation) serviceInvocation = cast(ast_serviceinvocation)(portAddress->getComponent());

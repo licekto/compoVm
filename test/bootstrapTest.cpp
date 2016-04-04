@@ -19,26 +19,19 @@
 
 BOOST_AUTO_TEST_SUITE(bootstrapTest)
 
-BOOST_AUTO_TEST_CASE(basicTest) {
-    // Crete parser, core modules, interpreter and bootstrap
-    ptr(ParserWrapper) parser = new_ptr(ParserWrapper)(new_ptr(Lexer)(), new_ptr(ast::semantic::CGlobalDescriptorTable)());
-    ptr(interpreter::core::CCoreModules) coreModules = new_ptr(interpreter::core::CCoreModules)(parser);
-    ptr(interpreter::core::CInterpreter) interpreter = new_ptr(interpreter::core::CInterpreter)(parser, coreModules);
-    ptr(interpreter::core::CBootstrap) bootstrap = new_ptr(interpreter::core::CBootstrap)(coreModules, interpreter);
-    
+// Create parser, core modules, interpreter and bootstrap
+ptr(ParserWrapper) parser = new_ptr(ParserWrapper)(new_ptr(Lexer)(), new_ptr(ast::semantic::CGlobalDescriptorTable)());
+ptr(interpreter::core::CCoreModules) coreModules = new_ptr(interpreter::core::CCoreModules)(parser);
+ptr(interpreter::core::CInterpreter) interpreter = new_ptr(interpreter::core::CInterpreter)(parser, coreModules);
+ptr(interpreter::core::CBootstrap) bootstrap = new_ptr(interpreter::core::CBootstrap)(coreModules, interpreter);
+
+BOOST_AUTO_TEST_CASE(componentTest) {
     // Bootstrap
     bootstrap->boostrap();
     
     ptr(interpreter::memory::objects::CComponent) component = bootstrap->getCoreComponent(interpreter::core::coreModuleType::COMPONENT);
     
-    BOOST_CHECK(component->getPortByName("default")->isPrimitive());
-    BOOST_CHECK_EQUAL(component->getPortByName("default")->getName(), "default");
-    BOOST_CHECK_EQUAL(component->getPortByName("default")->getOwner().get(), component.get());
-    BOOST_CHECK_EQUAL(component->getPortByName("default")->getRole(), types::roleType::PROVIDES);
-    BOOST_CHECK_EQUAL(component->getPortByName("default")->getVisibility(), types::visibilityType::EXTERNAL);
-    BOOST_CHECK_EQUAL(component->getPortByName("default")->getPrimitivePort()->getName(), "default");
-    BOOST_CHECK_EQUAL(component->getPortByName("default")->getPrimitivePort()->getOwner().get(), component.get());
-    BOOST_CHECK_EQUAL(component->getPortByName("default")->getPrimitivePort()->getConnectedServicesNumber(), 5);
+    TEST_GENERAL_PRIMITIVE_PORT(component, "default", types::roleType::PROVIDES, types::visibilityType::EXTERNAL, 5);
     BOOST_CHECK(component->getPortByName("default")->getPrimitivePort()->getConnectedServiceAt(0)->isPrimitive());
     BOOST_CHECK(component->getPortByName("default")->getPrimitivePort()->getConnectedServiceAt(1)->isPrimitive());
     BOOST_CHECK(component->getPortByName("default")->getPrimitivePort()->getConnectedServiceAt(2)->isPrimitive());
@@ -89,6 +82,18 @@ BOOST_AUTO_TEST_CASE(basicTest) {
     BOOST_CHECK_EQUAL(generalService->getPrimitiveService()->getArgumentsNamesCount(), 0);
     retVal = generalService->getPrimitiveService()->invoke();
     BOOST_CHECK_EQUAL(retVal.use_count(), 0);
+
+    TEST_GENERAL_PRIMITIVE_PORT(component, "self", types::roleType::PROVIDES, types::visibilityType::INTERNAL, 5);
+    BOOST_CHECK(component->getPortByName("self")->getPrimitivePort()->getConnectedServiceAt(0)->isPrimitive());
+    BOOST_CHECK(component->getPortByName("self")->getPrimitivePort()->getConnectedServiceAt(1)->isPrimitive());
+    BOOST_CHECK(component->getPortByName("self")->getPrimitivePort()->getConnectedServiceAt(2)->isPrimitive());
+    BOOST_CHECK(component->getPortByName("self")->getPrimitivePort()->getConnectedServiceAt(3)->isPrimitive());
+    BOOST_CHECK(component->getPortByName("self")->getPrimitivePort()->getConnectedServiceAt(4)->isPrimitive());
+}
+
+BOOST_AUTO_TEST_CASE(portComponentTest) {
+    // Bootstrap
+    
 }
 
 BOOST_AUTO_TEST_SUITE_END()

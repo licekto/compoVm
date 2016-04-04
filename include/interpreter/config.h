@@ -18,6 +18,9 @@
 // Name of kernel Descriptor file
 #define KERNEL_DESCRIPTOR_PATH "../coreModules/descriptor.cp"
 
+// Name of kernel Interface file
+#define KERNEL_INTERFACE_PATH "../coreModules/interface.cp"
+
 // Name of kernel Port file
 #define KERNEL_PORT_PATH "../coreModules/port.cp"
 
@@ -41,3 +44,24 @@
 
 // Name of port that is always connected to the name of the component
 #define NAME_OF_NAMEPORT "name"
+
+// String for requirement role
+#define ROLE_REQUIREMENT "requires"
+
+// String for provision role
+#define ROLE_PROVISION "provides"
+
+// String for external visibility
+#define VISIBILITY_EXTERNAL "externally"
+
+// String for internal visibility
+#define VISIBILITY_INTERNAL "internally"
+
+// String for universal port type
+#define PORT_TYPE_UNIVERSAL "universal"
+
+// String for signatures port type
+#define PORT_TYPE_SIGNATURES "signatures"
+
+// String for named port type
+#define PORT_TYPE_NAMED "named"

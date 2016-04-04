@@ -21,8 +21,8 @@ namespace interpreter {
 
 					virtual ~CValueComponent();
 
-                                        void addDefaultPort(ptr(CGeneralPort) port);
-                                        
+					void addDefaultPort(ptr(CGeneralPort) port);
+
 					ptr(CGeneralPort) getDefaultPort();
 
 					void addPort(ptr(CGeneralPort) port) = delete;

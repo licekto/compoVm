@@ -48,6 +48,7 @@ namespace interpreter {
 			loadDescriptor(KERNEL_COMPONENT_PATH);
 			loadDescriptor(KERNEL_CONNECTION_DESCRIPTION_PATH);
 			loadDescriptor(KERNEL_DESCRIPTOR_PATH);
+			loadDescriptor(KERNEL_INTERFACE_PATH);
 			loadDescriptor(KERNEL_PORT_PATH);
 			loadDescriptor(KERNEL_PORT_DESCRIPTION_PATH);
 			loadDescriptor(KERNEL_SERVICE_PATH);

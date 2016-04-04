@@ -94,22 +94,22 @@ do { \
 #define TEST_CONNECTION(connection) \
 do { \
     BOOST_CHECK_EQUAL(types::nodeType::CONNECTION, connection->getNodeType()); \
-    BOOST_CHECK_EQUAL(types::nodeType::PORT_ADDRESS, connection->getPortIdentification1()->getNodeType()); \
-    BOOST_CHECK_EQUAL(types::nodeType::PORT_ADDRESS, connection->getPortIdentification2()->getNodeType()); \
+    BOOST_CHECK_EQUAL(types::nodeType::PORT_ADDRESS, connection->getSourcePortIdentification()->getNodeType()); \
+    BOOST_CHECK_EQUAL(types::nodeType::PORT_ADDRESS, connection->getDestinationPortIdentification()->getNodeType()); \
 } while(0)
 
 #define TEST_DISCONNECTION(disconnection) \
 do { \
     BOOST_CHECK_EQUAL(types::nodeType::DISCONNECTION, disconnection->getNodeType()); \
-    BOOST_CHECK_EQUAL(types::nodeType::PORT_ADDRESS, disconnection->getPortIdentification1()->getNodeType()); \
-    BOOST_CHECK_EQUAL(types::nodeType::PORT_ADDRESS, disconnection->getPortIdentification2()->getNodeType()); \
+    BOOST_CHECK_EQUAL(types::nodeType::PORT_ADDRESS, disconnection->getSourcePortIdentification()->getNodeType()); \
+    BOOST_CHECK_EQUAL(types::nodeType::PORT_ADDRESS, disconnection->getDestinationPortIdentification()->getNodeType()); \
 } while(0)
 
 #define TEST_DELEGATION(delegation) \
 do { \
     BOOST_CHECK_EQUAL(types::nodeType::DELEGATION, delegation->getNodeType()); \
-    BOOST_CHECK_EQUAL(types::nodeType::PORT_ADDRESS, delegation->getPortIdentification1()->getNodeType()); \
-    BOOST_CHECK_EQUAL(types::nodeType::PORT_ADDRESS, delegation->getPortIdentification2()->getNodeType()); \
+    BOOST_CHECK_EQUAL(types::nodeType::PORT_ADDRESS, delegation->getSourcePortIdentification()->getNodeType()); \
+    BOOST_CHECK_EQUAL(types::nodeType::PORT_ADDRESS, delegation->getDestinationPortIdentification()->getNodeType()); \
 } while(0)
 
 #define TEST_PORT_ADDRES_DEREFERENCE(portAddress, portName, componentName) \
@@ -124,4 +124,16 @@ do { \
     BOOST_CHECK_EQUAL(types::nodeType::PORT_ADDRESS, portAddress->getNodeType()); \
     TEST_SYMBOL(portAddress->getPortName(), portName); \
     TEST_SYMBOL(std::dynamic_pointer_cast<ast::nodes::procedural::CSymbol>(portAddress->getComponent()), componentName); \
+} while(0)
+
+#define TEST_GENERAL_PRIMITIVE_PORT(component, portName, role, visibility, connectedServices) \
+do { \
+    BOOST_CHECK(component->getPortByName(portName)->isPrimitive()); \
+    BOOST_CHECK_EQUAL(component->getPortByName(portName)->getName(), portName); \
+    BOOST_CHECK_EQUAL(component->getPortByName(portName)->getOwner().get(), component.get()); \
+    BOOST_CHECK_EQUAL(component->getPortByName(portName)->getRole(), role); \
+    BOOST_CHECK_EQUAL(component->getPortByName(portName)->getVisibility(), visibility); \
+    BOOST_CHECK_EQUAL(component->getPortByName(portName)->getPrimitivePort()->getName(), portName); \
+    BOOST_CHECK_EQUAL(component->getPortByName(portName)->getPrimitivePort()->getOwner().get(), component.get()); \
+    BOOST_CHECK_EQUAL(component->getPortByName(portName)->getPrimitivePort()->getConnectedServicesNumber(), connectedServices); \
 } while(0)

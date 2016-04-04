@@ -4,6 +4,7 @@
 #include <functional>
 
 #include "types.h"
+#include "interpreter/config.h"
 #include "interpreter/core/interpreter.h"
 #include "interpreter/core/coreModules.h"
 #include "interpreter/core/coreModuleType.h"
@@ -38,23 +39,29 @@ namespace interpreter {
 
 			std::function<ptr(memory::objects::CComponent)(const std::vector<ptr(memory::objects::CComponent)>&, const ptr(memory::objects::CComponent)&)> prepareSymbolGetter(const std::string& portName);
 
-                        void addDefaultPort(ptr(memory::objects::values::CValueComponent) value);
-                        
-                        ptr(memory::objects::values::CUnsignedIntegerComponent) bootstrapValue(u64 value);
-                        
-                        ptr(memory::objects::values::CStringComponent) bootstrapValue(const std::string& value);
-                        
-                        ptr(memory::objects::values::CBoolComponent) bootstrapValue(bool value);
-                        
+			void addDefaultPort(ptr(memory::objects::values::CValueComponent) value);
+
+			ptr(memory::objects::values::CUnsignedIntegerComponent) bootstrapValue(u64 value);
+
+			ptr(memory::objects::values::CStringComponent) bootstrapValue(const std::string& value);
+
+			ptr(memory::objects::values::CBoolComponent) bootstrapValue(bool value);
+
 			ptr(memory::objects::CComponent) bootstrapComponent();
 
 			ptr(memory::objects::CComponent) bootstrapPortComponent(ptr(ast_port) astPort, ptr(memory::objects::CComponent) owner);
+
+			ptr(memory::objects::CComponent) bootstrapCollectionPortComponent(ptr(ast_port) astPort, ptr(memory::objects::CComponent) owner);
 
 			ptr(memory::objects::CComponent) bootstrapServiceComponent(ptr(ast_service) astService, ptr(memory::objects::CComponent) context);
 
 			ptr(memory::objects::CComponent) bootstrapServiceSignatureComponent(ptr(ast_servicesignature) astSignature);
 
 			ptr(memory::objects::CComponent) bootstrapPortDescriptionComponent(ptr(ast_port) astPort);
+
+			ptr(memory::objects::CComponent) bootstrapConnectionDescriptionComponent(ptr(ast_bind) bind);
+
+			ptr(memory::objects::CComponent) bootstrapInterfaceComponent(ptr(ast_port) astPort);
 
 			ptr(memory::objects::CComponent) bootstrapDescriptorComponent();
 

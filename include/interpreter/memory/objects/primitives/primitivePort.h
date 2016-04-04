@@ -41,8 +41,8 @@ namespace interpreter {
 					void connectService(ptr(objects::CGeneralService) service);
 
 					ptr(objects::CGeneralService) getConnectedServiceAt(size_t index);
-                                        
-                                        ptr(objects::CGeneralService) getConnectedServiceByName(const std::string& name);
+
+					ptr(objects::CGeneralService) getConnectedServiceByName(const std::string& name);
 
 					void disconnect(size_t index);
 				};

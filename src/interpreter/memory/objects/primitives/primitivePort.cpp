@@ -56,28 +56,27 @@ namespace interpreter {
 					}
 					// throw
 					return nullptr;
-                                }
+				}
 
-                                std::shared_ptr<objects::CGeneralService> CPrimitivePort::getConnectedServiceByName(const std::string& name) {
-                                    auto it = std::find_if(m_connectedServices.begin(), m_connectedServices.end(), [&name](ptr(CGeneralService) service) {
-                                        if (service->isPrimitive()) {
-                                            return service->getPrimitiveService()->getName() == name;
-                                        }
-                                        else {
-                                            //return service->getService()->getPortByName("serviceSign")->
-                                            return false;
-                                        }
-                                    });
-                                    
-                                    if (it == m_connectedServices.end()) {
-					//throw exception
-                                    }
-                                    return *it;
-                                }
+				std::shared_ptr<objects::CGeneralService> CPrimitivePort::getConnectedServiceByName(const std::string& name) {
+					auto it = std::find_if(m_connectedServices.begin(), m_connectedServices.end(), [&name](ptr(CGeneralService) service) {
+						if (service->isPrimitive()) {
+							return service->getPrimitiveService()->getName() == name;
+						} else {
+							//return service->getService()->getPortByName("serviceSign")->
+							return false;
+						}
+					});
+
+					if (it == m_connectedServices.end()) {
+						//throw exception
+					}
+					return *it;
+				}
 
 				void CPrimitivePort::disconnect(size_t index) {
 					if (index < m_connectedPorts.size()) {
-						m_connectedPorts[index] = nullptr;
+						m_connectedPorts.erase(m_connectedPorts.begin()+index);
 					}
 				}
 

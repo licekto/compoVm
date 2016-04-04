@@ -44,13 +44,13 @@ namespace ast {
 				 * Port name getter
 				 * @return name symbol of port identification.
 				 */
-				std::shared_ptr<compo::CPortAddress> getPortIdentification1() const;
+				std::shared_ptr<compo::CPortAddress> getSourcePortIdentification() const;
 
 				/**
 				* Port name getter
 				                * @return name symbol of port identification.
 				                */
-				std::shared_ptr<compo::CPortAddress> getPortIdentification2() const;
+				std::shared_ptr<compo::CPortAddress> getDestinationPortIdentification() const;
 			};
 
 		}

@@ -101,8 +101,8 @@ namespace ast {
 		void CSemanticCheckVisitor::visit(ptr(ast_connection) node) {
 			checkNodeType(node, ast_nodetype::CONNECTION);
 
-			node->getPortIdentification1()->accept(shared_from_this());
-			node->getPortIdentification2()->accept(shared_from_this());
+			node->getSourcePortIdentification()->accept(shared_from_this());
+			node->getDestinationPortIdentification()->accept(shared_from_this());
 		}
 
 		void CSemanticCheckVisitor::visit(ptr(ast_constraint) node) {
@@ -120,8 +120,8 @@ namespace ast {
 		void CSemanticCheckVisitor::visit(ptr(ast_delegation) node) {
 			checkNodeType(node, ast_nodetype::DELEGATION);
 
-			node->getPortIdentification1()->accept(shared_from_this());
-			node->getPortIdentification2()->accept(shared_from_this());
+			node->getSourcePortIdentification()->accept(shared_from_this());
+			node->getDestinationPortIdentification()->accept(shared_from_this());
 		}
 
 		void CSemanticCheckVisitor::visit(ptr(ast_dereference) node) {
@@ -155,8 +155,8 @@ namespace ast {
 		void CSemanticCheckVisitor::visit(ptr(ast_disconnection) node) {
 			checkNodeType(node, ast_nodetype::DISCONNECTION);
 
-			node->getPortIdentification1()->accept(shared_from_this());
-			node->getPortIdentification2()->accept(shared_from_this());
+			node->getSourcePortIdentification()->accept(shared_from_this());
+			node->getDestinationPortIdentification()->accept(shared_from_this());
 		}
 
 		void CSemanticCheckVisitor::visit(ptr(ast_injectedport) node) {
