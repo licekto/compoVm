@@ -60,19 +60,19 @@ namespace interpreter {
 					m_parser->getDescriptorTable()->addSymbol(m_coreModules->getCoreDescriptorAt(i));
 				}
 			}
-                }
+		}
 
-                void CInterpreter::execService(const std::string& code) {
-                        std::stringstream input;
+		void CInterpreter::execService(const std::string& code) {
+			std::stringstream input;
 			std::string serviceCode = code;
 			input.str(serviceCode);
-                        
-                        m_parser->parse(serviceCode);
-                        
-                        ptr(ast_compound) body = m_parser->getServiceBody();
-                        
-                        exec(body);
-                }
+
+			m_parser->parse(serviceCode);
+
+			ptr(ast_compound) body = m_parser->getServiceBody();
+
+			exec(body);
+		}
 
 		void CInterpreter::run(ptr(ast_program) ast) {
 			checkMainContainer();

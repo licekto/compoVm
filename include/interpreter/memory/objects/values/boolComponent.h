@@ -10,25 +10,25 @@ namespace interpreter {
 	namespace memory {
 
 		namespace objects {
-                    
-                    namespace values {
 
-			class CBoolComponent : public CValueComponent {
-			  private:
-				bool m_value;
+			namespace values {
 
-			  public:
-                                CBoolComponent(bool value = true);
-                                
-                                CBoolComponent(ptr(CBoolComponent) instance);
-                              
-                                virtual ~CBoolComponent();
+				class CBoolComponent : public CValueComponent {
+				  private:
+					bool m_value;
 
-				bool getValue();
+				  public:
+					CBoolComponent(bool value = true);
 
-				void setValue(bool value);
-			};
-                    }
+					CBoolComponent(ptr(CBoolComponent) instance);
+
+					virtual ~CBoolComponent();
+
+					bool getValue();
+
+					void setValue(bool value);
+				};
+			}
 		}
 	}
 }

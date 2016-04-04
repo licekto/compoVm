@@ -35,11 +35,11 @@ namespace ast {
 
 				/**< Is atomic? */
 				bool m_collectivity;
-                                
-                                /**< Type of visibility */
+
+				/**< Type of visibility */
 				types::visibilityType m_visibilityType;
-                                
-                                types::roleType m_role;
+
+				types::roleType m_role;
 
 			  public:
 				/**
@@ -51,13 +51,13 @@ namespace ast {
 				      std::shared_ptr<nodes::procedural::CSymbol> name = nullptr,
 				      bool atomicity = false,
 				      bool collectivity = false,
-                                      types::visibilityType visibility = types::visibilityType::EXTERNAL,
-                                      types::roleType role = types::roleType::PROVIDES);
+				      types::visibilityType visibility = types::visibilityType::EXTERNAL,
+				      types::roleType role = types::roleType::PROVIDES);
 
 				/**
-                                * Accept method for visitor acceptation.
-                                * @param visitor: Pointer to abstract visitor.
-                                */
+				                * Accept method for visitor acceptation.
+				                * @param visitor: Pointer to abstract visitor.
+				                */
 				virtual void accept(std::shared_ptr<visitors::CAbstractVisitor> visitor) = 0;
 
 				/**
@@ -74,8 +74,8 @@ namespace ast {
 
 				/**
 				* Port type getter
-                                * @return types::portType
-                                */
+				                * @return types::portType
+				                */
 				types::portType getPortType() const;
 
 				/**
@@ -92,17 +92,17 @@ namespace ast {
 
 				/**
 				* Collectivity getter
-                                * @return is collective?
-                                */
+				                * @return is collective?
+				                */
 				bool isCollection() const;
-                                
-                                void setVisibility(types::visibilityType visibility);
-                                
-                                types::visibilityType getVisibility() const;
-                                
-                                void setRole(types::roleType role);
-                                
-                                types::roleType getRole() const;
+
+				void setVisibility(types::visibilityType visibility);
+
+				types::visibilityType getVisibility() const;
+
+				void setRole(types::roleType role);
+
+				types::roleType getRole() const;
 			};
 
 		}

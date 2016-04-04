@@ -56,8 +56,8 @@ namespace interpreter {
 			CInterpreter(ptr(ParserWrapper) parser = nullptr,
 			             ptr(CCoreModules) modules = nullptr);
 
-                        void execService(const std::string& code);
-                        
+			void execService(const std::string& code);
+
 			void run(ptr(ast_program) ast);
 
 			ptr(memory::objects::CComponent) createComponentFromDescriptor(ptr(ast_descriptor) descriptor);

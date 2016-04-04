@@ -10,12 +10,12 @@ namespace interpreter {
 
 				CAbstractPrimitive::CAbstractPrimitive(const std::string& name, ptr(CComponent) owner)
 					: m_name(name), m_owner(owner) {
-                                }
+				}
 
-                                CAbstractPrimitive::CAbstractPrimitive(ptr(CAbstractPrimitive) instance)
-                                : m_name(instance->m_name), m_owner(nullptr) {
-                                    
-                                }
+				CAbstractPrimitive::CAbstractPrimitive(ptr(CAbstractPrimitive) instance)
+					: m_name(instance->m_name), m_owner(nullptr) {
+
+				}
 
 				CAbstractPrimitive::~CAbstractPrimitive() {
 				}
@@ -26,11 +26,11 @@ namespace interpreter {
 
 				ptr(CComponent) CAbstractPrimitive::getOwner() {
 					return m_owner;
-                                }
+				}
 
-                                void CAbstractPrimitive::setOwner(ptr(CComponent) owner) {
-                                    m_owner = owner;
-                                }
+				void CAbstractPrimitive::setOwner(ptr(CComponent) owner) {
+					m_owner = owner;
+				}
 
 			}
 

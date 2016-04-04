@@ -42,8 +42,8 @@ class ParserWrapper {
 
 	/**< Visibility type of current requirement/provision */
 	types::visibilityType m_visibilityType;
-        
-        types::roleType m_role;
+
+	types::roleType m_role;
 
 	/**< Is current port atomic? */
 	bool m_atomicity;
@@ -255,8 +255,8 @@ class ParserWrapper {
 	 */
 	void clearContext();
 
-        void clearRefs();
-        
+	void clearRefs();
+
 	void clearAll();
 
 	/**
@@ -330,12 +330,12 @@ class ParserWrapper {
 	void clearArchitectureBody();
 
 	void addServiceBody(ptr(ast_compound) body);
-        
-        ptr(ast_compound) getServiceBody() const;
+
+	ptr(ast_compound) getServiceBody() const;
 
 	void parseServices();
-        
-        void setRole(types::roleType role);
-        
-        types::roleType getRole() const;
+
+	void setRole(types::roleType role);
+
+	types::roleType getRole() const;
 };

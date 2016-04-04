@@ -9,37 +9,37 @@ namespace interpreter {
 	namespace memory {
 
 		namespace objects {
-                    
-                    namespace values {
 
-			class CValueComponent : public CComponent, public std::enable_shared_from_this<CValueComponent> {
-			  public:
-                              
-                                CValueComponent();
-                              
-                                CValueComponent(ptr(CValueComponent) instance);
+			namespace values {
 
-                                virtual ~CValueComponent();
-                                
-                                ptr(CGeneralPort) getDefaultPort();
-                                
-				void addPort(ptr(CGeneralPort) port) = delete;
+				class CValueComponent : public CComponent, public std::enable_shared_from_this<CValueComponent> {
+				  public:
 
-				size_t getNumberOfPorts() const = delete;
+					CValueComponent();
 
-				ptr(CGeneralPort) getPortAt(size_t index) = delete;
+					CValueComponent(ptr(CValueComponent) instance);
 
-				ptr(CGeneralPort) getPortByName(const std::string& name) = delete;
-                                
-                                ptr(CComponent) getServiceByName(const std::string& name) = delete;
-                                
-                                ptr(primitives::CPrimitiveService) getPrimitiveServiceByName(const std::string& name) = delete;
+					virtual ~CValueComponent();
 
-				void addService(ptr(CComponent) service) = delete;
+					ptr(CGeneralPort) getDefaultPort();
 
-				void addPrimitiveService(ptr(primitives::CPrimitiveService) service) = delete;
-			};
-                    }
+					void addPort(ptr(CGeneralPort) port) = delete;
+
+					size_t getNumberOfPorts() const = delete;
+
+					ptr(CGeneralPort) getPortAt(size_t index) = delete;
+
+					ptr(CGeneralPort) getPortByName(const std::string& name) = delete;
+
+					ptr(CComponent) getServiceByName(const std::string& name) = delete;
+
+					ptr(primitives::CPrimitiveService) getPrimitiveServiceByName(const std::string& name) = delete;
+
+					void addService(ptr(CComponent) service) = delete;
+
+					void addPrimitiveService(ptr(primitives::CPrimitiveService) service) = delete;
+				};
+			}
 		}
 	}
 }

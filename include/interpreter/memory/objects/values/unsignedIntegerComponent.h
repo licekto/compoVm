@@ -11,26 +11,26 @@ namespace interpreter {
 	namespace memory {
 
 		namespace objects {
-                    
-                    namespace values {
 
-			class CUnsignedIntegerComponent : public CValueComponent {
-			  private:
-				u64 m_value;
+			namespace values {
 
-			  public:
-                              
-                                CUnsignedIntegerComponent(u64 value = 0);
-                                
-                                CUnsignedIntegerComponent(ptr(CUnsignedIntegerComponent) instance);
-                              
-                                virtual ~CUnsignedIntegerComponent();
+				class CUnsignedIntegerComponent : public CValueComponent {
+				  private:
+					u64 m_value;
 
-				u64 getValue();
+				  public:
 
-				void setValue(u64 value);
-			};
-                    }
+					CUnsignedIntegerComponent(u64 value = 0);
+
+					CUnsignedIntegerComponent(ptr(CUnsignedIntegerComponent) instance);
+
+					virtual ~CUnsignedIntegerComponent();
+
+					u64 getValue();
+
+					void setValue(u64 value);
+				};
+			}
 		}
 	}
 }

@@ -10,25 +10,25 @@ namespace interpreter {
 	namespace memory {
 
 		namespace objects {
-                    
-                    namespace values {
 
-			class CStringComponent : public CValueComponent {
-			  private:
-				std::string m_value;
+			namespace values {
 
-			  public:
-                                CStringComponent(const std::string& value = "");
-                                
-                                CStringComponent(ptr(CStringComponent) instance);
-                              
-                                virtual ~CStringComponent();
+				class CStringComponent : public CValueComponent {
+				  private:
+					std::string m_value;
 
-				std::string getValue();
+				  public:
+					CStringComponent(const std::string& value = "");
 
-				void setValue(const std::string& value);
-			};
-                    }
+					CStringComponent(ptr(CStringComponent) instance);
+
+					virtual ~CStringComponent();
+
+					std::string getValue();
+
+					void setValue(const std::string& value);
+				};
+			}
 		}
 	}
 }

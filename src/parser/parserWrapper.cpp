@@ -172,22 +172,22 @@ void ParserWrapper::clearContext() {
 	clearServiceSignatures();
 	clearDescriptorServices();
 	clearDescriptorConstraints();
-        clearRefs();
+	clearRefs();
 }
 
 void ParserWrapper::clearRefs() {
-        m_architecture = nullptr;
-        m_currentCompoundBody = nullptr;
-        m_currentPortName = nullptr;
-        m_serviceBody = nullptr;
+	m_architecture = nullptr;
+	m_currentCompoundBody = nullptr;
+	m_currentPortName = nullptr;
+	m_serviceBody = nullptr;
 }
 
 void ParserWrapper::clearAll() {
 	clearContext();
 	clearDescriptorTable();
-        clearPorts();
+	clearPorts();
 	clearRootNodes();
-        clearRefs();
+	clearRefs();
 }
 
 void ParserWrapper::setCurrentCompoundBody(ptr(ast_compound) body) {
@@ -243,7 +243,7 @@ void ParserWrapper::addServiceBody(std::shared_ptr<ast_compound> body) {
 }
 
 std::shared_ptr<ast_compound> ParserWrapper::getServiceBody() const {
-        return m_serviceBody;
+	return m_serviceBody;
 }
 
 void ParserWrapper::parseServices() {
@@ -268,9 +268,9 @@ void ParserWrapper::parseServices() {
 }
 
 void ParserWrapper::setRole(types::roleType role) {
-    m_role = role;
+	m_role = role;
 }
 
 types::roleType ParserWrapper::getRole() const {
-    return m_role;
+	return m_role;
 }

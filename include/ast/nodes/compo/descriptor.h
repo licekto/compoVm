@@ -24,9 +24,9 @@ namespace ast {
 			 */
 			class CDescriptor : public CAbstractDescriptorInterface, public std::enable_shared_from_this<CDescriptor> {
 			  private:
-                                std::shared_ptr<compo::CArchitecture> m_architecture;  
-                              
-                                std::vector<std::shared_ptr<CPort>> m_ports;
+				std::shared_ptr<compo::CArchitecture> m_architecture;
+
+				std::vector<std::shared_ptr<CPort>> m_ports;
 
 				/**< Vector of descriptor body nodes */
 				std::vector<std::shared_ptr<compo::CService>> m_services;
@@ -42,7 +42,7 @@ namespace ast {
 				CDescriptor(std::shared_ptr<procedural::CSymbol> name = nullptr,
 				            std::shared_ptr<procedural::CSymbol> extends = nullptr,
 				            std::shared_ptr<compo::CArchitecture> arch = nullptr,
-                                            const std::vector<std::shared_ptr<compo::CPort>>& ports = std::vector<std::shared_ptr<compo::CPort>>(0),
+				            const std::vector<std::shared_ptr<compo::CPort>>& ports = std::vector<std::shared_ptr<compo::CPort>>(0),
 				            const std::vector<std::shared_ptr<compo::CService>>& services = std::vector<std::shared_ptr<compo::CService>>(0),
 				            const std::vector<std::shared_ptr<compo::CConstraint>>& constraints = std::vector<std::shared_ptr<compo::CConstraint>>(0));
 
@@ -59,8 +59,8 @@ namespace ast {
 				size_t getServicesSize() const;
 
 				size_t getConstraintsSize() const;
-                                
-                                size_t getPortsSize() const; 
+
+				size_t getPortsSize() const;
 
 				/**
 				* Body getter
@@ -69,10 +69,10 @@ namespace ast {
 				std::shared_ptr<compo::CService> getServiceAt(size_t index) const;
 
 				std::shared_ptr<compo::CConstraint> getConstraintAt(size_t index) const;
-                                
-                                std::shared_ptr<compo::CPort> getPortAt(size_t index) const;
-                                
-                                std::shared_ptr<compo::CPort> getPortByName(const std::string& name) const;
+
+				std::shared_ptr<compo::CPort> getPortAt(size_t index) const;
+
+				std::shared_ptr<compo::CPort> getPortByName(const std::string& name) const;
 
 				std::shared_ptr<compo::CArchitecture> getArchitecture() const;
 

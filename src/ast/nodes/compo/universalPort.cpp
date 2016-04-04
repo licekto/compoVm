@@ -9,8 +9,8 @@ namespace ast {
 			CUniversalPort::CUniversalPort(std::shared_ptr<ast::nodes::procedural::CSymbol> name,
 			                               bool atomicity,
 			                               bool collectivity,
-                                                       types::visibilityType visibility,
-                                                       types::roleType role)
+			                               types::visibilityType visibility,
+			                               types::roleType role)
 				:   CNode(types::nodeType::PORT),
 				    CPort(types::portType::UNIVERSAL, name, atomicity, collectivity, visibility, role) {
 			}

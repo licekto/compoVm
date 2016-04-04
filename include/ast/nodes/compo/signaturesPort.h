@@ -27,15 +27,15 @@ namespace ast {
 				*/
 				CSignaturesPort(std::shared_ptr<procedural::CSymbol> name = nullptr,
 				                bool atomicity = false,
-                                                bool collectivity = false,
-                                                types::visibilityType visibility = types::visibilityType::EXTERNAL,
-                                                types::roleType role = types::roleType::PROVIDES,
+				                bool collectivity = false,
+				                types::visibilityType visibility = types::visibilityType::EXTERNAL,
+				                types::roleType role = types::roleType::PROVIDES,
 				                std::vector<std::shared_ptr<compo::CServiceSignature>> list = std::vector<std::shared_ptr<compo::CServiceSignature>>(0));
 
 				/**
-                                * Accept method for visitor acceptation.
-                                * @param visitor: Pointer to abstract visitor.
-                                */
+				                * Accept method for visitor acceptation.
+				                * @param visitor: Pointer to abstract visitor.
+				                */
 				virtual void accept(std::shared_ptr<visitors::CAbstractVisitor> visitor);
 
 				/**

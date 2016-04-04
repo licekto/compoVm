@@ -74,12 +74,12 @@ namespace ast {
 				if (m_signature.use_count()) {
 					return m_signature->setParam(param);
 				}
-                        }
+			}
 
-                        void CService::setBodyCode(const std::string& code) {
-                            m_code = std::make_shared<ast::nodes::procedural::CStringLiteral>(code);
-                            m_body.reset();
-                        }
+			void CService::setBodyCode(const std::string& code) {
+				m_code = std::make_shared<ast::nodes::procedural::CStringLiteral>(code);
+				m_body.reset();
+			}
 
 			std::string CService::getBodyCode() const {
 				if (m_code.use_count()) {

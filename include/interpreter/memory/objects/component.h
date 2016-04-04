@@ -21,15 +21,15 @@ namespace interpreter {
 				std::vector<ptr(CGeneralPort)> m_ports;
 
 				std::vector<ptr(CGeneralService)> m_services;
-                                
+
 			  public:
 
-                                CComponent();
-                              
-                                CComponent(ptr(CComponent) instance);
-                              
-                                virtual ~CComponent();
-                              
+				CComponent();
+
+				CComponent(ptr(CComponent) instance);
+
+				virtual ~CComponent();
+
 				void addPort(ptr(CGeneralPort) port);
 
 				size_t getNumberOfPorts() const;
@@ -37,12 +37,12 @@ namespace interpreter {
 				ptr(CGeneralPort) getPortAt(size_t index);
 
 				ptr(CGeneralPort) getPortByName(const std::string& name);
-                                
-                                ptr(CGeneralService) getServiceByName(const std::string& name);
+
+				ptr(CGeneralService) getServiceByName(const std::string& name);
 
 				void addService(ptr(CGeneralService) service);
-                                
-                                ptr(CGeneralPort) getPortOfService(const std::string& serviceName);
+
+				ptr(CGeneralPort) getPortOfService(const std::string& serviceName);
 			};
 
 		}

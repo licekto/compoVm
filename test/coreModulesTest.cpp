@@ -47,7 +47,7 @@ BOOST_AUTO_TEST_CASE(basicTest) {
     TEST_DESCRIPTOR(descriptor, "Service", "Component", 6, 1, 0);
     
     descriptor = coreModules->getCoreDescriptor("ServiceSignature");
-    TEST_DESCRIPTOR(descriptor, "ServiceSignature", "Component", 3, 0, 0);
+    TEST_DESCRIPTOR(descriptor, "ServiceSignature", "Component", 3, 5, 0);
 }
 
 BOOST_AUTO_TEST_SUITE_END()

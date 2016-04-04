@@ -26,7 +26,7 @@ namespace interpreter {
 		}
 
 		void CCoreModules::loadDescriptor(const std::string& path) {
-                        m_parser->clearAll();
+			m_parser->clearAll();
 			m_parser->parse(readFile(path));
 
 			m_coreDescriptors.push_back(cast(ast_descriptor)(m_parser->getRootNode()->getNodeAt(0)));
