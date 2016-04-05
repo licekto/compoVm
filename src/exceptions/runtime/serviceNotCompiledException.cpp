@@ -4,7 +4,7 @@ namespace exceptions {
 
 	namespace runtime {
 
-		CServiceNotCompiledException::CServiceNotCompiledException(std::string name)
+		CServiceNotCompiledException::CServiceNotCompiledException(const std::string& name)
 			: CAbstractException("Service '" + name + "' not compiled!") {
 		}
 

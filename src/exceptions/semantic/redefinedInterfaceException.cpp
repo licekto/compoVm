@@ -4,7 +4,7 @@ namespace exceptions {
 
 	namespace semantic {
 
-		CRedefinedInterfaceException::CRedefinedInterfaceException(std::string name)
+		CRedefinedInterfaceException::CRedefinedInterfaceException(const std::string& name)
 			: CAbstractRedefinedException(name, "Interface") {
 		}
 

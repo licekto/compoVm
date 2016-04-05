@@ -4,7 +4,7 @@ namespace exceptions {
 
 	namespace semantic {
 
-		CBidirectionalPortNotSupportedException::CBidirectionalPortNotSupportedException(std::string name)
+		CBidirectionalPortNotSupportedException::CBidirectionalPortNotSupportedException(const std::string& name)
 			: CAbstractException("Bidirectional ports not supported. Violated with port '" + name + "'!") {
 		}
 

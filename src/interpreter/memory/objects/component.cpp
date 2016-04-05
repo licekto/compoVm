@@ -43,7 +43,7 @@ namespace interpreter {
 				});
 
 				if (it == m_ports.end()) {
-					//throw exception
+                                        throw exceptions::runtime::CPortNotFoundException(name);
 				}
 				return *it;
 			}
@@ -88,6 +88,14 @@ namespace interpreter {
 				if (it != m_services.end()) {
                                         m_services.erase(it);
 				}
+                        }
+
+                        std::stringstream CComponent::dump() const {
+                            std::stringstream dump;
+                            
+                            dump << "ahoj";
+                            
+                            return dump;
                         }
 
 		}

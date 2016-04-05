@@ -4,7 +4,7 @@ namespace exceptions {
 
 	namespace semantic {
 
-		CUndefinedSymbolException::CUndefinedSymbolException(std::string name)
+		CUndefinedSymbolException::CUndefinedSymbolException(const std::string& name)
 			: CAbstractUndefinedException(name, "Symbol") {
 		}
 

@@ -4,7 +4,7 @@ namespace exceptions {
 
 	namespace semantic {
 
-		CUndefinedDescriptorException::CUndefinedDescriptorException(std::string name)
+		CUndefinedDescriptorException::CUndefinedDescriptorException(const std::string& name)
 			: CAbstractUndefinedException(name, "Descriptor") {
 		}
 

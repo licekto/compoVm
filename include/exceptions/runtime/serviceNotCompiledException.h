@@ -11,7 +11,7 @@ namespace exceptions {
 		class CServiceNotCompiledException : public CAbstractException {
 		  public:
 
-			CServiceNotCompiledException(std::string name);
+			CServiceNotCompiledException(const std::string& name);
 
 			virtual const char* what() const throw();
 		};

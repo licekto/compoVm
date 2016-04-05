@@ -56,6 +56,14 @@ namespace interpreter {
 			value->addDefaultPort(generalPort);
                 }
 
+                ptr(mem_component) CBootstrap::bootstrapPrologueWithComponent(ptr(ast_descriptor) descriptor,
+                                                                              std::map<std::string,ptr(mem_primitiveservice)>& servicesNames) {
+			ptr(mem_component) component = bootstrapComponent();
+			addPrimitivePorts(component, descriptor);
+			addPrimitiveServices(component, descriptor, servicesNames);
+                        return component;
+                }
+                
                 ptr(mem_component) CBootstrap::bootstrapPrologue(ptr(ast_descriptor) descriptor,
                                                                                            std::map<std::string,ptr(mem_primitiveservice)>& servicesNames) {
 			ptr(mem_component) component = new_ptr(mem_component)();
@@ -97,7 +105,6 @@ namespace interpreter {
 		CBootstrap::prepareSymbolSetter(const std::string& portName) {
 
 			return [&portName](const std::vector<ptr(mem_component)>& /*params*/, const ptr(mem_component)& context) -> ptr(mem_component) {
-
 				ptr(mem_component) paramComponent = context->getPortByName("args")->getConnectedPortAt(0)->getOwner();
 
 				context->getPortByName("args")->disconnectPortAt(0);
@@ -167,14 +174,15 @@ namespace interpreter {
 
 		ptr(mem_component) CBootstrap::bootstrapPortComponent(ptr(ast_port) astPort, ptr(mem_component) owner) {
                         std::map<std::string, ptr(mem_primitiveservice)> servicesNames;
-                        ptr(mem_component) port = bootstrapPrologue(m_coreModules->getCoreDescriptor("Port"), servicesNames);
+                        ptr(mem_component) port = bootstrapPrologueWithComponent(m_coreModules->getCoreDescriptor("Port"), servicesNames);
 
 			std::string name = astPort->getNameSymbol()->getStringValue();
-
+                        
 			ptr(mem_string) nameComponent = bootstrapStringValue(name);
-			port->getPortByName("name")->connectPort(nameComponent->getDefaultPort());
+                        ptr(mem_port) defaultPort = nameComponent->getDefaultPort();
+			port->getPortByName("name")->connectPort(defaultPort);
 			port->getPortByName("owner")->connectPort(owner->getPortByName("default"));
-
+                        
 			std::function<ptr(mem_component)(const std::vector<ptr(mem_component)>&, const ptr(mem_component)&)> callback;
 			callback = [](const std::vector<ptr(mem_component)>& /*params*/, const ptr(mem_component)& context) -> ptr(mem_component) {
 				return context->getPortByName("name")->getConnectedPortAt(0)->getOwner();
@@ -228,7 +236,7 @@ namespace interpreter {
 				context->getPortByName("connectedPorts")->disconnectPortAt(0);
 				return nullptr;
 			};
-			servicesNames.at("disconnect")->setCallback(callback);
+			servicesNames.at("disconnectPort")->setCallback(callback);
 
                         bootstrapEpilogue(port, servicesNames);
 			return port;
@@ -238,7 +246,7 @@ namespace interpreter {
                         ptr(mem_component) port = bootstrapPortComponent(astPort, owner);
                         
                         port->removeServiceByName("invoke");
-                        port->removeServiceByName("disconnect");
+                        port->removeServiceByName("disconnectPort");
                         
                         std::function<ptr(mem_component)(const std::vector<ptr(mem_component)>&, const ptr(mem_component)&)> callback;
 			callback = [](const std::vector<ptr(mem_component)>& /*params*/, const ptr(mem_component)& context) -> ptr(mem_component) {
@@ -267,7 +275,7 @@ namespace interpreter {
 				context->getPortByName("connectedPorts")->disconnectPortAt(val);
 				return nullptr;
 			};
-                        srv = new_ptr(mem_service)(new_ptr(mem_primitiveservice)("disconnect", port, callback));
+                        srv = new_ptr(mem_service)(new_ptr(mem_primitiveservice)("disconnectPort", port, callback));
                         port->addService(srv);
                         port->getPortByName("default")->getPrimitivePort()->connectService(srv);
                         port->getPortByName("self")->getPrimitivePort()->connectService(srv);
@@ -308,7 +316,7 @@ namespace interpreter {
 
 		ptr(mem_component) CBootstrap::bootstrapServiceSignatureComponent(ptr(ast_servicesignature) astSignature) {
                         std::map<std::string, ptr(mem_primitiveservice)> servicesNames;
-                        ptr(mem_component) serviceSignature = bootstrapPrologue(m_coreModules->getCoreDescriptor("ServiceSignature"), servicesNames);
+                        ptr(mem_component) serviceSignature = bootstrapPrologueWithComponent(m_coreModules->getCoreDescriptor("ServiceSignature"), servicesNames);
 
 			serviceSignature->getPortByName("name")->
                             connectPort(cast(mem_string)(bootstrapStringValue(astSignature->getNameSymbol()->getStringValue()))->getDefaultPort());
@@ -365,7 +373,7 @@ namespace interpreter {
 
 		ptr(mem_component) CBootstrap::bootstrapPortDescriptionComponent(ptr(ast_port) astPort) {
                         std::map<std::string, ptr(mem_primitiveservice)> servicesNames;
-                        ptr(mem_component) portDescription = bootstrapPrologue(m_coreModules->getCoreDescriptor("PortDescription"), servicesNames);
+                        ptr(mem_component) portDescription = bootstrapPrologueWithComponent(m_coreModules->getCoreDescriptor("PortDescription"), servicesNames);
 
 			portDescription->getPortByName("name")->connectPort(bootstrapStringValue(astPort->getNameSymbol()->getStringValue())->getDefaultPort());
 			std::string role = astPort->getRole() == types::roleType::PROVIDES ? ROLE_PROVISION : ROLE_REQUIREMENT;
@@ -410,7 +418,7 @@ namespace interpreter {
 
 		ptr(mem_component) CBootstrap::bootstrapConnectionDescriptionComponent(ptr(ast_bind) bind) {
                         std::map<std::string, ptr(mem_primitiveservice)> servicesNames;
-                        ptr(mem_component) connection = bootstrapPrologue(m_coreModules->getCoreDescriptor("ConnectionDescription"), servicesNames);
+                        ptr(mem_component) connection = bootstrapPrologueWithComponent(m_coreModules->getCoreDescriptor("ConnectionDescription"), servicesNames);
 
 			std::string sourceComponentName = cast(ast_symbol)(bind->getSourcePortIdentification()->getComponent())->getStringValue();
 			connection->getPortByName("sourceComponent")->connectPort(bootstrapStringValue(sourceComponentName)->getDefaultPort());
@@ -458,7 +466,7 @@ namespace interpreter {
 
 		ptr(mem_component) CBootstrap::bootstrapInterfaceComponent(ptr(ast_port) astPort) {
                         std::map<std::string, ptr(mem_primitiveservice)> servicesNames;
-                        ptr(mem_component) interface = bootstrapPrologue(m_coreModules->getCoreDescriptor("Interface"), servicesNames);
+                        ptr(mem_component) interface = bootstrapPrologueWithComponent(m_coreModules->getCoreDescriptor("Interface"), servicesNames);
 
 			switch (astPort->getPortType()) {
 			case types::portType::EXPLICIT_LIST : {

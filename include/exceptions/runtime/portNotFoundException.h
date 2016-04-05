@@ -6,11 +6,12 @@
 
 namespace exceptions {
 
-	namespace semantic {
+	namespace runtime {
 
-		class CBidirectionalPortNotSupportedException : public CAbstractException {
+		class CPortNotFoundException : public CAbstractException {
 		  public:
-			CBidirectionalPortNotSupportedException(const std::string& name);
+
+			CPortNotFoundException(const std::string& name);
 
 			virtual const char* what() const throw();
 		};

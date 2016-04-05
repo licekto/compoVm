@@ -4,7 +4,7 @@ namespace exceptions {
 
 	namespace semantic {
 
-		CUnsupportedFeatureException::CUnsupportedFeatureException(std::string feature)
+		CUnsupportedFeatureException::CUnsupportedFeatureException(const std::string& feature)
 			: CAbstractException("Unsupported feature '" + feature + "' exception") {
 		}
 

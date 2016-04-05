@@ -4,7 +4,7 @@ namespace exceptions {
 
 	namespace runtime {
 
-		CCoreModuleNotFoundException::CCoreModuleNotFoundException(std::string module)
+		CCoreModuleNotFoundException::CCoreModuleNotFoundException(const std::string& module)
 			: CAbstractException("'" + module + "' kernel module not found!") {
 		}
 

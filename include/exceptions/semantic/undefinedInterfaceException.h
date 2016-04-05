@@ -9,7 +9,7 @@ namespace exceptions {
 
 		class CUndefinedInterfaceException : public CAbstractUndefinedException {
 		  public:
-			CUndefinedInterfaceException(std::string name);
+			CUndefinedInterfaceException(const std::string& name);
 
 			virtual const char* what() const throw();
 		};

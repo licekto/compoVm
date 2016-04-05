@@ -9,7 +9,7 @@ namespace exceptions {
 	  protected:
 		std::string m_msg;
 	  public:
-		CAbstractException(std::string msg);
+		CAbstractException(const std::string& msg);
 
 		virtual const char* what() const throw() = 0;
 	};

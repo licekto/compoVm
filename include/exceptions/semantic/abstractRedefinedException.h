@@ -10,7 +10,7 @@ namespace exceptions {
 
 		class CAbstractRedefinedException : public CAbstractException {
 		  public:
-			CAbstractRedefinedException(std::string name, std::string element);
+			CAbstractRedefinedException(const std::string& name,const  std::string& element);
 
 			virtual const char* what() const throw() = 0;
 		};

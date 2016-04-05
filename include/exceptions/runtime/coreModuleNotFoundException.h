@@ -11,7 +11,7 @@ namespace exceptions {
 		class CCoreModuleNotFoundException : public CAbstractException {
 		  public:
 
-			CCoreModuleNotFoundException(std::string module);
+			CCoreModuleNotFoundException(const std::string& module);
 
 			virtual const char* what() const throw();
 		};

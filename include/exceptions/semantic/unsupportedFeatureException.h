@@ -10,7 +10,7 @@ namespace exceptions {
 
 		class CUnsupportedFeatureException : public CAbstractException {
 		  public:
-			CUnsupportedFeatureException(std::string feature);
+			CUnsupportedFeatureException(const std::string& feature);
 
 			virtual const char* what() const throw();
 		};

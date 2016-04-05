@@ -9,7 +9,7 @@ namespace exceptions {
 
 		class CRedefinedPortException : public CAbstractRedefinedException {
 		  public:
-			CRedefinedPortException(std::string name);
+			CRedefinedPortException(const std::string& name);
 
 			virtual const char* what() const throw();
 		};

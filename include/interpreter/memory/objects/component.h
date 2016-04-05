@@ -2,12 +2,15 @@
 
 #include <vector>
 #include <algorithm>
+#include <iostream>
 
 #include "definitions/allDefinitions.h"
 #include "interpreter/memory/objects/generalService.h"
 #include "interpreter/memory/objects/generalPort.h"
 #include "interpreter/memory/objects/primitives/primitivePort.h"
 #include "interpreter/config.h"
+
+#include "exceptions/runtime/portNotFoundException.h"
 
 namespace interpreter {
 
@@ -45,6 +48,8 @@ namespace interpreter {
 				ptr(CGeneralPort) getPortOfService(const std::string& serviceName);
                                 
                                 void removeServiceByName(const std::string& name);
+                                
+                                std::stringstream dump() const;
 			};
 
 		}

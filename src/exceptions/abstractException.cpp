@@ -2,7 +2,7 @@
 
 namespace exceptions {
 
-	CAbstractException::CAbstractException(std::string msg)
+	CAbstractException::CAbstractException(const std::string& msg)
 		: m_msg(msg) {
 	}
 

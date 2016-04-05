@@ -3,6 +3,9 @@
 #include <map>
 #include <functional>
 
+#include <boost/log/trivial.hpp>
+#include <boost/log/sources/basic_logger.hpp>
+
 #include "definitions/memoryObjectsDefinitions.h"
 
 #include "types.h"
@@ -40,6 +43,8 @@ namespace interpreter {
 			std::function<ptr(mem_component)(const std::vector<ptr(mem_component)>&, const ptr(mem_component)&)> prepareSymbolGetter(const std::string& portName);
 
 			void addDefaultPort(ptr(mem_value) value);
+                        
+                        ptr(mem_component) bootstrapPrologueWithComponent(ptr(ast_descriptor) descriptor, std::map<std::string, ptr(mem_primitiveservice)>& servicesNames);
                         
                         ptr(mem_component) bootstrapPrologue(ptr(ast_descriptor) descriptor, std::map<std::string, ptr(mem_primitiveservice)>& servicesNames);
                         

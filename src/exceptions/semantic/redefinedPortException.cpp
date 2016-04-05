@@ -4,7 +4,7 @@ namespace exceptions {
 
 	namespace semantic {
 
-		CRedefinedPortException::CRedefinedPortException(std::string name)
+		CRedefinedPortException::CRedefinedPortException(const std::string& name)
 			: CAbstractRedefinedException(name, "Port") {
 		}
 

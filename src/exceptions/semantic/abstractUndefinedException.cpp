@@ -4,7 +4,7 @@ namespace exceptions {
 
 	namespace semantic {
 
-		CAbstractUndefinedException::CAbstractUndefinedException(std::string name, std::string element)
+		CAbstractUndefinedException::CAbstractUndefinedException(const std::string& name, const std::string& element)
 			: CAbstractException(element + " '" + name + "' undefined exception!") {
 		}
 	}
