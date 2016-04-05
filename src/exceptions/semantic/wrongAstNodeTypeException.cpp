@@ -4,7 +4,7 @@ namespace exceptions {
 
 	namespace semantic {
 
-		CWrongAstNodeTypeException::CWrongAstNodeTypeException(ast_nodetype expected, ast_nodetype actual)
+		CWrongAstNodeTypeException::CWrongAstNodeTypeException(type_node expected, type_node actual)
 			: CAbstractException("Wrong type of AST node. Actual: '" + types::typeName(expected) + "', expected: '" + types::typeName(actual) + "'.") {
 		}
 

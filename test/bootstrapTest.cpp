@@ -7,6 +7,8 @@
 #include "definitions/allDefinitions.h"
 #include "testDefinitions.h"
 #include "types.h"
+#include "definitions/interpreterDefinitions.h"
+#include "definitions/memoryObjectsDefinitions.h"
 
 #include "parser/lexer.h"
 #include "parser/parserWrapper.h"
@@ -21,20 +23,33 @@ BOOST_AUTO_TEST_SUITE(bootstrapTest)
 
 // Create parser, core modules, interpreter and bootstrap
 ptr(ParserWrapper) parser = new_ptr(ParserWrapper)(new_ptr(Lexer)(), new_ptr(ast::semantic::CGlobalDescriptorTable)());
-ptr(interpreter::core::CCoreModules) coreModules = new_ptr(interpreter::core::CCoreModules)(parser);
-ptr(interpreter::core::CInterpreter) interpreter = new_ptr(interpreter::core::CInterpreter)(parser, coreModules);
-ptr(interpreter::core::CBootstrap) bootstrap = new_ptr(interpreter::core::CBootstrap)(coreModules, interpreter);
+ptr(core_modules) coreModules = new_ptr(core_modules)(parser);
+ptr(core_interpreter) interpreter = new_ptr(core_interpreter)(parser, coreModules);
+ptr(core_bootstrap) bootstrap = new_ptr(core_bootstrap)(coreModules, interpreter);
 
 BOOST_AUTO_TEST_CASE(componentTest) {
     // Bootstrap
-    ptr(interpreter::memory::objects::CComponent) component = bootstrap->bootstrapComponent();
+    ptr(mem_component) component = bootstrap->bootstrapComponent();
     
     TEST_COMPONENT(component);
 }
 
 BOOST_AUTO_TEST_CASE(portComponentTest) {
-    // Bootstrap
     
+    ptr(ast_symbol) portName = new_ptr(ast_symbol)("testPort");
+    bool atomicity = false;
+    bool collectivity = false;
+    type_visibility visibility = type_visibility::EXTERNAL;
+    type_role role = type_role::PROVIDES;
+    ptr(ast_symbol) componentName = new_ptr(ast_symbol)("testComponent");
+            
+    ptr(ast_namedport) astPort = new_ptr(ast_namedport)(portName, atomicity, collectivity, visibility, role, componentName);
+    
+    ptr(mem_component) someComponent = new_ptr(mem_component)();
+    
+    //ptr(interpreter::memory::objects::CComponent) portComponent = bootstrap->bootstrapPortComponent(astPort, someComponent);
+    
+    //TEST_COMPONENT(portComponent);
 }
 
 BOOST_AUTO_TEST_SUITE_END()

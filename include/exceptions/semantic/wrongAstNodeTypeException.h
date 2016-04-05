@@ -2,7 +2,7 @@
 
 #include <string>
 #include "exceptions/abstractException.h"
-#include "definitions/astTypesDefinitions.h"
+#include "definitions/typesDefinitions.h"
 
 namespace exceptions {
 
@@ -10,7 +10,7 @@ namespace exceptions {
 
 		class CWrongAstNodeTypeException : public CAbstractException {
 		  public:
-			CWrongAstNodeTypeException(ast_nodetype actual, ast_nodetype expected);
+			CWrongAstNodeTypeException(type_node actual, type_node expected);
 
 			virtual const char* what() const throw();
 		};

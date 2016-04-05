@@ -4,7 +4,7 @@ namespace exceptions {
 
 	namespace semantic {
 
-		CWrongBaseTypeException::CWrongBaseTypeException(ast_nodetype expected, ast_nodetype actual)
+		CWrongBaseTypeException::CWrongBaseTypeException(type_node expected, type_node actual)
 			: CAbstractException("Extension of wrong base element. Actual: '" + types::typeName(expected) + "', expected: '" + types::typeName(actual) + "'.") {
 		}
 

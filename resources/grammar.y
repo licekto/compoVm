@@ -442,11 +442,11 @@ visibility
 role
                 :   PROVIDES
 		    {
-                        parser->setRole(ast_roletype::PROVIDES);
+                        parser->setRole(type_role::PROVIDES);
 		    }
                 |   REQUIRES
                     {
-                        parser->setRole(ast_roletype::REQUIRES);
+                        parser->setRole(type_role::REQUIRES);
 		    }
                 ;
 

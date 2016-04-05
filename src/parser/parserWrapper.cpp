@@ -26,9 +26,9 @@ ptr(Lexer) ParserWrapper::getLexer() const {
 void ParserWrapper::addSymbolToDescriptorTable(ptr(ast_descriptorinterface) node) {
 	if (m_descriptorTable.use_count()) {
 		if (m_descriptorTable->symbolFound(node->getNameSymbol()->getStringValue())) {
-			if (node->getNodeType() == ast_nodetype::DESCRIPTOR) {
+			if (node->getNodeType() == type_node::DESCRIPTOR) {
 				throw exceptions::semantic::CRedefinedDescriptorException(node->getNameSymbol()->getStringValue());
-			} else if (node->getNodeType() == ast_nodetype::INTERFACE) {
+			} else if (node->getNodeType() == type_node::INTERFACE) {
 				throw exceptions::semantic::CRedefinedInterfaceException(node->getNameSymbol()->getStringValue());
 			}
 
@@ -248,7 +248,7 @@ std::shared_ptr<ast_compound> ParserWrapper::getServiceBody() const {
 
 void ParserWrapper::parseServices() {
 	for (size_t i = 0; i < m_root->getNodesSize(); ++i) {
-		if (m_root->getNodeAt(i)->getNodeType() == ast_nodetype::DESCRIPTOR) {
+		if (m_root->getNodeAt(i)->getNodeType() == type_node::DESCRIPTOR) {
 			ptr(ast_descriptor) descriptor = cast(ast_descriptor)(m_root->getNodeAt(i));
 			for (size_t j = 0; j < descriptor->getServicesSize(); ++j) {
 				ptr(ast_service) service = descriptor->getServiceAt(j);

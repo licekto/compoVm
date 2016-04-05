@@ -36,7 +36,7 @@ namespace ast {
 
 			void checkDescriptorInterface(ptr(ast_descriptorinterface) node);
 
-			void checkNodeType(ptr(ast_node) node, ast_nodetype type);
+			void checkNodeType(ptr(ast_node) node, type_node type);
 		  public:
 
 			CSemanticCheckVisitor(ptr(ast::semantic::CGlobalDescriptorTable) descriptorTable = nullptr);

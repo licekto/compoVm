@@ -38,11 +38,11 @@ namespace interpreter {
 
 		void CInterpreter::exec(ptr(ast_node) node) {
 			switch (node->getNodeType()) {
-			case ast_nodetype::PROGRAM : {
+			case type_node::PROGRAM : {
 				execProgram(cast(ast_program)(node));
 				break;
 			}
-			case ast_nodetype::DESCRIPTOR : {
+			case type_node::DESCRIPTOR : {
 				execDescriptor(cast(ast_descriptor)(node));
 				break;
 			}

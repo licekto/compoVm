@@ -2,5 +2,5 @@
 
 #include "astCompoDefinitions.h"
 #include "astProceduralDefinitions.h"
-#include "astTypesDefinitions.h"
+#include "typesDefinitions.h"
 #include "memoryDefinitions.h"

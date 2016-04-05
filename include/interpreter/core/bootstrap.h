@@ -3,6 +3,8 @@
 #include <map>
 #include <functional>
 
+#include "definitions/memoryObjectsDefinitions.h"
+
 #include "types.h"
 #include "interpreter/config.h"
 #include "interpreter/core/interpreter.h"
@@ -28,47 +30,47 @@ namespace interpreter {
 
 			ptr(core::CInterpreter) m_interpreter;
 
-			void addPrimitiveServices(ptr(memory::objects::CComponent) component, ptr(ast_descriptor) descriptor,
-			                          std::map<std::string, ptr(memory::objects::primitives::CPrimitiveService)>& servicesNames);
+			void addPrimitiveServices(ptr(mem_component) component, ptr(ast_descriptor) descriptor,
+			                          std::map<std::string, ptr(mem_primitiveservice)>& servicesNames);
 
-			void addPrimitivePorts(ptr(memory::objects::CComponent) component, ptr(ast_descriptor) descriptor);
+			void addPrimitivePorts(ptr(mem_component) component, ptr(ast_descriptor) descriptor);
 
-			std::function<ptr(memory::objects::CComponent)(const std::vector<ptr(memory::objects::CComponent)>&, const ptr(memory::objects::CComponent)&)> prepareSymbolSetter(const std::string& portName);
+			std::function<ptr(mem_component)(const std::vector<ptr(mem_component)>&, const ptr(mem_component)&)> prepareSymbolSetter(const std::string& portName);
 
-			std::function<ptr(memory::objects::CComponent)(const std::vector<ptr(memory::objects::CComponent)>&, const ptr(memory::objects::CComponent)&)> prepareSymbolGetter(const std::string& portName);
+			std::function<ptr(mem_component)(const std::vector<ptr(mem_component)>&, const ptr(mem_component)&)> prepareSymbolGetter(const std::string& portName);
 
-			void addDefaultPort(ptr(memory::objects::values::CValueComponent) value);
+			void addDefaultPort(ptr(mem_value) value);
                         
-                        ptr(memory::objects::CComponent) bootstrapPrologue(ptr(ast_descriptor) descriptor, std::map<std::string, ptr(memory::objects::primitives::CPrimitiveService)>& servicesNames);
+                        ptr(mem_component) bootstrapPrologue(ptr(ast_descriptor) descriptor, std::map<std::string, ptr(mem_primitiveservice)>& servicesNames);
                         
-                        void bootstrapEpilogue(ptr(memory::objects::CComponent) component, std::map<std::string,std::shared_ptr<memory::objects::primitives::CPrimitiveService> >& servicesNames);
+                        void bootstrapEpilogue(ptr(mem_component) component, std::map<std::string,std::shared_ptr<mem_primitiveservice> >& servicesNames);
 
                 public:
                         CBootstrap(ptr(core::CCoreModules) coreModules = nullptr, const ptr(core::CInterpreter)& interpreter = nullptr);
                         
-			ptr(memory::objects::values::CUnsignedIntegerComponent) bootstrapUIntValue(u64 value);
+			ptr(mem_uint) bootstrapUIntValue(u64 value);
 
-			ptr(memory::objects::values::CStringComponent) bootstrapStringValue(const std::string& value);
+			ptr(mem_string) bootstrapStringValue(const std::string& value);
 
-			ptr(memory::objects::values::CBoolComponent) bootstrapBoolValue(bool value);
+			ptr(mem_bool) bootstrapBoolValue(bool value);
                         
-			ptr(memory::objects::CComponent) bootstrapComponent();
+			ptr(mem_component) bootstrapComponent();
 
-			ptr(memory::objects::CComponent) bootstrapPortComponent(ptr(ast_port) astPort, ptr(memory::objects::CComponent) owner);
+			ptr(mem_component) bootstrapPortComponent(ptr(ast_port) astPort, ptr(mem_component) owner);
 
-			ptr(memory::objects::CComponent) bootstrapCollectionPortComponent(ptr(ast_port) astPort, ptr(memory::objects::CComponent) owner);
+			ptr(mem_component) bootstrapCollectionPortComponent(ptr(ast_port) astPort, ptr(mem_component) owner);
 
-			ptr(memory::objects::CComponent) bootstrapServiceComponent(ptr(ast_service) astService, ptr(memory::objects::CComponent) context);
+			ptr(mem_component) bootstrapServiceComponent(ptr(ast_service) astService, ptr(mem_component) context);
 
-			ptr(memory::objects::CComponent) bootstrapServiceSignatureComponent(ptr(ast_servicesignature) astSignature);
+			ptr(mem_component) bootstrapServiceSignatureComponent(ptr(ast_servicesignature) astSignature);
 
-			ptr(memory::objects::CComponent) bootstrapPortDescriptionComponent(ptr(ast_port) astPort);
+			ptr(mem_component) bootstrapPortDescriptionComponent(ptr(ast_port) astPort);
 
-			ptr(memory::objects::CComponent) bootstrapConnectionDescriptionComponent(ptr(ast_bind) bind);
+			ptr(mem_component) bootstrapConnectionDescriptionComponent(ptr(ast_bind) bind);
 
-			ptr(memory::objects::CComponent) bootstrapInterfaceComponent(ptr(ast_port) astPort);
+			ptr(mem_component) bootstrapInterfaceComponent(ptr(ast_port) astPort);
 
-			ptr(memory::objects::CComponent) bootstrapDescriptorComponent();
+			ptr(mem_component) bootstrapDescriptorComponent();
 		};
 	}
 }
