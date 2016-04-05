@@ -27,9 +27,7 @@ ptr(interpreter::core::CBootstrap) bootstrap = new_ptr(interpreter::core::CBoots
 
 BOOST_AUTO_TEST_CASE(componentTest) {
     // Bootstrap
-    bootstrap->boostrap();
-    
-    ptr(interpreter::memory::objects::CComponent) component = bootstrap->getCoreComponent(interpreter::core::coreModuleType::COMPONENT);
+    ptr(interpreter::memory::objects::CComponent) component = bootstrap->bootstrapComponent();
     
     TEST_COMPONENT(component);
 }

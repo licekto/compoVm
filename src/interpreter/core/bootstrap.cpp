@@ -8,6 +8,7 @@ namespace interpreter {
 		                       const ptr(core::CInterpreter)& interpreter)
 			: m_coreModules(coreModules),
 			  m_interpreter(interpreter) {
+                        m_coreModules->loadCoreModules();
 		}
 
 		void CBootstrap::addPrimitiveServices(std::shared_ptr<memory::objects::CComponent> component, std::shared_ptr<ast_descriptor> descriptor,
@@ -539,17 +540,6 @@ namespace interpreter {
                         
                         
 			return component;
-		}
-
-		void CBootstrap::boostrap() {
-			if (m_coreModules.use_count()) {
-				m_coreModules->loadCoreModules();
-				m_coreComponentsMap[core::coreModuleType::COMPONENT] = bootstrapComponent();
-			}
-		}
-
-		ptr(memory::objects::CComponent) CBootstrap::getCoreComponent(core::coreModuleType type) {
-			return m_coreComponentsMap[type];
 		}
 
 	}

@@ -28,8 +28,6 @@ namespace interpreter {
 
 			ptr(core::CInterpreter) m_interpreter;
 
-			std::map<core::coreModuleType, ptr(memory::objects::CComponent)> m_coreComponentsMap;
-
 			void addPrimitiveServices(ptr(memory::objects::CComponent) component, ptr(ast_descriptor) descriptor,
 			                          std::map<std::string, ptr(memory::objects::primitives::CPrimitiveService)>& servicesNames);
 
@@ -46,6 +44,7 @@ namespace interpreter {
                         void bootstrapEpilogue(ptr(memory::objects::CComponent) component, std::map<std::string,std::shared_ptr<memory::objects::primitives::CPrimitiveService> >& servicesNames);
 
                 public:
+                        CBootstrap(ptr(core::CCoreModules) coreModules = nullptr, const ptr(core::CInterpreter)& interpreter = nullptr);
                         
 			ptr(memory::objects::values::CUnsignedIntegerComponent) bootstrapUIntValue(u64 value);
 
@@ -70,12 +69,6 @@ namespace interpreter {
 			ptr(memory::objects::CComponent) bootstrapInterfaceComponent(ptr(ast_port) astPort);
 
 			ptr(memory::objects::CComponent) bootstrapDescriptorComponent();
-
-			CBootstrap(ptr(core::CCoreModules) coreModules = nullptr, const ptr(core::CInterpreter)& interpreter = nullptr);
-
-			void boostrap();
-
-			ptr(memory::objects::CComponent) getCoreComponent(core::coreModuleType type);
 		};
 	}
 }
