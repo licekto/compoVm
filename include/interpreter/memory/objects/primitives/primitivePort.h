@@ -35,6 +35,8 @@ namespace interpreter {
 					void connectPort(ptr(objects::CGeneralPort) component);
 
 					ptr(objects::CGeneralPort) getConnectedPortAt(size_t index);
+                                        
+                                        void disconnectPortArt(size_t index);
 
 					size_t getConnectedServicesNumber() const;
 
@@ -43,8 +45,6 @@ namespace interpreter {
 					ptr(objects::CGeneralService) getConnectedServiceAt(size_t index);
 
 					ptr(objects::CGeneralService) getConnectedServiceByName(const std::string& name);
-
-					void disconnect(size_t index);
 				};
 
 			}

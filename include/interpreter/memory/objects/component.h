@@ -43,6 +43,8 @@ namespace interpreter {
 				void addService(ptr(CGeneralService) service);
 
 				ptr(CGeneralPort) getPortOfService(const std::string& serviceName);
+                                
+                                void removeServiceByName(const std::string& name);
 			};
 
 		}

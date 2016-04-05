@@ -78,7 +78,17 @@ namespace interpreter {
 					}
 				}
 				return nullptr;
-			}
+                        }
+
+                        void CComponent::removeServiceByName(const std::string& name) {
+                                auto it = std::find_if(m_services.begin(), m_services.end(), [&name](ptr(CGeneralService) service) {
+					return service->getName() == name;
+				});
+
+				if (it != m_services.end()) {
+                                        m_services.erase(it);
+				}
+                        }
 
 		}
 	}

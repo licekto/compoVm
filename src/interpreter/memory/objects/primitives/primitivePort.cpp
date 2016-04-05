@@ -74,7 +74,7 @@ namespace interpreter {
 					return *it;
 				}
 
-				void CPrimitivePort::disconnect(size_t index) {
+				void CPrimitivePort::disconnectPortArt(size_t index) {
 					if (index < m_connectedPorts.size()) {
 						m_connectedPorts.erase(m_connectedPorts.begin()+index);
 					}

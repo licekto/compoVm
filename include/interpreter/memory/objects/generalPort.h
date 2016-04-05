@@ -53,6 +53,15 @@ namespace interpreter {
 				std::string getName() const;
 
 				ptr(CComponent) getOwner();
+                                
+                                
+                                size_t getConnectedPortsNumber() const;
+
+                                ptr(objects::CGeneralPort) getConnectedPortAt(size_t index);
+                                
+                                void connectPort(ptr(objects::CGeneralPort) port);
+
+                                void disconnectPortAt(size_t index);
 			};
 		}
 	}

@@ -133,8 +133,6 @@ do { \
     BOOST_CHECK_EQUAL(component->getPortByName(portName)->getOwner().get(), component.get()); \
     BOOST_CHECK_EQUAL(component->getPortByName(portName)->getRole(), role); \
     BOOST_CHECK_EQUAL(component->getPortByName(portName)->getVisibility(), visibility); \
-    BOOST_CHECK_EQUAL(component->getPortByName(portName)->getPrimitivePort()->getName(), portName); \
-    BOOST_CHECK_EQUAL(component->getPortByName(portName)->getPrimitivePort()->getOwner().get(), component.get()); \
     BOOST_CHECK_EQUAL(component->getPortByName(portName)->getPrimitivePort()->getConnectedServicesNumber(), connectedServices); \
 } while(0)
 
@@ -155,9 +153,9 @@ do { \
 do { \
     TEST_GENERAL_PRIMITIVE_PORT(component, "default", types::roleType::PROVIDES, types::visibilityType::EXTERNAL, 5); \
     TEST_GENERAL_PRIMITIVE_SERVICE(component, "default", "getPorts", 0, false); \
-    component->getPortByName("args")->getPrimitivePort()->connectPort(bootstrap->bootstrapStringValue("default")->getDefaultPort()); \
+    component->getPortByName("args")->connectPort(bootstrap->bootstrapStringValue("default")->getDefaultPort()); \
     TEST_GENERAL_PRIMITIVE_SERVICE(component, "default", "getPortNamed", 1, false); \
-    BOOST_CHECK_EQUAL(component->getPortByName("args")->getPrimitivePort()->getConnectedPortsNumber(), 0); \
+    BOOST_CHECK_EQUAL(component->getPortByName("args")->getConnectedPortsNumber(), 0); \
     TEST_GENERAL_PRIMITIVE_SERVICE(component, "default", "getDescriptor", 0, false); \
     TEST_GENERAL_PRIMITIVE_SERVICE(component, "default", "getIdentityHash", 0, false); \
     TEST_GENERAL_PRIMITIVE_SERVICE(component, "default", "getOwner", 0, true); \

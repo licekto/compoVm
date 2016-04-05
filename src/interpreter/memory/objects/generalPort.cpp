@@ -58,7 +58,43 @@ namespace interpreter {
 				} else {
 					return m_port->getPortByName("owner")->getPrimitivePort()->getConnectedPortAt(0)->getOwner();
 				}
-			}
+                        }
+
+                        size_t CGeneralPort::getConnectedPortsNumber() const {
+                            if (m_primitive) {
+                                return m_primitivePort->getConnectedPortsNumber();
+                            }
+                            else {
+                                return m_port->getPortByName("connectedPorts")->getConnectedPortsNumber();
+                            }
+                        }
+
+                        std::shared_ptr<objects::CGeneralPort> CGeneralPort::getConnectedPortAt(size_t index) {
+                            if (m_primitive) {
+                                return m_primitivePort->getConnectedPortAt(index);
+                            }
+                            else {
+                                return m_port->getPortByName("connectedPorts")->getConnectedPortAt(index);
+                            }
+                        }
+
+                        void CGeneralPort::connectPort(std::shared_ptr<objects::CGeneralPort> port) {
+                            if (m_primitive) {
+                                return m_primitivePort->connectPort(port);
+                            }
+                            else {
+                                return m_port->getPortByName("connectedPorts")->connectPort(port);
+                            }
+                        }
+
+                        void CGeneralPort::disconnectPortAt(size_t index) {
+                            if (m_primitive) {
+                                return m_primitivePort->disconnectPortArt(index);
+                            }
+                            else {
+                                return m_port->getPortByName("connectedPorts")->disconnectPortAt(index);
+                            }
+                        }
 
 		}
 	}
