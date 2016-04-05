@@ -54,7 +54,26 @@ namespace interpreter {
 			ptr(memory::objects::CGeneralPort) generalPort = new_ptr(memory::objects::CGeneralPort)(primitivePort, types::visibilityType::EXTERNAL, types::roleType::PROVIDES);
 
 			value->addDefaultPort(generalPort);
-		}
+                }
+
+                std::shared_ptr<memory::objects::CComponent> CBootstrap::bootstrapPrologue(std::shared_ptr<ast_descriptor> descriptor,
+                                                                                           std::map<std::string,std::shared_ptr<memory::objects::primitives::CPrimitiveService> >& servicesNames) {
+			ptr(memory::objects::CComponent) component = new_ptr(memory::objects::CComponent)();
+			addPrimitivePorts(component, descriptor);
+			addPrimitiveServices(component, descriptor, servicesNames);
+                        return component;
+                }
+
+                void CBootstrap::bootstrapEpilogue(std::shared_ptr<memory::objects::CComponent> component,
+                                                   std::map<std::string,std::shared_ptr<memory::objects::primitives::CPrimitiveService> >& servicesNames) {
+                        ptr(interpreter::memory::objects::primitives::CPrimitivePort) defaultPort = component->getPortByName("default")->getPrimitivePort();
+			ptr(interpreter::memory::objects::primitives::CPrimitivePort) selfPort = component->getPortByName("self")->getPrimitivePort();
+
+			for(auto const &record : servicesNames) {
+				defaultPort->connectService(new_ptr(interpreter::memory::objects::CGeneralService)(record.second));
+				selfPort->connectService(new_ptr(interpreter::memory::objects::CGeneralService)(record.second));
+			}
+                }
 
 		ptr(memory::objects::values::CUnsignedIntegerComponent) CBootstrap::bootstrapUIntValue(u64 value) {
 			ptr(memory::objects::values::CUnsignedIntegerComponent) component = new_ptr(memory::objects::values::CUnsignedIntegerComponent)(value);
@@ -99,12 +118,8 @@ namespace interpreter {
 		}
 
 		ptr(memory::objects::CComponent) CBootstrap::bootstrapComponent() {
-			ptr(ast_descriptor) componentDescriptor = m_coreModules->getCoreDescriptor("Component");
-			ptr(memory::objects::CComponent) component = new_ptr(memory::objects::CComponent)();
-
-			std::map<std::string, ptr(memory::objects::primitives::CPrimitiveService)> servicesNames;
-			addPrimitivePorts(component, componentDescriptor);
-			addPrimitiveServices(component, componentDescriptor, servicesNames);
+                        std::map<std::string, ptr(memory::objects::primitives::CPrimitiveService)> servicesNames;
+                        ptr(memory::objects::CComponent) component = bootstrapPrologue(m_coreModules->getCoreDescriptor("Component"), servicesNames);
 
 			std::function<ptr(memory::objects::CComponent)(const std::vector<ptr(memory::objects::CComponent)>&, const ptr(memory::objects::CComponent)&)> callback;
 
@@ -146,24 +161,13 @@ namespace interpreter {
 			};
 			servicesNames.at("getIdentityHash")->setCallback(callback);
 
-			ptr(interpreter::memory::objects::primitives::CPrimitivePort) defaultPort = component->getPortByName("default")->getPrimitivePort();
-			ptr(interpreter::memory::objects::primitives::CPrimitivePort) selfPort = component->getPortByName("self")->getPrimitivePort();
-
-			for(auto const &record : servicesNames) {
-				defaultPort->connectService(new_ptr(interpreter::memory::objects::CGeneralService)(record.second));
-				selfPort->connectService(new_ptr(interpreter::memory::objects::CGeneralService)(record.second));
-			}
-
+                        bootstrapEpilogue(component, servicesNames);
 			return component;
 		}
 
 		ptr(memory::objects::CComponent) CBootstrap::bootstrapPortComponent(ptr(ast_port) astPort, ptr(memory::objects::CComponent) owner) {
-			ptr(ast_descriptor) descriptor = m_coreModules->getCoreDescriptor("Port");
-			ptr(memory::objects::CComponent) port = bootstrapComponent();
-
-			std::map<std::string, ptr(memory::objects::primitives::CPrimitiveService)> servicesNames;
-			addPrimitivePorts(port, descriptor);
-			addPrimitiveServices(port, descriptor, servicesNames);
+                        std::map<std::string, ptr(memory::objects::primitives::CPrimitiveService)> servicesNames;
+                        ptr(memory::objects::CComponent) port = bootstrapPrologue(m_coreModules->getCoreDescriptor("Port"), servicesNames);
 
 			std::string name = astPort->getNameSymbol()->getStringValue();
 
@@ -228,16 +232,17 @@ namespace interpreter {
 			};
 			servicesNames.at("disconnect")->setCallback(callback);
 
-			ptr(interpreter::memory::objects::primitives::CPrimitivePort) defaultPort = port->getPortByName("default")->getPrimitivePort();
-			ptr(interpreter::memory::objects::primitives::CPrimitivePort) selfPort = port->getPortByName("self")->getPrimitivePort();
-
-			for(auto const &record : servicesNames) {
-				defaultPort->connectService(new_ptr(interpreter::memory::objects::CGeneralService)(record.second));
-				selfPort->connectService(new_ptr(interpreter::memory::objects::CGeneralService)(record.second));
-			}
-
+                        bootstrapEpilogue(port, servicesNames);
 			return port;
-		}
+                }
+
+                std::shared_ptr<memory::objects::CComponent> CBootstrap::bootstrapCollectionPortComponent(std::shared_ptr<ast_port> astPort, std::shared_ptr<memory::objects::CComponent> owner) {
+                        std::map<std::string, ptr(memory::objects::primitives::CPrimitiveService)> servicesNames;
+                        ptr(memory::objects::CComponent) port = bootstrapPrologue(m_coreModules->getCoreDescriptor("Port"), servicesNames);
+                        
+                        bootstrapEpilogue(port, servicesNames);
+                        return port;
+                }
 
 		ptr(memory::objects::CComponent) CBootstrap::bootstrapServiceComponent(ptr(ast_service) astService, ptr(memory::objects::CComponent) context) {
 			ptr(memory::objects::CComponent) service = bootstrapComponent();
@@ -271,13 +276,8 @@ namespace interpreter {
 		}
 
 		std::shared_ptr<memory::objects::CComponent> CBootstrap::bootstrapServiceSignatureComponent(ptr(ast_servicesignature) astSignature) {
-			ptr(memory::objects::CComponent) serviceSignature = bootstrapComponent();
-
-			ptr(ast_descriptor) descriptor = m_coreModules->getCoreDescriptor("ServiceSignature");
-
-			std::map<std::string, ptr(memory::objects::primitives::CPrimitiveService)> servicesNames;
-			addPrimitivePorts(serviceSignature, descriptor);
-			addPrimitiveServices(serviceSignature, descriptor, servicesNames);
+                        std::map<std::string, ptr(memory::objects::primitives::CPrimitiveService)> servicesNames;
+                        ptr(memory::objects::CComponent) serviceSignature = bootstrapPrologue(m_coreModules->getCoreDescriptor("ServiceSignature"), servicesNames);
 
 			serviceSignature->getPortByName("name")->getPrimitivePort()
 			->connectPort(cast(memory::objects::values::CStringComponent)(bootstrapStringValue(astSignature->getNameSymbol()->getStringValue()))->getDefaultPort());
@@ -327,24 +327,13 @@ namespace interpreter {
 			};
 			servicesNames.at("setParamName")->setCallback(callback);
 
-			ptr(interpreter::memory::objects::primitives::CPrimitivePort) defaultPort = serviceSignature->getPortByName("default")->getPrimitivePort();
-			ptr(interpreter::memory::objects::primitives::CPrimitivePort) selfPort = serviceSignature->getPortByName("self")->getPrimitivePort();
-
-			for(auto const &record : servicesNames) {
-				defaultPort->connectService(new_ptr(interpreter::memory::objects::CGeneralService)(record.second));
-				selfPort->connectService(new_ptr(interpreter::memory::objects::CGeneralService)(record.second));
-			}
-
+                        bootstrapEpilogue(serviceSignature, servicesNames);
 			return serviceSignature;
 		}
 
 		std::shared_ptr<memory::objects::CComponent> CBootstrap::bootstrapPortDescriptionComponent(std::shared_ptr<ast_port> astPort) {
-			ptr(memory::objects::CComponent) portDescription = bootstrapComponent();
-			ptr(ast_descriptor) descriptor = m_coreModules->getCoreDescriptor("PortDescription");
-
-			std::map<std::string, ptr(memory::objects::primitives::CPrimitiveService)> servicesNames;
-			addPrimitivePorts(portDescription, descriptor);
-			addPrimitiveServices(portDescription, descriptor, servicesNames);
+                        std::map<std::string, ptr(memory::objects::primitives::CPrimitiveService)> servicesNames;
+                        ptr(memory::objects::CComponent) portDescription = bootstrapPrologue(m_coreModules->getCoreDescriptor("PortDescription"), servicesNames);
 
 			portDescription->getPortByName("name")->getPrimitivePort()->connectPort(bootstrapStringValue(astPort->getNameSymbol()->getStringValue())->getDefaultPort());
 			std::string role = astPort->getRole() == types::roleType::PROVIDES ? ROLE_PROVISION : ROLE_REQUIREMENT;
@@ -383,24 +372,13 @@ namespace interpreter {
 			};
 			servicesNames.at("getInterface")->setCallback(callback);
 
-			ptr(interpreter::memory::objects::primitives::CPrimitivePort) defaultPort = portDescription->getPortByName("default")->getPrimitivePort();
-			ptr(interpreter::memory::objects::primitives::CPrimitivePort) selfPort = portDescription->getPortByName("self")->getPrimitivePort();
-
-			for(auto const &record : servicesNames) {
-				defaultPort->connectService(new_ptr(interpreter::memory::objects::CGeneralService)(record.second));
-				selfPort->connectService(new_ptr(interpreter::memory::objects::CGeneralService)(record.second));
-			}
-
+                        bootstrapEpilogue(portDescription, servicesNames);
 			return portDescription;
 		}
 
 		std::shared_ptr<memory::objects::CComponent> CBootstrap::bootstrapConnectionDescriptionComponent(ptr(ast_bind) bind) {
-			ptr(memory::objects::CComponent) connection = bootstrapComponent();
-			ptr(ast_descriptor) descriptor = m_coreModules->getCoreDescriptor("ConnectionDescription");
-
-			std::map<std::string, ptr(memory::objects::primitives::CPrimitiveService)> servicesNames;
-			addPrimitivePorts(connection, descriptor);
-			addPrimitiveServices(connection, descriptor, servicesNames);
+                        std::map<std::string, ptr(memory::objects::primitives::CPrimitiveService)> servicesNames;
+                        ptr(memory::objects::CComponent) connection = bootstrapPrologue(m_coreModules->getCoreDescriptor("ConnectionDescription"), servicesNames);
 
 			std::string sourceComponentName = cast(ast_symbol)(bind->getSourcePortIdentification()->getComponent())->getStringValue();
 			connection->getPortByName("sourceComponent")->getPrimitivePort()->connectPort(bootstrapStringValue(sourceComponentName)->getDefaultPort());
@@ -442,24 +420,13 @@ namespace interpreter {
 			};
 			servicesNames.at("isDisconnection")->setCallback(callback);
 
-			ptr(interpreter::memory::objects::primitives::CPrimitivePort) defaultPort = connection->getPortByName("default")->getPrimitivePort();
-			ptr(interpreter::memory::objects::primitives::CPrimitivePort) selfPort = connection->getPortByName("self")->getPrimitivePort();
-
-			for(auto const &record : servicesNames) {
-				defaultPort->connectService(new_ptr(interpreter::memory::objects::CGeneralService)(record.second));
-				selfPort->connectService(new_ptr(interpreter::memory::objects::CGeneralService)(record.second));
-			}
-
+                        bootstrapEpilogue(connection, servicesNames);
 			return connection;
 		}
 
 		std::shared_ptr<memory::objects::CComponent> CBootstrap::bootstrapInterfaceComponent(std::shared_ptr<ast_port> astPort) {
-			ptr(memory::objects::CComponent) interface = bootstrapComponent();
-			ptr(ast_descriptor) descriptor = m_coreModules->getCoreDescriptor("Interface");
-
-			std::map<std::string, ptr(memory::objects::primitives::CPrimitiveService)> servicesNames;
-			addPrimitivePorts(interface, descriptor);
-			addPrimitiveServices(interface, descriptor, servicesNames);
+                        std::map<std::string, ptr(memory::objects::primitives::CPrimitiveService)> servicesNames;
+                        ptr(memory::objects::CComponent) interface = bootstrapPrologue(m_coreModules->getCoreDescriptor("Interface"), servicesNames);
 
 			switch (astPort->getPortType()) {
 			case types::portType::EXPLICIT_LIST : {
@@ -530,14 +497,7 @@ namespace interpreter {
 			};
 			servicesNames.at("setConnectedComponent")->setCallback(callback);
 
-			ptr(interpreter::memory::objects::primitives::CPrimitivePort) defaultPort = interface->getPortByName("default")->getPrimitivePort();
-			ptr(interpreter::memory::objects::primitives::CPrimitivePort) selfPort = interface->getPortByName("self")->getPrimitivePort();
-
-			for(auto const &record : servicesNames) {
-				defaultPort->connectService(new_ptr(interpreter::memory::objects::CGeneralService)(record.second));
-				selfPort->connectService(new_ptr(interpreter::memory::objects::CGeneralService)(record.second));
-			}
-
+                        bootstrapEpilogue(interface, servicesNames);
 			return interface;
 		}
 

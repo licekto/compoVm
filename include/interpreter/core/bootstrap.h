@@ -40,6 +40,10 @@ namespace interpreter {
 			std::function<ptr(memory::objects::CComponent)(const std::vector<ptr(memory::objects::CComponent)>&, const ptr(memory::objects::CComponent)&)> prepareSymbolGetter(const std::string& portName);
 
 			void addDefaultPort(ptr(memory::objects::values::CValueComponent) value);
+                        
+                        ptr(memory::objects::CComponent) bootstrapPrologue(ptr(ast_descriptor) descriptor, std::map<std::string, ptr(memory::objects::primitives::CPrimitiveService)>& servicesNames);
+                        
+                        void bootstrapEpilogue(ptr(memory::objects::CComponent) component, std::map<std::string,std::shared_ptr<memory::objects::primitives::CPrimitiveService> >& servicesNames);
 
                 public:
                         

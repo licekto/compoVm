@@ -43,7 +43,7 @@ namespace interpreter {
 				types::visibilityType getVisibility() const;
 
 				types::roleType getRole() const;
-
+                                
 				bool isPrimitive() const;
 
 				ptr(CComponent) getPort();
