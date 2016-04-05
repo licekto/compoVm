@@ -41,12 +41,14 @@ namespace interpreter {
 
 			void addDefaultPort(ptr(memory::objects::values::CValueComponent) value);
 
-			ptr(memory::objects::values::CUnsignedIntegerComponent) bootstrapValue(u64 value);
+                public:
+                        
+			ptr(memory::objects::values::CUnsignedIntegerComponent) bootstrapUIntValue(u64 value);
 
-			ptr(memory::objects::values::CStringComponent) bootstrapValue(const std::string& value);
+			ptr(memory::objects::values::CStringComponent) bootstrapStringValue(const std::string& value);
 
-			ptr(memory::objects::values::CBoolComponent) bootstrapValue(bool value);
-
+			ptr(memory::objects::values::CBoolComponent) bootstrapBoolValue(bool value);
+                        
 			ptr(memory::objects::CComponent) bootstrapComponent();
 
 			ptr(memory::objects::CComponent) bootstrapPortComponent(ptr(ast_port) astPort, ptr(memory::objects::CComponent) owner);
@@ -64,8 +66,6 @@ namespace interpreter {
 			ptr(memory::objects::CComponent) bootstrapInterfaceComponent(ptr(ast_port) astPort);
 
 			ptr(memory::objects::CComponent) bootstrapDescriptorComponent();
-
-		  public:
 
 			CBootstrap(ptr(core::CCoreModules) coreModules = nullptr, const ptr(core::CInterpreter)& interpreter = nullptr);
 

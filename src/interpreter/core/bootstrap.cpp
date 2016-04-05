@@ -56,19 +56,19 @@ namespace interpreter {
 			value->addDefaultPort(generalPort);
 		}
 
-		ptr(memory::objects::values::CUnsignedIntegerComponent) CBootstrap::bootstrapValue(u64 value) {
+		ptr(memory::objects::values::CUnsignedIntegerComponent) CBootstrap::bootstrapUIntValue(u64 value) {
 			ptr(memory::objects::values::CUnsignedIntegerComponent) component = new_ptr(memory::objects::values::CUnsignedIntegerComponent)(value);
 			addDefaultPort(component);
 			return component;
 		}
 
-		ptr(memory::objects::values::CStringComponent) CBootstrap::bootstrapValue(const std::string& value) {
+		ptr(memory::objects::values::CStringComponent) CBootstrap::bootstrapStringValue(const std::string& value) {
 			ptr(memory::objects::values::CStringComponent) component = new_ptr(memory::objects::values::CStringComponent)(value);
 			addDefaultPort(component);
 			return component;
 		}
 
-		ptr(memory::objects::values::CBoolComponent) CBootstrap::bootstrapValue(bool value) {
+		ptr(memory::objects::values::CBoolComponent) CBootstrap::bootstrapBoolValue(bool value) {
 			ptr(memory::objects::values::CBoolComponent) component = new_ptr(memory::objects::values::CBoolComponent)(value);
 			addDefaultPort(component);
 			return component;
@@ -167,7 +167,7 @@ namespace interpreter {
 
 			std::string name = astPort->getNameSymbol()->getStringValue();
 
-			ptr(memory::objects::values::CStringComponent) nameComponent = bootstrapValue(name);
+			ptr(memory::objects::values::CStringComponent) nameComponent = bootstrapStringValue(name);
 			port->getPortByName("name")->getPrimitivePort()->connectPort(nameComponent->getDefaultPort());
 			port->getPortByName("owner")->getPrimitivePort()->connectPort(owner->getPortByName("default"));
 
@@ -246,7 +246,7 @@ namespace interpreter {
 
 			service->getPortByName("context")->getPrimitivePort()->connectPort(context->getPortByName("default"));
 			service->getPortByName("serviceSign")->getPrimitivePort()->connectPort(bootstrapServiceSignatureComponent(astService->getSignature())->getPortByName("default"));
-			service->getPortByName("code")->getPrimitivePort()->connectPort(cast(memory::objects::values::CStringComponent)(bootstrapValue(astService->getBodyCode()))->getDefaultPort());
+			service->getPortByName("code")->getPrimitivePort()->connectPort(cast(memory::objects::values::CStringComponent)(bootstrapStringValue(astService->getBodyCode()))->getDefaultPort());
 
 			std::function<ptr(memory::objects::CComponent)(const std::vector<ptr(memory::objects::CComponent)>&, const ptr(memory::objects::CComponent)&)> executeCallback =
 			[this](const std::vector<ptr(memory::objects::CComponent)>& /*params*/, const ptr(memory::objects::CComponent)& contextComponent) -> ptr(memory::objects::CComponent) {
@@ -280,7 +280,7 @@ namespace interpreter {
 			addPrimitiveServices(serviceSignature, descriptor, servicesNames);
 
 			serviceSignature->getPortByName("name")->getPrimitivePort()
-			->connectPort(cast(memory::objects::values::CStringComponent)(bootstrapValue(astSignature->getNameSymbol()->getStringValue()))->getDefaultPort());
+			->connectPort(cast(memory::objects::values::CStringComponent)(bootstrapStringValue(astSignature->getNameSymbol()->getStringValue()))->getDefaultPort());
 			ptr(memory::objects::primitives::CPrimitivePort) paramNames = serviceSignature->getPortByName("paramNames")->getPrimitivePort();
 
 			for(size_t i = 0; i < astSignature->getParamsSize(); ++i) {
@@ -346,13 +346,13 @@ namespace interpreter {
 			addPrimitivePorts(portDescription, descriptor);
 			addPrimitiveServices(portDescription, descriptor, servicesNames);
 
-			portDescription->getPortByName("name")->getPrimitivePort()->connectPort(bootstrapValue(astPort->getNameSymbol()->getStringValue())->getDefaultPort());
+			portDescription->getPortByName("name")->getPrimitivePort()->connectPort(bootstrapStringValue(astPort->getNameSymbol()->getStringValue())->getDefaultPort());
 			std::string role = astPort->getRole() == types::roleType::PROVIDES ? ROLE_PROVISION : ROLE_REQUIREMENT;
-			portDescription->getPortByName("role")->getPrimitivePort()->connectPort(bootstrapValue(role)->getDefaultPort());
+			portDescription->getPortByName("role")->getPrimitivePort()->connectPort(bootstrapStringValue(role)->getDefaultPort());
 			std::string visibility = astPort->getVisibility() == types::visibilityType::EXTERNAL ? VISIBILITY_EXTERNAL : VISIBILITY_INTERNAL;
-			portDescription->getPortByName("visibility")->getPrimitivePort()->connectPort(bootstrapValue(visibility)->getDefaultPort());
-			portDescription->getPortByName("kind")->getPrimitivePort()->connectPort(bootstrapValue(astPort->getKindOf()->getStringValue())->getDefaultPort());
-			portDescription->getPortByName("isCollectionPort")->getPrimitivePort()->connectPort(bootstrapValue(astPort->isCollection())->getDefaultPort());
+			portDescription->getPortByName("visibility")->getPrimitivePort()->connectPort(bootstrapStringValue(visibility)->getDefaultPort());
+			portDescription->getPortByName("kind")->getPrimitivePort()->connectPort(bootstrapStringValue(astPort->getKindOf()->getStringValue())->getDefaultPort());
+			portDescription->getPortByName("isCollectionPort")->getPrimitivePort()->connectPort(bootstrapBoolValue(astPort->isCollection())->getDefaultPort());
 
 			portDescription->getPortByName("interfaceDefinition")->getPrimitivePort()->connectPort(bootstrapInterfaceComponent(astPort)->getPortByName("default"));
 
@@ -403,17 +403,17 @@ namespace interpreter {
 			addPrimitiveServices(connection, descriptor, servicesNames);
 
 			std::string sourceComponentName = cast(ast_symbol)(bind->getSourcePortIdentification()->getComponent())->getStringValue();
-			connection->getPortByName("sourceComponent")->getPrimitivePort()->connectPort(bootstrapValue(sourceComponentName)->getDefaultPort());
+			connection->getPortByName("sourceComponent")->getPrimitivePort()->connectPort(bootstrapStringValue(sourceComponentName)->getDefaultPort());
 			std::string sourcePortName = bind->getSourcePortIdentification()->getPortName()->getStringValue();
-			connection->getPortByName("sourcePort")->getPrimitivePort()->connectPort(bootstrapValue(sourcePortName)->getDefaultPort());
+			connection->getPortByName("sourcePort")->getPrimitivePort()->connectPort(bootstrapStringValue(sourcePortName)->getDefaultPort());
 
 			std::string destinationComponentName = cast(ast_symbol)(bind->getDestinationPortIdentification()->getComponent())->getStringValue();
-			connection->getPortByName("destinationComponent")->getPrimitivePort()->connectPort(bootstrapValue(destinationComponentName)->getDefaultPort());
+			connection->getPortByName("destinationComponent")->getPrimitivePort()->connectPort(bootstrapStringValue(destinationComponentName)->getDefaultPort());
 			std::string destinationPortName = bind->getDestinationPortIdentification()->getPortName()->getStringValue();
-			connection->getPortByName("destinationPort")->getPrimitivePort()->connectPort(bootstrapValue(destinationPortName)->getDefaultPort());
+			connection->getPortByName("destinationPort")->getPrimitivePort()->connectPort(bootstrapStringValue(destinationPortName)->getDefaultPort());
 
 			bool isDisconnection = bind->getNodeType() == types::nodeType::DISCONNECTION;
-			connection->getPortByName("isDisconnection")->getPrimitivePort()->connectPort(bootstrapValue(isDisconnection)->getDefaultPort());
+			connection->getPortByName("isDisconnection")->getPrimitivePort()->connectPort(bootstrapBoolValue(isDisconnection)->getDefaultPort());
 
 			servicesNames.at("setSourceComponent")->setCallback(prepareSymbolSetter("sourceComponent"));
 			servicesNames.at("getSourceComponent")->setCallback(prepareSymbolGetter("sourceComponent"));
@@ -463,7 +463,7 @@ namespace interpreter {
 
 			switch (astPort->getPortType()) {
 			case types::portType::EXPLICIT_LIST : {
-				interface->getPortByName("type")->getPrimitivePort()->connectPort(bootstrapValue(PORT_TYPE_SIGNATURES)->getDefaultPort());
+				interface->getPortByName("type")->getPrimitivePort()->connectPort(bootstrapStringValue(PORT_TYPE_SIGNATURES)->getDefaultPort());
 				ptr(ast_signaturesport) signPort = cast(ast_signaturesport)(astPort);
 
 				for(size_t i = 0; i < signPort->getSignaturesSize(); ++i) {
@@ -477,15 +477,15 @@ namespace interpreter {
 				break;
 			}
 			case types::portType::NAMED : {
-				interface->getPortByName("type")->getPrimitivePort()->connectPort(bootstrapValue(PORT_TYPE_NAMED)->getDefaultPort());
+				interface->getPortByName("type")->getPrimitivePort()->connectPort(bootstrapStringValue(PORT_TYPE_NAMED)->getDefaultPort());
 
 				ptr(ast_namedport) namedPort = cast(ast_namedport)(astPort);
 
-				interface->getPortByName("connectedComponent")->getPrimitivePort()->connectPort(bootstrapValue(namedPort->getComponentName()->getStringValue())->getDefaultPort());
+				interface->getPortByName("connectedComponent")->getPrimitivePort()->connectPort(bootstrapStringValue(namedPort->getComponentName()->getStringValue())->getDefaultPort());
 				break;
 			}
 			case types::portType::UNIVERSAL : {
-				interface->getPortByName("type")->getPrimitivePort()->connectPort(bootstrapValue(PORT_TYPE_UNIVERSAL)->getDefaultPort());
+				interface->getPortByName("type")->getPrimitivePort()->connectPort(bootstrapStringValue(PORT_TYPE_UNIVERSAL)->getDefaultPort());
 				break;
 			}
 			}
@@ -498,7 +498,7 @@ namespace interpreter {
 			callback = [this](const std::vector<ptr(memory::objects::CComponent)>& /*params*/, const ptr(memory::objects::CComponent)& context) -> ptr(memory::objects::CComponent) {
 				u64 count = context->getPortByName("signatures")->getPrimitivePort()->getConnectedPortsNumber();
 
-				return bootstrapValue(count);
+				return bootstrapUIntValue(count);
 			};
 			servicesNames.at("getSignaturesCount")->setCallback(callback);
 
@@ -542,11 +542,12 @@ namespace interpreter {
 		}
 
 		ptr(memory::objects::CComponent) CBootstrap::bootstrapDescriptorComponent() {
-//			ptr(memory::objects::CComponent) component = new_ptr(memory::objects::CComponent)();
-//			ptr(ast_descriptor) descriptor = m_coreModules->getCoreDescriptor("Descriptor");
-//
-//			return component;
-			return nullptr;
+			ptr(memory::objects::CComponent) component = new_ptr(memory::objects::CComponent)();
+			ptr(ast_descriptor) descriptor = m_coreModules->getCoreDescriptor("Descriptor");
+                        
+                        
+                        
+			return component;
 		}
 
 		void CBootstrap::boostrap() {
