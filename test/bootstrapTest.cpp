@@ -29,9 +29,12 @@ ptr(core_bootstrap) bootstrap = new_ptr(core_bootstrap)(coreModules, interpreter
 
 BOOST_AUTO_TEST_CASE(componentTest) {
     // Bootstrap
-    ptr(mem_component) component = bootstrap->bootstrapComponent();
     
-    TEST_COMPONENT(component);
+    ptr(mem_component) owner;
+    
+    ptr(mem_component) component = bootstrap->bootstrapComponent(owner);
+    
+    TEST_COMPONENT(component, owner);
 }
 
 BOOST_AUTO_TEST_CASE(valuesComponentsTest) {
@@ -54,11 +57,14 @@ BOOST_AUTO_TEST_CASE(portComponentTest) {
             
     ptr(ast_namedport) astPort = new_ptr(ast_namedport)(portName, atomicity, collectivity, visibility, role, componentName);
     
-    ptr(mem_component) owner = bootstrap->bootstrapComponent();
+    ptr(mem_component) owner = bootstrap->bootstrapComponent(nullptr);
     
     ptr(mem_component) portComponent = bootstrap->bootstrapPortComponent(astPort, owner);
     
-    TEST_BASE_COMPONENT(portComponent, 12);
+    TEST_BASE_COMPONENT(portComponent, 12, owner);
+    
+    //TEST_GENERAL_PRIMITIVE_PORT(portComponent, "name", types::roleType::REQUIRES, types::visibilityType::INTERNAL, 0);
+    //BOOST_CHECK_EQUAL(cast(mem_string)(portComponent->getPortByName("name")->getConnectedPortAt(0)->getOwner())->getValue(), "testPort");
 }
 
 BOOST_AUTO_TEST_SUITE_END()

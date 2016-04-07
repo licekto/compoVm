@@ -1,7 +1,10 @@
 descriptor Component {
     provides { default : *; }
     
-    requires { args[] : *; }
+    requires {
+            args[] : *;
+            owner : Component;
+    }
     
     internally provides {
         super : * ofKind SuperPort;

@@ -38,13 +38,13 @@ namespace interpreter {
 
 			void addPrimitivePorts(ptr(mem_component) component, ptr(ast_descriptor) descriptor);
 
-			std::function<ptr(mem_component)(const std::vector<ptr(mem_component)>&, const ptr(mem_component)&)> prepareSymbolSetter(const std::string& portName);
+			std::function<ptr(mem_port)(const std::vector<ptr(mem_component)>&, const ptr(mem_component)&)> prepareSymbolSetter(const std::string& portName);
 
-			std::function<ptr(mem_component)(const std::vector<ptr(mem_component)>&, const ptr(mem_component)&)> prepareSymbolGetter(const std::string& portName);
+			std::function<ptr(mem_port)(const std::vector<ptr(mem_component)>&, const ptr(mem_component)&)> prepareSymbolGetter(const std::string& portName);
 
 			void addDefaultPort(ptr(mem_value) value);
                         
-                        ptr(mem_component) bootstrapPrologueWithComponent(ptr(ast_descriptor) descriptor, std::map<std::string, ptr(mem_primitiveservice)>& servicesNames);
+                        ptr(mem_component) bootstrapPrologueWithComponent(ptr(ast_descriptor) descriptor, std::map<std::string, ptr(mem_primitiveservice)>& servicesNames, ptr(mem_component) owner);
                         
                         ptr(mem_component) bootstrapPrologue(ptr(ast_descriptor) descriptor, std::map<std::string, ptr(mem_primitiveservice)>& servicesNames);
                         
@@ -59,21 +59,21 @@ namespace interpreter {
 
 			ptr(mem_bool) bootstrapBoolValue(bool value);
                         
-			ptr(mem_component) bootstrapComponent();
+			ptr(mem_component) bootstrapComponent(ptr(mem_component) owner);
 
 			ptr(mem_component) bootstrapPortComponent(ptr(ast_port) astPort, ptr(mem_component) owner);
 
 			ptr(mem_component) bootstrapCollectionPortComponent(ptr(ast_port) astPort, ptr(mem_component) owner);
 
-			ptr(mem_component) bootstrapServiceComponent(ptr(ast_service) astService, ptr(mem_component) context);
+			ptr(mem_component) bootstrapServiceComponent(ptr(ast_service) astService, ptr(mem_component) owner);
 
-			ptr(mem_component) bootstrapServiceSignatureComponent(ptr(ast_servicesignature) astSignature);
+			ptr(mem_component) bootstrapServiceSignatureComponent(ptr(ast_servicesignature) astSignature, ptr(mem_component) owner);
 
-			ptr(mem_component) bootstrapPortDescriptionComponent(ptr(ast_port) astPort);
+			ptr(mem_component) bootstrapPortDescriptionComponent(ptr(ast_port) astPort, ptr(mem_component) owner);
 
-			ptr(mem_component) bootstrapConnectionDescriptionComponent(ptr(ast_bind) bind);
+			ptr(mem_component) bootstrapConnectionDescriptionComponent(ptr(ast_bind) bind, ptr(mem_component) owner);
 
-			ptr(mem_component) bootstrapInterfaceComponent(ptr(ast_port) astPort);
+			ptr(mem_component) bootstrapInterfaceComponent(ptr(ast_port) astPort, ptr(mem_component) owner);
 
 			ptr(mem_component) bootstrapDescriptorComponent();
 		};

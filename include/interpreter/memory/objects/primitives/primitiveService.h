@@ -15,7 +15,7 @@ namespace interpreter {
 
 				class CPrimitiveService : public CAbstractPrimitive {
 
-					std::function<ptr(objects::CComponent)(const std::vector<ptr(objects::CComponent)>&, const ptr(objects::CComponent)&)> m_callback;
+					std::function<ptr(objects::CGeneralPort)(const std::vector<ptr(objects::CComponent)>&, const ptr(objects::CComponent)&)> m_callback;
 
 					std::vector<std::string> m_argumentsNames;
 
@@ -25,8 +25,8 @@ namespace interpreter {
 
 					CPrimitiveService(const std::string& name = "",
 					                  ptr(CComponent) context = nullptr,
-					                  std::function<ptr(objects::CComponent)(const std::vector<ptr(objects::CComponent)>&, const ptr(objects::CComponent)&)> callback
-					                  = std::function<ptr(objects::CComponent)(const std::vector<ptr(objects::CComponent)>&, const ptr(objects::CComponent)&)>(),
+					                  std::function<ptr(objects::CGeneralPort)(const std::vector<ptr(objects::CComponent)>&, const ptr(objects::CComponent)&)> callback
+					                  = std::function<ptr(objects::CGeneralPort)(const std::vector<ptr(objects::CComponent)>&, const ptr(objects::CComponent)&)>(),
 					                  std::vector<std::string> argumentsNames = std::vector<std::string>(0));
 
 					CPrimitiveService(ptr(CPrimitiveService) instance);
@@ -41,7 +41,7 @@ namespace interpreter {
 
 					ptr(CComponent) getContext();
 
-					ptr(objects::CComponent) invoke();
+					ptr(objects::CGeneralPort) invoke();
 
 					size_t getArgumentsNamesCount() const;
 
@@ -57,7 +57,7 @@ namespace interpreter {
 
 					ptr(objects::CComponent) getArgumentAt(size_t index);
 
-					void setCallback(std::function<ptr(objects::CComponent)(const std::vector<ptr(objects::CComponent)>&, const ptr(objects::CComponent)&)> callback);
+					void setCallback(std::function<ptr(objects::CGeneralPort)(const std::vector<ptr(objects::CComponent)>&, const ptr(objects::CComponent)&)> callback);
 				};
 
 			}

@@ -29,7 +29,7 @@ BOOST_AUTO_TEST_CASE(basicTest) {
     TEST_DESCRIPTOR(descriptor, "CollectionPort", "Port", 0, 3, 0);
     
     descriptor = coreModules->getCoreDescriptor("Component");
-    TEST_DESCRIPTOR(descriptor, "Component", "", 4, 5, 0);
+    TEST_DESCRIPTOR(descriptor, "Component", "", 5, 5, 0);
     
     descriptor = coreModules->getCoreDescriptor("ConnectionDescription");
     TEST_DESCRIPTOR(descriptor, "ConnectionDescription", "Component", 6, 10, 0);
