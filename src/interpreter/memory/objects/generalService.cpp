@@ -43,7 +43,16 @@ namespace interpreter {
 					//return m_service->getPortByName("serviceSign")->getPrimitivePort()->getConnectedPortAt(0)
 					return "";
 				}
-			}
+                        }
+
+                        ptr(objects::CGeneralPort) CGeneralService::invoke() {
+                            if (m_primitive) {
+                                return m_primitiveService->invoke();
+                            }
+                            else {
+                                return nullptr;
+                            }
+                        }
 
 		}
 	}

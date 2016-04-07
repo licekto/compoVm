@@ -86,6 +86,19 @@ BOOST_AUTO_TEST_CASE(serviceSignatureComponentTest) {
     BOOST_CHECK_EQUAL(signatureComponent->getPortByName("args")->getConnectedPortsNumber(), 0);
     BOOST_CHECK_EQUAL(cast(mem_string)(signatureComponent->getPortByName("name")->getConnectedPortAt(0)->getOwner())->getValue(), "testSignatureTest");
     
+    ret = true;
+    TEST_PRIMITIVE_SERVICE(signatureComponent, "default", "getSelector", 0, ret);
+    BOOST_CHECK_EQUAL(signatureComponent->getPortByName("args")->getConnectedPortsNumber(), 0);
+    BOOST_CHECK_EQUAL(cast(mem_string)(signatureComponent->getServiceByName("getSelector")->invoke()->getOwner())->getValue(), "testSignatureTest");
+    
+    TEST_PRIMITIVE_SERVICE(signatureComponent, "default", "getParamsCount", 0, ret);
+    BOOST_CHECK_EQUAL(signatureComponent->getPortByName("args")->getConnectedPortsNumber(), 0);
+    BOOST_CHECK_EQUAL(cast(mem_uint)(signatureComponent->getServiceByName("getParamsCount")->invoke()->getOwner())->getValue(), 2);
+    
+    signatureComponent->getPortByName("args")->connectPort(bootstrap->bootstrapUIntValue(0)->getDefaultPort());
+    TEST_PRIMITIVE_SERVICE(signatureComponent, "default", "getParamName", 1, ret);
+    BOOST_CHECK_EQUAL(signatureComponent->getPortByName("args")->getConnectedPortsNumber(), 0);
+    BOOST_CHECK_EQUAL(cast(mem_string)(signatureComponent->getServiceByName("getParamName")->invoke()->getOwner())->getValue(), "param1");
 }
 
 BOOST_AUTO_TEST_CASE(interfaceComponentTest) {

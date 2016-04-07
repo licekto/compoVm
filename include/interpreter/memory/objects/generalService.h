@@ -1,6 +1,7 @@
 #pragma once
 
 #include "definitions/allDefinitions.h"
+#include "interpreter/memory/objects/generalPort.h"
 
 namespace interpreter {
 
@@ -36,6 +37,8 @@ namespace interpreter {
 				bool isPrimitive() const;
 
 				std::string getName() const;
+                                
+                                ptr(objects::CGeneralPort) invoke();
 			};
 		}
 	}

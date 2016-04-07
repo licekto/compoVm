@@ -105,28 +105,21 @@ namespace interpreter {
 		std::function<ptr(mem_port)(const std::vector<ptr(mem_component) >&, const ptr(mem_component)&)>
 		CBootstrap::prepareSymbolSetter(const std::string& portName) {
 
-			return [&portName](const std::vector<ptr(mem_component)>& /*params*/, const ptr(mem_component)& context) -> ptr(mem_port) {
+			return [portName](const std::vector<ptr(mem_component)>& /*params*/, const ptr(mem_component)& context) -> ptr(mem_port) {
 				ptr(mem_component) paramComponent = context->getPortByName("args")->getConnectedPortAt(0)->getOwner();
 
 				context->getPortByName("args")->disconnectPortAt(0);
 
-                                ptr(mem_string) param;
-                                
-                                try {
-                                    param = cast(mem_string)(paramComponent);
-                                    context->getPortByName(portName)->disconnectPortAt(0);
-                                    context->getPortByName(portName)->connectPort(param->getDefaultPort());
-                                }
-                                catch (const std::bad_alloc& e) {
-                                    std::cout << "Allocation failed: " << e.what() << '\n';
-                                }
+                                ptr(mem_string) param = cast(mem_string)(paramComponent);
+                                context->getPortByName(portName)->disconnectPortAt(0);
+                                context->getPortByName(portName)->connectPort(param->getDefaultPort());
 				return nullptr;
 			};
 		}
 
 		std::function<ptr(mem_port)(const std::vector<ptr(mem_component) >&, const ptr(mem_component)&)>
 		CBootstrap::prepareSymbolGetter(const std::string& portName) {
-			return [&portName](const std::vector<ptr(mem_component)>& /*params*/, const ptr(mem_component)& context) -> ptr(mem_port) {
+			return [portName](const std::vector<ptr(mem_component)>& /*params*/, const ptr(mem_component)& context) -> ptr(mem_port) {
 				return context->getPortByName(portName)->getConnectedPortAt(0)->getOwner()->getPortByName("default");
 			};
 		}
@@ -334,9 +327,9 @@ namespace interpreter {
 			servicesNames.at("getSelector")->setCallback(prepareSymbolGetter("name"));
 
 			std::function<ptr(mem_port)(const std::vector<ptr(mem_component)>&, const ptr(mem_component)&)> callback
-			= [](const std::vector<ptr(mem_component)>& /*params*/, const ptr(mem_component)& context) -> ptr(mem_port) {
+			= [this](const std::vector<ptr(mem_component)>& /*params*/, const ptr(mem_component)& context) -> ptr(mem_port) {
 				u64 count = context->getPortByName("paramNames")->getConnectedPortsNumber();
-				return new_ptr(mem_uint)(count)->getDefaultPort();
+				return bootstrapUIntValue(count)->getDefaultPort();
 			};
 			servicesNames.at("getParamsCount")->setCallback(callback);
 
@@ -349,7 +342,9 @@ namespace interpreter {
 
 				ptr(mem_uint) uintComponent = cast(mem_uint)(indexComponent);
 
-				return params->getConnectedPortAt(uintComponent->getValue())->getOwner()->getPortByName("default");
+                                ptr(mem_port) portComp = params->getConnectedPortAt(uintComponent->getValue());
+                                
+				return portComp->getOwner()->getPortByName("default");
 			};
 			servicesNames.at("getParamName")->setCallback(callback);
 
