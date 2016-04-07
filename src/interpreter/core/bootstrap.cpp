@@ -357,7 +357,7 @@ namespace interpreter {
 				std::string name = cast(mem_string)(arg)->getValue();
 
 				context->getPortByName("args")->disconnectPortAt(0);
-				context->getPortByName("args")->disconnectPortAt(1);
+				context->getPortByName("args")->disconnectPortAt(0);
 
 				cast(mem_string)(context->getPortByName("paramNames")->getConnectedPortAt(index)->getOwner())->setValue(name);
 				return nullptr;
