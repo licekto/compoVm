@@ -1,5 +1,4 @@
 descriptor ConnectionDescription extends Component {
-    provides { default : *; }
     internally requires {
         sourceComponent : Symbol;
         sourcePort : Symbol;

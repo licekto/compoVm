@@ -126,7 +126,7 @@ do { \
     TEST_SYMBOL(std::dynamic_pointer_cast<ast::nodes::procedural::CSymbol>(portAddress->getComponent()), componentName); \
 } while(0)
 
-#define TEST_GENERAL_PRIMITIVE_PORT(component, portName, role, visibility, connectedServices) \
+#define TEST_PRIMITIVE_PORT(component, portName, role, visibility, connectedServices) \
 do { \
     BOOST_CHECK(component->getPortByName(portName)->isPrimitive()); \
     BOOST_CHECK_EQUAL(component->getPortByName(portName)->getName(), portName); \
@@ -136,7 +136,7 @@ do { \
     BOOST_CHECK_EQUAL(component->getPortByName(portName)->getPrimitivePort()->getConnectedServicesNumber(), connectedServices); \
 } while(0)
 
-#define TEST_GENERAL_PRIMITIVE_SERVICE(component, portName, serviceName, argsCount, ret) \
+#define TEST_PRIMITIVE_SERVICE(component, portName, serviceName, argsCount, ret) \
 do { \
     BOOST_CHECK(component->getPortByName(portName)->getPrimitivePort()->getConnectedServiceByName(serviceName)->isPrimitive()); \
     BOOST_CHECK_EQUAL(component->getPortByName(portName)->getPrimitivePort()->getConnectedServiceByName(serviceName)->getName(), serviceName); \
@@ -151,18 +151,18 @@ do { \
 
 #define TEST_BASE_COMPONENT(component, servicesTotal, owner) \
 do { \
-    TEST_GENERAL_PRIMITIVE_PORT(component, "default", types::roleType::PROVIDES, types::visibilityType::EXTERNAL, servicesTotal); \
-    TEST_GENERAL_PRIMITIVE_SERVICE(component, "default", "getPorts", 0, false); \
+    TEST_PRIMITIVE_PORT(component, "default", types::roleType::PROVIDES, types::visibilityType::EXTERNAL, servicesTotal); \
+    TEST_PRIMITIVE_SERVICE(component, "default", "getPorts", 0, false); \
     component->getPortByName("args")->connectPort(bootstrap->bootstrapStringValue("default")->getDefaultPort()); \
-    TEST_GENERAL_PRIMITIVE_SERVICE(component, "default", "getPortNamed", 1, true); \
+    TEST_PRIMITIVE_SERVICE(component, "default", "getPortNamed", 1, true); \
     BOOST_CHECK_EQUAL(component->getPortByName("args")->getConnectedPortsNumber(), 0); \
-    TEST_GENERAL_PRIMITIVE_SERVICE(component, "default", "getDescriptor", 0, false); \
-    TEST_GENERAL_PRIMITIVE_SERVICE(component, "default", "getIdentityHash", 0, false); \
+    TEST_PRIMITIVE_SERVICE(component, "default", "getDescriptor", 0, false); \
+    TEST_PRIMITIVE_SERVICE(component, "default", "getIdentityHash", 0, false); \
     if (owner.get()) { \
-        TEST_GENERAL_PRIMITIVE_SERVICE(component, "default", "getOwner", 0, true); \
+        TEST_PRIMITIVE_SERVICE(component, "default", "getOwner", 0, true); \
         BOOST_CHECK_EQUAL(component->getPortByName("default")->getPrimitivePort()->getConnectedServiceByName("getOwner")->getPrimitiveService()->invoke().get(), owner->getPortByName("default").get()); \
     } \
-    TEST_GENERAL_PRIMITIVE_PORT(component, "self", types::roleType::PROVIDES, types::visibilityType::INTERNAL, servicesTotal); \
+    TEST_PRIMITIVE_PORT(component, "self", types::roleType::PROVIDES, types::visibilityType::INTERNAL, servicesTotal); \
 } while(0)
 
 #define TEST_COMPONENT(component, owner) \

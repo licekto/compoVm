@@ -110,10 +110,16 @@ namespace interpreter {
 
 				context->getPortByName("args")->disconnectPortAt(0);
 
-				ptr(mem_string) param = cast(mem_string)(paramComponent);
-
-				context->getPortByName(portName)->disconnectPortAt(0);
-				context->getPortByName(portName)->connectPort(param->getDefaultPort());
+                                ptr(mem_string) param;
+                                
+                                try {
+                                    param = cast(mem_string)(paramComponent);
+                                    context->getPortByName(portName)->disconnectPortAt(0);
+                                    context->getPortByName(portName)->connectPort(param->getDefaultPort());
+                                }
+                                catch (const std::bad_alloc& e) {
+                                    std::cout << "Allocation failed: " << e.what() << '\n';
+                                }
 				return nullptr;
 			};
 		}
@@ -179,10 +185,7 @@ namespace interpreter {
 
 			std::string name = astPort->getNameSymbol()->getStringValue();
                         
-			ptr(mem_string) nameComponent = bootstrapStringValue(name);
-                        ptr(mem_port) defaultPort = nameComponent->getDefaultPort();
-			port->getPortByName("name")->connectPort(defaultPort);
-			
+			port->getPortByName("name")->connectPort(bootstrapStringValue(name)->getDefaultPort());
                         
 			std::function<ptr(mem_port)(const std::vector<ptr(mem_component)>&, const ptr(mem_component)&)> callback;
 			callback = [](const std::vector<ptr(mem_component)>& /*params*/, const ptr(mem_component)& context) -> ptr(mem_port) {
@@ -323,8 +326,8 @@ namespace interpreter {
 			ptr(mem_port) paramNames = serviceSignature->getPortByName("paramNames");
 
 			for(size_t i = 0; i < astSignature->getParamsSize(); ++i) {
-				std::string param = cast(ast::nodes::procedural::CSymbol)(astSignature->getParamAt(i))->getStringValue();
-				paramNames->connectPort(new_ptr(mem_string)(param)->getDefaultPort());
+				std::string param = cast(ast_symbol)(astSignature->getParamAt(i))->getStringValue();
+				paramNames->connectPort(bootstrapStringValue(param)->getDefaultPort());
 			}
 
 			servicesNames.at("setSelector")->setCallback(prepareSymbolSetter("name"));
@@ -513,7 +516,7 @@ namespace interpreter {
 				context->getPortByName("args")->disconnectPortAt(0);
 				return context->getPortByName("signatures")->getConnectedPortAt(val)->getOwner()->getPortByName("default");
 			};
-			servicesNames.at("getSignaturesAt")->setCallback(callback);
+			servicesNames.at("getSignatureAt")->setCallback(callback);
 
 			callback = [](const std::vector<ptr(mem_component)>& /*params*/, const ptr(mem_component)& context) -> ptr(mem_port) {
 				ptr(mem_component) signature = context->getPortByName("args")->getConnectedPortAt(0)->getOwner();
@@ -521,7 +524,7 @@ namespace interpreter {
 				context->getPortByName("signatures")->connectPort(signature->getPortByName("default"));
 				return nullptr;
 			};
-			servicesNames.at("setSignatures")->setCallback(callback);
+			servicesNames.at("setSignature")->setCallback(callback);
 
 			callback = [](const std::vector<ptr(mem_component)>& /*params*/, const ptr(mem_component)& context) -> ptr(mem_port) {
 				return context->getPortByName("connectedComponent")->getConnectedPortAt(0)->getOwner()->getPortByName("default");

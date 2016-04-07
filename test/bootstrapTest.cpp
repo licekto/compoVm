@@ -44,6 +44,73 @@ BOOST_AUTO_TEST_CASE(valuesComponentsTest) {
     BOOST_CHECK_EQUAL(stringComponent->getDefaultPort()->getName(), "default");
     BOOST_CHECK_EQUAL(stringComponent->getDefaultPort()->getOwner().get(), stringComponent.get());
     BOOST_CHECK_EQUAL(stringComponent->getValue(), "test");
+    
+    ptr(mem_bool) boolComponent = bootstrap->bootstrapBoolValue(false);
+    
+    BOOST_CHECK_EQUAL(boolComponent->getDefaultPort()->getName(), "default");
+    BOOST_CHECK_EQUAL(boolComponent->getDefaultPort()->getOwner().get(), boolComponent.get());
+    BOOST_CHECK_EQUAL(boolComponent->getValue(), false);
+    
+    ptr(mem_uint) uintComponent = bootstrap->bootstrapUIntValue(159456);
+    
+    BOOST_CHECK_EQUAL(uintComponent->getDefaultPort()->getName(), "default");
+    BOOST_CHECK_EQUAL(uintComponent->getDefaultPort()->getOwner().get(), uintComponent.get());
+    BOOST_CHECK_EQUAL(uintComponent->getValue(), 159456);
+}
+
+BOOST_AUTO_TEST_CASE(serviceSignatureComponentTest) {
+    
+    std::vector<ptr(ast_node)> params;
+    params.push_back(new_ptr(ast_symbol)("param1"));
+    params.push_back(new_ptr(ast_symbol)("param2"));
+    
+    ptr(ast_servicesignature) signAst = new_ptr(ast_servicesignature)(new_ptr(ast_symbol)("testSignature"), params);
+    
+    ptr(mem_component) owner = bootstrap->bootstrapComponent(nullptr);
+    
+    ptr(mem_component) signatureComponent = bootstrap->bootstrapServiceSignatureComponent(signAst, owner);
+    
+    TEST_BASE_COMPONENT(signatureComponent, 10, owner);
+    TEST_PRIMITIVE_PORT(signatureComponent, "name", types::roleType::REQUIRES, types::visibilityType::INTERNAL, 0);
+    BOOST_CHECK_EQUAL(cast(mem_string)(signatureComponent->getPortByName("name")->getConnectedPortAt(0)->getOwner())->getValue(), "testSignature");
+    TEST_PRIMITIVE_PORT(signatureComponent, "paramNames", types::roleType::REQUIRES, types::visibilityType::INTERNAL, 0);
+    BOOST_CHECK_EQUAL(signatureComponent->getPortByName("paramNames")->getConnectedPortsNumber(), 2);
+    BOOST_CHECK_EQUAL(cast(mem_string)(signatureComponent->getPortByName("paramNames")->getConnectedPortAt(0)->getOwner())->getValue(), "param1");
+    BOOST_CHECK_EQUAL(cast(mem_string)(signatureComponent->getPortByName("paramNames")->getConnectedPortAt(1)->getOwner())->getValue(), "param2");
+    
+    bool ret = false;
+    
+    BOOST_CHECK_EQUAL(signatureComponent->getPortByName("args")->getConnectedPortsNumber(), 0);
+    signatureComponent->getPortByName("args")->connectPort(bootstrap->bootstrapStringValue("testSignatureTest")->getDefaultPort());
+    TEST_PRIMITIVE_SERVICE(signatureComponent, "default", "setSelector", 1, ret);
+    BOOST_CHECK_EQUAL(signatureComponent->getPortByName("args")->getConnectedPortsNumber(), 0);
+    BOOST_CHECK_EQUAL(cast(mem_string)(signatureComponent->getPortByName("name")->getConnectedPortAt(0)->getOwner())->getValue(), "testSignatureTest");
+    
+}
+
+BOOST_AUTO_TEST_CASE(interfaceComponentTest) {
+    
+    ptr(ast_symbol) portName = new_ptr(ast_symbol)("testPort");
+    bool atomicity = false;
+    bool collectivity = false;
+    type_visibility visibility = type_visibility::EXTERNAL;
+    type_role role = type_role::PROVIDES;
+    ptr(ast_symbol) componentName = new_ptr(ast_symbol)("testComponent");
+            
+    ptr(ast_namedport) astPort = new_ptr(ast_namedport)(portName, atomicity, collectivity, visibility, role, componentName);
+    
+    ptr(mem_component) owner = bootstrap->bootstrapComponent(nullptr);
+    
+    ptr(mem_component) interfaceComponent = bootstrap->bootstrapInterfaceComponent(astPort, owner);
+    
+    TEST_BASE_COMPONENT(interfaceComponent, 12, owner);
+    
+    TEST_PRIMITIVE_PORT(interfaceComponent, "type", types::roleType::REQUIRES, types::visibilityType::INTERNAL, 0);
+    BOOST_CHECK_EQUAL(cast(mem_string)(interfaceComponent->getPortByName("type")->getConnectedPortAt(0)->getOwner())->getValue(), PORT_TYPE_NAMED);
+    TEST_PRIMITIVE_PORT(interfaceComponent, "connectedComponent", types::roleType::REQUIRES, types::visibilityType::INTERNAL, 0);
+    BOOST_CHECK_EQUAL(cast(mem_string)(interfaceComponent->getPortByName("connectedComponent")->getConnectedPortAt(0)->getOwner())->getValue(), "testComponent");
+    TEST_PRIMITIVE_PORT(interfaceComponent, "signatures", types::roleType::REQUIRES, types::visibilityType::INTERNAL, 0);
+    BOOST_CHECK_EQUAL(interfaceComponent->getPortByName("signatures")->getConnectedPortsNumber(), 0);
 }
 
 BOOST_AUTO_TEST_CASE(portComponentTest) {
@@ -63,8 +130,8 @@ BOOST_AUTO_TEST_CASE(portComponentTest) {
     
     TEST_BASE_COMPONENT(portComponent, 12, owner);
     
-    //TEST_GENERAL_PRIMITIVE_PORT(portComponent, "name", types::roleType::REQUIRES, types::visibilityType::INTERNAL, 0);
-    //BOOST_CHECK_EQUAL(cast(mem_string)(portComponent->getPortByName("name")->getConnectedPortAt(0)->getOwner())->getValue(), "testPort");
+    TEST_PRIMITIVE_PORT(portComponent, "name", types::roleType::REQUIRES, types::visibilityType::INTERNAL, 0);
+    BOOST_CHECK_EQUAL(cast(mem_string)(portComponent->getPortByName("name")->getConnectedPortAt(0)->getOwner())->getValue(), "testPort");
 }
 
 BOOST_AUTO_TEST_SUITE_END()

@@ -1,7 +1,4 @@
 descriptor Interface extends Component {
-    provides {
-        default : *;
-    }
     internally requires {
         type : String;
         signatures[] : ServiceSignature;
@@ -11,7 +8,7 @@ descriptor Interface extends Component {
     service setType(type) {}
     service getSignaturesCount() {}
     service getSignatureAt(index) {}
-    service setSignatureAt(index) {}
+    service setSignature() {}
     service getConnectedComponent() {}
     service setConnectedComponent() {}
 }
