@@ -134,6 +134,8 @@ BOOST_AUTO_TEST_CASE(interfaceComponentTest) {
     
     ptr(mem_component) interfaceComponent = bootstrap->bootstrapInterfaceComponent(astPort, owner);
     
+    ptr(mem_port) retPort;
+    
     TEST_BASE_COMPONENT(interfaceComponent, 12, owner);
     
     TEST_PRIMITIVE_PORT(interfaceComponent, "type", types::roleType::REQUIRES, types::visibilityType::INTERNAL, 0);
@@ -142,6 +144,13 @@ BOOST_AUTO_TEST_CASE(interfaceComponentTest) {
     BOOST_CHECK_EQUAL(cast(mem_string)(interfaceComponent->getPortByName("connectedComponent")->getConnectedPortAt(0)->getOwner())->getValue(), "testComponent");
     TEST_PRIMITIVE_PORT(interfaceComponent, "signatures", types::roleType::REQUIRES, types::visibilityType::INTERNAL, 0);
     BOOST_CHECK_EQUAL(interfaceComponent->getPortByName("signatures")->getConnectedPortsNumber(), 0);
+    
+    bool ret = false;
+    BOOST_CHECK_EQUAL(interfaceComponent->getPortByName("args")->getConnectedPortsNumber(), 0);
+    interfaceComponent->getPortByName("args")->connectPort(bootstrap->bootstrapStringValue("testType")->getDefaultPort());
+    TEST_PRIMITIVE_SERVICE(interfaceComponent, "default", "setType", 1, ret, retPort);
+    BOOST_CHECK_EQUAL(interfaceComponent->getPortByName("args")->getConnectedPortsNumber(), 0);
+    BOOST_CHECK_EQUAL(cast(mem_string)(interfaceComponent->getPortByName("type")->getConnectedPortAt(0)->getOwner())->getValue(), "testType");
 }
 
 BOOST_AUTO_TEST_CASE(portComponentTest) {
