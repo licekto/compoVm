@@ -438,4 +438,203 @@ BOOST_AUTO_TEST_CASE(collectionPortComponentTest) {
     BOOST_CHECK_EQUAL(portComponent->getPortByName("connectedPorts")->getConnectedPortsNumber(), 0);
 }
 
+BOOST_AUTO_TEST_CASE(portDescriptionComponentTest) {
+    
+    ptr(ast_symbol) portName = new_ptr(ast_symbol)("testPortDescription");
+    bool atomicity = false;
+    bool collectivity = false;
+    type_visibility visibility = type_visibility::EXTERNAL;
+    type_role role = type_role::PROVIDES;
+    ptr(ast_symbol) componentName = new_ptr(ast_symbol)("testComponent");
+            
+    ptr(ast_namedport) astPort = new_ptr(ast_namedport)(portName, atomicity, collectivity, visibility, role, componentName);
+    astPort->setKindOf(new_ptr(ast_symbol)("SuperPort"));
+    
+    ptr(mem_component) owner = bootstrap->bootstrapComponent(nullptr);
+    
+    ptr(mem_component) portDescriptionComponent = bootstrap->bootstrapPortDescriptionComponent(astPort, owner);
+    
+    TEST_BASE_COMPONENT(portDescriptionComponent, 17, owner);
+    
+    TEST_PRIMITIVE_PORT(portDescriptionComponent, "name", types::roleType::REQUIRES, types::visibilityType::INTERNAL, 0);
+    BOOST_CHECK_EQUAL(cast(mem_string)(portDescriptionComponent->getPortByName("name")->getConnectedPortAt(0)->getOwner())->getValue(), "testPortDescription");
+    TEST_PRIMITIVE_PORT(portDescriptionComponent, "role", types::roleType::REQUIRES, types::visibilityType::INTERNAL, 0);
+    BOOST_CHECK_EQUAL(cast(mem_string)(portDescriptionComponent->getPortByName("role")->getConnectedPortAt(0)->getOwner())->getValue(), ROLE_PROVISION);
+    TEST_PRIMITIVE_PORT(portDescriptionComponent, "visibility", types::roleType::REQUIRES, types::visibilityType::INTERNAL, 0);
+    BOOST_CHECK_EQUAL(cast(mem_string)(portDescriptionComponent->getPortByName("visibility")->getConnectedPortAt(0)->getOwner())->getValue(), VISIBILITY_EXTERNAL);
+    TEST_PRIMITIVE_PORT(portDescriptionComponent, "kind", types::roleType::REQUIRES, types::visibilityType::INTERNAL, 0);
+    BOOST_CHECK_EQUAL(cast(mem_string)(portDescriptionComponent->getPortByName("kind")->getConnectedPortAt(0)->getOwner())->getValue(), "SuperPort");
+    TEST_PRIMITIVE_PORT(portDescriptionComponent, "isCollectionPort", types::roleType::REQUIRES, types::visibilityType::INTERNAL, 0);
+    BOOST_CHECK_EQUAL(cast(mem_bool)(portDescriptionComponent->getPortByName("isCollectionPort")->getConnectedPortAt(0)->getOwner())->getValue(), false);
+    
+    ptr(mem_port) retPort;
+    
+    bool ret = false;
+    BOOST_CHECK_EQUAL(portDescriptionComponent->getPortByName("args")->getConnectedPortsNumber(), 0);
+    portDescriptionComponent->getPortByName("args")->connectPort(bootstrap->bootstrapStringValue("testPortDescriptionTest")->getDefaultPort());
+    TEST_PRIMITIVE_SERVICE(portDescriptionComponent, "default", "setName", 1, ret, retPort);
+    BOOST_CHECK_EQUAL(portDescriptionComponent->getPortByName("args")->getConnectedPortsNumber(), 0);
+    
+    ret = true;
+    TEST_PRIMITIVE_SERVICE(portDescriptionComponent, "default", "getName", 0, ret, retPort);
+    BOOST_CHECK_EQUAL(portDescriptionComponent->getPortByName("args")->getConnectedPortsNumber(), 0);
+    BOOST_CHECK_EQUAL(cast(mem_string)(retPort->getOwner())->getValue(), "testPortDescriptionTest");
+    ptr(mem_string) str = cast(mem_string)(retPort->getOwner());
+    BOOST_CHECK_EQUAL(str->getValue(), "testPortDescriptionTest");
+    
+    ret = false;
+    BOOST_CHECK_EQUAL(portDescriptionComponent->getPortByName("args")->getConnectedPortsNumber(), 0);
+    portDescriptionComponent->getPortByName("args")->connectPort(bootstrap->bootstrapStringValue(ROLE_REQUIREMENT)->getDefaultPort());
+    TEST_PRIMITIVE_SERVICE(portDescriptionComponent, "default", "setRole", 1, ret, retPort);
+    BOOST_CHECK_EQUAL(portDescriptionComponent->getPortByName("args")->getConnectedPortsNumber(), 0);
+    
+    ret = true;
+    TEST_PRIMITIVE_SERVICE(portDescriptionComponent, "default", "getRole", 0, ret, retPort);
+    BOOST_CHECK_EQUAL(portDescriptionComponent->getPortByName("args")->getConnectedPortsNumber(), 0);
+    BOOST_CHECK_EQUAL(cast(mem_string)(retPort->getOwner())->getValue(), ROLE_REQUIREMENT);
+    str = cast(mem_string)(retPort->getOwner());
+    BOOST_CHECK_EQUAL(str->getValue(), ROLE_REQUIREMENT);
+    
+    ret = false;
+    BOOST_CHECK_EQUAL(portDescriptionComponent->getPortByName("args")->getConnectedPortsNumber(), 0);
+    portDescriptionComponent->getPortByName("args")->connectPort(bootstrap->bootstrapStringValue("SelfPort")->getDefaultPort());
+    TEST_PRIMITIVE_SERVICE(portDescriptionComponent, "default", "setKind", 1, ret, retPort);
+    BOOST_CHECK_EQUAL(portDescriptionComponent->getPortByName("args")->getConnectedPortsNumber(), 0);
+    
+    ret = true;
+    TEST_PRIMITIVE_SERVICE(portDescriptionComponent, "default", "getKind", 0, ret, retPort);
+    BOOST_CHECK_EQUAL(portDescriptionComponent->getPortByName("args")->getConnectedPortsNumber(), 0);
+    BOOST_CHECK_EQUAL(cast(mem_string)(retPort->getOwner())->getValue(), "SelfPort");
+    str = cast(mem_string)(retPort->getOwner());
+    BOOST_CHECK_EQUAL(str->getValue(), "SelfPort");
+    
+    ret = false;
+    BOOST_CHECK_EQUAL(portDescriptionComponent->getPortByName("args")->getConnectedPortsNumber(), 0);
+    portDescriptionComponent->getPortByName("args")->connectPort(bootstrap->bootstrapStringValue(VISIBILITY_INTERNAL)->getDefaultPort());
+    TEST_PRIMITIVE_SERVICE(portDescriptionComponent, "default", "setVisibility", 1, ret, retPort);
+    BOOST_CHECK_EQUAL(portDescriptionComponent->getPortByName("args")->getConnectedPortsNumber(), 0);
+    
+    ret = true;
+    TEST_PRIMITIVE_SERVICE(portDescriptionComponent, "default", "getVisibility", 0, ret, retPort);
+    BOOST_CHECK_EQUAL(portDescriptionComponent->getPortByName("args")->getConnectedPortsNumber(), 0);
+    BOOST_CHECK_EQUAL(cast(mem_string)(retPort->getOwner())->getValue(), VISIBILITY_INTERNAL);
+    str = cast(mem_string)(retPort->getOwner());
+    BOOST_CHECK_EQUAL(str->getValue(), VISIBILITY_INTERNAL);
+    
+    ret = false;
+    BOOST_CHECK_EQUAL(portDescriptionComponent->getPortByName("args")->getConnectedPortsNumber(), 0);
+    portDescriptionComponent->getPortByName("args")->connectPort(bootstrap->bootstrapBoolValue(true)->getDefaultPort());
+    TEST_PRIMITIVE_SERVICE(portDescriptionComponent, "default", "setIsCollection", 1, ret, retPort);
+    BOOST_CHECK_EQUAL(portDescriptionComponent->getPortByName("args")->getConnectedPortsNumber(), 0);
+    
+    ret = true;
+    TEST_PRIMITIVE_SERVICE(portDescriptionComponent, "default", "isCollection", 0, ret, retPort);
+    BOOST_CHECK_EQUAL(portDescriptionComponent->getPortByName("args")->getConnectedPortsNumber(), 0);
+    BOOST_CHECK_EQUAL(cast(mem_bool)(retPort->getOwner())->getValue(), true);
+    ptr(mem_bool) boolVal = cast(mem_bool)(retPort->getOwner());
+    BOOST_CHECK_EQUAL(boolVal->getValue(), true);
+    
+    ret = false;
+    ptr(mem_component) intf = bootstrap->bootstrapInterfaceComponent(astPort, owner);
+    BOOST_CHECK_EQUAL(portDescriptionComponent->getPortByName("args")->getConnectedPortsNumber(), 0);
+    portDescriptionComponent->getPortByName("args")->connectPort(intf->getPortByName("default"));
+    TEST_PRIMITIVE_SERVICE(portDescriptionComponent, "default", "setInterface", 1, ret, retPort);
+    BOOST_CHECK_EQUAL(portDescriptionComponent->getPortByName("args")->getConnectedPortsNumber(), 0);
+    
+    ret = true;
+    TEST_PRIMITIVE_SERVICE(portDescriptionComponent, "default", "getInterface", 0, ret, retPort);
+    BOOST_CHECK_EQUAL(portDescriptionComponent->getPortByName("args")->getConnectedPortsNumber(), 0);
+    BOOST_CHECK_EQUAL(retPort->getOwner().get(), intf.get());
+}
+
+BOOST_AUTO_TEST_CASE(connectionDescriptionComponentTest) {
+    ptr(ast_portaddress) addr1 = new_ptr(ast_portaddress)(new_ptr(ast_symbol)("default"), new_ptr(ast_symbol)("backend"));
+    ptr(ast_portaddress) addr2 = new_ptr(ast_portaddress)(new_ptr(ast_symbol)("self"), new_ptr(ast_symbol)("frontend"));
+    
+    ptr(ast_connection) astConnection = new_ptr(ast_connection)(addr1, addr2);
+        
+    ptr(mem_component) owner = bootstrap->bootstrapComponent(nullptr);
+    
+    ptr(mem_component) connectionDescriptionComponent = bootstrap->bootstrapConnectionDescriptionComponent(astConnection, owner);
+    
+    TEST_BASE_COMPONENT(connectionDescriptionComponent, 15, owner);
+    
+    TEST_PRIMITIVE_PORT(connectionDescriptionComponent, "sourceComponent", types::roleType::REQUIRES, types::visibilityType::INTERNAL, 0);
+    BOOST_CHECK_EQUAL(cast(mem_string)(connectionDescriptionComponent->getPortByName("sourceComponent")->getConnectedPortAt(0)->getOwner())->getValue(), "backend");
+    TEST_PRIMITIVE_PORT(connectionDescriptionComponent, "sourcePort", types::roleType::REQUIRES, types::visibilityType::INTERNAL, 0);
+    BOOST_CHECK_EQUAL(cast(mem_string)(connectionDescriptionComponent->getPortByName("sourcePort")->getConnectedPortAt(0)->getOwner())->getValue(), "default");
+    TEST_PRIMITIVE_PORT(connectionDescriptionComponent, "destinationComponent", types::roleType::REQUIRES, types::visibilityType::INTERNAL, 0);
+    BOOST_CHECK_EQUAL(cast(mem_string)(connectionDescriptionComponent->getPortByName("destinationComponent")->getConnectedPortAt(0)->getOwner())->getValue(), "frontend");
+    TEST_PRIMITIVE_PORT(connectionDescriptionComponent, "destinationPort", types::roleType::REQUIRES, types::visibilityType::INTERNAL, 0);
+    BOOST_CHECK_EQUAL(cast(mem_string)(connectionDescriptionComponent->getPortByName("destinationPort")->getConnectedPortAt(0)->getOwner())->getValue(), "self");
+    TEST_PRIMITIVE_PORT(connectionDescriptionComponent, "isDisconnection", types::roleType::REQUIRES, types::visibilityType::INTERNAL, 0);
+    BOOST_CHECK_EQUAL(cast(mem_bool)(connectionDescriptionComponent->getPortByName("isDisconnection")->getConnectedPortAt(0)->getOwner())->getValue(), false);
+    
+    ptr(mem_port) retPort;
+    bool ret = false;
+    BOOST_CHECK_EQUAL(connectionDescriptionComponent->getPortByName("args")->getConnectedPortsNumber(), 0);
+    connectionDescriptionComponent->getPortByName("args")->connectPort(bootstrap->bootstrapStringValue("newBackend")->getDefaultPort());
+    TEST_PRIMITIVE_SERVICE(connectionDescriptionComponent, "default", "setSourceComponent", 1, ret, retPort);
+    BOOST_CHECK_EQUAL(connectionDescriptionComponent->getPortByName("args")->getConnectedPortsNumber(), 0);
+    
+    ret = true;
+    TEST_PRIMITIVE_SERVICE(connectionDescriptionComponent, "default", "getSourceComponent", 0, ret, retPort);
+    BOOST_CHECK_EQUAL(connectionDescriptionComponent->getPortByName("args")->getConnectedPortsNumber(), 0);
+    BOOST_CHECK_EQUAL(cast(mem_string)(retPort->getOwner())->getValue(), "newBackend");
+    ptr(mem_string) str = cast(mem_string)(retPort->getOwner());
+    BOOST_CHECK_EQUAL(str->getValue(), "newBackend");
+    
+    ret = false;
+    BOOST_CHECK_EQUAL(connectionDescriptionComponent->getPortByName("args")->getConnectedPortsNumber(), 0);
+    connectionDescriptionComponent->getPortByName("args")->connectPort(bootstrap->bootstrapStringValue("newDefault")->getDefaultPort());
+    TEST_PRIMITIVE_SERVICE(connectionDescriptionComponent, "default", "setSourcePort", 1, ret, retPort);
+    BOOST_CHECK_EQUAL(connectionDescriptionComponent->getPortByName("args")->getConnectedPortsNumber(), 0);
+    
+    ret = true;
+    TEST_PRIMITIVE_SERVICE(connectionDescriptionComponent, "default", "getSourcePort", 0, ret, retPort);
+    BOOST_CHECK_EQUAL(connectionDescriptionComponent->getPortByName("args")->getConnectedPortsNumber(), 0);
+    BOOST_CHECK_EQUAL(cast(mem_string)(retPort->getOwner())->getValue(), "newDefault");
+    str = cast(mem_string)(retPort->getOwner());
+    BOOST_CHECK_EQUAL(str->getValue(), "newDefault");
+    
+    ret = false;
+    BOOST_CHECK_EQUAL(connectionDescriptionComponent->getPortByName("args")->getConnectedPortsNumber(), 0);
+    connectionDescriptionComponent->getPortByName("args")->connectPort(bootstrap->bootstrapStringValue("newFrontend")->getDefaultPort());
+    TEST_PRIMITIVE_SERVICE(connectionDescriptionComponent, "default", "setDestinationComponent", 1, ret, retPort);
+    BOOST_CHECK_EQUAL(connectionDescriptionComponent->getPortByName("args")->getConnectedPortsNumber(), 0);
+    
+    ret = true;
+    TEST_PRIMITIVE_SERVICE(connectionDescriptionComponent, "default", "getDestinationComponent", 0, ret, retPort);
+    BOOST_CHECK_EQUAL(connectionDescriptionComponent->getPortByName("args")->getConnectedPortsNumber(), 0);
+    BOOST_CHECK_EQUAL(cast(mem_string)(retPort->getOwner())->getValue(), "newFrontend");
+    str = cast(mem_string)(retPort->getOwner());
+    BOOST_CHECK_EQUAL(str->getValue(), "newFrontend");
+    
+    ret = false;
+    BOOST_CHECK_EQUAL(connectionDescriptionComponent->getPortByName("args")->getConnectedPortsNumber(), 0);
+    connectionDescriptionComponent->getPortByName("args")->connectPort(bootstrap->bootstrapStringValue("newSelf")->getDefaultPort());
+    TEST_PRIMITIVE_SERVICE(connectionDescriptionComponent, "default", "setDestinationPort", 1, ret, retPort);
+    BOOST_CHECK_EQUAL(connectionDescriptionComponent->getPortByName("args")->getConnectedPortsNumber(), 0);
+    
+    ret = true;
+    TEST_PRIMITIVE_SERVICE(connectionDescriptionComponent, "default", "getDestinationPort", 0, ret, retPort);
+    BOOST_CHECK_EQUAL(connectionDescriptionComponent->getPortByName("args")->getConnectedPortsNumber(), 0);
+    BOOST_CHECK_EQUAL(cast(mem_string)(retPort->getOwner())->getValue(), "newSelf");
+    str = cast(mem_string)(retPort->getOwner());
+    BOOST_CHECK_EQUAL(str->getValue(), "newSelf");
+    
+    ret = false;
+    BOOST_CHECK_EQUAL(connectionDescriptionComponent->getPortByName("args")->getConnectedPortsNumber(), 0);
+    connectionDescriptionComponent->getPortByName("args")->connectPort(bootstrap->bootstrapBoolValue(true)->getDefaultPort());
+    TEST_PRIMITIVE_SERVICE(connectionDescriptionComponent, "default", "setIsDisconnection", 1, ret, retPort);
+    BOOST_CHECK_EQUAL(connectionDescriptionComponent->getPortByName("args")->getConnectedPortsNumber(), 0);
+    
+    ret = true;
+    TEST_PRIMITIVE_SERVICE(connectionDescriptionComponent, "default", "isDisconnection", 0, ret, retPort);
+    BOOST_CHECK_EQUAL(connectionDescriptionComponent->getPortByName("args")->getConnectedPortsNumber(), 0);
+    BOOST_CHECK_EQUAL(cast(mem_bool)(retPort->getOwner())->getValue(), true);
+    ptr(mem_bool) boolVal = cast(mem_bool)(retPort->getOwner());
+    BOOST_CHECK_EQUAL(boolVal->getValue(), true);
+}
+
 BOOST_AUTO_TEST_SUITE_END()

@@ -405,7 +405,9 @@ namespace interpreter {
 			portDescription->getPortByName("role")->connectPort(bootstrapStringValue(role)->getDefaultPort());
 			std::string visibility = astPort->getVisibility() == types::visibilityType::EXTERNAL ? VISIBILITY_EXTERNAL : VISIBILITY_INTERNAL;
 			portDescription->getPortByName("visibility")->connectPort(bootstrapStringValue(visibility)->getDefaultPort());
-			portDescription->getPortByName("kind")->connectPort(bootstrapStringValue(astPort->getKindOf()->getStringValue())->getDefaultPort());
+                        if (astPort->getKindOf().use_count()) {
+                            portDescription->getPortByName("kind")->connectPort(bootstrapStringValue(astPort->getKindOf()->getStringValue())->getDefaultPort());
+                        }
 			portDescription->getPortByName("isCollectionPort")->connectPort(bootstrapBoolValue(astPort->isCollection())->getDefaultPort());
 
 			portDescription->getPortByName("interfaceDefinition")->connectPort(bootstrapInterfaceComponent(astPort, owner)->getPortByName("default"));
@@ -427,6 +429,7 @@ namespace interpreter {
 			callback = [](const std::vector<ptr(mem_component)>& /*params*/, const ptr(mem_component)& context) -> ptr(mem_port) {
 				ptr(mem_component) paramComponent = context->getPortByName("args")->getConnectedPortAt(0)->getOwner();
 				context->getPortByName("args")->disconnectPortAt(0);
+                                context->getPortByName("interfaceDefinition")->disconnectPortAt(0);
 				context->getPortByName("interfaceDefinition")->connectPort(paramComponent->getPortByName("default"));
 				return nullptr;
 			};
@@ -437,6 +440,20 @@ namespace interpreter {
 			};
 			servicesNames.at("getInterface")->setCallback(callback);
 
+                        callback = [](const std::vector<ptr(mem_component)>& /*params*/, const ptr(mem_component)& context) -> ptr(mem_port) {
+				ptr(mem_bool) paramComponent = cast(mem_bool)(context->getPortByName("args")->getConnectedPortAt(0)->getOwner());
+				context->getPortByName("args")->disconnectPortAt(0);
+                                context->getPortByName("isCollectionPort")->disconnectPortAt(0);
+				context->getPortByName("isCollectionPort")->connectPort(paramComponent->getDefaultPort());
+				return nullptr;
+			};
+			servicesNames.at("setIsCollection")->setCallback(callback);
+
+			callback = [](const std::vector<ptr(mem_component)>& /*params*/, const ptr(mem_component)& context) -> ptr(mem_port) {
+                                return cast(mem_bool)(context->getPortByName("isCollectionPort")->getConnectedPortAt(0)->getOwner())->getDefaultPort();
+			};
+			servicesNames.at("isCollection")->setCallback(callback);
+                        
                         bootstrapEpilogue(portDescription, servicesNames);
 			return portDescription;
 		}
@@ -471,10 +488,9 @@ namespace interpreter {
 			std::function<ptr(mem_port)(const std::vector<ptr(mem_component)>&, const ptr(mem_component)&)> callback;
 
 			callback = [](const std::vector<ptr(mem_component)>& /*params*/, const ptr(mem_component)& context) -> ptr(mem_port) {
-				ptr(mem_bool) boolComponent =
-				    cast(mem_bool)(context->getPortByName("args")->getConnectedPortAt(0)->getOwner());
+				ptr(mem_bool) boolComponent = cast(mem_bool)(context->getPortByName("args")->getConnectedPortAt(0)->getOwner());
 				context->getPortByName("args")->disconnectPortAt(0);
-
+                                context->getPortByName("isDisconnection")->disconnectPortAt(0);
 				context->getPortByName("isDisconnection")->connectPort(boolComponent->getDefaultPort());
 				return nullptr;
 			};
