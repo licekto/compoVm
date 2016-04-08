@@ -8,7 +8,7 @@ descriptor Interface extends Component {
     service setType(type) {}
     service getSignaturesCount() {}
     service getSignatureAt(index) {}
-    service setSignature() {}
+    service setSignature(signature) {}
     service getConnectedComponent() {}
-    service setConnectedComponent() {}
+    service setConnectedComponent(component) {}
 }

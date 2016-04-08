@@ -465,33 +465,42 @@ namespace interpreter {
                         std::map<std::string, ptr(mem_primitiveservice)> servicesNames;
                         ptr(mem_component) interface = bootstrapPrologueWithComponent(m_coreModules->getCoreDescriptor("Interface"), servicesNames, owner);
 
+                        std::string type;
+                        
 			switch (astPort->getPortType()) {
-			case types::portType::EXPLICIT_LIST : {
-				interface->getPortByName("type")->connectPort(bootstrapStringValue(PORT_TYPE_SIGNATURES)->getDefaultPort());
-				ptr(ast_signaturesport) signPort = cast(ast_signaturesport)(astPort);
+                            case types::portType::EXPLICIT_LIST : {
+                                    type = PORT_TYPE_SIGNATURES;
+                                    interface->getPortByName("type")->connectPort(bootstrapStringValue(type)->getDefaultPort());
+                                    ptr(ast_signaturesport) signPort = cast(ast_signaturesport)(astPort);
 
-				for(size_t i = 0; i < signPort->getSignaturesSize(); ++i) {
-					interface->getPortByName("signatures")->connectPort(bootstrapServiceSignatureComponent(signPort->getSignatureAt(i), owner)->getPortByName("default"));
-				}
+                                    for(size_t i = 0; i < signPort->getSignaturesSize(); ++i) {
+                                            interface->getPortByName("signatures")->connectPort(bootstrapServiceSignatureComponent(signPort->getSignatureAt(i), owner)->getPortByName("default"));
+                                    }
 
-				break;
-			}
-			case types::portType::INJECTED : {
-				// throw unsupported feature
-				break;
-			}
-			case types::portType::NAMED : {
-				interface->getPortByName("type")->connectPort(bootstrapStringValue(PORT_TYPE_NAMED)->getDefaultPort());
+                                    break;
+                            }
+                            case types::portType::INJECTED : {
+                                    // throw unsupported feature
+                                    break;
+                            }
+                            case types::portType::NAMED : {
+                                    type = PORT_TYPE_NAMED;
+                                    interface->getPortByName("type")->connectPort(bootstrapStringValue(type)->getDefaultPort());
 
-				ptr(ast_namedport) namedPort = cast(ast_namedport)(astPort);
+                                    ptr(ast_namedport) namedPort = cast(ast_namedport)(astPort);
 
-				interface->getPortByName("connectedComponent")->connectPort(bootstrapStringValue(namedPort->getComponentName()->getStringValue())->getDefaultPort());
-				break;
-			}
-			case types::portType::UNIVERSAL : {
-				interface->getPortByName("type")->connectPort(bootstrapStringValue(PORT_TYPE_UNIVERSAL)->getDefaultPort());
-				break;
-			}
+                                    interface->getPortByName("connectedComponent")->connectPort(bootstrapStringValue(namedPort->getComponentName()->getStringValue())->getDefaultPort());
+                                    break;
+                            }
+                            case types::portType::UNIVERSAL : {
+                                    type = PORT_TYPE_UNIVERSAL;
+                                    interface->getPortByName("type")->connectPort(bootstrapStringValue(type)->getDefaultPort());
+                                    break;
+                            }
+                            default : {
+                                // throw
+                                break;
+                            }
 			}
 
 			servicesNames.at("setType")->setCallback(prepareSymbolSetter("type"));
@@ -506,14 +515,22 @@ namespace interpreter {
 			};
 			servicesNames.at("getSignaturesCount")->setCallback(callback);
 
-			callback = [](const std::vector<ptr(mem_component)>& /*params*/, const ptr(mem_component)& context) -> ptr(mem_port) {
+			callback = [type](const std::vector<ptr(mem_component)>& /*params*/, const ptr(mem_component)& context) -> ptr(mem_port) {
+                                if (type != PORT_TYPE_SIGNATURES) {
+                                    // throw
+                                    return nullptr;
+                                }
 				u64 val = cast(mem_uint)(context->getPortByName("args")->getConnectedPortAt(0)->getOwner())->getValue();
 				context->getPortByName("args")->disconnectPortAt(0);
 				return context->getPortByName("signatures")->getConnectedPortAt(val)->getOwner()->getPortByName("default");
 			};
 			servicesNames.at("getSignatureAt")->setCallback(callback);
 
-			callback = [](const std::vector<ptr(mem_component)>& /*params*/, const ptr(mem_component)& context) -> ptr(mem_port) {
+			callback = [type](const std::vector<ptr(mem_component)>& /*params*/, const ptr(mem_component)& context) -> ptr(mem_port) {
+                                if (type != PORT_TYPE_SIGNATURES) {
+                                    // throw
+                                    return nullptr;
+                                }
 				ptr(mem_component) signature = context->getPortByName("args")->getConnectedPortAt(0)->getOwner();
 				context->getPortByName("args")->disconnectPortAt(0);
 				context->getPortByName("signatures")->connectPort(signature->getPortByName("default"));
@@ -521,15 +538,28 @@ namespace interpreter {
 			};
 			servicesNames.at("setSignature")->setCallback(callback);
 
-			callback = [](const std::vector<ptr(mem_component)>& /*params*/, const ptr(mem_component)& context) -> ptr(mem_port) {
-				return context->getPortByName("connectedComponent")->getConnectedPortAt(0)->getOwner()->getPortByName("default");
+			callback = [type](const std::vector<ptr(mem_component)>& /*params*/, const ptr(mem_component)& context) -> ptr(mem_port) {
+                                if (type != PORT_TYPE_NAMED) {
+                                    // throw
+                                    return nullptr;
+                                }
+                                if (context->getPortByName("connectedComponent")->getConnectedPortsNumber()) {
+                                    return context->getPortByName("connectedComponent")->getConnectedPortAt(0)->getOwner()->getPortByName("default");
+                                }
+                                return nullptr;
 			};
 			servicesNames.at("getConnectedComponent")->setCallback(callback);
 
-			callback = [](const std::vector<ptr(mem_component)>& /*params*/, const ptr(mem_component)& context) -> ptr(mem_port) {
-				ptr(mem_component) component = context->getPortByName("args")->getConnectedPortAt(0)->getOwner();
+			callback = [type](const std::vector<ptr(mem_component)>& /*params*/, const ptr(mem_component)& context) -> ptr(mem_port) {
+                                if (type != PORT_TYPE_NAMED) {
+                                    // throw
+                                    return nullptr;
+                                }
+				ptr(mem_string) component = cast(mem_string)(context->getPortByName("args")->getConnectedPortAt(0)->getOwner());
+                                
 				context->getPortByName("args")->disconnectPortAt(0);
-				context->getPortByName("connectedComponent")->connectPort(component->getPortByName("default"));
+                                context->getPortByName("connectedComponent")->disconnectPortAt(0);
+				context->getPortByName("connectedComponent")->connectPort(component->getDefaultPort());
 				return nullptr;
 			};
 			servicesNames.at("setConnectedComponent")->setCallback(callback);
