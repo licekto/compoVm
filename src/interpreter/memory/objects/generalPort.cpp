@@ -89,7 +89,7 @@ namespace interpreter {
 
                         void CGeneralPort::disconnectPortAt(size_t index) {
                             if (m_primitive) {
-                                return m_primitivePort->disconnectPortArt(index);
+                                return m_primitivePort->disconnectPortAt(index);
                             }
                             else {
                                 return m_port->getPortByName("connectedPorts")->disconnectPortAt(index);

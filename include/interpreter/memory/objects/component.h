@@ -41,6 +41,8 @@ namespace interpreter {
 
 				ptr(CGeneralPort) getPortByName(const std::string& name);
 
+                                size_t getNumerOfServices() const;
+                                
 				ptr(CGeneralService) getServiceByName(const std::string& name);
 
 				void addService(ptr(CGeneralService) service);

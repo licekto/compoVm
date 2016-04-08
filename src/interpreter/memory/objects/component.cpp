@@ -46,7 +46,11 @@ namespace interpreter {
                                         throw exceptions::runtime::CPortNotFoundException(name);
 				}
 				return *it;
-			}
+                        }
+
+                        size_t CComponent::getNumerOfServices() const {
+                            return m_services.size();
+                        }
 
 			std::shared_ptr<CGeneralService> CComponent::getServiceByName(const std::string& name) {
 				auto it = std::find_if(m_services.begin(), m_services.end(), [&name](ptr(CGeneralService) service) {

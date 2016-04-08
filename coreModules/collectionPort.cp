@@ -1,5 +1,4 @@
 descriptor CollectionPort extends Port {
-    service invoke() {}
-    service connectTo() {}
+    service invoke(serviceName, index) {}
     service disconnectPort(index) {}
 }

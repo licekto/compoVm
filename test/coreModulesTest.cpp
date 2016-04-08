@@ -26,7 +26,7 @@ BOOST_AUTO_TEST_CASE(basicTest) {
     BOOST_CHECK_EQUAL(coreModules->getCoreDescriptorsSize(), 9);
     
     ptr(ast_descriptor) descriptor = coreModules->getCoreDescriptor("CollectionPort");
-    TEST_DESCRIPTOR(descriptor, "CollectionPort", "Port", 0, 3, 0);
+    TEST_DESCRIPTOR(descriptor, "CollectionPort", "Port", 0, 2, 0);
     
     descriptor = coreModules->getCoreDescriptor("Component");
     TEST_DESCRIPTOR(descriptor, "Component", "", 5, 5, 0);
@@ -47,7 +47,7 @@ BOOST_AUTO_TEST_CASE(basicTest) {
     TEST_DESCRIPTOR(descriptor, "PortDescription", "Component", 6, 12, 0);
     
     descriptor = coreModules->getCoreDescriptor("Service");
-    TEST_DESCRIPTOR(descriptor, "Service", "Component", 6, 1, 0);
+    TEST_DESCRIPTOR(descriptor, "Service", "Component", 4, 1, 0);
     
     descriptor = coreModules->getCoreDescriptor("ServiceSignature");
     TEST_DESCRIPTOR(descriptor, "ServiceSignature", "Component", 2, 5, 0);

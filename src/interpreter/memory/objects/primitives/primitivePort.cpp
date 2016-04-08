@@ -74,11 +74,26 @@ namespace interpreter {
 					return *it;
 				}
 
-				void CPrimitivePort::disconnectPortArt(size_t index) {
+				void CPrimitivePort::disconnectPortAt(size_t index) {
 					if (index < m_connectedPorts.size()) {
 						m_connectedPorts.erase(m_connectedPorts.begin()+index);
 					}
-				}
+                                }
+
+                                void CPrimitivePort::disconnectServiceByName(const std::string& name) {
+                                        auto it = std::find_if(m_connectedServices.begin(), m_connectedServices.end(), [&name](ptr(CGeneralService) service) {
+						if (service->isPrimitive()) {
+							return service->getPrimitiveService()->getName() == name;
+						} else {
+							//return service->getService()->getPortByName("serviceSign")->
+							return false;
+						}
+					});
+
+					if (it != m_connectedServices.end()) {
+                                            m_connectedServices.erase(it);
+					}
+                                }
 
 			}
 
