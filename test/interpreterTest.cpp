@@ -3,12 +3,12 @@
 
 #include <boost/test/unit_test.hpp>
 
+#include "logger/logger.h"
+
 #include "definitions/allDefinitions.h"
 #include "testDefinitions.h"
-
 #include "parser/lexer.h"
 #include "parser/parserWrapper.h"
-
 #include "ast/visitor/semanticCheckVisitor.h"
 #include "ast/semantic/syntaxDescriptorsTable.h"
 #include "exceptions/semantic/emptyProgramException.h"

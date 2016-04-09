@@ -51,16 +51,13 @@ namespace interpreter {
                                 return m_primitiveService->invoke();
                             }
                             else {
+                                TRACE(ERROR, "Not implemented yet");
                                 return nullptr;
                             }
                         }
 
                         ptr(objects::CGeneralPort) CGeneralService::getDefaultPort() {
-                            if (!m_primitive) {
-                                return m_service->getPortByName("default");
-                            }
-                            // throw
-                            return nullptr;
+                            return m_service->getPortByName("default");
                         }
 
 		}

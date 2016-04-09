@@ -1,5 +1,6 @@
 #include "interpreter/memory/objects/primitives/primitiveService.h"
 
+
 namespace interpreter {
 
 	namespace memory {
@@ -53,7 +54,13 @@ namespace interpreter {
 				}
 
 				std::string CPrimitiveService::getArgumentNameAt(size_t index) {
-					return m_argumentsNames.at(index);
+                                        std::string argument;
+                                        try {
+                                                argument = m_argumentsNames.at(index);
+                                        } catch (const std::out_of_range& ex) {
+                                                TRACE(ERROR, "Arguments names index out of range exception: " << ex.what());
+                                        }
+                                        return argument;
 				}
 
 				std::string CPrimitiveService::getName() const {
@@ -69,11 +76,13 @@ namespace interpreter {
 				}
 
 				std::shared_ptr<objects::CComponent> CPrimitiveService::getArgumentAt(size_t index) {
-					if (index < m_arguments.size()) {
-						return m_arguments.at(index);
-					}
-					//throw
-					return nullptr;
+                                        ptr(objects::CComponent) component;
+                                        try {
+                                                component = m_arguments.at(index);
+                                        } catch (const std::out_of_range& ex) {
+                                                TRACE(ERROR, "Connected ports index out of range exception: " << ex.what());
+                                        }
+                                        return component;
 				}
 
 				void CPrimitiveService::setCallback(std::function<ptr(objects::CGeneralPort)(const std::vector<ptr(objects::CComponent)>&, const ptr(objects::CComponent)&)> callback) {

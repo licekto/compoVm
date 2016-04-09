@@ -41,8 +41,7 @@ set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 # Boost settings
 #------------------------------
 set(Boost_ADDITIONAL_VERSIONS "1.58" "1.58.0")
-ADD_DEFINITIONS(-DBOOST_LOG_DYN_LINK)
-find_package(Boost 1.58 REQUIRED COMPONENTS log log_setup thread date_time filesystem system unit_test_framework)
+find_package(Boost 1.58 REQUIRED COMPONENTS thread date_time filesystem system unit_test_framework)
 find_package(Threads)
 
 if(Boost_FOUND)
@@ -114,6 +113,8 @@ add_library(OBJECT_FILES OBJECT ${SOURCE_FILES_ALL})
 #------------------------------
 OPTION(BuildRelease "BuildRelease" ON)
 
+add_definitions(-D_USER_INFO)
+
 IF(BuildRelease)
     # Main binary
     add_executable(compoVm ${MAIN_FILE} $<TARGET_OBJECTS:OBJECT_FILES>)
@@ -122,6 +123,9 @@ IF(BuildRelease)
                             ${Boost_LOG_LIBRARY}
                             ${CMAKE_THREAD_LIBS_INIT} )
     target_compile_definitions(compoVm PRIVATE "BOOST_LOG_DYN_LINK=1")
+ELSE()
+    add_definitions(-D_DEBUG)
+    add_definitions(-D_CERR)
 ENDIF()
 
 # Tests

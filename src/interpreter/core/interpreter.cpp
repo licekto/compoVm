@@ -20,7 +20,7 @@ namespace interpreter {
 			if (m_descriptorTable->descriptorFound(node->getNameSymbol()->getStringValue())) {
 				// throw exception
 			}
-			m_descriptorTable->addDescriptor(m_bootstrap->bootstrapDescriptorComponent(node));
+                        m_descriptorTable->addDescriptor(m_bootstrap->bootstrapDescriptorComponent(node));
 		}
 
 		void CInterpreter::exec(ptr(ast_node) node) {

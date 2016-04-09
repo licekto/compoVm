@@ -37,7 +37,7 @@ namespace ast {
 				try {
 					node = m_services.at(index);
 				} catch (const std::out_of_range& ex) {
-					// log error message
+					TRACE(ERROR, "Services index out of range exception: " << ex.what());
 				}
 				return node;
 			}
@@ -47,21 +47,23 @@ namespace ast {
 			}
 
 			std::shared_ptr<ast::nodes::compo::CConstraint> CDescriptor::getConstraintAt(size_t index) const {
-				std::shared_ptr<ast::nodes::compo::CConstraint> node;
+				std::shared_ptr<compo::CConstraint> node;
 				try {
 					node = m_constraints.at(index);
 				} catch (const std::out_of_range& ex) {
-					// log error message
+                                        TRACE(ERROR, "Constraints index out of range exception: " << ex.what());
 				}
 				return node;
 			}
 
 			std::shared_ptr<compo::CPort> CDescriptor::getPortAt(size_t index) const {
-				if (index < m_ports.size()) {
-					return m_ports.at(index);
+                                std::shared_ptr<compo::CPort> port;
+				try {
+					port = m_ports.at(index);
+				} catch (const std::out_of_range& ex) {
+                                        TRACE(ERROR, "Ports index out of range exception: " << ex.what());
 				}
-				// throw
-				return nullptr;
+				return port;
 			}
 
 			std::shared_ptr<compo::CPort> CDescriptor::getPortByName(const std::string& name) const {

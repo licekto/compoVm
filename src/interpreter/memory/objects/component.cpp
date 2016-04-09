@@ -1,6 +1,7 @@
 #include "interpreter/memory/objects/component.h"
 #include "interpreter/memory/objects/primitives/primitivePort.h"
 
+
 namespace interpreter {
 
 	namespace memory {
@@ -31,11 +32,7 @@ namespace interpreter {
 			}
 
 			ptr(CGeneralPort) CComponent::getPortAt(size_t index) {
-				if (index < m_ports.size()) {
-					return m_ports.at(index);
-				}
-				// throw exception
-				return nullptr;
+                                return m_ports.at(index);
 			}
 
 			ptr(CGeneralPort) CComponent::getPortByName(const std::string& name) {
@@ -54,11 +51,13 @@ namespace interpreter {
                         }
 
                         ptr(CGeneralService) CComponent::getServiceAt(size_t index) {
-                            if (index < m_services.size()) {
-                                return m_services.at(index);
-                            }
-                            // throw
-                            return nullptr;
+                                ptr(CGeneralService) service;
+				try {
+					service = m_services.at(index);
+				} catch (const std::out_of_range& ex) {
+                                        TRACE(ERROR, "Services index out of range exception: " << ex.what());
+				}
+				return service;
                         }
 
 			ptr(CGeneralService) CComponent::getServiceByName(const std::string& name) {
@@ -67,7 +66,7 @@ namespace interpreter {
 				});
 
 				if (it == m_services.end()) {
-					//throw exception
+					throw exceptions::runtime::CServiceNotFoundException(name);
 				}
 				return *it;
 			}
@@ -87,6 +86,7 @@ namespace interpreter {
 						}
 					} else {
 						//ptr(CGeneralPort) generalPort = port->getPort()->getPortByName("connectedPorts");
+                                                TRACE(ERROR, "Not implemented yet");
 						return nullptr;
 					}
 				}

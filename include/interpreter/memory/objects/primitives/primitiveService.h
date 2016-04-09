@@ -2,6 +2,7 @@
 
 #include <string>
 
+#include "logger/logger.h"
 #include "interpreter/memory/objects/primitives/abstractPrimitive.h"
 
 namespace interpreter {

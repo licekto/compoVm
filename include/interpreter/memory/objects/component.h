@@ -4,12 +4,14 @@
 #include <algorithm>
 #include <iostream>
 
+#include "logger/logger.h"
 #include "definitions/allDefinitions.h"
 #include "interpreter/memory/objects/generalService.h"
 #include "interpreter/memory/objects/generalPort.h"
 #include "interpreter/config.h"
 
 #include "exceptions/runtime/portNotFoundException.h"
+#include "exceptions/runtime/serviceNotFoundException.h"
 
 namespace interpreter {
 

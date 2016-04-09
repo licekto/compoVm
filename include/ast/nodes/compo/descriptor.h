@@ -3,6 +3,8 @@
 #include <memory>
 #include <algorithm>
 
+#include "logger/logger.h"
+
 #include "ast/nodes/node.h"
 #include "ast/nodes/compo/port.h"
 #include "ast/nodes/procedural/symbol.h"

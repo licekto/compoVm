@@ -3,14 +3,10 @@
 #include <map>
 #include <functional>
 
-#include <boost/log/trivial.hpp>
-#include <boost/log/sources/basic_logger.hpp>
-
 #include "definitions/memoryObjectsDefinitions.h"
 
 #include "types.h"
 #include "interpreter/config.h"
-//#include "interpreter/core/interpreter.h"
 #include "interpreter/core/coreModules.h"
 #include "interpreter/core/coreModuleType.h"
 #include "interpreter/memory/objects/component.h"
@@ -28,8 +24,6 @@ namespace interpreter {
 		class CBootstrap {
 		  private:
 			ptr(core::CCoreModules) m_coreModules;
-
-			//ptr(core::CInterpreter) m_interpreter;
 
 			void addPrimitiveServices(ptr(mem_component) component, ptr(ast_descriptor) descriptor,
 			                          std::map<std::string, ptr(mem_primitiveservice)>& servicesNames);
@@ -53,7 +47,7 @@ namespace interpreter {
                         void addServices(ptr(mem_component) component, ptr(ast_descriptor) descriptor);
 
                 public:
-                        CBootstrap(ptr(core::CCoreModules) coreModules = nullptr/*, const ptr(core::CInterpreter)& interpreter = nullptr*/);
+                        CBootstrap(ptr(core::CCoreModules) coreModules = nullptr);
                         
 			ptr(mem_uint) bootstrapUIntValue(u64 value);
 

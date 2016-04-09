@@ -4,6 +4,8 @@
 
 #include <boost/test/unit_test.hpp>
 
+#include "logger/logger.h"
+
 #include "definitions/allDefinitions.h"
 #include "testDefinitions.h"
 #include "types.h"

@@ -4,10 +4,8 @@ namespace interpreter {
 
 	namespace core {
 
-		CBootstrap::CBootstrap(ptr(core::CCoreModules) coreModules/*,
-		                       const ptr(core::CInterpreter)& interpreter*/)
-			: m_coreModules(coreModules)/*,
-			  m_interpreter(interpreter)*/ {
+		CBootstrap::CBootstrap(ptr(core::CCoreModules) coreModules)
+			: m_coreModules(coreModules) {
                         m_coreModules->loadCoreModules();
 		}
 
@@ -714,13 +712,17 @@ namespace interpreter {
                         addPorts(component, coreDescriptor);
                         addServices(component, coreDescriptor);
                         
-                        //ptr(mem_component) interface = bootstrapInterfaceComponent(port, generalPort);
+                        component->getPortByName("name")->connectPort(bootstrapStringValue(descriptor->getNameSymbol()->getStringValue())->getDefaultPort());
                         
-//                        for (size_t i = 0; i < component->getNumerOfServices(); ++i) {
-//                            component->getServiceAt(i);
-//                        }
-                        
-                        std::cout << component->dump().str() << std::endl;
+                        for (size_t i = 0; i < component->getNumberOfServices(); ++i) {
+                            component->getPortByName("default")->getPort()
+                                     ->getPortByName("interfaceDescription")->getConnectedPortAt(0)->getOwner()
+                                     ->getPortByName("services")->connectPort(component->getServiceAt(i)->getDefaultPort());
+                            
+                            component->getPortByName("self")->getPort()
+                                     ->getPortByName("interfaceDescription")->getConnectedPortAt(0)->getOwner()
+                                     ->getPortByName("services")->connectPort(component->getServiceAt(i)->getDefaultPort());
+                        }
                         
 			return component;
 		}
