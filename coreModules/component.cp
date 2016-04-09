@@ -14,6 +14,8 @@ descriptor Component {
     service getPorts() {}
     service getPortNamed(name) {}
     service getDescriptor() {}
-    service getOwner() {}
+    service getOwner() {
+        return owner;
+    }
     service getIdentityHash() {}
 }

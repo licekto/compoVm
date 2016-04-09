@@ -7,7 +7,7 @@
 #include "definitions/allDefinitions.h"
 
 #include "parser/lexer.h"
-#include "ast/semantic/globalDescriptorsTable.h"
+#include "ast/semantic/syntaxDescriptorsTable.h"
 #include "exceptions/semantic/redefinedDescriptorException.h"
 #include "exceptions/semantic/redefinedInterfaceException.h"
 #include "exceptions/semantic/redefinedPortException.h"
@@ -22,7 +22,7 @@ class ParserWrapper {
 	/**< Lexer pointer */
 	ptr(Lexer) m_lexer;
 
-	ptr(ast::semantic::CGlobalDescriptorTable) m_descriptorTable;
+	ptr(ast::semantic::CSyntaxDescriptorTable) m_descriptorTable;
 
 	/**< Vector of root nodes */
 	ptr(ast_program) m_root;
@@ -73,7 +73,7 @@ class ParserWrapper {
 	* Parametric constructor with default value
 	* @param lexer: pointer to lexer
 	*/
-	ParserWrapper(ptr(Lexer) lexer = nullptr, ptr(ast::semantic::CGlobalDescriptorTable) descriptorTable = nullptr);
+	ParserWrapper(ptr(Lexer) lexer = nullptr, ptr(ast::semantic::CSyntaxDescriptorTable) descriptorTable = nullptr);
 
 	/**
 	* Destructor
@@ -112,7 +112,7 @@ class ParserWrapper {
 
 	void addSymbolToDescriptorTable(ptr(ast_descriptorinterface) node);
 
-	ptr(ast::semantic::CGlobalDescriptorTable) getDescriptorTable();
+	ptr(ast::semantic::CSyntaxDescriptorTable) getDescriptorTable();
 
 	void clearDescriptorTable();
 

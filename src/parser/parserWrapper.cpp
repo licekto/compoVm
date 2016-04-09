@@ -3,7 +3,7 @@
 #include "parser/parserWrapper.h"
 #include "exceptions/semantic/redefinedPortException.h"
 
-ParserWrapper::ParserWrapper(ptr(Lexer) lexer, ptr(ast::semantic::CGlobalDescriptorTable) descriptorTable)
+ParserWrapper::ParserWrapper(ptr(Lexer) lexer, ptr(ast::semantic::CSyntaxDescriptorTable) descriptorTable)
 	: m_lexer(lexer), m_descriptorTable(descriptorTable), m_root(new_ptr(ast_program)()) {
 	pushServiceParams();
 }
@@ -37,7 +37,7 @@ void ParserWrapper::addSymbolToDescriptorTable(ptr(ast_descriptorinterface) node
 	}
 }
 
-ptr(ast::semantic::CGlobalDescriptorTable) ParserWrapper::getDescriptorTable() {
+ptr(ast::semantic::CSyntaxDescriptorTable) ParserWrapper::getDescriptorTable() {
 	return m_descriptorTable;
 }
 

@@ -10,7 +10,7 @@
 #include "parser/parserWrapper.h"
 
 #include "ast/visitor/semanticCheckVisitor.h"
-#include "ast/semantic/globalDescriptorsTable.h"
+#include "ast/semantic/syntaxDescriptorsTable.h"
 #include "exceptions/semantic/emptyProgramException.h"
 #include "exceptions/semantic/undefinedDescriptorException.h"
 #include "exceptions/semantic/undefinedInterfaceException.h"
@@ -23,7 +23,7 @@ BOOST_AUTO_TEST_SUITE(semanticsTest)
 
 
 // Global parser for testing purposes
-ParserWrapper parser(new_ptr(Lexer)(), new_ptr(ast::semantic::CGlobalDescriptorTable)());
+ParserWrapper parser(new_ptr(Lexer)(), new_ptr(ast::semantic::CSyntaxDescriptorTable)());
 
 BOOST_AUTO_TEST_CASE(basicTest) {
     // Testing input

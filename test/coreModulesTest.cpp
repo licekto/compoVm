@@ -17,7 +17,7 @@ BOOST_AUTO_TEST_SUITE(coreModulesTest)
 
 BOOST_AUTO_TEST_CASE(basicTest) {
     
-    ptr(ParserWrapper) parser = new_ptr(ParserWrapper)(new_ptr(Lexer)(), new_ptr(ast::semantic::CGlobalDescriptorTable)());
+    ptr(ParserWrapper) parser = new_ptr(ParserWrapper)(new_ptr(Lexer)(), new_ptr(ast::semantic::CSyntaxDescriptorTable)());
     
     ptr(interpreter::core::CCoreModules) coreModules = new_ptr(interpreter::core::CCoreModules)(parser);
     
@@ -35,10 +35,10 @@ BOOST_AUTO_TEST_CASE(basicTest) {
     TEST_DESCRIPTOR(descriptor, "ConnectionDescription", "Component", 5, 10, 0);
     
     descriptor = coreModules->getCoreDescriptor("Descriptor");
-    TEST_DESCRIPTOR(descriptor, "Descriptor", "Component", 4, 16, 0);
+    TEST_DESCRIPTOR(descriptor, "Descriptor", "Component", 4, 11, 0);
     
     descriptor = coreModules->getCoreDescriptor("Interface");
-    TEST_DESCRIPTOR(descriptor, "Interface", "Component", 3, 7, 0);
+    TEST_DESCRIPTOR(descriptor, "Interface", "Component", 5, 11, 0);
     
     descriptor = coreModules->getCoreDescriptor("Port");
     TEST_DESCRIPTOR(descriptor, "Port", "Component", 5, 7, 0);

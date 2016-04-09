@@ -2,7 +2,6 @@
 
 #include <string>
 
-#include "interpreter/memory/objects/component.h"
 #include "interpreter/memory/objects/primitives/abstractPrimitive.h"
 
 namespace interpreter {
@@ -10,6 +9,9 @@ namespace interpreter {
 	namespace memory {
 
 		namespace objects {
+                    
+                        class CComponet;
+                        class CGeneralPort;
 
 			namespace primitives {
 

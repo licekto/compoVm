@@ -25,7 +25,7 @@ namespace ast {
 		* \class CGLobalDescriptorTable
 		 * \brief Abstract base class for other nodes.
 		 */
-		class CGlobalDescriptorTable {
+		class CSyntaxDescriptorTable {
 		  private:
 			std::map<std::string, ptr(ast_descriptorinterface)> m_descriptorMap;
 

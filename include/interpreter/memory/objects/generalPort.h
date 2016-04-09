@@ -54,6 +54,8 @@ namespace interpreter {
 
 				ptr(CComponent) getOwner();
                                 
+                                void setOwner(ptr(CComponent) owner);
+                                
                                 
                                 size_t getConnectedPortsNumber() const;
 

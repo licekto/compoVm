@@ -2,6 +2,7 @@
 
 #include "definitions/allDefinitions.h"
 #include "interpreter/memory/objects/generalPort.h"
+#include "interpreter/memory/objects/primitives/primitiveService.h"
 
 namespace interpreter {
 
@@ -9,9 +10,7 @@ namespace interpreter {
 
 		namespace objects {
 
-			namespace primitives {
-				class CPrimitiveService;
-			}
+                        class CComponent;
 
 			class CComponent;
 
@@ -39,6 +38,8 @@ namespace interpreter {
 				std::string getName() const;
                                 
                                 ptr(objects::CGeneralPort) invoke();
+                                
+                                ptr(objects::CGeneralPort) getDefaultPort();
 			};
 		}
 	}

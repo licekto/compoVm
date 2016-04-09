@@ -1,6 +1,6 @@
 #include "interpreter/memory/objects/generalPort.h"
-#include "interpreter/memory/objects/primitives/abstractPrimitive.h"
-#include "interpreter/memory/objects/component.h"
+#include "interpreter/memory/objects/primitives/primitivePort.h"
+#include "interpreter/memory/objects/values/stringComponent.h"
 
 namespace interpreter {
 
@@ -47,16 +47,28 @@ namespace interpreter {
 			std::string CGeneralPort::getName() const {
 				if (m_primitive) {
 					return m_primitivePort->getName();
-				} else {
-					return m_port->getPortByName("name")->getPrimitivePort()->getName();
+				}
+                                else {
+					return cast(memory::objects::values::CStringComponent)
+                                                (m_port->getPortByName("name")->getPrimitivePort()->getConnectedPortAt(0)->getOwner())->getValue();
 				}
 			}
 
 			std::shared_ptr<CComponent> CGeneralPort::getOwner() {
 				if (m_primitive) {
 					return m_primitivePort->getOwner();
-				} else {
+				}
+                                else {
 					return m_port->getPortByName("owner")->getPrimitivePort()->getConnectedPortAt(0)->getOwner();
+				}
+                        }
+
+                        void CGeneralPort::setOwner(ptr(CComponent) owner) {
+                                if (m_primitive) {
+                                        m_primitivePort->setOwner(owner);
+                                }
+                                else {
+					return m_port->getPortByName("owner")->getPrimitivePort()->getConnectedPortAt(0)->setOwner(owner);
 				}
                         }
 

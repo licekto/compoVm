@@ -5,21 +5,15 @@ descriptor Descriptor extends Component {
         architectureDefinition[]: ConnectionDescription;
         services[] : Service;
     }
-
-    service getPorts() {}
-    service getPortNamed(name) {}
-    service getDescriptor() {}
-    service getOwner() {}
-    service getIndentityHash() {}
     
     service getDescribedPorts() {}
     service getDescribedConns() {}
-    service getService() {}
+    service getService(selector) {}
 
     service new() {}
-    service newNamed() {}
+    service newNamed(name, superDesc) {}
 
-    service addService() {}
+    service addService(serviceComponent) {}
     service removeService(selector, arity) {}
 
     service addPortDescription(pd) {}

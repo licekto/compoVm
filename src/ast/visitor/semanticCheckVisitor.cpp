@@ -4,7 +4,7 @@ namespace ast {
 
 	namespace visitors {
 
-		CSemanticCheckVisitor::CSemanticCheckVisitor(ptr(ast::semantic::CGlobalDescriptorTable) descriptorTable)
+		CSemanticCheckVisitor::CSemanticCheckVisitor(ptr(ast::semantic::CSyntaxDescriptorTable) descriptorTable)
 			: m_descriptorTable(descriptorTable), m_currentDescriptor(nullptr) {
 
 		}

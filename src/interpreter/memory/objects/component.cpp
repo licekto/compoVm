@@ -1,4 +1,5 @@
 #include "interpreter/memory/objects/component.h"
+#include "interpreter/memory/objects/primitives/primitivePort.h"
 
 namespace interpreter {
 
@@ -48,11 +49,19 @@ namespace interpreter {
 				return *it;
                         }
 
-                        size_t CComponent::getNumerOfServices() const {
+                        size_t CComponent::getNumberOfServices() const {
                             return m_services.size();
                         }
 
-			std::shared_ptr<CGeneralService> CComponent::getServiceByName(const std::string& name) {
+                        ptr(CGeneralService) CComponent::getServiceAt(size_t index) {
+                            if (index < m_services.size()) {
+                                return m_services.at(index);
+                            }
+                            // throw
+                            return nullptr;
+                        }
+
+			ptr(CGeneralService) CComponent::getServiceByName(const std::string& name) {
 				auto it = std::find_if(m_services.begin(), m_services.end(), [&name](ptr(CGeneralService) service) {
 					return service->getName() == name;
 				});
@@ -97,7 +106,15 @@ namespace interpreter {
                         std::stringstream CComponent::dump() const {
                             std::stringstream dump;
                             
-                            dump << "ahoj";
+                            dump << "ports: " << m_ports.size() << std::endl;
+                            for (ptr(CGeneralPort) port : m_ports) {
+                                dump << "\tname: " << port->getName() << ", connected ports: " << port->getConnectedPortsNumber() << std::endl;
+                            }
+                            
+                            dump << "services: " << m_services.size() << std::endl;
+                            for (ptr(CGeneralService) service : m_services) {
+                                dump << "\tname: " << service->getName() << std::endl;
+                            }
                             
                             return dump;
                         }

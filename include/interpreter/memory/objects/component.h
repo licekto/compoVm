@@ -7,7 +7,6 @@
 #include "definitions/allDefinitions.h"
 #include "interpreter/memory/objects/generalService.h"
 #include "interpreter/memory/objects/generalPort.h"
-#include "interpreter/memory/objects/primitives/primitivePort.h"
 #include "interpreter/config.h"
 
 #include "exceptions/runtime/portNotFoundException.h"
@@ -41,7 +40,9 @@ namespace interpreter {
 
 				ptr(CGeneralPort) getPortByName(const std::string& name);
 
-                                size_t getNumerOfServices() const;
+                                size_t getNumberOfServices() const;
+                                
+                                ptr(CGeneralService) getServiceAt(size_t index);
                                 
 				ptr(CGeneralService) getServiceByName(const std::string& name);
 

@@ -13,7 +13,6 @@
 #include "parser/lexer.h"
 #include "parser/parserWrapper.h"
 
-#include "interpreter/core/interpreter.h"
 #include "interpreter/core/coreModules.h"
 #include "interpreter/core/bootstrap.h"
 #include "interpreter/memory/objects/primitives/primitivePort.h"
@@ -22,10 +21,9 @@
 BOOST_AUTO_TEST_SUITE(bootstrapTest)
 
 // Create parser, core modules, interpreter and bootstrap
-ptr(ParserWrapper) parser = new_ptr(ParserWrapper)(new_ptr(Lexer)(), new_ptr(ast::semantic::CGlobalDescriptorTable)());
+ptr(ParserWrapper) parser = new_ptr(ParserWrapper)(new_ptr(Lexer)(), new_ptr(ast::semantic::CSyntaxDescriptorTable)());
 ptr(core_modules) coreModules = new_ptr(core_modules)(parser);
-ptr(core_interpreter) interpreter = new_ptr(core_interpreter)(parser, coreModules);
-ptr(core_bootstrap) bootstrap = new_ptr(core_bootstrap)(coreModules, interpreter);
+ptr(core_bootstrap) bootstrap = new_ptr(core_bootstrap)(coreModules/*, interpreter*/);
 
 BOOST_AUTO_TEST_CASE(componentTest) {
     // Bootstrap
@@ -151,18 +149,22 @@ BOOST_AUTO_TEST_CASE(namedInterfaceComponentTest) {
     
     ptr(mem_component) owner = bootstrap->bootstrapComponent(nullptr);
     
-    ptr(mem_component) interfaceComponent = bootstrap->bootstrapInterfaceComponent(astPort, owner);
+    ptr(mem_component) interfaceComponent = bootstrap->bootstrapInterfaceComponent(astPort, owner, nullptr);
     
     ptr(mem_port) retPort;
     
-    TEST_BASE_COMPONENT(interfaceComponent, 12, owner);
+    TEST_BASE_COMPONENT(interfaceComponent, 16, owner);
     
     TEST_PRIMITIVE_PORT(interfaceComponent, "type", types::roleType::REQUIRES, types::visibilityType::INTERNAL, 0);
     BOOST_CHECK_EQUAL(cast(mem_string)(interfaceComponent->getPortByName("type")->getConnectedPortAt(0)->getOwner())->getValue(), PORT_TYPE_NAMED);
-    TEST_PRIMITIVE_PORT(interfaceComponent, "connectedComponent", types::roleType::REQUIRES, types::visibilityType::INTERNAL, 0);
-    BOOST_CHECK_EQUAL(cast(mem_string)(interfaceComponent->getPortByName("connectedComponent")->getConnectedPortAt(0)->getOwner())->getValue(), "testComponent");
+    TEST_PRIMITIVE_PORT(interfaceComponent, "componentName", types::roleType::REQUIRES, types::visibilityType::INTERNAL, 0);
+    BOOST_CHECK_EQUAL(cast(mem_string)(interfaceComponent->getPortByName("componentName")->getConnectedPortAt(0)->getOwner())->getValue(), "testComponent");
     TEST_PRIMITIVE_PORT(interfaceComponent, "signatures", types::roleType::REQUIRES, types::visibilityType::INTERNAL, 0);
     BOOST_CHECK_EQUAL(interfaceComponent->getPortByName("signatures")->getConnectedPortsNumber(), 0);
+    TEST_PRIMITIVE_PORT(interfaceComponent, "component", types::roleType::REQUIRES, types::visibilityType::EXTERNAL, 0);
+    BOOST_CHECK_EQUAL(interfaceComponent->getPortByName("component")->getConnectedPortsNumber(), 0);
+    TEST_PRIMITIVE_PORT(interfaceComponent, "services", types::roleType::REQUIRES, types::visibilityType::EXTERNAL, 0);
+    BOOST_CHECK_EQUAL(interfaceComponent->getPortByName("services")->getConnectedPortsNumber(), 0);
     
     bool ret = true;
     TEST_PRIMITIVE_SERVICE(interfaceComponent, "default", "getType", 0, ret, retPort);
@@ -185,16 +187,16 @@ BOOST_AUTO_TEST_CASE(namedInterfaceComponentTest) {
     BOOST_CHECK_EQUAL(interfaceComponent->getPortByName("args")->getConnectedPortsNumber(), 0);
     BOOST_CHECK_EQUAL(cast(mem_uint)(retPort->getOwner())->getValue(), 0);
     
-    TEST_PRIMITIVE_SERVICE(interfaceComponent, "default", "getConnectedComponent", 0, ret, retPort);
+    TEST_PRIMITIVE_SERVICE(interfaceComponent, "default", "getConnectedComponentName", 0, ret, retPort);
     BOOST_CHECK_EQUAL(interfaceComponent->getPortByName("args")->getConnectedPortsNumber(), 0);
     BOOST_CHECK_EQUAL(cast(mem_string)(retPort->getOwner())->getValue(), "testComponent");
     
     ret = false;
     BOOST_CHECK_EQUAL(interfaceComponent->getPortByName("args")->getConnectedPortsNumber(), 0);
     interfaceComponent->getPortByName("args")->connectPort(bootstrap->bootstrapStringValue("testComponentTest")->getDefaultPort());
-    TEST_PRIMITIVE_SERVICE(interfaceComponent, "default", "setConnectedComponent", 1, ret, retPort);
+    TEST_PRIMITIVE_SERVICE(interfaceComponent, "default", "setConnectedComponentName", 1, ret, retPort);
     BOOST_CHECK_EQUAL(interfaceComponent->getPortByName("args")->getConnectedPortsNumber(), 0);
-    BOOST_CHECK_EQUAL(cast(mem_string)(interfaceComponent->getPortByName("connectedComponent")->getConnectedPortAt(0)->getOwner())->getValue(), "testComponentTest");
+    BOOST_CHECK_EQUAL(cast(mem_string)(interfaceComponent->getPortByName("componentName")->getConnectedPortAt(0)->getOwner())->getValue(), "testComponentTest");
 }
 
 BOOST_AUTO_TEST_CASE(signatureInterfaceComponentTest) {
@@ -226,18 +228,22 @@ BOOST_AUTO_TEST_CASE(signatureInterfaceComponentTest) {
     
     ptr(mem_component) owner = bootstrap->bootstrapComponent(nullptr);
     
-    ptr(mem_component) interfaceComponent = bootstrap->bootstrapInterfaceComponent(astPort, owner);
+    ptr(mem_component) interfaceComponent = bootstrap->bootstrapInterfaceComponent(astPort, owner, nullptr);
     
     ptr(mem_port) retPort;
     
-    TEST_BASE_COMPONENT(interfaceComponent, 12, owner);
+    TEST_BASE_COMPONENT(interfaceComponent, 16, owner);
     
     TEST_PRIMITIVE_PORT(interfaceComponent, "type", types::roleType::REQUIRES, types::visibilityType::INTERNAL, 0);
     BOOST_CHECK_EQUAL(cast(mem_string)(interfaceComponent->getPortByName("type")->getConnectedPortAt(0)->getOwner())->getValue(), PORT_TYPE_SIGNATURES);
-    TEST_PRIMITIVE_PORT(interfaceComponent, "connectedComponent", types::roleType::REQUIRES, types::visibilityType::INTERNAL, 0);
-    BOOST_CHECK_EQUAL(interfaceComponent->getPortByName("connectedComponent")->getConnectedPortsNumber(), 0);
+    TEST_PRIMITIVE_PORT(interfaceComponent, "componentName", types::roleType::REQUIRES, types::visibilityType::INTERNAL, 0);
+    BOOST_CHECK_EQUAL(interfaceComponent->getPortByName("componentName")->getConnectedPortsNumber(), 0);
     TEST_PRIMITIVE_PORT(interfaceComponent, "signatures", types::roleType::REQUIRES, types::visibilityType::INTERNAL, 0);
     BOOST_CHECK_EQUAL(interfaceComponent->getPortByName("signatures")->getConnectedPortsNumber(), 3);
+    TEST_PRIMITIVE_PORT(interfaceComponent, "component", types::roleType::REQUIRES, types::visibilityType::EXTERNAL, 0);
+    BOOST_CHECK_EQUAL(interfaceComponent->getPortByName("component")->getConnectedPortsNumber(), 0);
+    TEST_PRIMITIVE_PORT(interfaceComponent, "services", types::roleType::REQUIRES, types::visibilityType::EXTERNAL, 0);
+    BOOST_CHECK_EQUAL(interfaceComponent->getPortByName("services")->getConnectedPortsNumber(), 0);
     
     bool ret = true;
     TEST_PRIMITIVE_SERVICE(interfaceComponent, "default", "getType", 0, ret, retPort);
@@ -261,7 +267,7 @@ BOOST_AUTO_TEST_CASE(signatureInterfaceComponentTest) {
     BOOST_CHECK_EQUAL(cast(mem_uint)(retPort->getOwner())->getValue(), 3);
     
     ret = false;
-    TEST_PRIMITIVE_SERVICE(interfaceComponent, "default", "getConnectedComponent", 0, ret, retPort);
+    TEST_PRIMITIVE_SERVICE(interfaceComponent, "default", "getConnectedComponentName", 0, ret, retPort);
     BOOST_CHECK_EQUAL(interfaceComponent->getPortByName("args")->getConnectedPortsNumber(), 0);
     BOOST_CHECK_EQUAL(retPort.use_count(), 0);
     
@@ -300,7 +306,7 @@ BOOST_AUTO_TEST_CASE(signatureInterfaceComponentTest) {
     ret = false;
     BOOST_CHECK_EQUAL(interfaceComponent->getPortByName("args")->getConnectedPortsNumber(), 0);
     interfaceComponent->getPortByName("args")->connectPort(bootstrap->bootstrapServiceSignatureComponent(signature, interfaceComponent)->getPortByName("default"));
-    TEST_PRIMITIVE_SERVICE(interfaceComponent, "default", "setSignature", 1, ret, retPort);
+    TEST_PRIMITIVE_SERVICE(interfaceComponent, "default", "addSignature", 1, ret, retPort);
     BOOST_CHECK_EQUAL(interfaceComponent->getPortByName("args")->getConnectedPortsNumber(), 0);
     
     ret = true;
@@ -342,7 +348,7 @@ BOOST_AUTO_TEST_CASE(portComponentTest) {
     BOOST_CHECK_EQUAL(portComponent->getPortByName("args")->getConnectedPortsNumber(), 0);
     ptr(mem_string) str = cast(mem_string)(retPort->getOwner()->getPortByName("type")->getConnectedPortAt(0)->getOwner());
     BOOST_CHECK_EQUAL(str->getValue(), PORT_TYPE_NAMED);
-    str = cast(mem_string)(retPort->getOwner()->getPortByName("connectedComponent")->getConnectedPortAt(0)->getOwner());
+    str = cast(mem_string)(retPort->getOwner()->getPortByName("componentName")->getConnectedPortAt(0)->getOwner());
     BOOST_CHECK_EQUAL(str->getValue(), "testComponent");
     
     TEST_PRIMITIVE_SERVICE(portComponent, "default", "isConnected", 0, ret, retPort);
@@ -535,7 +541,7 @@ BOOST_AUTO_TEST_CASE(portDescriptionComponentTest) {
     BOOST_CHECK_EQUAL(boolVal->getValue(), true);
     
     ret = false;
-    ptr(mem_component) intf = bootstrap->bootstrapInterfaceComponent(astPort, owner);
+    ptr(mem_component) intf = bootstrap->bootstrapInterfaceComponent(astPort, owner, nullptr);
     BOOST_CHECK_EQUAL(portDescriptionComponent->getPortByName("args")->getConnectedPortsNumber(), 0);
     portDescriptionComponent->getPortByName("args")->connectPort(intf->getPortByName("default"));
     TEST_PRIMITIVE_SERVICE(portDescriptionComponent, "default", "setInterface", 1, ret, retPort);

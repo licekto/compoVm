@@ -4,23 +4,10 @@ namespace interpreter {
 
 	namespace core {
 
-		CInterpreter::CInterpreter(ptr(ParserWrapper) parser,
-		                           ptr(CCoreModules) modules)
-			: m_ast(nullptr),
-			  m_parser(parser),
-			  m_coreModules(modules) {
-		}
-
-		void CInterpreter::checkMainContainer() const {
-			if (!m_parser->getDescriptorTable()->symbolFound(COMPO_MAIN_COMPONENT_NAME)) {
-				throw exceptions::runtime::CMainComponentMissingException();
-			}
-
-			ptr(ast_descriptor) container = cast(ast_descriptor)(m_parser->getDescriptorTable()->getSymbol(COMPO_MAIN_COMPONENT_NAME));
-
-			if (!container->getServiceByName(COMPO_MAIN_SERVICE_NAME).use_count()) {
-				throw exceptions::runtime::CMainServiceMissingException();
-			}
+		CInterpreter::CInterpreter(ptr(ParserWrapper) parser, ptr(CBootstrap) bootstrap, ptr(memory::memspace::CDescriptorTable) table)
+			: m_parser(parser),
+                          m_bootstrap(bootstrap),
+                          m_descriptorTable(table) {
 		}
 
 		void CInterpreter::execProgram(ptr(ast_program) node) {
@@ -30,35 +17,25 @@ namespace interpreter {
 		}
 
 		void CInterpreter::execDescriptor(ptr(ast_descriptor) node) {
-			if (!m_parser->getDescriptorTable()->symbolFound(node->getNameSymbol()->getStringValue())) {
+			if (m_descriptorTable->descriptorFound(node->getNameSymbol()->getStringValue())) {
 				// throw exception
 			}
-			// create descriptor component -> instance of Descriptor
+			m_descriptorTable->addDescriptor(m_bootstrap->bootstrapDescriptorComponent(node));
 		}
 
 		void CInterpreter::exec(ptr(ast_node) node) {
 			switch (node->getNodeType()) {
-			case type_node::PROGRAM : {
-				execProgram(cast(ast_program)(node));
-				break;
-			}
-			case type_node::DESCRIPTOR : {
-				execDescriptor(cast(ast_descriptor)(node));
-				break;
-			}
-			default : {
-				// throw exception
-			}
-			}
-		}
-
-		void CInterpreter::loadCoreToDescriptorTable() {
-			if (m_coreModules.use_count()) {
-				m_coreModules->loadCoreModules();
-
-				for (size_t i = 0; i < m_coreModules->getCoreDescriptorsSize(); ++i) {
-					m_parser->getDescriptorTable()->addSymbol(m_coreModules->getCoreDescriptorAt(i));
-				}
+                            case type_node::PROGRAM : {
+                                    execProgram(cast(ast_program)(node));
+                                    break;
+                            }
+                            case type_node::DESCRIPTOR : {
+                                    execDescriptor(cast(ast_descriptor)(node));
+                                    break;
+                            }
+                            default : {
+                                    // throw exception
+                            }
 			}
 		}
 
@@ -75,9 +52,6 @@ namespace interpreter {
 		}
 
 		void CInterpreter::run(ptr(ast_program) ast) {
-			checkMainContainer();
-			loadCoreToDescriptorTable();
-
 			exec(ast);
 		}
 

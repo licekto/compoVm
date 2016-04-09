@@ -1,5 +1,5 @@
 #include "interpreter/memory/objects/generalService.h"
-#include "interpreter/memory/objects/primitives/primitiveService.h"
+#include "interpreter/memory/objects/values/stringComponent.h"
 
 namespace interpreter {
 
@@ -40,8 +40,9 @@ namespace interpreter {
 				if (m_primitive) {
 					return m_primitiveService->getName();
 				} else {
-					//return m_service->getPortByName("serviceSign")->getPrimitivePort()->getConnectedPortAt(0)
-					return "";
+					return cast(values::CStringComponent)
+                                                    (m_service->getPortByName("serviceSign")->getConnectedPortAt(0)
+                                                     ->getOwner()->getPortByName("name")->getConnectedPortAt(0)->getOwner())->getValue();
 				}
                         }
 
@@ -52,6 +53,14 @@ namespace interpreter {
                             else {
                                 return nullptr;
                             }
+                        }
+
+                        ptr(objects::CGeneralPort) CGeneralService::getDefaultPort() {
+                            if (!m_primitive) {
+                                return m_service->getPortByName("default");
+                            }
+                            // throw
+                            return nullptr;
                         }
 
 		}

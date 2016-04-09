@@ -1,5 +1,4 @@
 #include "interpreter/memory/objects/primitives/primitivePort.h"
-#include "interpreter/memory/objects/primitives/primitiveService.h"
 
 namespace interpreter {
 

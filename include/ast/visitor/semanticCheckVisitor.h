@@ -11,7 +11,7 @@
 #include "exceptions/semantic/emptyProgramException.h"
 #include "exceptions/semantic/undefinedDescriptorException.h"
 #include "exceptions/semantic/undefinedInterfaceException.h"
-#include "ast/semantic/globalDescriptorsTable.h"
+#include "ast/semantic/syntaxDescriptorsTable.h"
 #include "exceptions/semantic/wrongBaseTypeException.h"
 #include "exceptions/semantic/undefinedPortException.h"
 #include "exceptions/semantic/unsupportedFeatureException.h"
@@ -30,7 +30,7 @@ namespace ast {
 		class CSemanticCheckVisitor : public CAbstractVisitor, public std::enable_shared_from_this<CSemanticCheckVisitor> {
 		  private:
 
-			ptr(ast::semantic::CGlobalDescriptorTable) m_descriptorTable;
+			ptr(ast::semantic::CSyntaxDescriptorTable) m_descriptorTable;
 
 			ptr(ast_descriptor) m_currentDescriptor;
 
@@ -39,7 +39,7 @@ namespace ast {
 			void checkNodeType(ptr(ast_node) node, type_node type);
 		  public:
 
-			CSemanticCheckVisitor(ptr(ast::semantic::CGlobalDescriptorTable) descriptorTable = nullptr);
+			CSemanticCheckVisitor(ptr(ast::semantic::CSyntaxDescriptorTable) descriptorTable = nullptr);
 
 			virtual void visit(ptr(ast_node) node);
 			virtual void visit(ptr(ast_program) node);

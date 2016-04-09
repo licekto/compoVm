@@ -10,7 +10,7 @@
 #include "parser/parserWrapper.h"
 
 #include "ast/visitor/semanticCheckVisitor.h"
-#include "ast/semantic/globalDescriptorsTable.h"
+#include "ast/semantic/syntaxDescriptorsTable.h"
 #include "exceptions/semantic/emptyProgramException.h"
 #include "exceptions/semantic/undefinedDescriptorException.h"
 #include "exceptions/semantic/undefinedInterfaceException.h"
@@ -26,7 +26,11 @@ BOOST_AUTO_TEST_SUITE(interpreterTest)
 
 
 // Global parser for testing purposes
-ptr(ParserWrapper) parser = new_ptr(ParserWrapper)(new_ptr(Lexer)(), new_ptr(ast::semantic::CGlobalDescriptorTable)());
+ptr(ParserWrapper) parser = new_ptr(ParserWrapper)(new_ptr(Lexer)(), new_ptr(ast::semantic::CSyntaxDescriptorTable)());
+ptr(interpreter::core::CCoreModules) coreModules = new_ptr(interpreter::core::CCoreModules)();
+ptr(interpreter::core::CBootstrap) bootstrap = new_ptr(interpreter::core::CBootstrap)(new_ptr(interpreter::core::CCoreModules)(parser));
+ptr(interpreter::memory::memspace::CDescriptorTable) table = new_ptr(interpreter::memory::memspace::CDescriptorTable)();
+ptr(interpreter::core::CInterpreter) interpreter = new_ptr(interpreter::core::CInterpreter)(parser, bootstrap, table);
 
 BOOST_AUTO_TEST_CASE(basicTest) {
     // Testing input
@@ -44,18 +48,8 @@ BOOST_AUTO_TEST_CASE(basicTest) {
     parser->parseAll(input);
     
     ptr(ast_program) program = parser->getRootNode();
-    
-    ptr(ast::visitors::CSemanticCheckVisitor) visitor = new_ptr(ast::visitors::CSemanticCheckVisitor)(parser->getDescriptorTable());
 
-    program->accept(visitor);
-    
-    ptr(interpreter::core::CCoreModules) coreModules = new_ptr(interpreter::core::CCoreModules)();
-    
-    ptr(interpreter::core::CInterpreter) interpreter = new_ptr(interpreter::core::CInterpreter)(parser, coreModules);
-    
-    ptr(interpreter::core::CBootstrap) bootstrap = new_ptr(interpreter::core::CBootstrap)(new_ptr(interpreter::core::CCoreModules)(parser), interpreter);
-    
-    //interpreter->run(program);
+    interpreter->run(program);
     
     // Clear AST for next test
     parser->clearAll();
@@ -106,9 +100,9 @@ BOOST_AUTO_TEST_CASE(calcTest) {
     }");
     
     // Parse input and create AST
-    parser->parseAll(input);
+    //parser->parseAll(input);
     
-    ptr(ast_program) program = parser->getRootNode();
+    //ptr(ast_program) program = parser->getRootNode();
     
     
     //ptr(ast::visitors::CSemanticCheckVisitor) visitor = new_ptr(ast::visitors::CSemanticCheckVisitor)(parser->getDescriptorTable());
