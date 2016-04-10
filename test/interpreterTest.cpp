@@ -49,7 +49,7 @@ BOOST_AUTO_TEST_CASE(basicTest) {
     
     ptr(ast_program) program = parser->getRootNode();
 
-    //interpreter->run(program);
+    interpreter->run(program);
     
     // Clear AST for next test
     parser->clearAll();

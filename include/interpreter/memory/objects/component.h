@@ -52,6 +52,10 @@ namespace interpreter {
                                 
                                 size_t getNumberOfAllServices() const;
                                 
+                                void connectAllSelfServicesTo(ptr(CGeneralPort) port);
+                                
+                                void connectAllParentServicesTo(ptr(CGeneralPort) port);
+                                
                                 void connectAllServicesTo(ptr(CGeneralPort) port);
                                 
                                 ptr(CGeneralService) getSelfServiceByName(const std::string& name);

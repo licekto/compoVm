@@ -83,15 +83,34 @@ namespace interpreter {
                             return getNumberOfSubServices() + getNumberOfInheritedServices();
                         }
 
-                        void CComponent::connectAllServicesTo(ptr(CGeneralPort) port) {
+                        void CComponent::connectAllSelfServicesTo(ptr(CGeneralPort) port) {
                             for (ptr(CGeneralService) service : m_services) {
                                 port->connectPort(service->getDefaultPort());
                             }
-                            if (m_parent.use_count()) {
-                                m_parent->connectAllServicesTo(port);
+                        }
+                        
+                        void CComponent::connectAllParentServicesTo(ptr(CGeneralPort) port) {
+                            ptr(CComponent) tmp = m_parent;
+                            
+                            while (tmp.use_count()) {
+                                tmp->connectAllSelfServicesTo(port);
+                                tmp = tmp->m_parent;
                             }
-                            if (m_child.use_count()) {
-                                m_child->connectAllServicesTo(port);
+                        }
+                        
+                        void CComponent::connectAllServicesTo(ptr(CGeneralPort) port) {
+                            connectAllSelfServicesTo(port);
+                            ptr(CComponent) tmp = m_parent;
+                            
+                            while (tmp.use_count()) {
+                                tmp->connectAllSelfServicesTo(port);
+                                tmp = tmp->m_parent;
+                            }
+                            
+                            tmp = m_child;
+                            while (tmp.use_count()) {
+                                tmp->connectAllSelfServicesTo(port);
+                                tmp = tmp->m_child;
                             }
                         }
 

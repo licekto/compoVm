@@ -1,13 +1,13 @@
 descriptor Port extends Component {
     requires {
         owner : Component;
-        connectedPorts[] : IPort;
-        delegatedPorts[] : IPort;
+        connectedPorts[] : Port;
+        delegatedPorts[] : Port;
     }
 
     internally requires {
         name : String;
-        interfaceDescription : IInterface;
+        interfaceDescription : Interface;
     }
 
     service getName() {}
