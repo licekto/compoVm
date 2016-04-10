@@ -1,5 +1,6 @@
 #include "interpreter/core/interpreter.h"
 
+
 namespace interpreter {
 
 	namespace core {
@@ -17,8 +18,9 @@ namespace interpreter {
 		}
 
 		void CInterpreter::execDescriptor(ptr(ast_descriptor) node) {
-			if (m_descriptorTable->descriptorFound(node->getNameSymbol()->getStringValue())) {
-				// throw exception
+                        std::string name = node->getNameSymbol()->getStringValue();
+			if (m_descriptorTable->descriptorFound(name)) {
+                            throw exceptions::semantic::CRedefinedDescriptorException(name);
 			}
                         m_descriptorTable->addDescriptor(m_bootstrap->bootstrapDescriptorComponent(node));
 		}
@@ -34,7 +36,7 @@ namespace interpreter {
                                     break;
                             }
                             default : {
-                                    // throw exception
+                                    throw exceptions::runtime::CUnknownAstNodeTypeException(typeName(node->getNodeType()));
                             }
 			}
 		}

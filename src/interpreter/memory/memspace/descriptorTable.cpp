@@ -1,4 +1,5 @@
 #include "interpreter/memory/memspace/descriptorTable.h"
+#include "exceptions/semantic/undefinedDescriptorException.h"
 
 namespace interpreter {
 
@@ -13,7 +14,7 @@ namespace interpreter {
 
                 ptr(mem_component) CDescriptorTable::getDescriptor(const std::string& name) {
                     if (!descriptorFound(name)) {
-                        // throw
+                        throw exceptions::semantic::CUndefinedDescriptorException(name);
                     }
                     return m_table.at(name);
                 }

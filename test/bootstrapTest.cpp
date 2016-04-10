@@ -19,6 +19,7 @@
 #include "interpreter/core/bootstrap.h"
 #include "interpreter/memory/objects/primitives/primitivePort.h"
 #include "interpreter/memory/objects/values/stringComponent.h"
+#include "exceptions/runtime/wrongPortTypeException.h"
 
 BOOST_AUTO_TEST_SUITE(bootstrapTest)
 
@@ -280,10 +281,8 @@ BOOST_AUTO_TEST_CASE(signatureInterfaceComponentTest) {
     BOOST_CHECK_EQUAL(interfaceComponent->getPortByName("args")->getConnectedPortsNumber(), 0);
     BOOST_CHECK_EQUAL(cast(mem_uint)(retPort->getOwner())->getValue(), 3);
     
-    ret = false;
-    TEST_PRIMITIVE_SERVICE(interfaceComponent, "default", "getConnectedComponentName", 0, ret, retPort);
-    BOOST_CHECK_EQUAL(interfaceComponent->getPortByName("args")->getConnectedPortsNumber(), 0);
-    BOOST_CHECK_EQUAL(retPort.use_count(), 0);
+    BOOST_CHECK_THROW(interfaceComponent->getPortByName("default")->getPrimitivePort()->getConnectedServiceByName("getConnectedComponentName")->getPrimitiveService()->invoke(),
+            exceptions::runtime::CWrongPortTypeException);
     
     ret = true;
     BOOST_CHECK_EQUAL(interfaceComponent->getPortByName("args")->getConnectedPortsNumber(), 0);

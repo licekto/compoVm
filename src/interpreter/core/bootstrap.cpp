@@ -1,4 +1,7 @@
 #include "interpreter/core/bootstrap.h"
+#include "exceptions/semantic/unsupportedFeatureException.h"
+#include "exceptions/runtime/unknownPortTypeException.h"
+#include "exceptions/runtime/wrongPortTypeException.h"
 
 namespace interpreter {
 
@@ -554,7 +557,7 @@ namespace interpreter {
                                     break;
                             }
                             case types::portType::INJECTED : {
-                                    // throw unsupported feature
+                                    throw exceptions::semantic::CUnsupportedFeatureException("Injection port");
                                     break;
                             }
                             case types::portType::NAMED : {
@@ -580,8 +583,7 @@ namespace interpreter {
                                     break;
                             }
                             default : {
-                                // throw
-                                break;
+                                throw exceptions::runtime::CUnknownPortTypeException();
                             }
 			}
 
@@ -599,8 +601,7 @@ namespace interpreter {
 
 			callback = [type](const std::vector<ptr(mem_component)>& /*params*/, const ptr(mem_component)& context) -> ptr(mem_port) {
                                 if (type != PORT_TYPE_SIGNATURES) {
-                                    // throw
-                                    return nullptr;
+                                    throw exceptions::runtime::CWrongPortTypeException(type, "getSignatureAt");
                                 }
 				u64 val = cast(mem_uint)(context->getPortByName("args")->getConnectedPortAt(0)->getOwner())->getValue();
 				context->getPortByName("args")->disconnectPortAt(0);
@@ -610,8 +611,7 @@ namespace interpreter {
 
 			callback = [type](const std::vector<ptr(mem_component)>& /*params*/, const ptr(mem_component)& context) -> ptr(mem_port) {
                                 if (type != PORT_TYPE_SIGNATURES) {
-                                    // throw
-                                    return nullptr;
+                                    throw exceptions::runtime::CWrongPortTypeException(type, "addSignature");
                                 }
 				ptr(mem_component) signature = context->getPortByName("args")->getConnectedPortAt(0)->getOwner();
 				context->getPortByName("args")->disconnectPortAt(0);
@@ -622,8 +622,7 @@ namespace interpreter {
 
 			callback = [type](const std::vector<ptr(mem_component)>& /*params*/, const ptr(mem_component)& context) -> ptr(mem_port) {
                                 if (type != PORT_TYPE_NAMED) {
-                                    // throw
-                                    return nullptr;
+                                    throw exceptions::runtime::CWrongPortTypeException(type, "getConnectedComponentName");
                                 }
                                 if (context->getPortByName("componentName")->getConnectedPortsNumber()) {
                                     return context->getPortByName("componentName")->getConnectedPortAt(0)->getOwner()->getPortByName("default");
@@ -634,8 +633,7 @@ namespace interpreter {
 
 			callback = [type](const std::vector<ptr(mem_component)>& /*params*/, const ptr(mem_component)& context) -> ptr(mem_port) {
                                 if (type != PORT_TYPE_NAMED) {
-                                    // throw
-                                    return nullptr;
+                                    throw exceptions::runtime::CWrongPortTypeException(type, "setConnectedComponentName");
                                 }
 				ptr(mem_string) component = cast(mem_string)(context->getPortByName("args")->getConnectedPortAt(0)->getOwner());
                                 
@@ -648,8 +646,7 @@ namespace interpreter {
 
                         callback = [type](const std::vector<ptr(mem_component)>& /*params*/, const ptr(mem_component)& context) -> ptr(mem_port) {
                                 if (type != PORT_TYPE_NAMED) {
-                                    // throw
-                                    return nullptr;
+                                    throw exceptions::runtime::CWrongPortTypeException(type, "getConnectedComponent");
                                 }
                                 if (context->getPortByName("component")->getConnectedPortsNumber()) {
                                     return context->getPortByName("component")->getConnectedPortAt(0)->getOwner()->getPortByName("default");
@@ -660,8 +657,7 @@ namespace interpreter {
 
 			callback = [type](const std::vector<ptr(mem_component)>& /*params*/, const ptr(mem_component)& context) -> ptr(mem_port) {
                                 if (type != PORT_TYPE_NAMED) {
-                                    // throw
-                                    return nullptr;
+                                    throw exceptions::runtime::CWrongPortTypeException(type, "setConnectedComponent");
                                 }
 				ptr(mem_component) component = context->getPortByName("args")->getConnectedPortAt(0)->getOwner();
                                 
@@ -674,8 +670,7 @@ namespace interpreter {
                         
                         callback = [type](const std::vector<ptr(mem_component)>& /*params*/, const ptr(mem_component)& context) -> ptr(mem_port) {
                                 if (type == PORT_TYPE_NAMED) {
-                                    // throw
-                                    return nullptr;
+                                    throw exceptions::runtime::CWrongPortTypeException(type, "getServiceAt");
                                 }
                                 
                                 ptr(mem_uint) arg = cast(mem_uint)(context->getPortByName("args")->getConnectedPortAt(0)->getOwner());
@@ -689,8 +684,7 @@ namespace interpreter {
 
 			callback = [type](const std::vector<ptr(mem_component)>& /*params*/, const ptr(mem_component)& context) -> ptr(mem_port) {
                                 if (type == PORT_TYPE_NAMED) {
-                                    // throw
-                                    return nullptr;
+                                    throw exceptions::runtime::CWrongPortTypeException(type, "addService");
                                 }
 				ptr(mem_component) service = context->getPortByName("args")->getConnectedPortAt(0)->getOwner();
                                 

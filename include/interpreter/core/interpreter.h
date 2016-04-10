@@ -1,5 +1,6 @@
 #pragma once
 
+#include "types.h"
 #include "interpreter/core/bootstrap.h"
 #include "interpreter/memory/memspace/descriptorTable.h"
 #include "parser/parserWrapper.h"
@@ -8,6 +9,7 @@
 #include "ast/semantic/syntaxDescriptorsTable.h"
 #include "exceptions/runtime/mainComponentMissingException.h"
 #include "exceptions/runtime/mainServiceMissingException.h"
+#include "exceptions/runtime/unknownAstNodeTypeException.h"
 
 /**
  *  \addtogroup interpreter

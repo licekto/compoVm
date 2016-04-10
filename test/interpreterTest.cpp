@@ -36,11 +36,10 @@ BOOST_AUTO_TEST_CASE(basicTest) {
     // Testing input
     std::stringstream input;
     input.str(
-   "descriptor Test {\
-    }\
-    descriptor CompoContainer {\
+   "descriptor CompoContainer {\
         service main() {\
-            c := Test.new();\
+            |a|\
+            a := 1 + 1;\
         }\
     }");
     
