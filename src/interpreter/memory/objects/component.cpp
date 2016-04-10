@@ -37,58 +37,102 @@ namespace interpreter {
                                 return cnt;
 			}
 
-			ptr(CGeneralPort) CComponent::getPortByName(const std::string& name) {
+			ptr(CGeneralPort) CComponent::getSelfPortByName(const std::string& name) {
 				auto it = std::find_if(m_ports.begin(), m_ports.end(), [&name](ptr(CGeneralPort) port) {
 					return port->getName() == name;
 				});
-
+                                
 				if (it == m_ports.end()) {
-                                        if (m_parent.use_count()) {
-                                            return m_parent->getPortByName(name);
-                                        }
-                                        if (m_child.use_count()) {
-                                            return m_child->getPortByName(name);
-                                        }
-                                        throw exceptions::runtime::CPortNotFoundException(name);
+                                        return nullptr;
 				}
 				return *it;
                         }
-
+                        
+                        ptr(CGeneralPort) CComponent::getPortByName(const std::string& name) {
+                            ptr(CGeneralPort) port = getSelfPortByName(name);
+                            if (port.use_count()) {
+                                return port;
+                            }
+                            
+                            ptr(CComponent) tmp = m_parent;
+                            
+                            while (tmp.use_count()) {
+                                port = tmp->getSelfPortByName(name);
+                                if (port.use_count()) {
+                                    return port;
+                                }
+                                tmp = tmp->m_parent;
+                            }
+                            
+                            tmp = m_child;
+                            while (tmp.use_count()) {
+                                port = tmp->getSelfPortByName(name);
+                                if (port.use_count()) {
+                                    return port;
+                                }
+                                tmp = tmp->m_child;
+                            }
+                            throw exceptions::runtime::CPortNotFoundException(name);
+                        }
+                        
+                        size_t CComponent::getNumberOfSubServices() const {
+                            return m_services.size();
+                        }
+                        
                         size_t CComponent::getNumberOfAllServices() const {
                             return getNumberOfSubServices() + getNumberOfInheritedServices();
                         }
 
-                        size_t CComponent::getNumberOfSubServices() const {
-                            return m_services.size();
+                        void CComponent::connectAllServicesTo(ptr(CGeneralPort) port) {
+                            for (ptr(CGeneralService) service : m_services) {
+                                port->connectPort(service->getDefaultPort());
+                            }
+                            if (m_parent.use_count()) {
+                                m_parent->connectAllServicesTo(port);
+                            }
+                            if (m_child.use_count()) {
+                                m_child->connectAllServicesTo(port);
+                            }
                         }
 
-                        ptr(CGeneralService) CComponent::getServiceAt(size_t index) {
-                                ptr(CGeneralService) service;
-				try {
-					service = m_services.at(index);
-				} catch (const std::out_of_range& ex) {
-                                        TRACE(ERROR, "Services index out of range exception: " << ex.what());
-				}
-				return service;
-                        }
-
-			ptr(CGeneralService) CComponent::getServiceByName(const std::string& name) {
+			ptr(CGeneralService) CComponent::getSelfServiceByName(const std::string& name) {
 				auto it = std::find_if(m_services.begin(), m_services.end(), [&name](ptr(CGeneralService) service) {
 					return service->getName() == name;
 				});
 
 				if (it == m_services.end()) {
-                                        if (m_parent.use_count()) {
-                                            return m_parent->getServiceByName(name);
-                                        }
-                                        if (m_child.use_count()) {
-                                            return m_child->getServiceByName(name);
-                                        }
-					throw exceptions::runtime::CServiceNotFoundException(name);
+                                    return nullptr;
 				}
 				return *it;
 			}
-
+                        
+                        ptr(CGeneralService) CComponent::getServiceByName(const std::string& name) {
+                            ptr(CGeneralService) service = getSelfServiceByName(name);
+                            if (service.use_count()) {
+                                return service;
+                            }
+                            
+                            ptr(CComponent) tmp = m_parent;
+                            
+                            while (tmp.use_count()) {
+                                service = tmp->getSelfServiceByName(name);
+                                if (service.use_count()) {
+                                    return service;
+                                }
+                                tmp = tmp->m_parent;
+                            }
+                            
+                            tmp = m_child;
+                            while (tmp.use_count()) {
+                                service = tmp->getSelfServiceByName(name);
+                                if (service.use_count()) {
+                                    return service;
+                                }
+                                tmp = tmp->m_child;
+                            }
+                            throw exceptions::runtime::CServiceNotFoundException(name);
+                        }
+                        
 			void CComponent::addService(std::shared_ptr<CGeneralService> service) {
 				m_services.push_back(service);
 			}

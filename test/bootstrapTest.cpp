@@ -35,6 +35,9 @@ BOOST_AUTO_TEST_CASE(componentTest) {
     ptr(mem_component) component = bootstrap->bootstrapComponent(owner);
     
     TEST_COMPONENT(component, owner);
+    
+    BOOST_CHECK_THROW(component->getServiceByName("abcd"), exceptions::runtime::CServiceNotFoundException);
+    BOOST_CHECK_THROW(component->getPortByName("abcd"), exceptions::runtime::CPortNotFoundException);
 }
 
 BOOST_AUTO_TEST_CASE(valuesComponentsTest) {
@@ -75,6 +78,9 @@ BOOST_AUTO_TEST_CASE(serviceComponentTest) {
     
     TEST_BASE_COMPONENT(service, 6, owner);
     BOOST_CHECK_EQUAL(cast(mem_string)(service->getPortByName("code")->getConnectedPortAt(0)->getOwner())->getValue(), codeStr);
+    
+    BOOST_CHECK_THROW(service->getServiceByName("abcd"), exceptions::runtime::CServiceNotFoundException);
+    BOOST_CHECK_THROW(service->getPortByName("abcd"), exceptions::runtime::CPortNotFoundException);
 }
 
 BOOST_AUTO_TEST_CASE(serviceSignatureComponentTest) {
@@ -136,6 +142,9 @@ BOOST_AUTO_TEST_CASE(serviceSignatureComponentTest) {
     TEST_PRIMITIVE_SERVICE(signatureComponent, "default", "getParamName", 1, ret, retPort);
     BOOST_CHECK_EQUAL(signatureComponent->getPortByName("args")->getConnectedPortsNumber(), 0);
     BOOST_CHECK_EQUAL(cast(mem_string)(retPort->getOwner())->getValue(), "param3");
+    
+    BOOST_CHECK_THROW(signatureComponent->getServiceByName("abcd"), exceptions::runtime::CServiceNotFoundException);
+    BOOST_CHECK_THROW(signatureComponent->getPortByName("abcd"), exceptions::runtime::CPortNotFoundException);
 }
 
 BOOST_AUTO_TEST_CASE(namedInterfaceComponentTest) {
@@ -199,6 +208,9 @@ BOOST_AUTO_TEST_CASE(namedInterfaceComponentTest) {
     TEST_PRIMITIVE_SERVICE(interfaceComponent, "default", "setConnectedComponentName", 1, ret, retPort);
     BOOST_CHECK_EQUAL(interfaceComponent->getPortByName("args")->getConnectedPortsNumber(), 0);
     BOOST_CHECK_EQUAL(cast(mem_string)(interfaceComponent->getPortByName("componentName")->getConnectedPortAt(0)->getOwner())->getValue(), "testComponentTest");
+    
+    BOOST_CHECK_THROW(interfaceComponent->getServiceByName("abcd"), exceptions::runtime::CServiceNotFoundException);
+    BOOST_CHECK_THROW(interfaceComponent->getPortByName("abcd"), exceptions::runtime::CPortNotFoundException);
 }
 
 BOOST_AUTO_TEST_CASE(signatureInterfaceComponentTest) {
@@ -318,6 +330,9 @@ BOOST_AUTO_TEST_CASE(signatureInterfaceComponentTest) {
     BOOST_CHECK_EQUAL(interfaceComponent->getPortByName("args")->getConnectedPortsNumber(), 0);
     str = cast(mem_string)(retPort->getOwner()->getPortByName("name")->getConnectedPortAt(0)->getOwner());
     BOOST_CHECK_EQUAL(str->getValue(), "signature3");
+    
+    BOOST_CHECK_THROW(interfaceComponent->getServiceByName("abcd"), exceptions::runtime::CServiceNotFoundException);
+    BOOST_CHECK_THROW(interfaceComponent->getPortByName("abcd"), exceptions::runtime::CPortNotFoundException);
 }
 
 BOOST_AUTO_TEST_CASE(portComponentTest) {
@@ -381,6 +396,9 @@ BOOST_AUTO_TEST_CASE(portComponentTest) {
     
     TEST_PRIMITIVE_SERVICE(portComponent, "default", "disconnectPort", 0, ret, retPort);
     BOOST_CHECK_EQUAL(portComponent->getPortByName("connectedPorts")->getConnectedPortsNumber(), 0);
+    
+    BOOST_CHECK_THROW(portComponent->getServiceByName("abcd"), exceptions::runtime::CServiceNotFoundException);
+    BOOST_CHECK_THROW(portComponent->getPortByName("abcd"), exceptions::runtime::CPortNotFoundException);
 }
 
 BOOST_AUTO_TEST_CASE(collectionPortComponentTest) {
@@ -444,6 +462,9 @@ BOOST_AUTO_TEST_CASE(collectionPortComponentTest) {
     TEST_PRIMITIVE_SERVICE(portComponent, "default", "disconnectPort", 1, ret, retPort);
     BOOST_CHECK_EQUAL(portComponent->getPortByName("args")->getConnectedPortsNumber(), 0);
     BOOST_CHECK_EQUAL(portComponent->getPortByName("connectedPorts")->getConnectedPortsNumber(), 0);
+    
+    BOOST_CHECK_THROW(portComponent->getServiceByName("abcd"), exceptions::runtime::CServiceNotFoundException);
+    BOOST_CHECK_THROW(portComponent->getPortByName("abcd"), exceptions::runtime::CPortNotFoundException);
 }
 
 BOOST_AUTO_TEST_CASE(portDescriptionComponentTest) {
@@ -553,6 +574,9 @@ BOOST_AUTO_TEST_CASE(portDescriptionComponentTest) {
     TEST_PRIMITIVE_SERVICE(portDescriptionComponent, "default", "getInterface", 0, ret, retPort);
     BOOST_CHECK_EQUAL(portDescriptionComponent->getPortByName("args")->getConnectedPortsNumber(), 0);
     BOOST_CHECK_EQUAL(retPort->getOwner().get(), intf->getParent().get());
+    
+    BOOST_CHECK_THROW(portDescriptionComponent->getServiceByName("abcd"), exceptions::runtime::CServiceNotFoundException);
+    BOOST_CHECK_THROW(portDescriptionComponent->getPortByName("abcd"), exceptions::runtime::CPortNotFoundException);
 }
 
 BOOST_AUTO_TEST_CASE(connectionDescriptionComponentTest) {
@@ -643,6 +667,9 @@ BOOST_AUTO_TEST_CASE(connectionDescriptionComponentTest) {
     BOOST_CHECK_EQUAL(cast(mem_bool)(retPort->getOwner())->getValue(), true);
     ptr(mem_bool) boolVal = cast(mem_bool)(retPort->getOwner());
     BOOST_CHECK_EQUAL(boolVal->getValue(), true);
+    
+    BOOST_CHECK_THROW(connectionDescriptionComponent->getServiceByName("abcd"), exceptions::runtime::CServiceNotFoundException);
+    BOOST_CHECK_THROW(connectionDescriptionComponent->getPortByName("abcd"), exceptions::runtime::CPortNotFoundException);
 }
 
 BOOST_AUTO_TEST_SUITE_END()

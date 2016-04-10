@@ -42,7 +42,9 @@ namespace interpreter {
                                 
 				void addPort(ptr(CGeneralPort) port);
 
-				ptr(CGeneralPort) getPortByName(const std::string& name);
+				ptr(CGeneralPort) getSelfPortByName(const std::string& name);
+                                
+                                ptr(CGeneralPort) getPortByName(const std::string& name);
 
                                 size_t getNumberOfInheritedServices() const;
                                 
@@ -50,7 +52,9 @@ namespace interpreter {
                                 
                                 size_t getNumberOfAllServices() const;
                                 
-                                ptr(CGeneralService) getServiceAt(size_t index);
+                                void connectAllServicesTo(ptr(CGeneralPort) port);
+                                
+                                ptr(CGeneralService) getSelfServiceByName(const std::string& name);
                                 
 				ptr(CGeneralService) getServiceByName(const std::string& name);
 

@@ -519,7 +519,11 @@ namespace interpreter {
 			servicesNames.at("setIsDisconnection")->setCallback(callback);
 
 			callback = [](const std::vector<ptr(mem_component)>& /*params*/, const ptr(mem_component)& context) -> ptr(mem_port) {
-				return context->getPortByName("isDisconnection")->getConnectedPortAt(0)->getOwner()->getPortByName("default");
+				ptr(mem_port) port = context->getPortByName("isDisconnection");
+                                port = port->getConnectedPortAt(0);
+                                port = port->getOwner()->getPortByName("default");
+                                
+                                return port;
 			};
 			servicesNames.at("isDisconnection")->setCallback(callback);
 
@@ -570,9 +574,7 @@ namespace interpreter {
                                     interface->getPortByName("type")->connectPort(bootstrapStringValue(type)->getDefaultPort());
                                     
                                     if (portOwner.use_count()) {
-//                                        for (size_t i = 0; i < portOwner->getNumberOfAllServices(); ++i) {
-//                                            interface->getPortByName("services")->connectPort(portOwner->getServiceAt(i)->getDefaultPort());
-//                                        }
+                                        portOwner->connectAllServicesTo(interface->getPortByName("services"));
                                     }
                                     
                                     break;
@@ -711,27 +713,30 @@ namespace interpreter {
                         ptr(ast_port) port = coreComponent->getPortByName("default");
                         ptr(mem_port) generalPort = new_ptr(mem_port)(bootstrapPortComponent(port, nullptr), port->getVisibility(), port->getRole());
                         generalPort->getPort()->getPortByName("owner")->setOwner(component);
-                        component->addPort(generalPort);
+                        parentComponent->addPort(generalPort);
                         
                         addPorts(parentComponent, coreComponent);
                         addServices(parentComponent, coreComponent);
                         
+                        component->setParent(parentComponent);
+                        parentComponent->setChild(component);
+                        
                         addPorts(component, coreDescriptor);
                         addServices(component, coreDescriptor);
                         
-                        component->setParent(parentComponent);
-                        
                         component->getPortByName("name")->connectPort(bootstrapStringValue(descriptor->getNameSymbol()->getStringValue())->getDefaultPort());
                         
-//                        for (size_t i = 0; i < component->getNumberOfAllServices(); ++i) {
-//                            component->getPortByName("default")->getPort()
-//                                     ->getPortByName("interfaceDescription")->getConnectedPortAt(0)->getOwner()
-//                                     ->getPortByName("services")->connectPort(component->getServiceAt(i)->getDefaultPort());
-//                            
-//                            component->getPortByName("self")->getPort()
-//                                     ->getPortByName("interfaceDescription")->getConnectedPortAt(0)->getOwner()
-//                                     ->getPortByName("services")->connectPort(component->getServiceAt(i)->getDefaultPort());
-//                        }
+                        generalPort = component->getPortByName("default")->getPort()
+                                                        ->getPortByName("interfaceDescription")->getConnectedPortAt(0)->getOwner()
+                                                        ->getPortByName("services");
+                        
+                        component->connectAllServicesTo(generalPort);
+                        
+                        generalPort = component->getPortByName("self")->getPort()
+                                ->getPortByName("interfaceDescription")->getConnectedPortAt(0)->getOwner()
+                                ->getPortByName("services");
+                        
+                        component->connectAllServicesTo(generalPort);
                         
 			return component;
 		}
