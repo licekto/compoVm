@@ -8,10 +8,12 @@ namespace interpreter {
 
 		namespace objects {
 
-			CComponent::CComponent() {
+			CComponent::CComponent() : m_parent(nullptr), m_child(nullptr) {
 			}
 
 			CComponent::CComponent(ptr(CComponent) instance) {
+                                m_parent = new_ptr(CComponent)(instance->m_parent);
+                            
 				for (ptr(CGeneralPort) port : instance->m_ports) {
 					this->m_ports.push_back(new_ptr(CGeneralPort)(port));
 				}
@@ -28,11 +30,11 @@ namespace interpreter {
 			}
 
 			size_t CComponent::getNumberOfPorts() const {
-				return m_ports.size();
-			}
-
-			ptr(CGeneralPort) CComponent::getPortAt(size_t index) {
-                                return m_ports.at(index);
+				size_t cnt = m_ports.size();
+                                if (m_parent.use_count()) {
+                                    cnt += m_parent->getNumberOfPorts();
+                                }
+                                return cnt;
 			}
 
 			ptr(CGeneralPort) CComponent::getPortByName(const std::string& name) {
@@ -41,12 +43,22 @@ namespace interpreter {
 				});
 
 				if (it == m_ports.end()) {
+                                        if (m_parent.use_count()) {
+                                            return m_parent->getPortByName(name);
+                                        }
+                                        if (m_child.use_count()) {
+                                            return m_child->getPortByName(name);
+                                        }
                                         throw exceptions::runtime::CPortNotFoundException(name);
 				}
 				return *it;
                         }
 
-                        size_t CComponent::getNumberOfServices() const {
+                        size_t CComponent::getNumberOfAllServices() const {
+                            return getNumberOfSubServices() + getNumberOfInheritedServices();
+                        }
+
+                        size_t CComponent::getNumberOfSubServices() const {
                             return m_services.size();
                         }
 
@@ -66,6 +78,12 @@ namespace interpreter {
 				});
 
 				if (it == m_services.end()) {
+                                        if (m_parent.use_count()) {
+                                            return m_parent->getServiceByName(name);
+                                        }
+                                        if (m_child.use_count()) {
+                                            return m_child->getServiceByName(name);
+                                        }
 					throw exceptions::runtime::CServiceNotFoundException(name);
 				}
 				return *it;
@@ -103,6 +121,32 @@ namespace interpreter {
 				}
                         }
 
+                        size_t CComponent::getNumberOfInheritedServices() const {
+                                size_t cnt = 0;
+                                ptr(CComponent) parent = m_parent;
+                                while (parent.use_count()) {
+                                    cnt += parent->getNumberOfAllServices();
+                                    parent = parent->getParent();
+                                }
+                                return cnt;
+                        }
+
+                        ptr(CComponent) CComponent::getParent() {
+                                return m_parent;
+                        }
+
+                        void CComponent::setParent(ptr(CComponent) parent) {
+                                m_parent = parent;
+                        }
+
+                        ptr(CComponent) CComponent::getChild() {
+                                return m_child;
+                        }
+
+                        void CComponent::setChild(ptr(CComponent) child) {
+                                m_child = child;
+                        }
+                        
                         std::stringstream CComponent::dump() const {
                             std::stringstream dump;
                             

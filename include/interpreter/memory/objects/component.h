@@ -21,7 +21,11 @@ namespace interpreter {
 
 			class CComponent {
 			  protected:
-
+                              
+                                ptr(CComponent) m_parent;
+                                
+                                ptr(CComponent) m_child;
+                              
 				std::vector<ptr(CGeneralPort)> m_ports;
 
 				std::vector<ptr(CGeneralService)> m_services;
@@ -34,15 +38,17 @@ namespace interpreter {
 
 				virtual ~CComponent();
 
+                                size_t getNumberOfPorts() const;
+                                
 				void addPort(ptr(CGeneralPort) port);
-
-				size_t getNumberOfPorts() const;
-
-				ptr(CGeneralPort) getPortAt(size_t index);
 
 				ptr(CGeneralPort) getPortByName(const std::string& name);
 
-                                size_t getNumberOfServices() const;
+                                size_t getNumberOfInheritedServices() const;
+                                
+                                size_t getNumberOfSubServices() const;
+                                
+                                size_t getNumberOfAllServices() const;
                                 
                                 ptr(CGeneralService) getServiceAt(size_t index);
                                 
@@ -53,6 +59,14 @@ namespace interpreter {
 				ptr(CGeneralPort) getPortOfService(const std::string& serviceName);
                                 
                                 void removeServiceByName(const std::string& name);
+                                
+                                ptr(CComponent) getParent();
+                                
+                                void setParent(ptr(CComponent) parent);
+                                
+                                ptr(CComponent) getChild();
+                                
+                                void setChild(ptr(CComponent) child);
                                 
                                 std::stringstream dump() const;
 			};

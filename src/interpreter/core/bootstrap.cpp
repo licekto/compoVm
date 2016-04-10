@@ -57,9 +57,15 @@ namespace interpreter {
                 ptr(mem_component) CBootstrap::bootstrapPrologueWithComponent(ptr(ast_descriptor) descriptor,
                                                                               std::map<std::string,ptr(mem_primitiveservice)>& servicesNames,
                                                                               ptr(mem_component) owner) {
-			ptr(mem_component) component = bootstrapComponent(owner);
+			ptr(mem_component) parentComponent = bootstrapComponent(owner);
+                        
+                        ptr(mem_component) component = new_ptr(mem_component)();
 			addPrimitivePorts(component, descriptor);
 			addPrimitiveServices(component, descriptor, servicesNames);
+                        
+                        component->setParent(parentComponent);
+                        parentComponent->setChild(component);
+                                
                         return component;
                 }
                 
@@ -358,8 +364,7 @@ namespace interpreter {
                         std::map<std::string, ptr(mem_primitiveservice)> servicesNames;
                         ptr(mem_component) serviceSignature = bootstrapPrologueWithComponent(m_coreModules->getCoreDescriptor("ServiceSignature"), servicesNames, owner);
 
-			serviceSignature->getPortByName("name")->
-                            connectPort(cast(mem_string)(bootstrapStringValue(astSignature->getNameSymbol()->getStringValue()))->getDefaultPort());
+			serviceSignature->getPortByName("name")->connectPort(cast(mem_string)(bootstrapStringValue(astSignature->getNameSymbol()->getStringValue()))->getDefaultPort());
                         
 			ptr(mem_port) paramNames = serviceSignature->getPortByName("paramNames");
 
@@ -565,9 +570,9 @@ namespace interpreter {
                                     interface->getPortByName("type")->connectPort(bootstrapStringValue(type)->getDefaultPort());
                                     
                                     if (portOwner.use_count()) {
-                                        for (size_t i = 0; i < portOwner->getNumberOfServices(); ++i) {
-                                            interface->getPortByName("services")->connectPort(portOwner->getServiceAt(i)->getDefaultPort());
-                                        }
+//                                        for (size_t i = 0; i < portOwner->getNumberOfAllServices(); ++i) {
+//                                            interface->getPortByName("services")->connectPort(portOwner->getServiceAt(i)->getDefaultPort());
+//                                        }
                                     }
                                     
                                     break;
@@ -698,7 +703,8 @@ namespace interpreter {
 		}
 
 		ptr(mem_component) CBootstrap::bootstrapDescriptorComponent(ptr(ast_descriptor) descriptor) {
-			ptr(mem_component) component = new_ptr(mem_component)();
+			ptr(mem_component) parentComponent = new_ptr(mem_component)();
+                        ptr(mem_component) component = new_ptr(mem_component)();
                         ptr(ast_descriptor) coreComponent = m_coreModules->getCoreDescriptor("Component");
 			ptr(ast_descriptor) coreDescriptor = m_coreModules->getCoreDescriptor("Descriptor");
                         
@@ -707,22 +713,25 @@ namespace interpreter {
                         generalPort->getPort()->getPortByName("owner")->setOwner(component);
                         component->addPort(generalPort);
                         
-                        addPorts(component, coreComponent);
-                        addServices(component, coreComponent);
+                        addPorts(parentComponent, coreComponent);
+                        addServices(parentComponent, coreComponent);
+                        
                         addPorts(component, coreDescriptor);
                         addServices(component, coreDescriptor);
                         
+                        component->setParent(parentComponent);
+                        
                         component->getPortByName("name")->connectPort(bootstrapStringValue(descriptor->getNameSymbol()->getStringValue())->getDefaultPort());
                         
-                        for (size_t i = 0; i < component->getNumberOfServices(); ++i) {
-                            component->getPortByName("default")->getPort()
-                                     ->getPortByName("interfaceDescription")->getConnectedPortAt(0)->getOwner()
-                                     ->getPortByName("services")->connectPort(component->getServiceAt(i)->getDefaultPort());
-                            
-                            component->getPortByName("self")->getPort()
-                                     ->getPortByName("interfaceDescription")->getConnectedPortAt(0)->getOwner()
-                                     ->getPortByName("services")->connectPort(component->getServiceAt(i)->getDefaultPort());
-                        }
+//                        for (size_t i = 0; i < component->getNumberOfAllServices(); ++i) {
+//                            component->getPortByName("default")->getPort()
+//                                     ->getPortByName("interfaceDescription")->getConnectedPortAt(0)->getOwner()
+//                                     ->getPortByName("services")->connectPort(component->getServiceAt(i)->getDefaultPort());
+//                            
+//                            component->getPortByName("self")->getPort()
+//                                     ->getPortByName("interfaceDescription")->getConnectedPortAt(0)->getOwner()
+//                                     ->getPortByName("services")->connectPort(component->getServiceAt(i)->getDefaultPort());
+//                        }
                         
 			return component;
 		}
