@@ -51,17 +51,17 @@ namespace ast {
 				try {
 					node = m_constraints.at(index);
 				} catch (const std::out_of_range& ex) {
-                                        TRACE(ERROR, "Constraints index out of range exception: " << ex.what());
+					TRACE(ERROR, "Constraints index out of range exception: " << ex.what());
 				}
 				return node;
 			}
 
 			std::shared_ptr<compo::CPort> CDescriptor::getPortAt(size_t index) const {
-                                std::shared_ptr<compo::CPort> port;
+				std::shared_ptr<compo::CPort> port;
 				try {
 					port = m_ports.at(index);
 				} catch (const std::out_of_range& ex) {
-                                        TRACE(ERROR, "Ports index out of range exception: " << ex.what());
+					TRACE(ERROR, "Ports index out of range exception: " << ex.what());
 				}
 				return port;
 			}

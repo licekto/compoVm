@@ -21,11 +21,11 @@ namespace interpreter {
 
 			class CComponent {
 			  protected:
-                              
-                                ptr(CComponent) m_parent;
-                                
-                                ptr(CComponent) m_child;
-                              
+
+				ptr(CComponent) m_parent;
+
+				ptr(CComponent) m_child;
+
 				std::vector<ptr(CGeneralPort)> m_ports;
 
 				std::vector<ptr(CGeneralService)> m_services;
@@ -38,49 +38,49 @@ namespace interpreter {
 
 				virtual ~CComponent();
 
-                                size_t getNumberOfPorts() const;
-                                
+				size_t getNumberOfPorts() const;
+
 				void addPort(ptr(CGeneralPort) port);
 
 				ptr(CGeneralPort) getSelfPortByName(const std::string& name);
-                                
-                                ptr(CGeneralPort) getPortByName(const std::string& name);
 
-                                size_t getNumberOfInheritedServices() const;
-                                
-                                size_t getNumberOfSelfServices() const;
-                                
-                                size_t getNumberOfAllServices() const;
-                                
-                                void connectAllSelfServicesTo(ptr(CGeneralPort) port);
-                                
-                                void connectAllParentServicesTo(ptr(CGeneralPort) port);
-                                
-                                void connectAllServicesTo(ptr(CGeneralPort) port);
-                                
-                                ptr(CGeneralService) getSelfServiceByName(const std::string& name);
-                                
+				ptr(CGeneralPort) getPortByName(const std::string& name);
+
+				size_t getNumberOfInheritedServices() const;
+
+				size_t getNumberOfSelfServices() const;
+
+				size_t getNumberOfAllServices() const;
+
+				void connectAllSelfServicesTo(ptr(CGeneralPort) port);
+
+				void connectAllParentServicesTo(ptr(CGeneralPort) port);
+
+				void connectAllServicesTo(ptr(CGeneralPort) port);
+
+				ptr(CGeneralService) getSelfServiceByName(const std::string& name);
+
 				ptr(CGeneralService) getServiceByName(const std::string& name);
 
 				void addService(ptr(CGeneralService) service);
 
 				ptr(CGeneralPort) getPortOfService(const std::string& serviceName);
-                                
-                                void removeServiceByName(const std::string& name);
-                                
-                                ptr(CComponent) getParent();
-                                
-                                ptr(CComponent) getTopParent();
-                                
-                                void setParent(ptr(CComponent) parent);
-                                
-                                ptr(CComponent) getChild();
-                                
-                                ptr(CComponent) getBottomChild();
-                                
-                                void setChild(ptr(CComponent) child);
-                                
-                                std::stringstream dump() const;
+
+				void removeServiceByName(const std::string& name);
+
+				ptr(CComponent) getParent();
+
+				ptr(CComponent) getTopParent();
+
+				void setParent(ptr(CComponent) parent);
+
+				ptr(CComponent) getChild();
+
+				ptr(CComponent) getBottomChild();
+
+				void setChild(ptr(CComponent) child);
+
+				std::stringstream dump() const;
 			};
 
 		}

@@ -41,24 +41,23 @@ namespace interpreter {
 					return m_primitiveService->getName();
 				} else {
 					return cast(values::CStringComponent)
-                                                    (m_service->getPortByName("serviceSign")->getConnectedPortAt(0)
-                                                     ->getOwner()->getPortByName("selector")->getConnectedPortAt(0)->getOwner())->getValue();
+					       (m_service->getPortByName("serviceSign")->getConnectedPortAt(0)
+					        ->getOwner()->getPortByName("selector")->getConnectedPortAt(0)->getOwner())->getValue();
 				}
-                        }
+			}
 
-                        ptr(objects::CGeneralPort) CGeneralService::invoke() {
-                            if (m_primitive) {
-                                return m_primitiveService->invoke();
-                            }
-                            else {
-                                TRACE(ERROR, "Not implemented yet");
-                                return nullptr;
-                            }
-                        }
+			ptr(objects::CGeneralPort) CGeneralService::invoke() {
+				if (m_primitive) {
+					return m_primitiveService->invoke();
+				} else {
+					TRACE(ERROR, "Not implemented yet");
+					return nullptr;
+				}
+			}
 
-                        ptr(objects::CGeneralPort) CGeneralService::getDefaultPort() {
-                            return m_service->getPortByName("default");
-                        }
+			ptr(objects::CGeneralPort) CGeneralService::getDefaultPort() {
+				return m_service->getPortByName("default");
+			}
 
 		}
 	}

@@ -10,9 +10,9 @@ namespace interpreter {
 	namespace memory {
 
 		namespace objects {
-                    
-                        class CComponet;
-                        class CGeneralPort;
+
+			class CComponet;
+			class CGeneralPort;
 
 			namespace primitives {
 

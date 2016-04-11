@@ -10,7 +10,7 @@ namespace interpreter {
 
 		namespace objects {
 
-                        class CComponent;
+			class CComponent;
 
 			class CComponent;
 
@@ -36,10 +36,10 @@ namespace interpreter {
 				bool isPrimitive() const;
 
 				std::string getName() const;
-                                
-                                ptr(objects::CGeneralPort) invoke();
-                                
-                                ptr(objects::CGeneralPort) getDefaultPort();
+
+				ptr(objects::CGeneralPort) invoke();
+
+				ptr(objects::CGeneralPort) getDefaultPort();
 			};
 		}
 	}

@@ -74,8 +74,8 @@ namespace ast {
 
 				/**
 				* Port type getter
-                                * @return types::portType
-                                */
+				                * @return types::portType
+				                */
 				types::portType getPortType() const;
 
 				/**
@@ -92,8 +92,8 @@ namespace ast {
 
 				/**
 				* Collectivity getter
-                                * @return is collective?
-                                */
+				                * @return is collective?
+				                */
 				bool isCollection() const;
 
 				void setVisibility(types::visibilityType visibility);

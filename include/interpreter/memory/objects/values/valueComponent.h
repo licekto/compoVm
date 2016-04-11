@@ -25,8 +25,8 @@ namespace interpreter {
 
 					ptr(CGeneralPort) getDefaultPort();
 
-                                        ptr(CGeneralPort) getPortByName(const std::string& name);
-                                        
+					ptr(CGeneralPort) getPortByName(const std::string& name);
+
 					void addPort(ptr(CGeneralPort) port) = delete;
 
 					size_t getNumberOfPorts() const = delete;

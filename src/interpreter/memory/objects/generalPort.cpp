@@ -47,66 +47,59 @@ namespace interpreter {
 			std::string CGeneralPort::getName() const {
 				if (m_primitive) {
 					return m_primitivePort->getName();
-				}
-                                else {
+				} else {
 					return cast(memory::objects::values::CStringComponent)
-                                                (m_port->getPortByName("name")->getPrimitivePort()->getConnectedPortAt(0)->getOwner())->getValue();
+					       (m_port->getPortByName("name")->getPrimitivePort()->getConnectedPortAt(0)->getOwner())->getValue();
 				}
 			}
 
 			std::shared_ptr<CComponent> CGeneralPort::getOwner() {
 				if (m_primitive) {
 					return m_primitivePort->getOwner();
-				}
-                                else {
+				} else {
 					return m_port->getPortByName("owner")->getPrimitivePort()->getConnectedPortAt(0)->getOwner();
 				}
-                        }
+			}
 
-                        void CGeneralPort::setOwner(ptr(CComponent) owner) {
-                                if (m_primitive) {
-                                        m_primitivePort->setOwner(owner);
-                                }
-                                else {
+			void CGeneralPort::setOwner(ptr(CComponent) owner) {
+				if (m_primitive) {
+					m_primitivePort->setOwner(owner);
+				} else {
 					return m_port->getPortByName("owner")->getPrimitivePort()->getConnectedPortAt(0)->setOwner(owner);
 				}
-                        }
+			}
 
-                        size_t CGeneralPort::getConnectedPortsNumber() const {
-                            if (m_primitive) {
-                                return m_primitivePort->getConnectedPortsNumber();
-                            }
-                            else {
-                                return m_port->getPortByName("connectedPorts")->getConnectedPortsNumber();
-                            }
-                        }
+			size_t CGeneralPort::getConnectedPortsNumber() const {
+				if (m_primitive) {
+					return m_primitivePort->getConnectedPortsNumber();
+				} else {
+					return m_port->getPortByName("connectedPorts")->getConnectedPortsNumber();
+				}
+			}
 
-                        std::shared_ptr<objects::CGeneralPort> CGeneralPort::getConnectedPortAt(size_t index) {
-                            if (m_primitive) {
-                                return m_primitivePort->getConnectedPortAt(index);
-                            }
-                            else {
-                                return m_port->getPortByName("connectedPorts")->getConnectedPortAt(index);
-                            }
-                        }
+			std::shared_ptr<objects::CGeneralPort> CGeneralPort::getConnectedPortAt(size_t index) {
+				if (m_primitive) {
+					return m_primitivePort->getConnectedPortAt(index);
+				} else {
+					return m_port->getPortByName("connectedPorts")->getConnectedPortAt(index);
+				}
+			}
 
-                        void CGeneralPort::connectPort(std::shared_ptr<objects::CGeneralPort> port) {
-                            if (m_primitive) {
-                                return m_primitivePort->connectPort(port);
-                            }
-                            else {
-                                return m_port->getPortByName("connectedPorts")->connectPort(port);
-                            }
-                        }
+			void CGeneralPort::connectPort(std::shared_ptr<objects::CGeneralPort> port) {
+				if (m_primitive) {
+					return m_primitivePort->connectPort(port);
+				} else {
+					return m_port->getPortByName("connectedPorts")->connectPort(port);
+				}
+			}
 
-                        void CGeneralPort::disconnectPortAt(size_t index) {
-                            if (m_primitive) {
-                                return m_primitivePort->disconnectPortAt(index);
-                            }
-                            else {
-                                return m_port->getPortByName("connectedPorts")->disconnectPortAt(index);
-                            }
-                        }
+			void CGeneralPort::disconnectPortAt(size_t index) {
+				if (m_primitive) {
+					return m_primitivePort->disconnectPortAt(index);
+				} else {
+					return m_port->getPortByName("connectedPorts")->disconnectPortAt(index);
+				}
+			}
 
 		}
 	}

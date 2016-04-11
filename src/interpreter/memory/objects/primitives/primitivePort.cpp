@@ -35,13 +35,13 @@ namespace interpreter {
 				}
 
 				ptr(objects::CGeneralPort) CPrimitivePort::getConnectedPortAt(size_t index) {
-                                        ptr(objects::CGeneralPort) port;
-                                        try {
-                                                port = m_connectedPorts.at(index);
-                                        } catch (const std::out_of_range& ex) {
-                                                TRACE(ERROR, "Connected ports index out of range exception, index: " << index << ", exception: '" << ex.what() << "'");
-                                        }
-                                        return port;
+					ptr(objects::CGeneralPort) port;
+					try {
+						port = m_connectedPorts.at(index);
+					} catch (const std::out_of_range& ex) {
+						TRACE(ERROR, "Connected ports index out of range exception, index: " << index << ", exception: '" << ex.what() << "'");
+					}
+					return port;
 				}
 
 				void CPrimitivePort::connectService(std::shared_ptr<objects::CGeneralService> service) {
@@ -53,45 +53,45 @@ namespace interpreter {
 				}
 
 				ptr(objects::CGeneralService) CPrimitivePort::getConnectedServiceAt(size_t index) {
-                                        ptr(objects::CGeneralService) service;
-                                        try {
-                                                service = m_connectedServices.at(index);
-                                        } catch (const std::out_of_range& ex) {
-                                                TRACE(ERROR, "Connected services index out of range exception, index: " << index << ", exception: '" << ex.what() << "'");
-                                        }
-                                        return service;
+					ptr(objects::CGeneralService) service;
+					try {
+						service = m_connectedServices.at(index);
+					} catch (const std::out_of_range& ex) {
+						TRACE(ERROR, "Connected services index out of range exception, index: " << index << ", exception: '" << ex.what() << "'");
+					}
+					return service;
 				}
 
 				std::shared_ptr<objects::CGeneralService> CPrimitivePort::getConnectedServiceByName(const std::string& name) {
 					auto it = std::find_if(m_connectedServices.begin(), m_connectedServices.end(), [&name](ptr(CGeneralService) service) {
-                                                return service->getName() == name;
+						return service->getName() == name;
 					});
 
 					if (it == m_connectedServices.end()) {
-                                                throw exceptions::runtime::CServiceNotFoundException(name);
+						throw exceptions::runtime::CServiceNotFoundException(name);
 					}
 					return *it;
 				}
 
 				void CPrimitivePort::disconnectPortAt(size_t index) {
-                                        try {
-                                                if (m_connectedPorts.size()) {
-                                                    m_connectedPorts.erase(m_connectedPorts.begin()+index);
-                                                }
-                                        } catch (const std::out_of_range& ex) {
-                                                TRACE(ERROR, "Connected ports index out of range exception, index: " << index << ", exception: '" << ex.what() << "'");
-                                        }
-                                }
+					try {
+						if (m_connectedPorts.size()) {
+							m_connectedPorts.erase(m_connectedPorts.begin()+index);
+						}
+					} catch (const std::out_of_range& ex) {
+						TRACE(ERROR, "Connected ports index out of range exception, index: " << index << ", exception: '" << ex.what() << "'");
+					}
+				}
 
-                                void CPrimitivePort::disconnectServiceByName(const std::string& name) {
-                                        auto it = std::find_if(m_connectedServices.begin(), m_connectedServices.end(), [&name](ptr(CGeneralService) service) {
+				void CPrimitivePort::disconnectServiceByName(const std::string& name) {
+					auto it = std::find_if(m_connectedServices.begin(), m_connectedServices.end(), [&name](ptr(CGeneralService) service) {
 						return service->getName() == name;
 					});
 
 					if (it != m_connectedServices.end()) {
-                                            m_connectedServices.erase(it);
+						m_connectedServices.erase(it);
 					}
-                                }
+				}
 
 			}
 

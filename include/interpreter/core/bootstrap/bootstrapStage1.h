@@ -20,73 +20,76 @@
 #include "exceptions/runtime/unknownPortTypeException.h"
 #include "exceptions/runtime/wrongPortTypeException.h"
 #include "exceptions/runtime/unknownAstNodeTypeException.h"
-#include "types.h"
 
 namespace interpreter {
 
 	namespace core {
 
-            namespace bootstrap {
-            
-		class CBootstrapStage1 {
-		  private:
-			ptr(core::CCoreModules) m_coreModules;
+		class CInterpreter;
 
-			void addPrimitiveServices(ptr(mem_component) component, ptr(ast_descriptor) descriptor, std::map<std::string, ptr(mem_primitiveservice)>& servicesNames);
+		namespace bootstrap {
 
-			void addPrimitivePorts(ptr(mem_component) component, ptr(ast_descriptor) descriptor);
+			class CBootstrapStage1 {
+			  private:
+				ptr(core::CCoreModules) m_coreModules;
 
-			std::function<ptr(mem_port)(const std::vector<ptr(mem_component)>&, const ptr(mem_component)&)> prepareStringSetter(const std::string& portName);
+				ptr(core::CInterpreter) m_interpreter;
 
-			std::function<ptr(mem_port)(const std::vector<ptr(mem_component)>&, const ptr(mem_component)&)> prepareStringGetter(const std::string& portName);
+				void addPrimitiveServices(ptr(mem_component) component, ptr(ast_descriptor) descriptor, std::map<std::string, ptr(mem_primitiveservice)>& servicesNames);
 
-			void addDefaultPort(ptr(mem_value) value);
-                        
-                        ptr(mem_component) bootstrapPrologueWithComponent(ptr(ast_descriptor) descriptor, std::map<std::string, ptr(mem_primitiveservice)>& servicesNames, ptr(mem_component) owner);
-                        
-                        ptr(mem_component) bootstrapPrologue(ptr(ast_descriptor) descriptor, std::map<std::string, ptr(mem_primitiveservice)>& servicesNames);
-                        
-                        void bootstrapEpilogue(ptr(mem_component) component, std::map<std::string,std::shared_ptr<mem_primitiveservice> >& servicesNames);
-                        
-                        void addPorts(ptr(mem_component) component, ptr(ast_descriptor) descriptor);
-                        
-                        void addServices(ptr(mem_component) component, ptr(ast_descriptor) descriptor);
-                        
-                        ptr(mem_component) bootstrapRootComponent(ptr(mem_component) owner);
-                        
-                        ptr(mem_component) buildPortFromDescription(ptr(mem_component) description);
+				void addPrimitivePorts(ptr(mem_component) component, ptr(ast_descriptor) descriptor);
 
-                public:
-                        CBootstrapStage1(ptr(core::CCoreModules) coreModules = nullptr);
-                        
-			ptr(mem_uint) bootstrapUIntValue(u64 value);
+				std::function<ptr(mem_port)(const std::vector<ptr(mem_component)>&, const ptr(mem_component)&)> prepareStringSetter(const std::string& portName);
 
-			ptr(mem_string) bootstrapStringValue(const std::string& value);
+				std::function<ptr(mem_port)(const std::vector<ptr(mem_component)>&, const ptr(mem_component)&)> prepareStringGetter(const std::string& portName);
 
-			ptr(mem_bool) bootstrapBoolValue(bool value);
-                        
-			ptr(mem_component) bootstrapComponent(ptr(mem_component) owner);
+				void addDefaultPort(ptr(mem_value) value);
 
-			ptr(mem_component) bootstrapPortComponent(ptr(ast_port) astPort, ptr(mem_component) owner);
+				ptr(mem_component) bootstrapPrologueWithComponent(ptr(ast_descriptor) descriptor, std::map<std::string, ptr(mem_primitiveservice)>& servicesNames, ptr(mem_component) owner);
 
-			ptr(mem_component) bootstrapCollectionPortComponent(ptr(ast_port) astPort, ptr(mem_component) owner);
+				ptr(mem_component) bootstrapPrologue(ptr(ast_descriptor) descriptor, std::map<std::string, ptr(mem_primitiveservice)>& servicesNames);
 
-			ptr(mem_component) bootstrapServiceComponent(ptr(ast_service) astService, ptr(mem_component) owner);
+				void bootstrapEpilogue(ptr(mem_component) component, std::map<std::string,std::shared_ptr<mem_primitiveservice> >& servicesNames);
 
-			ptr(mem_component) bootstrapServiceSignatureComponent(ptr(ast_servicesignature) astSignature, ptr(mem_component) owner);
+				void addPorts(ptr(mem_component) component, ptr(ast_descriptor) descriptor);
 
-			ptr(mem_component) bootstrapPortDescriptionComponent(ptr(ast_port) astPort, ptr(mem_component) owner);
+				void addServices(ptr(mem_component) component, ptr(ast_descriptor) descriptor);
 
-                        ptr(mem_component) bootstrapServiceInvocationComponent(ptr(ast_serviceinvocation) astServiceInv, ptr(mem_component) owner);
-                        
-			ptr(mem_component) bootstrapConnectionDescriptionComponent(ptr(ast_bind) bind, ptr(mem_component) owner);
+				ptr(mem_component) bootstrapRootComponent(ptr(mem_component) owner);
 
-			ptr(mem_component) bootstrapInterfaceComponent(ptr(ast_port) astPort, ptr(mem_component) owner, ptr(mem_component) portOwner);
+				ptr(mem_component) buildPortFromDescription(ptr(mem_component) description);
 
-			ptr(mem_component) bootstrapDescriptorComponent(ptr(ast_descriptor) descriptor);
-		};
-                
-            }
-            
+			  public:
+				CBootstrapStage1(ptr(core::CCoreModules) coreModules = nullptr);
+
+				ptr(mem_uint) bootstrapUIntValue(u64 value);
+
+				ptr(mem_string) bootstrapStringValue(const std::string& value);
+
+				ptr(mem_bool) bootstrapBoolValue(bool value);
+
+				ptr(mem_component) bootstrapComponent(ptr(mem_component) owner);
+
+				ptr(mem_component) bootstrapPortComponent(ptr(ast_port) astPort, ptr(mem_component) owner);
+
+				ptr(mem_component) bootstrapCollectionPortComponent(ptr(ast_port) astPort, ptr(mem_component) owner);
+
+				ptr(mem_component) bootstrapServiceComponent(ptr(ast_service) astService, ptr(mem_component) owner);
+
+				ptr(mem_component) bootstrapServiceSignatureComponent(ptr(ast_servicesignature) astSignature, ptr(mem_component) owner);
+
+				ptr(mem_component) bootstrapPortDescriptionComponent(ptr(ast_port) astPort, ptr(mem_component) owner);
+
+				ptr(mem_component) bootstrapServiceInvocationComponent(ptr(ast_serviceinvocation) astServiceInv, ptr(mem_component) owner);
+
+				ptr(mem_component) bootstrapConnectionDescriptionComponent(ptr(ast_bind) bind, ptr(mem_component) owner);
+
+				ptr(mem_component) bootstrapInterfaceComponent(ptr(ast_port) astPort, ptr(mem_component) owner, ptr(mem_component) portOwner);
+
+				ptr(mem_component) bootstrapDescriptorComponent(ptr(ast_descriptor) descriptor);
+			};
+
+		}
+
 	}
 }

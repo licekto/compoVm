@@ -43,7 +43,7 @@ namespace interpreter {
 				types::visibilityType getVisibility() const;
 
 				types::roleType getRole() const;
-                                
+
 				bool isPrimitive() const;
 
 				ptr(CComponent) getPort();
@@ -53,17 +53,17 @@ namespace interpreter {
 				std::string getName() const;
 
 				ptr(CComponent) getOwner();
-                                
-                                void setOwner(ptr(CComponent) owner);
-                                
-                                
-                                size_t getConnectedPortsNumber() const;
 
-                                ptr(objects::CGeneralPort) getConnectedPortAt(size_t index);
-                                
-                                void connectPort(ptr(objects::CGeneralPort) port);
+				void setOwner(ptr(CComponent) owner);
 
-                                void disconnectPortAt(size_t index);
+
+				size_t getConnectedPortsNumber() const;
+
+				ptr(objects::CGeneralPort) getConnectedPortAt(size_t index);
+
+				void connectPort(ptr(objects::CGeneralPort) port);
+
+				void disconnectPortAt(size_t index);
 			};
 		}
 	}

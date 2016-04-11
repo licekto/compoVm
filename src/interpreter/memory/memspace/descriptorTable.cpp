@@ -4,33 +4,33 @@
 namespace interpreter {
 
 	namespace memory {
-            
-            namespace memspace {
 
-                void CDescriptorTable::addDescriptor(ptr(mem_component) descriptor) {
-                    ptr(mem_port) port = descriptor->getPortByName("name");
-                    m_table[cast(mem_string)(port->getConnectedPortAt(0)->getOwner())->getValue()] = descriptor;
-                }
+		namespace memspace {
 
-                ptr(mem_component) CDescriptorTable::getDescriptor(const std::string& name) {
-                    if (!descriptorFound(name)) {
-                        throw exceptions::semantic::CUndefinedDescriptorException(name);
-                    }
-                    return m_table.at(name);
-                }
+			void CDescriptorTable::addDescriptor(ptr(mem_component) descriptor) {
+				ptr(mem_port) port = descriptor->getPortByName("name");
+				m_table[cast(mem_string)(port->getConnectedPortAt(0)->getOwner())->getValue()] = descriptor;
+			}
 
-                bool CDescriptorTable::descriptorFound(const std::string& name) const {
-                    if (m_table.find(name) == m_table.end()) {
-                        return false;
-                    }
-                    return true;
-                }
+			ptr(mem_component) CDescriptorTable::getDescriptor(const std::string& name) {
+				if (!descriptorFound(name)) {
+					throw exceptions::semantic::CUndefinedDescriptorException(name);
+				}
+				return m_table.at(name);
+			}
 
-                void CDescriptorTable::clear() {
-                    m_table.clear();
-                }
+			bool CDescriptorTable::descriptorFound(const std::string& name) const {
+				if (m_table.find(name) == m_table.end()) {
+					return false;
+				}
+				return true;
+			}
 
-            }
-            
+			void CDescriptorTable::clear() {
+				m_table.clear();
+			}
+
+		}
+
 	}
 }

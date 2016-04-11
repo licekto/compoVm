@@ -38,10 +38,10 @@ namespace interpreter {
 		  private:
 
 			ptr(ParserWrapper) m_parser;
-                        
-                        ptr(bootstrap::CBootstrapStage1) m_bootstrap;
-                        
-                        ptr(memory::memspace::CDescriptorTable) m_descriptorTable;
+
+			ptr(bootstrap::CBootstrapStage1) m_bootstrap;
+
+			ptr(memory::memspace::CDescriptorTable) m_descriptorTable;
 
 			void checkMainContainer() const;
 

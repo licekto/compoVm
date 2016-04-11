@@ -1,7 +1,6 @@
 #include "logger/logger.h"
 
-void log(const string& level, const string& what)
-{
+void log(const string& level, const string& what) {
 	stringstream oss;
 
 	oss << level << "	" << what << "\"" << endl;
