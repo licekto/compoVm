@@ -6,6 +6,7 @@
 #include "logger/logger.h"
 
 #include "definitions/allDefinitions.h"
+#include "definitions/interpreterDefinitions.h"
 #include "testDefinitions.h"
 #include "parser/lexer.h"
 #include "parser/parserWrapper.h"
@@ -27,10 +28,10 @@ BOOST_AUTO_TEST_SUITE(interpreterTest)
 
 // Global parser for testing purposes
 ptr(ParserWrapper) parser = new_ptr(ParserWrapper)(new_ptr(Lexer)(), new_ptr(ast::semantic::CSyntaxDescriptorTable)());
-ptr(interpreter::core::CCoreModules) coreModules = new_ptr(interpreter::core::CCoreModules)();
-ptr(interpreter::core::CBootstrapStage1) bootstrap = new_ptr(interpreter::core::CBootstrapStage1)(new_ptr(interpreter::core::CCoreModules)(parser));
+ptr(core_modules) coreModules = new_ptr(core_modules)();
+ptr(core_bootstrap1) bootstrap = new_ptr(core_bootstrap1)(new_ptr(interpreter::core::CCoreModules)(parser));
 ptr(interpreter::memory::memspace::CDescriptorTable) table = new_ptr(interpreter::memory::memspace::CDescriptorTable)();
-ptr(interpreter::core::CInterpreter) interpreter = new_ptr(interpreter::core::CInterpreter)(parser, bootstrap, table);
+ptr(core_interpreter) interpreter = new_ptr(core_interpreter)(parser, bootstrap, table);
 
 BOOST_AUTO_TEST_CASE(basicTest) {
     // Testing input

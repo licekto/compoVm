@@ -16,11 +16,18 @@
 #include "interpreter/memory/objects/primitives/abstractPrimitive.h"
 #include "interpreter/memory/objects/primitives/primitiveService.h"
 #include "interpreter/memory/objects/primitives/primitivePort.h"
+#include "exceptions/semantic/unsupportedFeatureException.h"
+#include "exceptions/runtime/unknownPortTypeException.h"
+#include "exceptions/runtime/wrongPortTypeException.h"
+#include "exceptions/runtime/unknownAstNodeTypeException.h"
+#include "types.h"
 
 namespace interpreter {
 
 	namespace core {
 
+            namespace bootstrap {
+            
 		class CBootstrapStage1 {
 		  private:
 			ptr(core::CCoreModules) m_coreModules;
@@ -78,5 +85,8 @@ namespace interpreter {
 
 			ptr(mem_component) bootstrapDescriptorComponent(ptr(ast_descriptor) descriptor);
 		};
+                
+            }
+            
 	}
 }

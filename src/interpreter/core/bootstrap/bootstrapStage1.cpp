@@ -1,13 +1,10 @@
 #include "interpreter/core/bootstrap/bootstrapStage1.h"
-#include "exceptions/semantic/unsupportedFeatureException.h"
-#include "exceptions/runtime/unknownPortTypeException.h"
-#include "exceptions/runtime/wrongPortTypeException.h"
-#include "exceptions/runtime/unknownAstNodeTypeException.h"
-#include "types.h"
 
 namespace interpreter {
 
 	namespace core {
+            
+            namespace bootstrap {
 
 		CBootstrapStage1::CBootstrapStage1(ptr(core::CCoreModules) coreModules)
 			: m_coreModules(coreModules) {
@@ -997,6 +994,8 @@ namespace interpreter {
                         
 			return component;
 		}
-
+                
+            }
+            
 	}
 }

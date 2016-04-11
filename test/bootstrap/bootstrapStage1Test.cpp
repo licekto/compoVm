@@ -26,7 +26,7 @@ BOOST_AUTO_TEST_SUITE(bootstrapStage1Test)
 // Create parser, core modules, interpreter and bootstrap
 ptr(ParserWrapper) parser = new_ptr(ParserWrapper)(new_ptr(Lexer)(), new_ptr(ast::semantic::CSyntaxDescriptorTable)());
 ptr(core_modules) coreModules = new_ptr(core_modules)(parser);
-ptr(core_bootstrap) bootstrap = new_ptr(core_bootstrap)(coreModules/*, interpreter*/);
+ptr(core_bootstrap1) bootstrap = new_ptr(core_bootstrap1)(coreModules/*, interpreter*/);
 
 BOOST_AUTO_TEST_CASE(componentTest) {
     // Bootstrap
