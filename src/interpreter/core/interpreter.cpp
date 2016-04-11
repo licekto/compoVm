@@ -6,7 +6,7 @@ namespace interpreter {
 
 	namespace core {
 
-		CInterpreter::CInterpreter(ptr(ParserWrapper) parser, ptr(CBootstrap) bootstrap, ptr(memory::memspace::CDescriptorTable) table)
+		CInterpreter::CInterpreter(ptr(ParserWrapper) parser, ptr(CBootstrapStage1) bootstrap, ptr(memory::memspace::CDescriptorTable) table)
 			: m_parser(parser),
                           m_bootstrap(bootstrap),
                           m_descriptorTable(table) {

@@ -11,7 +11,6 @@
 
 #include "interpreter/core/interpreter.h"
 #include "interpreter/core/coreModules.h"
-#include "interpreter/core/bootstrap.h"
 
 BOOST_AUTO_TEST_SUITE(coreModulesTest)
 
@@ -35,7 +34,7 @@ BOOST_AUTO_TEST_CASE(basicTest) {
     TEST_DESCRIPTOR(descriptor, "ConnectionDescription", "Component", 11, 23, 0);
     
     descriptor = coreModules->getCoreDescriptor("Descriptor");
-    TEST_DESCRIPTOR(descriptor, "Descriptor", "Component", 4, 11, 0);
+    TEST_DESCRIPTOR(descriptor, "Descriptor", "Component", 5, 15, 0);
     
     descriptor = coreModules->getCoreDescriptor("Interface");
     TEST_DESCRIPTOR(descriptor, "Interface", "Component", 5, 11, 0);

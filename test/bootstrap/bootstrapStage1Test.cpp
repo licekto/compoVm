@@ -16,12 +16,12 @@
 #include "parser/parserWrapper.h"
 
 #include "interpreter/core/coreModules.h"
-#include "interpreter/core/bootstrap.h"
+#include "interpreter/core/bootstrap/bootstrapStage1.h"
 #include "interpreter/memory/objects/primitives/primitivePort.h"
 #include "interpreter/memory/objects/values/stringComponent.h"
 #include "exceptions/runtime/wrongPortTypeException.h"
 
-BOOST_AUTO_TEST_SUITE(bootstrapTest)
+BOOST_AUTO_TEST_SUITE(bootstrapStage1Test)
 
 // Create parser, core modules, interpreter and bootstrap
 ptr(ParserWrapper) parser = new_ptr(ParserWrapper)(new_ptr(Lexer)(), new_ptr(ast::semantic::CSyntaxDescriptorTable)());

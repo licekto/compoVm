@@ -20,7 +20,7 @@
 #include "exceptions/semantic/bidirectionalPortNotSupportedException.h"
 #include "interpreter/core/interpreter.h"
 #include "interpreter/core/coreModules.h"
-#include "interpreter/core/bootstrap.h"
+#include "interpreter/core/bootstrap/bootstrapStage1.h"
 
 BOOST_AUTO_TEST_SUITE(interpreterTest)
 
@@ -28,7 +28,7 @@ BOOST_AUTO_TEST_SUITE(interpreterTest)
 // Global parser for testing purposes
 ptr(ParserWrapper) parser = new_ptr(ParserWrapper)(new_ptr(Lexer)(), new_ptr(ast::semantic::CSyntaxDescriptorTable)());
 ptr(interpreter::core::CCoreModules) coreModules = new_ptr(interpreter::core::CCoreModules)();
-ptr(interpreter::core::CBootstrap) bootstrap = new_ptr(interpreter::core::CBootstrap)(new_ptr(interpreter::core::CCoreModules)(parser));
+ptr(interpreter::core::CBootstrapStage1) bootstrap = new_ptr(interpreter::core::CBootstrapStage1)(new_ptr(interpreter::core::CCoreModules)(parser));
 ptr(interpreter::memory::memspace::CDescriptorTable) table = new_ptr(interpreter::memory::memspace::CDescriptorTable)();
 ptr(interpreter::core::CInterpreter) interpreter = new_ptr(interpreter::core::CInterpreter)(parser, bootstrap, table);
 

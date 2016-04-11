@@ -21,12 +21,11 @@ namespace interpreter {
 
 	namespace core {
 
-		class CBootstrap {
+		class CBootstrapStage1 {
 		  private:
 			ptr(core::CCoreModules) m_coreModules;
 
-			void addPrimitiveServices(ptr(mem_component) component, ptr(ast_descriptor) descriptor,
-			                          std::map<std::string, ptr(mem_primitiveservice)>& servicesNames);
+			void addPrimitiveServices(ptr(mem_component) component, ptr(ast_descriptor) descriptor, std::map<std::string, ptr(mem_primitiveservice)>& servicesNames);
 
 			void addPrimitivePorts(ptr(mem_component) component, ptr(ast_descriptor) descriptor);
 
@@ -45,9 +44,13 @@ namespace interpreter {
                         void addPorts(ptr(mem_component) component, ptr(ast_descriptor) descriptor);
                         
                         void addServices(ptr(mem_component) component, ptr(ast_descriptor) descriptor);
+                        
+                        ptr(mem_component) bootstrapRootComponent(ptr(mem_component) owner);
+                        
+                        ptr(mem_component) buildPortFromDescription(ptr(mem_component) description);
 
                 public:
-                        CBootstrap(ptr(core::CCoreModules) coreModules = nullptr);
+                        CBootstrapStage1(ptr(core::CCoreModules) coreModules = nullptr);
                         
 			ptr(mem_uint) bootstrapUIntValue(u64 value);
 
