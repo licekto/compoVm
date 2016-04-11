@@ -75,12 +75,12 @@ namespace interpreter {
                             throw exceptions::runtime::CPortNotFoundException(name);
                         }
                         
-                        size_t CComponent::getNumberOfSubServices() const {
+                        size_t CComponent::getNumberOfSelfServices() const {
                             return m_services.size();
                         }
                         
                         size_t CComponent::getNumberOfAllServices() const {
-                            return getNumberOfSubServices() + getNumberOfInheritedServices();
+                            return getNumberOfSelfServices() + getNumberOfInheritedServices();
                         }
 
                         void CComponent::connectAllSelfServicesTo(ptr(CGeneralPort) port) {
@@ -198,12 +198,32 @@ namespace interpreter {
                                 return m_parent;
                         }
 
+                        ptr(CComponent) CComponent::getTopParent() {
+                            ptr(CComponent) parent = m_parent;
+                            ptr(CComponent) prev;
+                            while (parent.use_count()) {
+                                prev = parent;
+                                parent = parent->m_parent;
+                            }
+                            return prev;
+                        }
+
                         void CComponent::setParent(ptr(CComponent) parent) {
                                 m_parent = parent;
                         }
 
                         ptr(CComponent) CComponent::getChild() {
                                 return m_child;
+                        }
+
+                        ptr(CComponent) CComponent::getBottomChild() {
+                            ptr(CComponent) child = m_child;
+                            ptr(CComponent) prev;
+                            while (child.use_count()) {
+                                prev = child;
+                                child = child->m_child;
+                            }
+                            return prev;
                         }
 
                         void CComponent::setChild(ptr(CComponent) child) {

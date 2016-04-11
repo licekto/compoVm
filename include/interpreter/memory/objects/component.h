@@ -48,7 +48,7 @@ namespace interpreter {
 
                                 size_t getNumberOfInheritedServices() const;
                                 
-                                size_t getNumberOfSubServices() const;
+                                size_t getNumberOfSelfServices() const;
                                 
                                 size_t getNumberOfAllServices() const;
                                 
@@ -70,9 +70,13 @@ namespace interpreter {
                                 
                                 ptr(CComponent) getParent();
                                 
+                                ptr(CComponent) getTopParent();
+                                
                                 void setParent(ptr(CComponent) parent);
                                 
                                 ptr(CComponent) getChild();
+                                
+                                ptr(CComponent) getBottomChild();
                                 
                                 void setChild(ptr(CComponent) child);
                                 

@@ -38,6 +38,7 @@ namespace interpreter {
 			});
 
 			if (it == m_coreDescriptors.end()) {
+                                // throw
 				return nullptr;
 			}
 			return *it;
@@ -53,6 +54,7 @@ namespace interpreter {
 			loadDescriptor(KERNEL_PORT_DESCRIPTION_PATH);
 			loadDescriptor(KERNEL_SERVICE_PATH);
 			loadDescriptor(KERNEL_SERVICE_SIGNATURE_PATH);
+                        loadDescriptor(KERNEL_SERVICE_INVOCATION_PATH);
 		}
 
 		ptr(ast_descriptor) CCoreModules::getCoreDescriptorAt(size_t i) const {

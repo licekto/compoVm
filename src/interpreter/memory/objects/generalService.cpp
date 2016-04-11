@@ -42,7 +42,7 @@ namespace interpreter {
 				} else {
 					return cast(values::CStringComponent)
                                                     (m_service->getPortByName("serviceSign")->getConnectedPortAt(0)
-                                                     ->getOwner()->getPortByName("name")->getConnectedPortAt(0)->getOwner())->getValue();
+                                                     ->getOwner()->getPortByName("selector")->getConnectedPortAt(0)->getOwner())->getValue();
 				}
                         }
 

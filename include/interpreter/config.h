@@ -1,10 +1,16 @@
 #pragma once
 
+/* Main component and main component (a la "public static void main()" */
+/******************************************************************************/
+
 // Name of root component
 #define COMPO_MAIN_COMPONENT_NAME "CompoContainer"
 
 // Name of main service in root component
 #define COMPO_MAIN_SERVICE_NAME "main"
+
+/* Core Compo modules paths */
+/******************************************************************************/
 
 // Name of kernel Collection Port file
 #define KERNEL_COLLECTION_PORT_PATH "../coreModules/collectionPort.cp"
@@ -33,6 +39,11 @@
 // Name of kernel Service Signature file
 #define KERNEL_SERVICE_SIGNATURE_PATH "../coreModules/serviceSignature.cp"
 
+#define KERNEL_SERVICE_INVOCATION_PATH "../coreModules/serviceInvocation.cp"
+
+/* Names of value components */
+/******************************************************************************/
+
 // Name of core component representing string
 #define COMPONENT_STRING_NAME "String"
 
@@ -42,8 +53,14 @@
 // Name of core component representing boolean
 #define COMPONENT_BOOLEAN_NAME "Boolean"
 
+/* Names of frequently used ports */
+/******************************************************************************/
+
 // Name of port that is always connected to the name of the component
 #define NAME_OF_NAMEPORT "name"
+
+/* String representation of types of inner Compo elements */
+/******************************************************************************/
 
 // String for requirement role
 #define ROLE_REQUIREMENT "requires"
@@ -65,3 +82,18 @@
 
 // String for named port type
 #define PORT_TYPE_NAMED "named"
+
+/* String representation of types of connection addresses */
+/******************************************************************************/
+
+// String for named port
+#define CONNECTION_NAMED "named"
+
+// String for service invocation
+#define CONNECTION_INVOCATION "invocation"
+
+// String for collection port
+#define CONNECTION_COLLECTION "collection"
+
+// String for dereference
+#define CONNECTION_DEREFERENCE "dereference"

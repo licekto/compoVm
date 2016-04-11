@@ -1,7 +1,7 @@
 descriptor ServiceSignature extends Component {
     internally requires {
-        name : Symbol;
-        paramNames[] : Symbol;
+        selector : String;
+        paramNames[] : String;
     }
     service setSelector(name) {}
     service getSelector() {}

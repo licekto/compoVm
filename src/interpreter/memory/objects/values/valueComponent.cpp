@@ -24,7 +24,15 @@ namespace interpreter {
 
 				ptr(CGeneralPort) CValueComponent::getDefaultPort() {
 					return m_ports.at(0);
-				}
+                                }
+
+                                ptr(CGeneralPort) CValueComponent::getPortByName(const std::string& name) {
+                                    if (name != "default") {
+                                        // throw
+                                        return nullptr;
+                                    }
+                                    return m_ports.at(0);
+                                }
 
 			}
 

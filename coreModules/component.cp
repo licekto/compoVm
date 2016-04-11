@@ -4,6 +4,7 @@ descriptor Component {
     requires {
             args[] : *;
             owner : Component;
+            descriptorPort : Component;
     }
     
     internally provides {

@@ -1,6 +1,6 @@
 descriptor Descriptor extends Component {
     internally requires {
-        name : Symbol;
+        name : String;
         ports[] : PortDescription;
         architectureDefinition[]: ConnectionDescription;
         services[] : Service;

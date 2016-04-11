@@ -1,10 +1,10 @@
 descriptor PortDescription extends Component {
     internally requires {
-        name : Symbol;
-        role : Symbol;
-        visibility : Symbol;
+        name : String;
+        role : String;
+        visibility : String;
         interfaceDefinition : Interface;
-        kind : Symbol;
+        kind : String;
         isCollectionPort : Bool;
     }
 

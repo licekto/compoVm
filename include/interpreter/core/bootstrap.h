@@ -30,9 +30,9 @@ namespace interpreter {
 
 			void addPrimitivePorts(ptr(mem_component) component, ptr(ast_descriptor) descriptor);
 
-			std::function<ptr(mem_port)(const std::vector<ptr(mem_component)>&, const ptr(mem_component)&)> prepareSymbolSetter(const std::string& portName);
+			std::function<ptr(mem_port)(const std::vector<ptr(mem_component)>&, const ptr(mem_component)&)> prepareStringSetter(const std::string& portName);
 
-			std::function<ptr(mem_port)(const std::vector<ptr(mem_component)>&, const ptr(mem_component)&)> prepareSymbolGetter(const std::string& portName);
+			std::function<ptr(mem_port)(const std::vector<ptr(mem_component)>&, const ptr(mem_component)&)> prepareStringGetter(const std::string& portName);
 
 			void addDefaultPort(ptr(mem_value) value);
                         
@@ -67,6 +67,8 @@ namespace interpreter {
 
 			ptr(mem_component) bootstrapPortDescriptionComponent(ptr(ast_port) astPort, ptr(mem_component) owner);
 
+                        ptr(mem_component) bootstrapServiceInvocationComponent(ptr(ast_serviceinvocation) astServiceInv, ptr(mem_component) owner);
+                        
 			ptr(mem_component) bootstrapConnectionDescriptionComponent(ptr(ast_bind) bind, ptr(mem_component) owner);
 
 			ptr(mem_component) bootstrapInterfaceComponent(ptr(ast_port) astPort, ptr(mem_component) owner, ptr(mem_component) portOwner);

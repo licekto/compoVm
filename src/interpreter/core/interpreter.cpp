@@ -1,4 +1,5 @@
 #include "interpreter/core/interpreter.h"
+#include "exceptions/runtime/wrongFormOfMainException.h"
 
 
 namespace interpreter {
@@ -15,6 +16,9 @@ namespace interpreter {
 			for (size_t i = 0; i < node->getNodesSize(); ++i) {
 				exec(node->getNodeAt(i));
 			}
+                        ptr(mem_component) main = m_descriptorTable->getDescriptor(COMPO_MAIN_COMPONENT_NAME);
+                        
+                        
 		}
 
 		void CInterpreter::execDescriptor(ptr(ast_descriptor) node) {

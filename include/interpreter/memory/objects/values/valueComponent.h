@@ -25,13 +25,13 @@ namespace interpreter {
 
 					ptr(CGeneralPort) getDefaultPort();
 
+                                        ptr(CGeneralPort) getPortByName(const std::string& name);
+                                        
 					void addPort(ptr(CGeneralPort) port) = delete;
 
 					size_t getNumberOfPorts() const = delete;
 
 					ptr(CGeneralPort) getPortAt(size_t index) = delete;
-
-					ptr(CGeneralPort) getPortByName(const std::string& name) = delete;
 
 					ptr(CComponent) getServiceByName(const std::string& name) = delete;
 
