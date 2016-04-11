@@ -13,7 +13,7 @@ namespace interpreter {
 				}
 
 				CUnsignedIntegerComponent::CUnsignedIntegerComponent(ptr(CUnsignedIntegerComponent) instance)
-					: CValueComponent(instance), m_value(instance->m_value) {
+					: CValueComponent(), m_value(instance->m_value) {
 				}
 
 				CUnsignedIntegerComponent::~CUnsignedIntegerComponent() {

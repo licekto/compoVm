@@ -9,7 +9,7 @@ namespace interpreter {
 		namespace objects {
 
 			CComponent::CComponent() : m_parent(nullptr), m_child(nullptr) {
-                        }
+			}
 
 			CComponent::~CComponent() {
 			}

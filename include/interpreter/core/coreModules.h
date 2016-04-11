@@ -6,9 +6,9 @@
 #include <vector>
 #include <algorithm>
 
+#include "types.h"
 #include "definitions/allDefinitions.h"
 #include "interpreter/config.h"
-#include "interpreter/core/coreModuleType.h"
 #include "parser/parserWrapper.h"
 #include "exceptions/runtime/coreModuleNotFoundException.h"
 #include "interpreter/memory/objects/component.h"

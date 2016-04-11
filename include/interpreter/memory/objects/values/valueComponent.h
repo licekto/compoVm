@@ -17,8 +17,6 @@ namespace interpreter {
 
 					CValueComponent();
 
-					CValueComponent(ptr(CValueComponent) instance);
-
 					virtual ~CValueComponent();
 
 					void addDefaultPort(ptr(CGeneralPort) port);

@@ -13,7 +13,7 @@ namespace interpreter {
 				}
 
 				CBoolComponent::CBoolComponent(ptr(CBoolComponent) instance)
-					: CValueComponent(instance), m_value(instance->m_value) {
+					: CValueComponent(), m_value(instance->m_value) {
 				}
 
 				CBoolComponent::~CBoolComponent() {

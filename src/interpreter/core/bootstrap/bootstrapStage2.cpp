@@ -48,23 +48,26 @@ namespace interpreter {
 				component->getPortByName("owner")->connectPort(owner->getPortByName("default"));
 
 				return component;
-                        }
+			}
 
-                        ptr(mem_component) CBootstrapStage2::buildPortFromDescription(ptr(mem_component) description, ptr(mem_component) owner) {
-                            
-                                ptr(mem_component) port = m_bootstrapStage1->bootstrapPortComponent(owner);
-                                
-                                std::string name = cast(mem_string)(description->getPortByName("name")->getOwner())->getValue();
+			ptr(mem_component) CBootstrapStage2::buildPortFromDescription(ptr(mem_component) description, ptr(mem_component) owner) {
+
+				ptr(mem_component) port = m_bootstrapStage1->bootstrapPortComponent(owner);
+
+				std::string name = cast(mem_string)(description->getPortByName("name")->getOwner())->getValue();
 
 				port->getPortByName("name")->connectPort(m_bootstrapStage1->bootstrapStringValue(name)->getDefaultPort());
-                                //ptr(mem_component) interface = new_ptr(mem_component)(description->getPortByName("interfaceDefinition")->getConnectedPortAt(0)->getOwner());
+				//ptr(mem_component) interface = new_ptr(mem_component)(description->getPortByName("interfaceDefinition")->getConnectedPortAt(0)->getOwner());
 				//port->getPortByName("interfaceDescription")->connectPort();
-                        }
 
-                        ptr(mem_component) CBootstrapStage2::cloneInterface(ptr(mem_component) interface) {
-                                ptr(mem_component) newInterface = m_bootstrapStage1->bootstrapInterfaceComponent(nullptr);
-                                
-                        }
+				return nullptr;
+			}
+
+			ptr(mem_component) CBootstrapStage2::cloneInterface(ptr(mem_component) interface) {
+				ptr(mem_component) newInterface = m_bootstrapStage1->bootstrapInterfaceComponent(nullptr);
+
+				return nullptr;
+			}
 
 			ptr(mem_component) CBootstrapStage2::bootstrapDescriptorComponent(ptr(ast_descriptor) descriptor) {
 				ptr(mem_component) parentComponent = new_ptr(mem_component)();
@@ -123,8 +126,10 @@ namespace interpreter {
 
 					for (size_t i = 0; i < componentNew->getPortByName("ports")->getConnectedPortsNumber(); ++i) {
 						ptr(mem_component) portDescriptionComponent = componentNew->getPortByName("ports")->getConnectedPortAt(i)->getOwner();
-                                                
+
 					}
+
+					return nullptr;
 				};
 
 				generalPort = component->getPortByName("default")->getPort()

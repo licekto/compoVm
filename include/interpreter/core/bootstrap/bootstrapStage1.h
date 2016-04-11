@@ -8,7 +8,6 @@
 #include "types.h"
 #include "interpreter/config.h"
 #include "interpreter/core/coreModules.h"
-#include "interpreter/core/coreModuleType.h"
 #include "interpreter/memory/objects/component.h"
 #include "interpreter/memory/objects/values/unsignedIntegerComponent.h"
 #include "interpreter/memory/objects/values/stringComponent.h"
@@ -65,16 +64,16 @@ namespace interpreter {
 				ptr(mem_component) bootstrapComponent(ptr(mem_component) owner);
 
 				ptr(mem_component) bootstrapPortComponent(ptr(ast_port) astPort, ptr(mem_component) owner);
-                                
-                                ptr(mem_component) bootstrapPortComponent(ptr(mem_component) owner);
+
+				ptr(mem_component) bootstrapPortComponent(ptr(mem_component) owner);
 
 				ptr(mem_component) bootstrapCollectionPortComponent(ptr(ast_port) astPort, ptr(mem_component) owner);
 
 				ptr(mem_component) bootstrapServiceComponent(ptr(ast_service) astService, ptr(mem_component) owner);
 
 				ptr(mem_component) bootstrapServiceSignatureComponent(ptr(ast_servicesignature) astSignature, ptr(mem_component) owner);
-                                
-                                ptr(mem_component) bootstrapServiceSignatureComponent(ptr(mem_component) owner);
+
+				ptr(mem_component) bootstrapServiceSignatureComponent(ptr(mem_component) owner);
 
 				ptr(mem_component) bootstrapPortDescriptionComponent(ptr(ast_port) astPort, ptr(mem_component) owner);
 
@@ -82,8 +81,8 @@ namespace interpreter {
 
 				ptr(mem_component) bootstrapConnectionDescriptionComponent(ptr(ast_bind) bind, ptr(mem_component) owner);
 
-                                ptr(mem_component) bootstrapInterfaceComponent(ptr(mem_component) owner);
-                                
+				ptr(mem_component) bootstrapInterfaceComponent(ptr(mem_component) owner);
+
 				ptr(mem_component) bootstrapInterfaceComponent(ptr(ast_port) astPort, ptr(mem_component) owner, ptr(mem_component) portOwner);
 			};
 

@@ -13,7 +13,7 @@ namespace interpreter {
 				}
 
 				CStringComponent::CStringComponent(ptr(CStringComponent) instance)
-					: CValueComponent(instance), m_value(instance->m_value) {
+					: CValueComponent(), m_value(instance->m_value) {
 				}
 
 				CStringComponent::~CStringComponent() {

@@ -196,7 +196,7 @@ namespace interpreter {
 				return port;
 			}
 
-                        ptr(mem_component) CBootstrapStage1::bootstrapPortComponent(ptr(mem_component) owner) {
+			ptr(mem_component) CBootstrapStage1::bootstrapPortComponent(ptr(mem_component) owner) {
 				std::map<std::string, ptr(mem_primitiveservice)> servicesNames;
 				ptr(mem_component) port = bootstrapPrologueWithComponent(m_coreModules->getCoreDescriptor("Port"), servicesNames, owner);
 
@@ -266,7 +266,7 @@ namespace interpreter {
 				bootstrapEpilogue(port, servicesNames);
 				return port;
 			}
-                        
+
 			ptr(mem_component) CBootstrapStage1::bootstrapCollectionPortComponent(ptr(ast_port) astPort, ptr(mem_component) owner) {
 				ptr(mem_component) port = bootstrapPortComponent(astPort, owner);
 
@@ -370,7 +370,7 @@ namespace interpreter {
 				return serviceSignature;
 			}
 
-                        ptr(mem_component) CBootstrapStage1::bootstrapServiceSignatureComponent(ptr(mem_component) owner) {
+			ptr(mem_component) CBootstrapStage1::bootstrapServiceSignatureComponent(ptr(mem_component) owner) {
 				std::map<std::string, ptr(mem_primitiveservice)> servicesNames;
 				ptr(mem_component) serviceSignature = bootstrapPrologueWithComponent(m_coreModules->getCoreDescriptor("ServiceSignature"), servicesNames, owner);
 
@@ -418,7 +418,7 @@ namespace interpreter {
 				bootstrapEpilogue(serviceSignature, servicesNames);
 				return serviceSignature;
 			}
-                        
+
 			ptr(mem_component) CBootstrapStage1::bootstrapPortDescriptionComponent(ptr(ast_port) astPort, ptr(mem_component) owner) {
 				std::map<std::string, ptr(mem_primitiveservice)> servicesNames;
 				ptr(mem_component) portDescription = bootstrapPrologueWithComponent(m_coreModules->getCoreDescriptor("PortDescription"), servicesNames, owner);
@@ -722,7 +722,7 @@ namespace interpreter {
 				return connection;
 			}
 
-                        ptr(mem_component) CBootstrapStage1::bootstrapInterfaceComponent(ptr(mem_component) owner) {
+			ptr(mem_component) CBootstrapStage1::bootstrapInterfaceComponent(ptr(mem_component) owner) {
 				std::map<std::string, ptr(mem_primitiveservice)> servicesNames;
 				ptr(mem_component) interface = bootstrapPrologueWithComponent(m_coreModules->getCoreDescriptor("Interface"), servicesNames, owner);
 
@@ -739,7 +739,7 @@ namespace interpreter {
 				servicesNames.at("getSignaturesCount")->setCallback(callback);
 
 				callback = [](const std::vector<ptr(mem_component)>& /*params*/, const ptr(mem_component)& context) -> ptr(mem_port) {
-                                        std::string type = cast(mem_string)(context->getPortByName("type")->getConnectedPortAt(0)->getOwner())->getValue();
+					std::string type = cast(mem_string)(context->getPortByName("type")->getConnectedPortAt(0)->getOwner())->getValue();
 					if (type != PORT_TYPE_SIGNATURES) {
 						throw exceptions::runtime::CWrongPortTypeException(type, "getSignatureAt");
 					}
@@ -750,7 +750,7 @@ namespace interpreter {
 				servicesNames.at("getSignatureAt")->setCallback(callback);
 
 				callback = [](const std::vector<ptr(mem_component)>& /*params*/, const ptr(mem_component)& context) -> ptr(mem_port) {
-                                        std::string type = cast(mem_string)(context->getPortByName("type")->getConnectedPortAt(0)->getOwner())->getValue();
+					std::string type = cast(mem_string)(context->getPortByName("type")->getConnectedPortAt(0)->getOwner())->getValue();
 					if (type != PORT_TYPE_SIGNATURES) {
 						throw exceptions::runtime::CWrongPortTypeException(type, "addSignature");
 					}
@@ -762,8 +762,8 @@ namespace interpreter {
 				servicesNames.at("addSignature")->setCallback(callback);
 
 				callback = [](const std::vector<ptr(mem_component)>& /*params*/, const ptr(mem_component)& context) -> ptr(mem_port) {
-                                        std::string type = cast(mem_string)(context->getPortByName("type")->getConnectedPortAt(0)->getOwner())->getValue();
-                                        if (type != PORT_TYPE_NAMED) {
+					std::string type = cast(mem_string)(context->getPortByName("type")->getConnectedPortAt(0)->getOwner())->getValue();
+					if (type != PORT_TYPE_NAMED) {
 						throw exceptions::runtime::CWrongPortTypeException(type, "getConnectedComponentName");
 					}
 					if (context->getPortByName("componentName")->getConnectedPortsNumber()) {
@@ -774,7 +774,7 @@ namespace interpreter {
 				servicesNames.at("getConnectedComponentName")->setCallback(callback);
 
 				callback = [](const std::vector<ptr(mem_component)>& /*params*/, const ptr(mem_component)& context) -> ptr(mem_port) {
-                                        std::string type = cast(mem_string)(context->getPortByName("type")->getConnectedPortAt(0)->getOwner())->getValue();
+					std::string type = cast(mem_string)(context->getPortByName("type")->getConnectedPortAt(0)->getOwner())->getValue();
 					if (type != PORT_TYPE_NAMED) {
 						throw exceptions::runtime::CWrongPortTypeException(type, "setConnectedComponentName");
 					}
@@ -788,7 +788,7 @@ namespace interpreter {
 				servicesNames.at("setConnectedComponentName")->setCallback(callback);
 
 				callback = [](const std::vector<ptr(mem_component)>& /*params*/, const ptr(mem_component)& context) -> ptr(mem_port) {
-                                        std::string type = cast(mem_string)(context->getPortByName("type")->getConnectedPortAt(0)->getOwner())->getValue();
+					std::string type = cast(mem_string)(context->getPortByName("type")->getConnectedPortAt(0)->getOwner())->getValue();
 					if (type != PORT_TYPE_NAMED) {
 						throw exceptions::runtime::CWrongPortTypeException(type, "getConnectedComponent");
 					}
@@ -800,7 +800,7 @@ namespace interpreter {
 				servicesNames.at("getConnectedComponent")->setCallback(callback);
 
 				callback = [](const std::vector<ptr(mem_component)>& /*params*/, const ptr(mem_component)& context) -> ptr(mem_port) {
-                                        std::string type = cast(mem_string)(context->getPortByName("type")->getConnectedPortAt(0)->getOwner())->getValue();
+					std::string type = cast(mem_string)(context->getPortByName("type")->getConnectedPortAt(0)->getOwner())->getValue();
 					if (type != PORT_TYPE_NAMED) {
 						throw exceptions::runtime::CWrongPortTypeException(type, "setConnectedComponent");
 					}
@@ -814,7 +814,7 @@ namespace interpreter {
 				servicesNames.at("setConnectedComponent")->setCallback(callback);
 
 				callback = [](const std::vector<ptr(mem_component)>& /*params*/, const ptr(mem_component)& context) -> ptr(mem_port) {
-                                        std::string type = cast(mem_string)(context->getPortByName("type")->getConnectedPortAt(0)->getOwner())->getValue();
+					std::string type = cast(mem_string)(context->getPortByName("type")->getConnectedPortAt(0)->getOwner())->getValue();
 					if (type != PORT_TYPE_NAMED) {
 						throw exceptions::runtime::CWrongPortTypeException(type, "getServiceAt");
 					}
@@ -829,7 +829,7 @@ namespace interpreter {
 				servicesNames.at("getServiceAt")->setCallback(callback);
 
 				callback = [](const std::vector<ptr(mem_component)>& /*params*/, const ptr(mem_component)& context) -> ptr(mem_port) {
-                                        std::string type = cast(mem_string)(context->getPortByName("type")->getConnectedPortAt(0)->getOwner())->getValue();
+					std::string type = cast(mem_string)(context->getPortByName("type")->getConnectedPortAt(0)->getOwner())->getValue();
 					if (type != PORT_TYPE_NAMED) {
 						throw exceptions::runtime::CWrongPortTypeException(type, "addService");
 					}
@@ -844,7 +844,7 @@ namespace interpreter {
 				bootstrapEpilogue(interface, servicesNames);
 				return interface;
 			}
-                        
+
 			ptr(mem_component) CBootstrapStage1::bootstrapInterfaceComponent(ptr(ast_port) astPort, ptr(mem_component) owner, ptr(mem_component) portOwner) {
 				ptr(mem_component) interface = bootstrapInterfaceComponent(owner);
 
@@ -896,7 +896,7 @@ namespace interpreter {
 					throw exceptions::runtime::CUnknownPortTypeException();
 				}
 				}
-                                
+
 				return interface;
 			}
 		}
