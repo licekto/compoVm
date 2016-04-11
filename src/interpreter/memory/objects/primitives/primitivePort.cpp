@@ -15,12 +15,6 @@ namespace interpreter {
 
 				CPrimitivePort::CPrimitivePort(ptr(CPrimitivePort) instance)
 					: CAbstractPrimitive(instance) {
-					for (ptr(CGeneralPort) port : instance->m_connectedPorts) {
-						this->m_connectedPorts.push_back(new_ptr(CGeneralPort)(port));
-					}
-					for (ptr(CGeneralService) service : instance->m_connectedServices) {
-						this->m_connectedServices.push_back(new_ptr(CGeneralService)(service));
-					}
 				}
 
 				CPrimitivePort::~CPrimitivePort() {

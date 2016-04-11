@@ -11,8 +11,7 @@ namespace interpreter {
 				CValueComponent::CValueComponent() {
 				}
 
-				CValueComponent::CValueComponent(ptr(CValueComponent) instance)
-					: CComponent(instance) {
+				CValueComponent::CValueComponent(ptr(CValueComponent) instance) {
 				}
 
 				CValueComponent::~CValueComponent() {

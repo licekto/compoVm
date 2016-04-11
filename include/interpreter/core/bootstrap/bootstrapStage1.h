@@ -31,6 +31,8 @@ namespace interpreter {
 
 			class CBootstrapStage1 {
 			  private:
+				friend class CBootstrapStage2;
+
 				ptr(core::CCoreModules) m_coreModules;
 
 				ptr(core::CInterpreter) m_interpreter;
@@ -51,16 +53,8 @@ namespace interpreter {
 
 				void bootstrapEpilogue(ptr(mem_component) component, std::map<std::string,std::shared_ptr<mem_primitiveservice> >& servicesNames);
 
-				void addPorts(ptr(mem_component) component, ptr(ast_descriptor) descriptor);
-
-				void addServices(ptr(mem_component) component, ptr(ast_descriptor) descriptor);
-
-				ptr(mem_component) bootstrapRootComponent(ptr(mem_component) owner);
-
-				ptr(mem_component) buildPortFromDescription(ptr(mem_component) description);
-
 			  public:
-				CBootstrapStage1(ptr(core::CCoreModules) coreModules = nullptr);
+				CBootstrapStage1(ptr(core::CCoreModules) coreModules = nullptr, ptr(core::CInterpreter) interpreter = nullptr);
 
 				ptr(mem_uint) bootstrapUIntValue(u64 value);
 
@@ -71,12 +65,16 @@ namespace interpreter {
 				ptr(mem_component) bootstrapComponent(ptr(mem_component) owner);
 
 				ptr(mem_component) bootstrapPortComponent(ptr(ast_port) astPort, ptr(mem_component) owner);
+                                
+                                ptr(mem_component) bootstrapPortComponent(ptr(mem_component) owner);
 
 				ptr(mem_component) bootstrapCollectionPortComponent(ptr(ast_port) astPort, ptr(mem_component) owner);
 
 				ptr(mem_component) bootstrapServiceComponent(ptr(ast_service) astService, ptr(mem_component) owner);
 
 				ptr(mem_component) bootstrapServiceSignatureComponent(ptr(ast_servicesignature) astSignature, ptr(mem_component) owner);
+                                
+                                ptr(mem_component) bootstrapServiceSignatureComponent(ptr(mem_component) owner);
 
 				ptr(mem_component) bootstrapPortDescriptionComponent(ptr(ast_port) astPort, ptr(mem_component) owner);
 
@@ -84,9 +82,9 @@ namespace interpreter {
 
 				ptr(mem_component) bootstrapConnectionDescriptionComponent(ptr(ast_bind) bind, ptr(mem_component) owner);
 
+                                ptr(mem_component) bootstrapInterfaceComponent(ptr(mem_component) owner);
+                                
 				ptr(mem_component) bootstrapInterfaceComponent(ptr(ast_port) astPort, ptr(mem_component) owner, ptr(mem_component) portOwner);
-
-				ptr(mem_component) bootstrapDescriptorComponent(ptr(ast_descriptor) descriptor);
 			};
 
 		}

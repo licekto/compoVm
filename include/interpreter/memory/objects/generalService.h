@@ -27,8 +27,6 @@ namespace interpreter {
 
 				CGeneralService(ptr(primitives::CPrimitiveService) primitiveService = nullptr);
 
-				CGeneralService(ptr(CGeneralService) instance);
-
 				ptr(CComponent) getService();
 
 				ptr(primitives::CPrimitiveService) getPrimitiveService();

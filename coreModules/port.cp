@@ -1,6 +1,5 @@
 descriptor Port extends Component {
     requires {
-        owner : Component;
         connectedPorts[] : Port;
         delegatedPorts[] : Port;
     }

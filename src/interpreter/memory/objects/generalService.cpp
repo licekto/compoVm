@@ -19,11 +19,6 @@ namespace interpreter {
 				  m_primitive(true) {
 			}
 
-			CGeneralService::CGeneralService(ptr(CGeneralService) instance)
-				: m_service(instance->m_service), m_primitiveService(instance->m_primitiveService),
-				  m_primitive(instance->m_primitive) {
-			}
-
 			ptr(CComponent) CGeneralService::getService() {
 				return m_service;
 			}

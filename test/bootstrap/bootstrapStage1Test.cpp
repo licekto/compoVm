@@ -289,16 +289,8 @@ BOOST_AUTO_TEST_CASE(namedInterfaceComponentTest) {
     BOOST_CHECK_EQUAL(interfaceComponent->getPortByName("args")->getConnectedPortsNumber(), 0);
     BOOST_CHECK_EQUAL(cast(mem_uint)(retPort->getOwner())->getValue(), 0);
     
-    TEST_PRIMITIVE_SERVICE(interfaceComponent, "default", "getConnectedComponentName", 0, ret, retPort);
-    BOOST_CHECK_EQUAL(interfaceComponent->getPortByName("args")->getConnectedPortsNumber(), 0);
-    BOOST_CHECK_EQUAL(cast(mem_string)(retPort->getOwner())->getValue(), "testComponent");
-    
-    ret = false;
-    BOOST_CHECK_EQUAL(interfaceComponent->getPortByName("args")->getConnectedPortsNumber(), 0);
-    interfaceComponent->getPortByName("args")->connectPort(bootstrap->bootstrapStringValue("testComponentTest")->getDefaultPort());
-    TEST_PRIMITIVE_SERVICE(interfaceComponent, "default", "setConnectedComponentName", 1, ret, retPort);
-    BOOST_CHECK_EQUAL(interfaceComponent->getPortByName("args")->getConnectedPortsNumber(), 0);
-    BOOST_CHECK_EQUAL(cast(mem_string)(interfaceComponent->getPortByName("componentName")->getConnectedPortAt(0)->getOwner())->getValue(), "testComponentTest");
+    BOOST_CHECK_THROW(interfaceComponent->getPortByName("default")->getPrimitivePort()->getConnectedServiceByName("getConnectedComponentName")->getPrimitiveService()->invoke(),
+            exceptions::runtime::CWrongPortTypeException);
     
     BOOST_CHECK_THROW(interfaceComponent->getServiceByName("abcd"), exceptions::runtime::CServiceNotFoundException);
     BOOST_CHECK_THROW(interfaceComponent->getPortByName("abcd"), exceptions::runtime::CPortNotFoundException);
@@ -367,33 +359,23 @@ BOOST_AUTO_TEST_CASE(signatureInterfaceComponentTest) {
     BOOST_CHECK_EQUAL(interfaceComponent->getPortByName("args")->getConnectedPortsNumber(), 0);
     BOOST_CHECK_EQUAL(cast(mem_string)(retPort->getOwner())->getValue(), "testType");
     
+    ret = false;
+    BOOST_CHECK_EQUAL(interfaceComponent->getPortByName("args")->getConnectedPortsNumber(), 0);
+    interfaceComponent->getPortByName("args")->connectPort(bootstrap->bootstrapStringValue(PORT_TYPE_SIGNATURES)->getDefaultPort());
+    TEST_PRIMITIVE_SERVICE(interfaceComponent, "default", "setType", 1, ret, retPort);
+    BOOST_CHECK_EQUAL(interfaceComponent->getPortByName("args")->getConnectedPortsNumber(), 0);
+    BOOST_CHECK_EQUAL(cast(mem_string)(interfaceComponent->getPortByName("type")->getConnectedPortAt(0)->getOwner())->getValue(), PORT_TYPE_SIGNATURES);
+    
+    ret = true;
     TEST_PRIMITIVE_SERVICE(interfaceComponent, "default", "getSignaturesCount", 0, ret, retPort);
     BOOST_CHECK_EQUAL(interfaceComponent->getPortByName("args")->getConnectedPortsNumber(), 0);
     BOOST_CHECK_EQUAL(cast(mem_uint)(retPort->getOwner())->getValue(), 3);
-    
-    BOOST_CHECK_THROW(interfaceComponent->getPortByName("default")->getPrimitivePort()->getConnectedServiceByName("getConnectedComponentName")->getPrimitiveService()->invoke(),
-            exceptions::runtime::CWrongPortTypeException);
-    
-    ret = true;
-    BOOST_CHECK_EQUAL(interfaceComponent->getPortByName("args")->getConnectedPortsNumber(), 0);
-    interfaceComponent->getPortByName("args")->connectPort(bootstrap->bootstrapUIntValue(0)->getDefaultPort());
-    TEST_PRIMITIVE_SERVICE(interfaceComponent, "default", "getSignatureAt", 1, ret, retPort);
-    BOOST_CHECK_EQUAL(interfaceComponent->getPortByName("args")->getConnectedPortsNumber(), 0);
-    ptr(mem_string) str = cast(mem_string)(retPort->getOwner()->getPortByName("selector")->getConnectedPortAt(0)->getOwner());
-    BOOST_CHECK_EQUAL(str->getValue(), "signature0");
-    
-    BOOST_CHECK_EQUAL(interfaceComponent->getPortByName("args")->getConnectedPortsNumber(), 0);
-    interfaceComponent->getPortByName("args")->connectPort(bootstrap->bootstrapUIntValue(1)->getDefaultPort());
-    TEST_PRIMITIVE_SERVICE(interfaceComponent, "default", "getSignatureAt", 1, ret, retPort);
-    BOOST_CHECK_EQUAL(interfaceComponent->getPortByName("args")->getConnectedPortsNumber(), 0);
-    str = cast(mem_string)(retPort->getOwner()->getPortByName("selector")->getConnectedPortAt(0)->getOwner());
-    BOOST_CHECK_EQUAL(str->getValue(), "signature1");
     
     BOOST_CHECK_EQUAL(interfaceComponent->getPortByName("args")->getConnectedPortsNumber(), 0);
     interfaceComponent->getPortByName("args")->connectPort(bootstrap->bootstrapUIntValue(2)->getDefaultPort());
     TEST_PRIMITIVE_SERVICE(interfaceComponent, "default", "getSignatureAt", 1, ret, retPort);
     BOOST_CHECK_EQUAL(interfaceComponent->getPortByName("args")->getConnectedPortsNumber(), 0);
-    str = cast(mem_string)(retPort->getOwner()->getPortByName("selector")->getConnectedPortAt(0)->getOwner());
+    ptr(mem_string) str = cast(mem_string)(retPort->getOwner()->getPortByName("selector")->getConnectedPortAt(0)->getOwner());
     BOOST_CHECK_EQUAL(str->getValue(), "signature2");
     
     std::vector<ptr(ast_node)> params;

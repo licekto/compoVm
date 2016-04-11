@@ -7,8 +7,9 @@ namespace interpreter {
 
 		namespace bootstrap {
 
-			CBootstrapStage1::CBootstrapStage1(ptr(core::CCoreModules) coreModules)
-				: m_coreModules(coreModules) {
+			CBootstrapStage1::CBootstrapStage1(ptr(core::CCoreModules) coreModules, ptr(core::CInterpreter) interpreter)
+				: m_coreModules(coreModules),
+				  m_interpreter(interpreter) {
 				m_coreModules->loadCoreModules();
 			}
 
@@ -89,47 +90,6 @@ namespace interpreter {
 					defaultPort->connectService(new_ptr(mem_service)(record.second));
 					selfPort->connectService(new_ptr(mem_service)(record.second));
 				}
-			}
-
-			void CBootstrapStage1::addPorts(ptr(mem_component) component, ptr(ast_descriptor) descriptor) {
-				for (size_t i = 0; i < descriptor->getPortsSize(); ++i) {
-					ptr(ast_port) port = descriptor->getPortAt(i);
-					if (port->getNameSymbol()->getStringValue() == "default") {
-						continue;
-					}
-					std::string name = port->getNameSymbol()->getStringValue();
-					component->addPort(new_ptr(mem_port)(bootstrapPortComponent(port, component), port->getVisibility(), port->getRole()));
-				}
-			}
-
-			void CBootstrapStage1::addServices(ptr(mem_component) component, ptr(ast_descriptor) descriptor) {
-				for (size_t i = 0; i < descriptor->getServicesSize(); ++i) {
-					component->addService(new_ptr(mem_service)(bootstrapServiceComponent(descriptor->getServiceAt(i), component)));
-				}
-			}
-
-			ptr(mem_component) CBootstrapStage1::bootstrapRootComponent(ptr(mem_component) owner) {
-				ptr(ast_descriptor) descriptor = m_coreModules->getCoreDescriptor("Component");
-
-				ptr(mem_component) component = new_ptr(mem_component)();
-
-				for (size_t i = 0; i < descriptor->getPortsSize(); ++i) {
-					ptr(ast_port) astPort = descriptor->getPortAt(i);
-					ptr(mem_port) port = new_ptr(mem_port)(bootstrapPortComponent(astPort, component), astPort->getVisibility(), astPort->getRole());
-					component->addPort(port);
-				}
-
-				for (size_t i = 0; i < descriptor->getServicesSize(); ++i) {
-					ptr(ast_service) astService = descriptor->getServiceAt(i);
-					ptr(mem_service) service = new_ptr(mem_service)(bootstrapServiceComponent(astService, component));
-					component->addService(service);
-				}
-
-				component->connectAllServicesTo(component->getPortByName("default"));
-				component->connectAllServicesTo(component->getPortByName("self"));
-				component->getPortByName("owner")->connectPort(owner->getPortByName("default"));
-
-				return component;
 			}
 
 			ptr(mem_uint) CBootstrapStage1::bootstrapUIntValue(u64 value) {
@@ -226,13 +186,19 @@ namespace interpreter {
 			}
 
 			ptr(mem_component) CBootstrapStage1::bootstrapPortComponent(ptr(ast_port) astPort, ptr(mem_component) owner) {
-				std::map<std::string, ptr(mem_primitiveservice)> servicesNames;
-				ptr(mem_component) port = bootstrapPrologueWithComponent(m_coreModules->getCoreDescriptor("Port"), servicesNames, owner);
+				ptr(mem_component) port = bootstrapPortComponent(owner);
 
 				std::string name = astPort->getNameSymbol()->getStringValue();
 
 				port->getPortByName("name")->connectPort(bootstrapStringValue(name)->getDefaultPort());
 				port->getPortByName("interfaceDescription")->connectPort(bootstrapInterfaceComponent(astPort, port, owner)->getPortByName("default"));
+
+				return port;
+			}
+
+                        ptr(mem_component) CBootstrapStage1::bootstrapPortComponent(ptr(mem_component) owner) {
+				std::map<std::string, ptr(mem_primitiveservice)> servicesNames;
+				ptr(mem_component) port = bootstrapPrologueWithComponent(m_coreModules->getCoreDescriptor("Port"), servicesNames, owner);
 
 				std::function<ptr(mem_port)(const std::vector<ptr(mem_component)>&, const ptr(mem_component)&)> callback;
 				callback = [](const std::vector<ptr(mem_component)>& /*params*/, const ptr(mem_component)& context) -> ptr(mem_port) {
@@ -300,7 +266,7 @@ namespace interpreter {
 				bootstrapEpilogue(port, servicesNames);
 				return port;
 			}
-
+                        
 			ptr(mem_component) CBootstrapStage1::bootstrapCollectionPortComponent(ptr(ast_port) astPort, ptr(mem_component) owner) {
 				ptr(mem_component) port = bootstrapPortComponent(astPort, owner);
 
@@ -391,8 +357,7 @@ namespace interpreter {
 			}
 
 			ptr(mem_component) CBootstrapStage1::bootstrapServiceSignatureComponent(ptr(ast_servicesignature) astSignature, ptr(mem_component) owner) {
-				std::map<std::string, ptr(mem_primitiveservice)> servicesNames;
-				ptr(mem_component) serviceSignature = bootstrapPrologueWithComponent(m_coreModules->getCoreDescriptor("ServiceSignature"), servicesNames, owner);
+				ptr(mem_component) serviceSignature = bootstrapServiceSignatureComponent(owner);
 
 				serviceSignature->getPortByName("selector")->connectPort(cast(mem_string)(bootstrapStringValue(astSignature->getNameSymbol()->getStringValue()))->getDefaultPort());
 
@@ -402,6 +367,12 @@ namespace interpreter {
 					std::string param = cast(ast_symbol)(astSignature->getParamAt(i))->getStringValue();
 					paramNames->connectPort(bootstrapStringValue(param)->getDefaultPort());
 				}
+				return serviceSignature;
+			}
+
+                        ptr(mem_component) CBootstrapStage1::bootstrapServiceSignatureComponent(ptr(mem_component) owner) {
+				std::map<std::string, ptr(mem_primitiveservice)> servicesNames;
+				ptr(mem_component) serviceSignature = bootstrapPrologueWithComponent(m_coreModules->getCoreDescriptor("ServiceSignature"), servicesNames, owner);
 
 				servicesNames.at("setSelector")->setCallback(prepareStringSetter("selector"));
 				servicesNames.at("getSelector")->setCallback(prepareStringGetter("selector"));
@@ -447,7 +418,7 @@ namespace interpreter {
 				bootstrapEpilogue(serviceSignature, servicesNames);
 				return serviceSignature;
 			}
-
+                        
 			ptr(mem_component) CBootstrapStage1::bootstrapPortDescriptionComponent(ptr(ast_port) astPort, ptr(mem_component) owner) {
 				std::map<std::string, ptr(mem_primitiveservice)> servicesNames;
 				ptr(mem_component) portDescription = bootstrapPrologueWithComponent(m_coreModules->getCoreDescriptor("PortDescription"), servicesNames, owner);
@@ -751,9 +722,131 @@ namespace interpreter {
 				return connection;
 			}
 
-			ptr(mem_component) CBootstrapStage1::bootstrapInterfaceComponent(ptr(ast_port) astPort, ptr(mem_component) owner, ptr(mem_component) portOwner) {
+                        ptr(mem_component) CBootstrapStage1::bootstrapInterfaceComponent(ptr(mem_component) owner) {
 				std::map<std::string, ptr(mem_primitiveservice)> servicesNames;
 				ptr(mem_component) interface = bootstrapPrologueWithComponent(m_coreModules->getCoreDescriptor("Interface"), servicesNames, owner);
+
+				servicesNames.at("setType")->setCallback(prepareStringSetter("type"));
+				servicesNames.at("getType")->setCallback(prepareStringGetter("type"));
+
+				std::function<ptr(mem_port)(const std::vector<ptr(mem_component)>&, const ptr(mem_component)&)> callback;
+
+				callback = [this](const std::vector<ptr(mem_component)>& /*params*/, const ptr(mem_component)& context) -> ptr(mem_port) {
+					u64 count = context->getPortByName("signatures")->getConnectedPortsNumber();
+
+					return bootstrapUIntValue(count)->getDefaultPort();
+				};
+				servicesNames.at("getSignaturesCount")->setCallback(callback);
+
+				callback = [](const std::vector<ptr(mem_component)>& /*params*/, const ptr(mem_component)& context) -> ptr(mem_port) {
+                                        std::string type = cast(mem_string)(context->getPortByName("type")->getConnectedPortAt(0)->getOwner())->getValue();
+					if (type != PORT_TYPE_SIGNATURES) {
+						throw exceptions::runtime::CWrongPortTypeException(type, "getSignatureAt");
+					}
+					u64 val = cast(mem_uint)(context->getPortByName("args")->getConnectedPortAt(0)->getOwner())->getValue();
+					context->getPortByName("args")->disconnectPortAt(0);
+					return context->getPortByName("signatures")->getConnectedPortAt(val)->getOwner()->getPortByName("default");
+				};
+				servicesNames.at("getSignatureAt")->setCallback(callback);
+
+				callback = [](const std::vector<ptr(mem_component)>& /*params*/, const ptr(mem_component)& context) -> ptr(mem_port) {
+                                        std::string type = cast(mem_string)(context->getPortByName("type")->getConnectedPortAt(0)->getOwner())->getValue();
+					if (type != PORT_TYPE_SIGNATURES) {
+						throw exceptions::runtime::CWrongPortTypeException(type, "addSignature");
+					}
+					ptr(mem_component) signature = context->getPortByName("args")->getConnectedPortAt(0)->getOwner();
+					context->getPortByName("args")->disconnectPortAt(0);
+					context->getPortByName("signatures")->connectPort(signature->getPortByName("default"));
+					return nullptr;
+				};
+				servicesNames.at("addSignature")->setCallback(callback);
+
+				callback = [](const std::vector<ptr(mem_component)>& /*params*/, const ptr(mem_component)& context) -> ptr(mem_port) {
+                                        std::string type = cast(mem_string)(context->getPortByName("type")->getConnectedPortAt(0)->getOwner())->getValue();
+                                        if (type != PORT_TYPE_NAMED) {
+						throw exceptions::runtime::CWrongPortTypeException(type, "getConnectedComponentName");
+					}
+					if (context->getPortByName("componentName")->getConnectedPortsNumber()) {
+						return context->getPortByName("componentName")->getConnectedPortAt(0)->getOwner()->getPortByName("default");
+					}
+					return nullptr;
+				};
+				servicesNames.at("getConnectedComponentName")->setCallback(callback);
+
+				callback = [](const std::vector<ptr(mem_component)>& /*params*/, const ptr(mem_component)& context) -> ptr(mem_port) {
+                                        std::string type = cast(mem_string)(context->getPortByName("type")->getConnectedPortAt(0)->getOwner())->getValue();
+					if (type != PORT_TYPE_NAMED) {
+						throw exceptions::runtime::CWrongPortTypeException(type, "setConnectedComponentName");
+					}
+					ptr(mem_string) component = cast(mem_string)(context->getPortByName("args")->getConnectedPortAt(0)->getOwner());
+
+					context->getPortByName("args")->disconnectPortAt(0);
+					context->getPortByName("componentName")->disconnectPortAt(0);
+					context->getPortByName("componentName")->connectPort(component->getDefaultPort());
+					return nullptr;
+				};
+				servicesNames.at("setConnectedComponentName")->setCallback(callback);
+
+				callback = [](const std::vector<ptr(mem_component)>& /*params*/, const ptr(mem_component)& context) -> ptr(mem_port) {
+                                        std::string type = cast(mem_string)(context->getPortByName("type")->getConnectedPortAt(0)->getOwner())->getValue();
+					if (type != PORT_TYPE_NAMED) {
+						throw exceptions::runtime::CWrongPortTypeException(type, "getConnectedComponent");
+					}
+					if (context->getPortByName("component")->getConnectedPortsNumber()) {
+						return context->getPortByName("component")->getConnectedPortAt(0)->getOwner()->getPortByName("default");
+					}
+					return nullptr;
+				};
+				servicesNames.at("getConnectedComponent")->setCallback(callback);
+
+				callback = [](const std::vector<ptr(mem_component)>& /*params*/, const ptr(mem_component)& context) -> ptr(mem_port) {
+                                        std::string type = cast(mem_string)(context->getPortByName("type")->getConnectedPortAt(0)->getOwner())->getValue();
+					if (type != PORT_TYPE_NAMED) {
+						throw exceptions::runtime::CWrongPortTypeException(type, "setConnectedComponent");
+					}
+					ptr(mem_component) component = context->getPortByName("args")->getConnectedPortAt(0)->getOwner();
+
+					context->getPortByName("args")->disconnectPortAt(0);
+					context->getPortByName("component")->disconnectPortAt(0);
+					context->getPortByName("component")->connectPort(component->getPortByName("default"));
+					return nullptr;
+				};
+				servicesNames.at("setConnectedComponent")->setCallback(callback);
+
+				callback = [](const std::vector<ptr(mem_component)>& /*params*/, const ptr(mem_component)& context) -> ptr(mem_port) {
+                                        std::string type = cast(mem_string)(context->getPortByName("type")->getConnectedPortAt(0)->getOwner())->getValue();
+					if (type != PORT_TYPE_NAMED) {
+						throw exceptions::runtime::CWrongPortTypeException(type, "getServiceAt");
+					}
+
+					ptr(mem_uint) arg = cast(mem_uint)(context->getPortByName("args")->getConnectedPortAt(0)->getOwner());
+
+					if (context->getPortByName("services")->getConnectedPortsNumber()) {
+						return context->getPortByName("services")->getConnectedPortAt(arg->getValue())->getOwner()->getPortByName("default");
+					}
+					return nullptr;
+				};
+				servicesNames.at("getServiceAt")->setCallback(callback);
+
+				callback = [](const std::vector<ptr(mem_component)>& /*params*/, const ptr(mem_component)& context) -> ptr(mem_port) {
+                                        std::string type = cast(mem_string)(context->getPortByName("type")->getConnectedPortAt(0)->getOwner())->getValue();
+					if (type != PORT_TYPE_NAMED) {
+						throw exceptions::runtime::CWrongPortTypeException(type, "addService");
+					}
+					ptr(mem_component) service = context->getPortByName("args")->getConnectedPortAt(0)->getOwner();
+
+					context->getPortByName("args")->disconnectPortAt(0);
+					context->getPortByName("services")->connectPort(service->getPortByName("default"));
+					return nullptr;
+				};
+				servicesNames.at("addService")->setCallback(callback);
+
+				bootstrapEpilogue(interface, servicesNames);
+				return interface;
+			}
+                        
+			ptr(mem_component) CBootstrapStage1::bootstrapInterfaceComponent(ptr(ast_port) astPort, ptr(mem_component) owner, ptr(mem_component) portOwner) {
+				ptr(mem_component) interface = bootstrapInterfaceComponent(owner);
 
 				std::string type;
 
@@ -803,197 +896,9 @@ namespace interpreter {
 					throw exceptions::runtime::CUnknownPortTypeException();
 				}
 				}
-
-				servicesNames.at("setType")->setCallback(prepareStringSetter("type"));
-				servicesNames.at("getType")->setCallback(prepareStringGetter("type"));
-
-				std::function<ptr(mem_port)(const std::vector<ptr(mem_component)>&, const ptr(mem_component)&)> callback;
-
-				callback = [this](const std::vector<ptr(mem_component)>& /*params*/, const ptr(mem_component)& context) -> ptr(mem_port) {
-					u64 count = context->getPortByName("signatures")->getConnectedPortsNumber();
-
-					return bootstrapUIntValue(count)->getDefaultPort();
-				};
-				servicesNames.at("getSignaturesCount")->setCallback(callback);
-
-				callback = [type](const std::vector<ptr(mem_component)>& /*params*/, const ptr(mem_component)& context) -> ptr(mem_port) {
-					if (type != PORT_TYPE_SIGNATURES) {
-						throw exceptions::runtime::CWrongPortTypeException(type, "getSignatureAt");
-					}
-					u64 val = cast(mem_uint)(context->getPortByName("args")->getConnectedPortAt(0)->getOwner())->getValue();
-					context->getPortByName("args")->disconnectPortAt(0);
-					return context->getPortByName("signatures")->getConnectedPortAt(val)->getOwner()->getPortByName("default");
-				};
-				servicesNames.at("getSignatureAt")->setCallback(callback);
-
-				callback = [type](const std::vector<ptr(mem_component)>& /*params*/, const ptr(mem_component)& context) -> ptr(mem_port) {
-					if (type != PORT_TYPE_SIGNATURES) {
-						throw exceptions::runtime::CWrongPortTypeException(type, "addSignature");
-					}
-					ptr(mem_component) signature = context->getPortByName("args")->getConnectedPortAt(0)->getOwner();
-					context->getPortByName("args")->disconnectPortAt(0);
-					context->getPortByName("signatures")->connectPort(signature->getPortByName("default"));
-					return nullptr;
-				};
-				servicesNames.at("addSignature")->setCallback(callback);
-
-				callback = [type](const std::vector<ptr(mem_component)>& /*params*/, const ptr(mem_component)& context) -> ptr(mem_port) {
-					if (type != PORT_TYPE_NAMED) {
-						throw exceptions::runtime::CWrongPortTypeException(type, "getConnectedComponentName");
-					}
-					if (context->getPortByName("componentName")->getConnectedPortsNumber()) {
-						return context->getPortByName("componentName")->getConnectedPortAt(0)->getOwner()->getPortByName("default");
-					}
-					return nullptr;
-				};
-				servicesNames.at("getConnectedComponentName")->setCallback(callback);
-
-				callback = [type](const std::vector<ptr(mem_component)>& /*params*/, const ptr(mem_component)& context) -> ptr(mem_port) {
-					if (type != PORT_TYPE_NAMED) {
-						throw exceptions::runtime::CWrongPortTypeException(type, "setConnectedComponentName");
-					}
-					ptr(mem_string) component = cast(mem_string)(context->getPortByName("args")->getConnectedPortAt(0)->getOwner());
-
-					context->getPortByName("args")->disconnectPortAt(0);
-					context->getPortByName("componentName")->disconnectPortAt(0);
-					context->getPortByName("componentName")->connectPort(component->getDefaultPort());
-					return nullptr;
-				};
-				servicesNames.at("setConnectedComponentName")->setCallback(callback);
-
-				callback = [type](const std::vector<ptr(mem_component)>& /*params*/, const ptr(mem_component)& context) -> ptr(mem_port) {
-					if (type != PORT_TYPE_NAMED) {
-						throw exceptions::runtime::CWrongPortTypeException(type, "getConnectedComponent");
-					}
-					if (context->getPortByName("component")->getConnectedPortsNumber()) {
-						return context->getPortByName("component")->getConnectedPortAt(0)->getOwner()->getPortByName("default");
-					}
-					return nullptr;
-				};
-				servicesNames.at("getConnectedComponent")->setCallback(callback);
-
-				callback = [type](const std::vector<ptr(mem_component)>& /*params*/, const ptr(mem_component)& context) -> ptr(mem_port) {
-					if (type != PORT_TYPE_NAMED) {
-						throw exceptions::runtime::CWrongPortTypeException(type, "setConnectedComponent");
-					}
-					ptr(mem_component) component = context->getPortByName("args")->getConnectedPortAt(0)->getOwner();
-
-					context->getPortByName("args")->disconnectPortAt(0);
-					context->getPortByName("component")->disconnectPortAt(0);
-					context->getPortByName("component")->connectPort(component->getPortByName("default"));
-					return nullptr;
-				};
-				servicesNames.at("setConnectedComponent")->setCallback(callback);
-
-				callback = [type](const std::vector<ptr(mem_component)>& /*params*/, const ptr(mem_component)& context) -> ptr(mem_port) {
-					if (type == PORT_TYPE_NAMED) {
-						throw exceptions::runtime::CWrongPortTypeException(type, "getServiceAt");
-					}
-
-					ptr(mem_uint) arg = cast(mem_uint)(context->getPortByName("args")->getConnectedPortAt(0)->getOwner());
-
-					if (context->getPortByName("services")->getConnectedPortsNumber()) {
-						return context->getPortByName("services")->getConnectedPortAt(arg->getValue())->getOwner()->getPortByName("default");
-					}
-					return nullptr;
-				};
-				servicesNames.at("getServiceAt")->setCallback(callback);
-
-				callback = [type](const std::vector<ptr(mem_component)>& /*params*/, const ptr(mem_component)& context) -> ptr(mem_port) {
-					if (type == PORT_TYPE_NAMED) {
-						throw exceptions::runtime::CWrongPortTypeException(type, "addService");
-					}
-					ptr(mem_component) service = context->getPortByName("args")->getConnectedPortAt(0)->getOwner();
-
-					context->getPortByName("args")->disconnectPortAt(0);
-					context->getPortByName("services")->connectPort(service->getPortByName("default"));
-					return nullptr;
-				};
-				servicesNames.at("addService")->setCallback(callback);
-
-				bootstrapEpilogue(interface, servicesNames);
+                                
 				return interface;
 			}
-
-			ptr(mem_component) CBootstrapStage1::bootstrapDescriptorComponent(ptr(ast_descriptor) descriptor) {
-				ptr(mem_component) parentComponent = new_ptr(mem_component)();
-				ptr(mem_component) component = new_ptr(mem_component)();
-				ptr(ast_descriptor) coreComponent = m_coreModules->getCoreDescriptor("Component");
-				ptr(ast_descriptor) coreDescriptor = m_coreModules->getCoreDescriptor("Descriptor");
-
-				ptr(ast_port) port = coreComponent->getPortByName("default");
-				ptr(mem_port) generalPort = new_ptr(mem_port)(bootstrapPortComponent(port, nullptr), port->getVisibility(), port->getRole());
-				generalPort->getPort()->getPortByName("owner")->setOwner(component);
-				parentComponent->addPort(generalPort);
-
-				addPorts(parentComponent, coreComponent);
-				addServices(parentComponent, coreComponent);
-
-				component->setParent(parentComponent);
-				parentComponent->setChild(component);
-
-				addPorts(component, coreDescriptor);
-				addServices(component, coreDescriptor);
-
-				component->getPortByName("name")->connectPort(bootstrapStringValue(descriptor->getNameSymbol()->getStringValue())->getDefaultPort());
-
-				for (size_t i = 0; i < descriptor->getPortsSize(); ++i) {
-					component->getPortByName("ports")->connectPort(bootstrapPortDescriptionComponent(descriptor->getPortAt(i), component)->getPortByName("default"));
-				}
-
-				if (descriptor->getArchitecture().use_count()) {
-					for (size_t i = 0; i < descriptor->getArchitecture()->getBodySize(); ++i) {
-						ptr(ast_bind) bind = descriptor->getArchitecture()->getBodyNodeAt(i);
-						component->getPortByName("architectureDefinition")->connectPort(bootstrapConnectionDescriptionComponent(bind, component)->getPortByName("default"));
-					}
-				}
-
-				for (size_t i = 0; i < descriptor->getServicesSize(); ++i) {
-					ptr(ast_service) service = descriptor->getServiceAt(i);
-					component->getPortByName("services")->connectPort(bootstrapServiceComponent(service, component)->getPortByName("default"));
-				}
-
-				component->removeServiceByName("new");
-
-				std::function<ptr(mem_port)(const std::vector<ptr(mem_component)>&, const ptr(mem_component)&)> callback;
-				callback = [this](const std::vector<ptr(mem_component)>& /*params*/, const ptr(mem_component)& context) -> ptr(mem_port) {
-					ptr(mem_component) componentNew = new_ptr(mem_component)();
-
-					// TODO set proper owner
-					//                                                   ||
-					//                                                  \||/
-					//                                                   \/
-					ptr(mem_component) parent = bootstrapRootComponent(nullptr);
-					componentNew->setParent(parent);
-					parent->setChild(componentNew);
-
-					componentNew->getPortByName("descriptorPort")->connectPort(context->getPortByName("default"));
-
-
-					for (size_t i = 0; i < componentNew->getPortByName("ports")->getConnectedPortsNumber(); ++i) {
-						ptr(mem_component) portDescriptionComponent = componentNew->getPortByName("ports")->getConnectedPortAt(i)->getOwner();
-
-					}
-				};
-
-				generalPort = component->getPortByName("default")->getPort()
-				              ->getPortByName("interfaceDescription")->getConnectedPortAt(0)->getOwner()
-				              ->getPortByName("services");
-				component->connectAllServicesTo(generalPort);
-
-				generalPort = component->getPortByName("self")->getPort()
-				              ->getPortByName("interfaceDescription")->getConnectedPortAt(0)->getOwner()
-				              ->getPortByName("services");
-				component->connectAllServicesTo(generalPort);
-
-				generalPort = component->getPortByName("super")->getPort()
-				              ->getPortByName("interfaceDescription")->getConnectedPortAt(0)->getOwner()
-				              ->getPortByName("services");
-				component->connectAllParentServicesTo(generalPort);
-
-				return component;
-			}
-
 		}
 
 	}

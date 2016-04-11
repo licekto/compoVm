@@ -38,8 +38,6 @@ namespace interpreter {
 				             types::visibilityType v = types::visibilityType::EXTERNAL,
 				             types::roleType t = types::roleType::PROVIDES);
 
-				CGeneralPort(ptr(CGeneralPort) instance);
-
 				types::visibilityType getVisibility() const;
 
 				types::roleType getRole() const;

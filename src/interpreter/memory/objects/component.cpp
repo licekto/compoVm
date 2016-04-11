@@ -9,18 +9,7 @@ namespace interpreter {
 		namespace objects {
 
 			CComponent::CComponent() : m_parent(nullptr), m_child(nullptr) {
-			}
-
-			CComponent::CComponent(ptr(CComponent) instance) {
-				m_parent = new_ptr(CComponent)(instance->m_parent);
-
-				for (ptr(CGeneralPort) port : instance->m_ports) {
-					this->m_ports.push_back(new_ptr(CGeneralPort)(port));
-				}
-				for (ptr(CGeneralService) service : instance->m_services) {
-					this->m_services.push_back(new_ptr(CGeneralService)(service));
-				}
-			}
+                        }
 
 			CComponent::~CComponent() {
 			}

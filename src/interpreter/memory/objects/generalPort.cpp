@@ -18,12 +18,6 @@ namespace interpreter {
 
 			}
 
-			CGeneralPort::CGeneralPort(ptr(CGeneralPort) instance)
-				: m_port(instance->m_port), m_primitivePort(instance->m_primitivePort),
-				  m_visibility(instance->m_visibility), m_type(instance->m_type), m_primitive(instance->m_primitive) {
-
-			}
-
 			types::visibilityType CGeneralPort::getVisibility() const {
 				return m_visibility;
 			}

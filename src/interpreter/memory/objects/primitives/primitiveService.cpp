@@ -25,9 +25,6 @@ namespace interpreter {
 					for (const std::string& param : instance->m_argumentsNames) {
 						m_argumentsNames.push_back(param);
 					}
-					for (ptr(objects::CComponent) param : instance->m_arguments) {
-						m_arguments.push_back(param);
-					}
 				}
 
 				CPrimitiveService::~CPrimitiveService() {

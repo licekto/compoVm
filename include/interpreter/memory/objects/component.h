@@ -34,8 +34,6 @@ namespace interpreter {
 
 				CComponent();
 
-				CComponent(ptr(CComponent) instance);
-
 				virtual ~CComponent();
 
 				size_t getNumberOfPorts() const;
