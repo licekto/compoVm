@@ -29,9 +29,10 @@ BOOST_AUTO_TEST_SUITE(interpreterTest)
 // Global parser for testing purposes
 ptr(ParserWrapper) parser = new_ptr(ParserWrapper)(new_ptr(Lexer)(), new_ptr(ast::semantic::CSyntaxDescriptorTable)());
 ptr(core_modules) coreModules = new_ptr(core_modules)();
-ptr(core_bootstrap1) bootstrap = new_ptr(core_bootstrap1)(new_ptr(interpreter::core::CCoreModules)(parser));
+ptr(core_bootstrap1) bootstrap1 = new_ptr(core_bootstrap1)(new_ptr(interpreter::core::CCoreModules)(parser));
+ptr(core_bootstrap2) bootstrap2 = new_ptr(core_bootstrap2)(bootstrap1);
 ptr(interpreter::memory::memspace::CDescriptorTable) table = new_ptr(interpreter::memory::memspace::CDescriptorTable)();
-ptr(core_interpreter) interpreter = new_ptr(core_interpreter)(parser, bootstrap, table);
+ptr(core_interpreter) interpreter = new_ptr(core_interpreter)(parser, bootstrap2, table);
 
 BOOST_AUTO_TEST_CASE(basicTest) {
     // Testing input
@@ -49,7 +50,7 @@ BOOST_AUTO_TEST_CASE(basicTest) {
     
     ptr(ast_program) program = parser->getRootNode();
 
-    //interpreter->run(program);
+    interpreter->run(program);
     
     // Clear AST for next test
     parser->clearAll();

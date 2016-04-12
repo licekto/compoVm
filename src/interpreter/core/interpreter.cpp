@@ -6,7 +6,7 @@ namespace interpreter {
 
 	namespace core {
 
-		CInterpreter::CInterpreter(ptr(ParserWrapper) parser, ptr(bootstrap::CBootstrapStage1) bootstrap, ptr(memory::memspace::CDescriptorTable) table)
+		CInterpreter::CInterpreter(ptr(ParserWrapper) parser, ptr(bootstrap::CBootstrapStage2) bootstrap, ptr(memory::memspace::CDescriptorTable) table)
 			: m_parser(parser),
 			  m_bootstrap(bootstrap),
 			  m_descriptorTable(table) {
@@ -26,7 +26,7 @@ namespace interpreter {
 			if (m_descriptorTable->descriptorFound(name)) {
 				throw exceptions::semantic::CRedefinedDescriptorException(name);
 			}
-			//m_descriptorTable->addDescriptor(m_bootstrap->bootstrapDescriptorComponent(node));
+			m_descriptorTable->addDescriptor(m_bootstrap->bootstrapDescriptorComponent(node));
 		}
 
 		void CInterpreter::exec(ptr(ast_node) node) {

@@ -222,6 +222,10 @@ namespace interpreter {
 			std::stringstream CComponent::dump() const {
 				std::stringstream dump;
 
+                                if (m_parent) {
+                                    dump << m_parent->dump().str() << std::endl;
+                                }
+                                
 				dump << "ports: " << m_ports.size() << std::endl;
 				for (ptr(CGeneralPort) port : m_ports) {
 					dump << "\tname: " << port->getName() << ", connected ports: " << port->getConnectedPortsNumber() << std::endl;

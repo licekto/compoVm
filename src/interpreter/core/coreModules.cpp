@@ -55,6 +55,7 @@ namespace interpreter {
 			loadDescriptor(KERNEL_SERVICE_PATH);
 			loadDescriptor(KERNEL_SERVICE_SIGNATURE_PATH);
 			loadDescriptor(KERNEL_SERVICE_INVOCATION_PATH);
+                        m_parser->clearAll();
 		}
 
 		ptr(ast_descriptor) CCoreModules::getCoreDescriptorAt(size_t i) const {

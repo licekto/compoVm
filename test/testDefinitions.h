@@ -150,12 +150,12 @@ do { \
     } \
 } while(0)
 
-#define TEST_BASE_COMPONENT(component, servicesTotal, owner) \
+#define TEST_BASE_COMPONENT_PRIMITIVE(component, servicesTotal, owner, bootstrap1) \
 do { \
     ptr(mem_port) _retPort_; \
     TEST_PRIMITIVE_PORT(component, "default", types::roleType::PROVIDES, types::visibilityType::EXTERNAL, servicesTotal); \
     TEST_PRIMITIVE_SERVICE(component, "default", "getPorts", 0, false, _retPort_); \
-    component->getPortByName("args")->connectPort(bootstrap->bootstrapStringValue("default")->getDefaultPort()); \
+    component->getPortByName("args")->connectPort(bootstrap1->bootstrapStringValue("default")->getDefaultPort()); \
     TEST_PRIMITIVE_SERVICE(component, "default", "getPortNamed", 1, true, _retPort_); \
     BOOST_CHECK_EQUAL(component->getPortByName("args")->getConnectedPortsNumber(), 0); \
     TEST_PRIMITIVE_SERVICE(component, "default", "getDescriptor", 0, false, _retPort_); \
@@ -167,7 +167,95 @@ do { \
     TEST_PRIMITIVE_PORT(component, "self", types::roleType::PROVIDES, types::visibilityType::INTERNAL, servicesTotal); \
 } while(0)
 
-#define TEST_COMPONENT(component, owner) \
+#define TEST_COMPONENT_PRIMITIVE(component, owner, bootstrap1) \
 do { \
-    TEST_BASE_COMPONENT(component, 5, owner); \
+    TEST_BASE_COMPONENT_PRIMITIVE(component, 5, owner, bootstrap1); \
+} while(0)
+
+#define TEST_PORT_COMPONENT(port, name, connectedPorts) \
+do { \
+    BOOST_CHECK(port->getPortByName("default")->isPrimitive()); \
+    BOOST_CHECK(port->getPortByName("args")->isPrimitive()); \
+    BOOST_CHECK(port->getPortByName("owner")->isPrimitive()); \
+    BOOST_CHECK(port->getPortByName("descriptorPort")->isPrimitive()); \
+    BOOST_CHECK(port->getPortByName("self")->isPrimitive()); \
+    BOOST_CHECK(port->getPortByName("super")->isPrimitive()); \
+    BOOST_CHECK(port->getPortByName("connectedPorts")->isPrimitive()); \
+    BOOST_CHECK(port->getPortByName("delegatedPorts")->isPrimitive()); \
+    BOOST_CHECK(port->getPortByName("name")->isPrimitive()); \
+    BOOST_CHECK(port->getPortByName("interfaceDescription")->isPrimitive()); \
+    BOOST_CHECK_EQUAL(port->getPortByName("default")->getPrimitivePort()->getConnectedServicesNumber(), 12); \
+    BOOST_CHECK_EQUAL(port->getPortByName("default")->getPrimitivePort()->getConnectedPortsNumber(), 0); \
+    BOOST_CHECK_EQUAL(port->getPortByName("args")->getPrimitivePort()->getConnectedServicesNumber(), 0); \
+    BOOST_CHECK_EQUAL(port->getPortByName("args")->getPrimitivePort()->getConnectedPortsNumber(), 0); \
+    BOOST_CHECK_EQUAL(port->getPortByName("owner")->getPrimitivePort()->getConnectedServicesNumber(), 0); \
+    BOOST_CHECK_EQUAL(port->getPortByName("owner")->getPrimitivePort()->getConnectedPortsNumber(), 1); \
+    BOOST_CHECK_EQUAL(port->getPortByName("descriptorPort")->getPrimitivePort()->getConnectedServicesNumber(), 0); \
+    BOOST_CHECK_EQUAL(port->getPortByName("descriptorPort")->getPrimitivePort()->getConnectedPortsNumber(), 0); \
+    BOOST_CHECK_EQUAL(port->getPortByName("self")->getPrimitivePort()->getConnectedServicesNumber(), 12); \
+    BOOST_CHECK_EQUAL(port->getPortByName("self")->getPrimitivePort()->getConnectedPortsNumber(), 0); \
+    BOOST_CHECK_EQUAL(port->getPortByName("super")->getPrimitivePort()->getConnectedServicesNumber(), 0); \
+    BOOST_CHECK_EQUAL(port->getPortByName("super")->getPrimitivePort()->getConnectedPortsNumber(), 0); \
+    BOOST_CHECK_EQUAL(port->getPortByName("connectedPorts")->getPrimitivePort()->getConnectedServicesNumber(), 0); \
+    BOOST_CHECK_EQUAL(port->getPortByName("connectedPorts")->getPrimitivePort()->getConnectedPortsNumber(), connectedPorts); \
+    BOOST_CHECK_EQUAL(port->getPortByName("delegatedPorts")->getPrimitivePort()->getConnectedServicesNumber(), 0); \
+    BOOST_CHECK_EQUAL(port->getPortByName("delegatedPorts")->getPrimitivePort()->getConnectedPortsNumber(), 0); \
+    BOOST_CHECK_EQUAL(port->getPortByName("name")->getPrimitivePort()->getConnectedServicesNumber(), 0); \
+    BOOST_CHECK_EQUAL(port->getPortByName("name")->getPrimitivePort()->getConnectedPortsNumber(), 1); \
+    BOOST_CHECK_EQUAL(cast(mem_string)(port->getPortByName("name")->getPrimitivePort()->getConnectedPortAt(0)->getOwner())->getValue(), name); \
+    BOOST_CHECK_EQUAL(port->getPortByName("interfaceDescription")->getPrimitivePort()->getConnectedServicesNumber(), 0); \
+    BOOST_CHECK_EQUAL(port->getPortByName("interfaceDescription")->getPrimitivePort()->getConnectedPortsNumber(), 1); \
+} while(0)
+
+#define TEST_BASE_COMPONENT_COMPONENT(component) \
+do { \
+    std::string portName = "default"; \
+    BOOST_CHECK(!descriptorComponent->getPortByName(portName)->isPrimitive()); \
+    TEST_PORT_COMPONENT(descriptorComponent->getPortByName(portName)->getPort(), portName, 0); \
+    portName = "args"; \
+    BOOST_CHECK(!descriptorComponent->getPortByName(portName)->isPrimitive()); \
+    TEST_PORT_COMPONENT(descriptorComponent->getPortByName(portName)->getPort(), portName, 0); \
+    portName = "owner"; \
+    BOOST_CHECK(!descriptorComponent->getPortByName(portName)->isPrimitive()); \
+    TEST_PORT_COMPONENT(descriptorComponent->getPortByName(portName)->getPort(), portName, 0); \
+    portName = "descriptorPort"; \
+    BOOST_CHECK(!descriptorComponent->getPortByName(portName)->isPrimitive()); \
+    TEST_PORT_COMPONENT(descriptorComponent->getPortByName(portName)->getPort(), portName, 0); \
+    portName = "super"; \
+    BOOST_CHECK(!descriptorComponent->getPortByName(portName)->isPrimitive()); \
+    TEST_PORT_COMPONENT(descriptorComponent->getPortByName(portName)->getPort(), portName, 0); \
+    portName = "self"; \
+    BOOST_CHECK(!descriptorComponent->getPortByName(portName)->isPrimitive()); \
+    TEST_PORT_COMPONENT(descriptorComponent->getPortByName(portName)->getPort(), portName, 0); \
+} while(0)
+
+#define TEST_DESCRIPTOR_COMPONENT(descriptorComponent, name, extends, portsOfComponentNumber, servicesOfComponentNumber, portsNumber, bindNumber, servicesNumber) \
+do { \
+    BOOST_CHECK_EQUAL(descriptorComponent->getNumberOfPorts(), portsOfComponentNumber); \
+    BOOST_CHECK_EQUAL(descriptorComponent->getNumberOfAllServices(), servicesOfComponentNumber); \
+    TEST_BASE_COMPONENT_COMPONENT(descriptorComponent); \
+    std::string portName = "name"; \
+    BOOST_CHECK(!descriptorComponent->getPortByName(portName)->isPrimitive()); \
+    TEST_PORT_COMPONENT(descriptorComponent->getPortByName(portName)->getPort(), portName, 1); \
+    BOOST_CHECK_EQUAL(cast(mem_string)(descriptorComponent->getPortByName(portName)->getConnectedPortAt(0)->getOwner())->getValue(), name); \
+    portName = "parentName"; \
+    BOOST_CHECK(!descriptorComponent->getPortByName(portName)->isPrimitive()); \
+    TEST_PORT_COMPONENT(descriptorComponent->getPortByName(portName)->getPort(), portName, 1); \
+    std::string extendsName = extends; \
+    if (extendsName == "") { \
+        extendsName = "Component"; \
+    } \
+    BOOST_CHECK_EQUAL(cast(mem_string)(descriptorComponent->getPortByName(portName)->getConnectedPortAt(0)->getOwner())->getValue(), extendsName); \
+    portName = "ports"; \
+    BOOST_CHECK(!descriptorComponent->getPortByName(portName)->isPrimitive()); \
+    TEST_PORT_COMPONENT(descriptorComponent->getPortByName(portName)->getPort(), portName, portsNumber); \
+    BOOST_CHECK_EQUAL(descriptorComponent->getPortByName(portName)->getConnectedPortsNumber(), portsNumber); \
+    portName = "architectureDefinition"; \
+    BOOST_CHECK(!descriptorComponent->getPortByName(portName)->isPrimitive()); \
+    TEST_PORT_COMPONENT(descriptorComponent->getPortByName(portName)->getPort(), portName, bindNumber); \
+    BOOST_CHECK_EQUAL(descriptorComponent->getPortByName(portName)->getConnectedPortsNumber(), bindNumber); \
+    portName = "services"; \
+    BOOST_CHECK(!descriptorComponent->getPortByName(portName)->isPrimitive()); \
+    TEST_PORT_COMPONENT(descriptorComponent->getPortByName(portName)->getPort(), portName, servicesNumber); \
+    BOOST_CHECK_EQUAL(descriptorComponent->getPortByName(portName)->getConnectedPortsNumber(), servicesNumber); \
 } while(0)

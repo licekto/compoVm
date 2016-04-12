@@ -8,5 +8,6 @@
 using core_modules = interpreter::core::CCoreModules;
 using core_interpreter = interpreter::core::CInterpreter;
 using core_bootstrap1 = interpreter::core::bootstrap::CBootstrapStage1;
+using core_bootstrap2 = interpreter::core::bootstrap::CBootstrapStage2;
 
 using mem_component = interpreter::memory::objects::CComponent;

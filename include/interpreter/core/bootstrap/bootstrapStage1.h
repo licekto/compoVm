@@ -70,6 +70,8 @@ namespace interpreter {
 				ptr(mem_component) bootstrapCollectionPortComponent(ptr(ast_port) astPort, ptr(mem_component) owner);
 
 				ptr(mem_component) bootstrapServiceComponent(ptr(ast_service) astService, ptr(mem_component) owner);
+                                
+                                ptr(mem_component) bootstrapServiceComponent(ptr(mem_component) owner);
 
 				ptr(mem_component) bootstrapServiceSignatureComponent(ptr(ast_servicesignature) astSignature, ptr(mem_component) owner);
 

@@ -26,19 +26,33 @@ BOOST_AUTO_TEST_SUITE(bootstrapTest)
 // Create parser, core modules, interpreter and bootstrap
 ptr(ParserWrapper) parser = new_ptr(ParserWrapper)(new_ptr(Lexer)(), new_ptr(ast::semantic::CSyntaxDescriptorTable)());
 ptr(core_modules) coreModules = new_ptr(core_modules)(parser);
-ptr(core_bootstrap1) bootstrap = new_ptr(core_bootstrap1)(coreModules/*, interpreter*/);
+ptr(core_bootstrap1) bootstrap1 = new_ptr(core_bootstrap1)(coreModules);
+ptr(core_bootstrap2) bootstrap2 = new_ptr(core_bootstrap2)(bootstrap1);
 
 BOOST_AUTO_TEST_CASE(componentStage2Test) {
-    // Bootstrap
+    // Testing input
+    std::stringstream input;
+    input.str(
+    "descriptor HTTPServer {\
+	externally provides {\
+		req : Handler;\
+	}\
+	service create() {}\
+        architecture {\
+            connect a@b to b@c;\
+        }\
+    }");
+    // Parse input and create AST
+    parser->parseAll(input);
     
-    ptr(mem_component) owner;
+    // Check descriptor
+    ptr(ast_descriptor) descriptorAst = cast(ast_descriptor)(parser->getRootNode()->getNodeAt(0));
     
-    ptr(mem_component) component = bootstrap->bootstrapComponent(owner);
+    std::cout << descriptorAst->getNameSymbol()->getStringValue() << std::endl;
     
-    TEST_COMPONENT(component, owner);
+    ptr(mem_component) descriptorComponent = bootstrap2->bootstrapDescriptorComponent(descriptorAst);
     
-    BOOST_CHECK_THROW(component->getServiceByName("abcd"), exceptions::runtime::CServiceNotFoundException);
-    BOOST_CHECK_THROW(component->getPortByName("abcd"), exceptions::runtime::CPortNotFoundException);
+    TEST_DESCRIPTOR_COMPONENT(descriptorComponent, "HTTPServer", "",11, 19, 1, 1, 1);
 }
 
 BOOST_AUTO_TEST_SUITE_END()

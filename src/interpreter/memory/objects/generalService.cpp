@@ -51,6 +51,10 @@ namespace interpreter {
 			}
 
 			ptr(objects::CGeneralPort) CGeneralService::getDefaultPort() {
+                                if (m_primitive) {
+                                    // throw
+                                    TRACE(ERROR, "Primitive service doesn't have primitive port!");
+                                }
 				return m_service->getPortByName("default");
 			}
 

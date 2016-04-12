@@ -61,6 +61,7 @@ namespace interpreter {
 			ptr(mem_component) CBootstrapStage1::bootstrapPrologueWithComponent(ptr(ast_descriptor) descriptor,
 			        std::map<std::string,ptr(mem_primitiveservice)>& servicesNames,
 			        ptr(mem_component) owner) {
+                            
 				ptr(mem_component) parentComponent = bootstrapComponent(owner);
 
 				ptr(mem_component) component = new_ptr(mem_component)();
@@ -138,6 +139,9 @@ namespace interpreter {
 
 				if (owner.use_count()) {
 					ptr(mem_port) port = owner->getPortByName("default");
+                                        if (component->getPortByName("owner")->getConnectedPortsNumber()) {
+                                            component->getPortByName("owner")->disconnectPortAt(0);
+                                        }
 					component->getPortByName("owner")->connectPort(port);
 				}
 
@@ -329,12 +333,18 @@ namespace interpreter {
 			}
 
 			ptr(mem_component) CBootstrapStage1::bootstrapServiceComponent(ptr(ast_service) astService, ptr(mem_component) owner) {
-				ptr(mem_component) service = bootstrapComponent(owner);
-
-				addPrimitivePorts(service, m_coreModules->getCoreDescriptor("Service"));
+				ptr(mem_component) service = bootstrapServiceComponent(owner);
 
 				service->getPortByName("serviceSign")->connectPort(bootstrapServiceSignatureComponent(astService->getSignature(), owner)->getPortByName("default"));
 				service->getPortByName("code")->connectPort(cast(mem_string)(bootstrapStringValue(astService->getBodyCode()))->getDefaultPort());
+
+				return service;
+			}
+
+			ptr(mem_component) CBootstrapStage1::bootstrapServiceComponent(ptr(mem_component) owner) {
+				ptr(mem_component) service = bootstrapComponent(owner);
+
+				addPrimitivePorts(service, m_coreModules->getCoreDescriptor("Service"));
 
 				std::function<ptr(mem_port)(const std::vector<ptr(mem_component)>&, const ptr(mem_component)&)> executeCallback =
 				[this](const std::vector<ptr(mem_component)>& /*params*/, const ptr(mem_component)& contextComponent) -> ptr(mem_port) {
@@ -355,7 +365,7 @@ namespace interpreter {
 
 				return service;
 			}
-
+                        
 			ptr(mem_component) CBootstrapStage1::bootstrapServiceSignatureComponent(ptr(ast_servicesignature) astSignature, ptr(mem_component) owner) {
 				ptr(mem_component) serviceSignature = bootstrapServiceSignatureComponent(owner);
 
@@ -876,10 +886,6 @@ namespace interpreter {
 
 					ptr(ast_namedport) namedPort = cast(ast_namedport)(astPort);
 					interface->getPortByName("componentName")->connectPort(bootstrapStringValue(namedPort->getComponentName()->getStringValue())->getDefaultPort());
-
-					if (portOwner.use_count()) {
-						interface->getPortByName("component")->connectPort(portOwner->getPortByName("default"));
-					}
 					break;
 				}
 				case types::portType::UNIVERSAL : {

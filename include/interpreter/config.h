@@ -83,6 +83,9 @@
 // String for named port type
 #define PORT_TYPE_NAMED "named"
 
+// String for injected port type
+#define PORT_TYPE_INJECTED "named"
+
 /* String representation of types of connection addresses */
 /******************************************************************************/
 

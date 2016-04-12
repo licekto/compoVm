@@ -1,7 +1,7 @@
 #pragma once
 
 #include "types.h"
-#include "interpreter/core/bootstrap/bootstrapStage1.h"
+#include "interpreter/core/bootstrap/bootstrapStage2.h"
 #include "interpreter/memory/memspace/descriptorTable.h"
 #include "parser/parserWrapper.h"
 #include "definitions/allDefinitions.h"
@@ -39,7 +39,7 @@ namespace interpreter {
 
 			ptr(ParserWrapper) m_parser;
 
-			ptr(bootstrap::CBootstrapStage1) m_bootstrap;
+			ptr(bootstrap::CBootstrapStage2) m_bootstrap;
 
 			ptr(memory::memspace::CDescriptorTable) m_descriptorTable;
 
@@ -53,7 +53,7 @@ namespace interpreter {
 
 		  public:
 
-			CInterpreter(ptr(ParserWrapper) parser = nullptr, ptr(bootstrap::CBootstrapStage1) bootstrap = nullptr, ptr(memory::memspace::CDescriptorTable) table = nullptr);
+			CInterpreter(ptr(ParserWrapper) parser = nullptr, ptr(bootstrap::CBootstrapStage2) bootstrap = nullptr, ptr(memory::memspace::CDescriptorTable) table = nullptr);
 
 			void execService(const std::string& code);
 
