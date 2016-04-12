@@ -229,10 +229,10 @@ do { \
     TEST_PORT_COMPONENT(descriptorComponent->getPortByName(portName)->getPort(), portName, 0); \
 } while(0)
 
-#define TEST_DESCRIPTOR_COMPONENT(descriptorComponent, name, extends, portsOfComponentNumber, servicesOfComponentNumber, portsNumber, bindNumber, servicesNumber) \
+#define TEST_DESCRIPTOR_COMPONENT(descriptorComponent, name, extends, portsNumber, bindNumber, servicesNumber) \
 do { \
-    BOOST_CHECK_EQUAL(descriptorComponent->getNumberOfPorts(), portsOfComponentNumber); \
-    BOOST_CHECK_EQUAL(descriptorComponent->getNumberOfAllServices(), servicesOfComponentNumber); \
+    BOOST_CHECK_EQUAL(descriptorComponent->getNumberOfPorts(), 11); \
+    BOOST_CHECK_EQUAL(descriptorComponent->getNumberOfAllServices(), 20); \
     TEST_BASE_COMPONENT_COMPONENT(descriptorComponent); \
     std::string portName = "name"; \
     BOOST_CHECK(!descriptorComponent->getPortByName(portName)->isPrimitive()); \

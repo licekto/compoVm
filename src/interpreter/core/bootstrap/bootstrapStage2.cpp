@@ -15,7 +15,6 @@ namespace interpreter {
 					if (port->getNameSymbol()->getStringValue() == "default") {
 						continue;
 					}
-                                        std::string name = port->getNameSymbol()->getStringValue();
 					component->addPort(new_ptr(mem_port)(m_bootstrapStage1->bootstrapPortComponent(port, component), port->getVisibility(), port->getRole()));
 				}
 			}
@@ -31,21 +30,18 @@ namespace interpreter {
 
 				ptr(mem_component) component = new_ptr(mem_component)();
 
-				for (size_t i = 0; i < descriptor->getPortsSize(); ++i) {
-					ptr(ast_port) astPort = descriptor->getPortAt(i);
-					ptr(mem_port) port = new_ptr(mem_port)(m_bootstrapStage1->bootstrapPortComponent(astPort, component), astPort->getVisibility(), astPort->getRole());
-					component->addPort(port);
-				}
+                                ptr(ast_port) port = descriptor->getPortByName("default");
+				ptr(mem_port) generalPort = new_ptr(mem_port)(m_bootstrapStage1->bootstrapPortComponent(port, nullptr), port->getVisibility(), port->getRole());
+				component->addPort(generalPort);
 
-				for (size_t i = 0; i < descriptor->getServicesSize(); ++i) {
-					ptr(ast_service) astService = descriptor->getServiceAt(i);
-					ptr(mem_service) service = new_ptr(mem_service)(m_bootstrapStage1->bootstrapServiceComponent(astService, component));
-					component->addService(service);
-				}
+				addPorts(component, descriptor);
+				addServices(component, descriptor);
+                                
+                                component->getPortByName("default")->getPort()->getPortByName("owner")->connectPort(component->getPortByName("default"));
 
-				component->connectAllServicesTo(component->getPortByName("default"));
-				component->connectAllServicesTo(component->getPortByName("self"));
-				component->getPortByName("owner")->connectPort(owner->getPortByName("default"));
+                                if (owner.use_count()) {
+                                    component->getPortByName("owner")->connectPort(owner->getPortByName("default"));
+                                }
 
 				return component;
 			}
@@ -54,7 +50,7 @@ namespace interpreter {
 
 				ptr(mem_component) port = m_bootstrapStage1->bootstrapPortComponent(owner);
 
-				std::string name = cast(mem_string)(description->getPortByName("name")->getOwner())->getValue();
+				std::string name = cast(mem_string)(description->getPortByName("name")->getConnectedPortAt(0)->getOwner())->getValue();
 
 				port->getPortByName("name")->connectPort(m_bootstrapStage1->bootstrapStringValue(name)->getDefaultPort());
                                 port->getPortByName("interfaceDescription")->connectPort(
@@ -81,14 +77,14 @@ namespace interpreter {
                                         }
                                     }
 				}
-				if (type == PORT_TYPE_INJECTED) {
+				else if (type == PORT_TYPE_INJECTED) {
 					throw exceptions::semantic::CUnsupportedFeatureException("Injection port");
 				}
-				if (type == PORT_TYPE_NAMED) {
+				else if (type == PORT_TYPE_NAMED) {
                                         std::string componentName = cast(mem_string)(interface->getPortByName("componentName")->getConnectedPortAt(0)->getOwner())->getValue();
                                         newInterface->getPortByName("componentName")->connectPort(m_bootstrapStage1->bootstrapStringValue(componentName)->getDefaultPort());
 				}
-				if (type == PORT_TYPE_UNIVERSAL) {
+				else if (type == PORT_TYPE_UNIVERSAL) {
                                         if (portOwner.use_count()) {
                                             portOwner->connectAllServicesTo(newInterface->getPortByName("services"));
                                         }
@@ -97,7 +93,7 @@ namespace interpreter {
 					throw exceptions::runtime::CUnknownPortTypeException();
 				}
                                 
-				return nullptr;
+				return newInterface;
                         }
 
                         ptr(mem_component) CBootstrapStage2::cloneSignature(ptr(mem_component) signature, ptr(mem_component) owner) {
@@ -126,19 +122,9 @@ namespace interpreter {
                         }
 
 			ptr(mem_component) CBootstrapStage2::bootstrapDescriptorComponent(ptr(ast_descriptor) descriptor) {
-				ptr(mem_component) parentComponent = new_ptr(mem_component)();
+				ptr(mem_component) parentComponent = bootstrapRootComponent(nullptr);
 				ptr(mem_component) component = new_ptr(mem_component)();
-				ptr(ast_descriptor) coreComponent = m_bootstrapStage1->m_coreModules->getCoreDescriptor("Component");
 				ptr(ast_descriptor) coreDescriptor = m_bootstrapStage1->m_coreModules->getCoreDescriptor("Descriptor");
-
-				ptr(ast_port) port = coreComponent->getPortByName("default");
-				ptr(mem_port) generalPort = new_ptr(mem_port)(m_bootstrapStage1->bootstrapPortComponent(port, nullptr), port->getVisibility(), port->getRole());
-				parentComponent->addPort(generalPort);
-
-				addPorts(parentComponent, coreComponent);
-				addServices(parentComponent, coreComponent);
-                                
-                                parentComponent->getPortByName("default")->getPort()->getPortByName("owner")->connectPort(parentComponent->getPortByName("default"));
                                 
 				component->setParent(parentComponent);
 				parentComponent->setChild(component);
@@ -201,13 +187,59 @@ namespace interpreter {
                                                 ptr(mem_port) newPort = new_ptr(mem_port)(buildPortFromDescription(portDescriptionComponent, newComponent), v, r);
                                                 newComponent->addPort(newPort);
 					}
-
+                                        
+                                        for (size_t i = 0; i < context->getPortByName("architectureDefinition")->getConnectedPortsNumber(); ++i) {
+                                            ptr(mem_component) connection = context->getPortByName("architectureDefinition")->getConnectedPortAt(0)->getOwner()->getBottomChild();
+                                            
+                                            auto func = [&connection, &newComponent](const std::string& type, const std::string& portName, const std::string& dstSrc) -> ptr(mem_port) {
+                                                ptr(mem_port) port;
+                                                if (type == CONNECTION_NAMED) {
+                                                    std::string componentName = cast(mem_string)(connection->getPortByName(dstSrc + "Component")->getConnectedPortAt(0)->getOwner())->getValue();
+                                                    if (componentName == "self") {
+                                                        port = newComponent->getPortByName(portName);
+                                                    }
+                                                    else {
+                                                        port = newComponent->getPortByName(componentName)->getConnectedPortAt(0)->getOwner()->getBottomChild()->getPortByName(portName);
+                                                    }
+                                                }
+                                                else if (type == CONNECTION_COLLECTION) {
+                                                    std::string componentName = cast(mem_string)(connection->getPortByName(dstSrc + "Component")->getConnectedPortAt(0)->getOwner())->getValue();
+                                                    if (componentName == "self") {
+                                                        // throw
+                                                        return nullptr;
+                                                    }
+                                                    u64 index = cast(mem_uint)(connection->getPortByName(dstSrc + "ComponentIndex")->getConnectedPortAt(0)->getOwner())->getValue();
+                                                    port = newComponent->getPortByName(componentName)->getConnectedPortAt(index)->getOwner()->getBottomChild()->getPortByName(portName);
+                                                }
+                                                else if (type == CONNECTION_INVOCATION) {
+                                                    ptr(mem_component) inv = connection->getPortByName(dstSrc + "ComponentInvocation")->getConnectedPortAt(0)->getOwner()->getBottomChild();
+                                                    std::string receiverName = cast(mem_string)(inv->getPortByName("receiver")->getConnectedPortAt(0)->getOwner())->getValue();
+                                                    std::string selectorName = cast(mem_string)(inv->getPortByName("selector")->getConnectedPortAt(0)->getOwner())->getValue();
+                                                }
+                                                else if (type == CONNECTION_DEREFERENCE) {
+                                                    // throw
+                                                }
+                                                else {
+                                                    // throw
+                                                }
+                                                return port;
+                                            };
+                                            std::string sourceType = cast(mem_string)(connection->getPortByName("sourceType")->getConnectedPortAt(0)->getOwner())->getValue();
+                                            std::string sourcePortName = cast(mem_string)(connection->getPortByName("sourcePort")->getConnectedPortAt(0)->getOwner())->getValue();
+                                            std::string destinationType = cast(mem_string)(connection->getPortByName("destinationType")->getConnectedPortAt(0)->getOwner())->getValue();
+                                            std::string destinationPortName = cast(mem_string)(connection->getPortByName("destinationPort")->getConnectedPortAt(0)->getOwner())->getValue();
+                                            
+                                            ptr(mem_port) srcPort = func(sourceType, sourcePortName, "source");
+                                            ptr(mem_port) dstPort = func(destinationType, destinationPortName, "destination");
+                                            srcPort->connectPort(dstPort);
+                                        }
+                                        
 					return newComponent->getPortByName("default");
 				};
                                 ptr(mem_service) newService = new_ptr(mem_service)(new_ptr(memory::objects::primitives::CPrimitiveService)("new", component, callback));
-                                //component->addService(newService);
+                                component->addService(newService);
 
-				generalPort = component->getPortByName("default")->getPort()
+				ptr(mem_port) generalPort = component->getPortByName("default")->getPort()
 				              ->getPortByName("interfaceDescription")->getConnectedPortAt(0)->getOwner()
 				              ->getPortByName("services");
 				component->connectAllServicesTo(generalPort);

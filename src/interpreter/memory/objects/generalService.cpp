@@ -45,8 +45,7 @@ namespace interpreter {
 				if (m_primitive) {
 					return m_primitiveService->invoke();
 				} else {
-					TRACE(ERROR, "Not implemented yet");
-					return nullptr;
+                                        return m_service->getServiceByName("execute")->invoke();
 				}
 			}
 

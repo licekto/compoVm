@@ -19,7 +19,7 @@ namespace interpreter {
 
 		namespace objects {
 
-			class CComponent {
+			class CComponent : public std::enable_shared_from_this<CComponent> {
 			  protected:
 
 				ptr(CComponent) m_parent;

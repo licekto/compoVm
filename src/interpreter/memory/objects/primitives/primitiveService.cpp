@@ -1,6 +1,5 @@
 #include "interpreter/memory/objects/primitives/primitiveService.h"
 
-
 namespace interpreter {
 
 	namespace memory {
@@ -84,7 +83,7 @@ namespace interpreter {
 
 				void CPrimitiveService::setCallback(std::function<ptr(objects::CGeneralPort)(const std::vector<ptr(objects::CComponent)>&, const ptr(objects::CComponent)&)> callback) {
 					m_callback = callback;
-				}
+                                }
 
 			}
 

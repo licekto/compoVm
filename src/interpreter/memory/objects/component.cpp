@@ -74,7 +74,12 @@ namespace interpreter {
 
 			void CComponent::connectAllSelfServicesTo(ptr(CGeneralPort) port) {
 				for (ptr(CGeneralService) service : m_services) {
-					port->connectPort(service->getDefaultPort());
+                                        if (!service->isPrimitive()) {
+                                            port->connectPort(service->getDefaultPort());
+                                        }
+                                        else {
+                                            port->connectPrimitiveService(service);
+                                        }
 				}
 			}
 
@@ -188,13 +193,11 @@ namespace interpreter {
 			}
 
 			ptr(CComponent) CComponent::getTopParent() {
-				ptr(CComponent) parent = m_parent;
-				ptr(CComponent) prev;
-				while (parent.use_count()) {
-					prev = parent;
+				ptr(CComponent) parent = this->shared_from_this();
+				while (parent->m_parent.use_count()) {
 					parent = parent->m_parent;
 				}
-				return prev;
+				return parent;
 			}
 
 			void CComponent::setParent(ptr(CComponent) parent) {
@@ -206,13 +209,11 @@ namespace interpreter {
 			}
 
 			ptr(CComponent) CComponent::getBottomChild() {
-				ptr(CComponent) child = m_child;
-				ptr(CComponent) prev;
-				while (child.use_count()) {
-					prev = child;
+				ptr(CComponent) child = this->shared_from_this();
+				while (child->m_child.use_count()) {
 					child = child->m_child;
 				}
-				return prev;
+				return child;
 			}
 
 			void CComponent::setChild(ptr(CComponent) child) {

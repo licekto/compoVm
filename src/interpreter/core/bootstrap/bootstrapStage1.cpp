@@ -76,6 +76,7 @@ namespace interpreter {
 
 			ptr(mem_component) CBootstrapStage1::bootstrapPrologue(ptr(ast_descriptor) descriptor,
 			        std::map<std::string,ptr(mem_primitiveservice)>& servicesNames) {
+                            
 				ptr(mem_component) component = new_ptr(mem_component)();
 				addPrimitivePorts(component, descriptor);
 				addPrimitiveServices(component, descriptor, servicesNames);

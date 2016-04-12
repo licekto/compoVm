@@ -98,7 +98,19 @@ namespace interpreter {
 				} else {
 					return m_port->getPortByName("connectedPorts")->disconnectPortAt(index);
 				}
-			}
+                        }
+
+                        void CGeneralPort::connectPrimitiveService(ptr(CGeneralService) service) {
+                                m_connectedPrimitiveServices.push_back(service);
+                        }
+
+                        size_t CGeneralPort::getConnectedPrimitiveServicesNumber() const {
+                                return m_connectedPrimitiveServices.size();
+                        }
+
+                        ptr(CGeneralService) CGeneralPort::getPrimitiveServiceAt(size_t index) {
+                                return m_connectedPrimitiveServices.at(index);
+                        }
 
 		}
 	}

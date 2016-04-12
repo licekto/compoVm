@@ -12,8 +12,6 @@ namespace interpreter {
 
 			class CComponent;
 
-			class CComponent;
-
 			class CGeneralService {
 			  private:
 				ptr(CComponent) m_service;

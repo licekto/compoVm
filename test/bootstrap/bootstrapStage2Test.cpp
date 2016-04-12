@@ -37,10 +37,14 @@ BOOST_AUTO_TEST_CASE(componentStage2Test) {
 	externally provides {\
 		req : Handler;\
 	}\
-	service create() {}\
+        internally provides {\
+		fE : FrontEnd;\
+                bE : BackEnd;\
+	}\
         architecture {\
-            connect a@b to b@c;\
+            connect fE@self to bE@self;\
         }\
+	service create() {}\
     }");
     // Parse input and create AST
     parser->parseAll(input);
@@ -52,7 +56,9 @@ BOOST_AUTO_TEST_CASE(componentStage2Test) {
     
     ptr(mem_component) descriptorComponent = bootstrap2->bootstrapDescriptorComponent(descriptorAst);
     
-    TEST_DESCRIPTOR_COMPONENT(descriptorComponent, "HTTPServer", "",11, 19, 1, 1, 1);
+    TEST_DESCRIPTOR_COMPONENT(descriptorComponent, "HTTPServer", "", 3, 1, 1);
+    
+    ptr(mem_port) port = descriptorComponent->getServiceByName("new")->invoke();
 }
 
 BOOST_AUTO_TEST_SUITE_END()
