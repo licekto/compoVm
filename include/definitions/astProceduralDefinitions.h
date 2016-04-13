@@ -5,6 +5,7 @@
 #include "ast/nodes/procedural/breakStatement.h"
 #include "ast/nodes/procedural/compoundBody.h"
 #include "ast/nodes/procedural/constant.h"
+#include "ast/nodes/procedural/boolean.h"
 #include "ast/nodes/procedural/continueStatement.h"
 #include "ast/nodes/procedural/divisionExpression.h"
 #include "ast/nodes/procedural/equalityExpression.h"
@@ -34,6 +35,7 @@ using ast_binary = ast::nodes::procedural::CBinaryExpression;
 using ast_break = ast::nodes::procedural::CBreakStatement;
 using ast_compound = ast::nodes::procedural::CCompoundBody;
 using ast_constant = ast::nodes::procedural::CConstant;
+using ast_boolean = ast::nodes::procedural::CBoolean;
 using ast_continue = ast::nodes::procedural::CContinueStatement;
 using ast_division = ast::nodes::procedural::CDivisionExpression;
 using ast_equality = ast::nodes::procedural::CEqualityExpression;

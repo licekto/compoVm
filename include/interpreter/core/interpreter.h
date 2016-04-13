@@ -1,5 +1,7 @@
 #pragma once
 
+#include <stack>
+
 #include "types.h"
 #include "interpreter/core/bootstrap/bootstrapStage2.h"
 #include "interpreter/memory/memspace/descriptorTable.h"
@@ -10,6 +12,7 @@
 #include "exceptions/runtime/mainComponentMissingException.h"
 #include "exceptions/runtime/mainServiceMissingException.h"
 #include "exceptions/runtime/unknownAstNodeTypeException.h"
+#include "variablesTable.h"
 
 /**
  *  \addtogroup interpreter
@@ -42,20 +45,30 @@ namespace interpreter {
 			ptr(bootstrap::CBootstrapStage2) m_bootstrap;
 
 			ptr(memory::memspace::CDescriptorTable) m_descriptorTable;
-
-			void checkMainContainer() const;
+                        
+                        std::stack<ptr(CVariablesTable)> m_contextStack;
 
 			void execProgram(ptr(ast_program) node);
 
 			void execDescriptor(ptr(ast_descriptor) node);
+                        
+                        void execCompound(ptr(ast_compound) node);
+                        
+                        void execAssignment(ptr(ast_assignment) node);
+                        
+                        ptr(mem_port) execArithmeticOp(ptr(ast_binary) expr, type_operator op);
+                        
+                        ptr(mem_port) execLogicalOp(ptr(ast_binary) expr, type_operator op);
+                        
+                        ptr(mem_port) execRelationalOp(ptr(ast_binary) expr, type_operator op);
 
-			void exec(ptr(ast_node));
+			ptr(mem_port) exec(ptr(ast_node));
 
 		  public:
 
 			CInterpreter(ptr(ParserWrapper) parser = nullptr, ptr(bootstrap::CBootstrapStage2) bootstrap = nullptr, ptr(memory::memspace::CDescriptorTable) table = nullptr);
 
-			void execService(const std::string& code);
+			ptr(mem_port) execService(const std::string& code);
 
 			void run(ptr(ast_program) ast);
 		};

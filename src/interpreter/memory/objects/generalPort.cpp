@@ -53,8 +53,7 @@ namespace interpreter {
 				} else {
 					ptr(CGeneralPort) port = m_port->getPortByName("owner")->getPrimitivePort()->getConnectedPortAt(0);
                                         if (port.get() == this) {
-                                            // throw owner of this port is owner of this port :)
-                                            return nullptr;
+                                            return m_port->getPortByName("owner")->getPrimitivePort()->getOwner();
                                         }
                                         return port->getOwner();
 				}

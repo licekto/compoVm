@@ -229,7 +229,7 @@ do { \
     TEST_PORT_COMPONENT(descriptorComponent->getPortByName(portName)->getPort(), portName, 0); \
 } while(0)
 
-#define TEST_DESCRIPTOR_COMPONENT(descriptorComponent, name, extends, portsNumber, bindNumber, servicesNumber) \
+#define TEST_DESCRIPTOR_COMPONENT(descriptorComponent, name, extends, portsNumber, servicesNumber, bindNumber) \
 do { \
     BOOST_CHECK_EQUAL(descriptorComponent->getNumberOfPorts(), 11); \
     BOOST_CHECK_EQUAL(descriptorComponent->getNumberOfAllServices(), 20); \

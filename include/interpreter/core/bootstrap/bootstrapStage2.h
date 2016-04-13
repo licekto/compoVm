@@ -36,6 +36,12 @@ namespace interpreter {
 
 			  public:
 				CBootstrapStage2(ptr(CBootstrapStage1) stage1 = nullptr);
+                                
+                                ptr(mem_port) getUintComponent(u64 value);
+                                
+                                ptr(mem_port) getStringComponent(const std::string& value);
+                                
+                                ptr(mem_port) getBoolComponent(bool value);
 
 				ptr(mem_component) bootstrapDescriptorComponent(ptr(ast_descriptor) descriptor);
 			};

@@ -276,7 +276,7 @@ namespace ast {
 		void CSemanticCheckVisitor::visit(ptr(ast_assignment) node) {
 			checkNodeType(node, type_node::ASSIGNMENT_EXPRESSION);
 
-			node->getRValue()->accept(shared_from_this());
+			node->getRightSide()->accept(shared_from_this());
 			node->getVariable()->accept(shared_from_this());
 		}
 
@@ -300,6 +300,10 @@ namespace ast {
 			checkNodeType(node, type_node::CONSTANT);
 		}
 
+                void CSemanticCheckVisitor::visit(ptr(ast_boolean) node) {
+			checkNodeType(node, type_node::BOOLEAN);
+		}
+                
 		void CSemanticCheckVisitor::visit(ptr(ast_continue) node) {
 			checkNodeType(node, type_node::CONTINUE);
 		}

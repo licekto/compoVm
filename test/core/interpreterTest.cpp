@@ -35,13 +35,14 @@ ptr(interpreter::memory::memspace::CDescriptorTable) table = new_ptr(interpreter
 ptr(core_interpreter) interpreter = new_ptr(core_interpreter)(parser, bootstrap2, table);
 
 BOOST_AUTO_TEST_CASE(basicTest) {
+    bootstrap1->setInterpreter(interpreter);
     // Testing input
     std::stringstream input;
     input.str(
    "descriptor CompoContainer {\
         service main() {\
             |a|\
-            a := 1 + 1;\
+            a := 1;\
         }\
     }");
     
@@ -54,6 +55,67 @@ BOOST_AUTO_TEST_CASE(basicTest) {
     
     // Clear AST for next test
     parser->clearAll();
+    table->clear();
+}
+
+BOOST_AUTO_TEST_CASE(variablesTest) {
+    bootstrap1->setInterpreter(interpreter);
+    // Testing input
+    std::stringstream input;
+    input.str(
+   "descriptor CompoContainer {\
+        service main() {\
+            |a|\
+            a := 1;\
+        }\
+    }");
+    
+    // Parse input and create AST
+    parser->parseAll(input);
+    
+    ptr(ast_program) program = parser->getRootNode();
+
+    interpreter->run(program);
+    
+    // Clear AST for next test
+    parser->clearAll();
+    table->clear();
+}
+
+BOOST_AUTO_TEST_CASE(proceduralTest) {
+    bootstrap1->setInterpreter(interpreter);
+    // Testing input
+    std::stringstream input;
+    input.str(
+   "descriptor CompoContainer {\
+        service main() {\
+            |a|\
+            a := 1;\
+            a := 1 + 1;\
+            a := 1 - 1;\
+            a := 1 * 1;\
+            a := 1 / 1;\
+            a := true || true;\
+            a := true && false;\
+            a := 1 == 1;\
+            a := 1 != 1;\
+            a := 1 < 1;\
+            a := 1 <= 1;\
+            a := 1 > 1;\
+            a := 1 >= 1;\
+        }\
+    }");
+    
+    // Parse input and create AST
+    parser->parseAll(input);
+    
+    ptr(ast_program) program = parser->getRootNode();
+
+    interpreter->run(program);
+    
+    // Clear AST for next test
+    parser->clearAll();
+    table->clear();
 }
 
 BOOST_AUTO_TEST_CASE(calcTest) {
@@ -116,6 +178,7 @@ BOOST_AUTO_TEST_CASE(calcTest) {
     
     // Clear AST for next test
     parser->clearAll();
+    table->clear();
 }
 
 BOOST_AUTO_TEST_SUITE_END()

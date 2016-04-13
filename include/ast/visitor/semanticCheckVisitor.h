@@ -73,6 +73,7 @@ namespace ast {
 			virtual void visit(ptr(ast_break) node);
 			virtual void visit(ptr(ast_compound) node);
 			virtual void visit(ptr(ast_constant) node);
+                        virtual void visit(ptr(ast_boolean) node);
 			virtual void visit(ptr(ast_continue) node);
 			virtual void visit(ptr(ast_division) node);
 			virtual void visit(ptr(ast_equality) node);

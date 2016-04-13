@@ -54,6 +54,8 @@ namespace interpreter {
 
 			  public:
 				CBootstrapStage1(ptr(core::CCoreModules) coreModules = nullptr, ptr(core::CInterpreter) interpreter = nullptr);
+                                
+                                void setInterpreter(ptr(core::CInterpreter) interpreter);
 
 				ptr(mem_uint) bootstrapUIntValue(u64 value);
 

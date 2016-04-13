@@ -20,7 +20,7 @@ namespace ast {
 				return m_variable;
 			}
 
-			std::shared_ptr<ast::nodes::CNode> CAssignmentExpression::getRValue() const {
+			std::shared_ptr<ast::nodes::CNode> CAssignmentExpression::getRightSide() const {
 				return m_rValue;
 			}
 

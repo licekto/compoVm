@@ -38,6 +38,7 @@ namespace interpreter {
 				addServices(component, descriptor);
                                 
                                 component->getPortByName("default")->getPort()->getPortByName("owner")->connectPort(component->getPortByName("default"));
+                                component->getPortByName("default")->getPort()->getPortByName("owner")->setOwner(component);
 
                                 if (owner.use_count()) {
                                     component->getPortByName("owner")->connectPort(owner->getPortByName("default"));
@@ -119,6 +120,18 @@ namespace interpreter {
                                 newService->getPortByName("code")->connectPort(m_bootstrapStage1->bootstrapStringValue(code)->getDefaultPort());
                                 
                                 return newService;
+                        }
+
+                        ptr(mem_port) CBootstrapStage2::getUintComponent(u64 value) {
+                            return m_bootstrapStage1->bootstrapUIntValue(value)->getDefaultPort();
+                        }
+
+                        ptr(mem_port) CBootstrapStage2::getStringComponent(const std::string& value) {
+                            return m_bootstrapStage1->bootstrapStringValue(value)->getDefaultPort();
+                        }
+
+                        ptr(mem_port) CBootstrapStage2::getBoolComponent(bool value) {
+                            return m_bootstrapStage1->bootstrapBoolValue(value)->getDefaultPort();
                         }
 
 			ptr(mem_component) CBootstrapStage2::bootstrapDescriptorComponent(ptr(ast_descriptor) descriptor) {

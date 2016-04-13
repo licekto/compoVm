@@ -143,7 +143,7 @@ BOOST_AUTO_TEST_CASE(compoServiceBody) {
     TEST_SYMBOL(symbol, "b");
     
     // Check constant
-    ptr(ast_constant) constant = cast(ast_constant)(assignment->getRValue());
+    ptr(ast_constant) constant = cast(ast_constant)(assignment->getRightSide());
     TEST_CONSTANT(constant, 1);
     
     // Clear AST for next test

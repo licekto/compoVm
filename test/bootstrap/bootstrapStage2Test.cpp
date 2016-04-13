@@ -21,7 +21,7 @@
 #include "interpreter/memory/objects/values/stringComponent.h"
 #include "exceptions/runtime/wrongPortTypeException.h"
 
-BOOST_AUTO_TEST_SUITE(bootstrapTest)
+BOOST_AUTO_TEST_SUITE(bootstrapStage2Test)
 
 // Create parser, core modules, interpreter and bootstrap
 ptr(ParserWrapper) parser = new_ptr(ParserWrapper)(new_ptr(Lexer)(), new_ptr(ast::semantic::CSyntaxDescriptorTable)());
@@ -29,7 +29,7 @@ ptr(core_modules) coreModules = new_ptr(core_modules)(parser);
 ptr(core_bootstrap1) bootstrap1 = new_ptr(core_bootstrap1)(coreModules);
 ptr(core_bootstrap2) bootstrap2 = new_ptr(core_bootstrap2)(bootstrap1);
 
-BOOST_AUTO_TEST_CASE(componentStage2Test) {
+BOOST_AUTO_TEST_CASE(basicTest) {
     // Testing input
     std::stringstream input;
     input.str(
@@ -41,9 +41,6 @@ BOOST_AUTO_TEST_CASE(componentStage2Test) {
 		fE : FrontEnd;\
                 bE : BackEnd;\
 	}\
-        architecture {\
-            connect fE@self to bE@self;\
-        }\
 	service create() {}\
     }");
     // Parse input and create AST
@@ -56,9 +53,18 @@ BOOST_AUTO_TEST_CASE(componentStage2Test) {
     
     ptr(mem_component) descriptorComponent = bootstrap2->bootstrapDescriptorComponent(descriptorAst);
     
-    TEST_DESCRIPTOR_COMPONENT(descriptorComponent, "HTTPServer", "", 3, 1, 1);
+    TEST_BASE_COMPONENT_COMPONENT(descriptorComponent);
+    
+    TEST_DESCRIPTOR_COMPONENT(descriptorComponent, "HTTPServer", "", 3, 1, 0);
     
     ptr(mem_port) port = descriptorComponent->getServiceByName("new")->invoke();
+    
+    ptr(mem_component) newComponent = port->getOwner();
+    
+    TEST_BASE_COMPONENT_COMPONENT(newComponent);
+    TEST_PORT_COMPONENT(newComponent->getPortByName("req")->getPort(), "req", 0);
+    TEST_PORT_COMPONENT(newComponent->getPortByName("fE")->getPort(), "fE", 0);
+    TEST_PORT_COMPONENT(newComponent->getPortByName("bE")->getPort(), "bE", 0);
 }
 
 BOOST_AUTO_TEST_SUITE_END()

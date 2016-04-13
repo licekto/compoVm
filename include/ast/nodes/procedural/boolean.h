@@ -17,17 +17,17 @@ namespace ast {
 			 *
 			 * Class contains positive or negative 4B integer value.
 			 */
-			class CConstant : public CAbstractPrimaryExpression, public std::enable_shared_from_this<CConstant> {
+			class CBoolean : public CAbstractPrimaryExpression, public std::enable_shared_from_this<CBoolean> {
 			  private:
 				/**< Integer 4B value */
-				u64 m_intValue;
+				bool m_value;
 
 			  public:
 				/**
 				* Parametric constructor with default value
 				* @param val: integer value
 				*/
-				CConstant(u64 val = 0);
+				CBoolean(bool val = false);
 
 				/**
                                 * Accept method for visitor acceptation.
@@ -39,7 +39,7 @@ namespace ast {
 				 * Integer value getter
 				 * @return integer value
 				 */
-				u64 getValue() const;
+				bool getValue() const;
 			};
 
 		}

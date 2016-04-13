@@ -66,7 +66,7 @@ BOOST_AUTO_TEST_CASE(nodesProceduralBinary) {
     
     
     // Check constant
-    ptr(ast_constant) constant = cast(ast_constant)(assignment->getRValue());
+    ptr(ast_constant) constant = cast(ast_constant)(assignment->getRightSide());
     TEST_CONSTANT(constant, 1);
     
     // -------------------------------------------------------------------------
@@ -79,7 +79,7 @@ BOOST_AUTO_TEST_CASE(nodesProceduralBinary) {
     TEST_SYMBOL(symbol, "c");
     
     // Check string literal
-    ptr(ast_string) stringLiteral = cast(ast_string)(assignment->getRValue());
+    ptr(ast_string) stringLiteral = cast(ast_string)(assignment->getRightSide());
     BOOST_CHECK_EQUAL(types::nodeType::STRING_LITERAL, stringLiteral->getNodeType());
     BOOST_CHECK_EQUAL("testString", stringLiteral->getValue());
     
@@ -93,7 +93,7 @@ BOOST_AUTO_TEST_CASE(nodesProceduralBinary) {
     TEST_SYMBOL(symbol, "d");
     
     // Check parens
-    ptr(ast_parens) parens = cast(ast_parens)(assignment->getRValue());
+    ptr(ast_parens) parens = cast(ast_parens)(assignment->getRightSide());
     BOOST_CHECK_EQUAL(types::nodeType::PARENS, parens->getNodeType());
     
     // Check constant
@@ -110,7 +110,7 @@ BOOST_AUTO_TEST_CASE(nodesProceduralBinary) {
     TEST_SYMBOL(symbol, "e");
     
     // Check parens
-    ptr(ast_addition) addition = cast(ast_addition)(assignment->getRValue());
+    ptr(ast_addition) addition = cast(ast_addition)(assignment->getRightSide());
     BOOST_CHECK_EQUAL(types::nodeType::ADDITION_EXPRESSION, addition->getNodeType());
     BOOST_CHECK_EQUAL(types::operatorType::PLUS, addition->getOperator());
     
@@ -132,7 +132,7 @@ BOOST_AUTO_TEST_CASE(nodesProceduralBinary) {
     TEST_SYMBOL(symbol, "f");
     
     // Check parens
-    ptr(ast_subtraction) subtraction = cast(ast_subtraction)(assignment->getRValue());
+    ptr(ast_subtraction) subtraction = cast(ast_subtraction)(assignment->getRightSide());
     BOOST_CHECK_EQUAL(types::nodeType::SUBTRACTION_EXPRESSION, subtraction->getNodeType());
     BOOST_CHECK_EQUAL(types::operatorType::MINUS, subtraction->getOperator());
     
@@ -155,7 +155,7 @@ BOOST_AUTO_TEST_CASE(nodesProceduralBinary) {
     TEST_SYMBOL(symbol, "g");
     
     // Check parens
-    ptr(ast_multiplication) multiplication = cast(ast_multiplication)(assignment->getRValue());
+    ptr(ast_multiplication) multiplication = cast(ast_multiplication)(assignment->getRightSide());
     BOOST_CHECK_EQUAL(types::nodeType::MULTIPLICATION_EXPRESSION, multiplication->getNodeType());
     BOOST_CHECK_EQUAL(types::operatorType::TIMES, multiplication->getOperator());
     
@@ -177,7 +177,7 @@ BOOST_AUTO_TEST_CASE(nodesProceduralBinary) {
     TEST_SYMBOL(symbol, "h");
     
     // Check parens
-    ptr(ast_division) division = cast(ast_division)(assignment->getRValue());
+    ptr(ast_division) division = cast(ast_division)(assignment->getRightSide());
     BOOST_CHECK_EQUAL(types::nodeType::DIVISION_EXPRESSION, division->getNodeType());
     BOOST_CHECK_EQUAL(types::operatorType::DIVISION, division->getOperator());
     
@@ -199,7 +199,7 @@ BOOST_AUTO_TEST_CASE(nodesProceduralBinary) {
     TEST_SYMBOL(symbol, "i");
     
     // Check parens
-    ptr(ast_equality) equality = cast(ast_equality)(assignment->getRValue());
+    ptr(ast_equality) equality = cast(ast_equality)(assignment->getRightSide());
     BOOST_CHECK_EQUAL(types::nodeType::EQUALITY_EXPRESSION, equality->getNodeType());
     BOOST_CHECK_EQUAL(types::operatorType::EQUALITY, equality->getOperator());
     
@@ -221,7 +221,7 @@ BOOST_AUTO_TEST_CASE(nodesProceduralBinary) {
     TEST_SYMBOL(symbol, "j");
     
     // Check parens
-    ptr(ast_nonequality) nonEquality = cast(ast_nonequality)(assignment->getRValue());
+    ptr(ast_nonequality) nonEquality = cast(ast_nonequality)(assignment->getRightSide());
     BOOST_CHECK_EQUAL(types::nodeType::NON_EQUALITY_EXPRESSION, nonEquality->getNodeType());
     BOOST_CHECK_EQUAL(types::operatorType::NON_EQUALITY, nonEquality->getOperator());
     
@@ -243,7 +243,7 @@ BOOST_AUTO_TEST_CASE(nodesProceduralBinary) {
     TEST_SYMBOL(symbol, "k");
     
     // Check parens
-    ptr(ast_or) logicalOr = cast(ast_or)(assignment->getRValue());
+    ptr(ast_or) logicalOr = cast(ast_or)(assignment->getRightSide());
     BOOST_CHECK_EQUAL(types::nodeType::LOGICAL_OR_EXPRESSION, logicalOr->getNodeType());
     BOOST_CHECK_EQUAL(types::operatorType::LOGICAL_OR, logicalOr->getOperator());
     
@@ -265,7 +265,7 @@ BOOST_AUTO_TEST_CASE(nodesProceduralBinary) {
     TEST_SYMBOL(symbol, "l");
     
     // Check parens
-    ptr(ast_and) logicalAnd = cast(ast_and)(assignment->getRValue());
+    ptr(ast_and) logicalAnd = cast(ast_and)(assignment->getRightSide());
     BOOST_CHECK_EQUAL(types::nodeType::LOGICAL_AND_EXPRESSION, logicalAnd->getNodeType());
     BOOST_CHECK_EQUAL(types::operatorType::LOGICAL_AND, logicalAnd->getOperator());
     
@@ -287,7 +287,7 @@ BOOST_AUTO_TEST_CASE(nodesProceduralBinary) {
     TEST_SYMBOL(symbol, "m");
     
     // Check parens
-    ptr(ast_less) less = cast(ast_less)(assignment->getRValue());
+    ptr(ast_less) less = cast(ast_less)(assignment->getRightSide());
     BOOST_CHECK_EQUAL(types::nodeType::LESS_EXPRESSION, less->getNodeType());
     BOOST_CHECK_EQUAL(types::operatorType::LESS, less->getOperator());
     
@@ -309,7 +309,7 @@ BOOST_AUTO_TEST_CASE(nodesProceduralBinary) {
     TEST_SYMBOL(symbol, "n");
     
     // Check parens
-    ptr(ast_greater) greater = cast(ast_greater)(assignment->getRValue());
+    ptr(ast_greater) greater = cast(ast_greater)(assignment->getRightSide());
     BOOST_CHECK_EQUAL(types::nodeType::GREATER_EXPRESSION, greater->getNodeType());
     BOOST_CHECK_EQUAL(types::operatorType::GREATER, greater->getOperator());
     
@@ -331,7 +331,7 @@ BOOST_AUTO_TEST_CASE(nodesProceduralBinary) {
     TEST_SYMBOL(symbol, "o");
     
     // Check parens
-    ptr(ast_lessorequal) lessOrEqual = cast(ast_lessorequal)(assignment->getRValue());
+    ptr(ast_lessorequal) lessOrEqual = cast(ast_lessorequal)(assignment->getRightSide());
     BOOST_CHECK_EQUAL(types::nodeType::LESS_OR_EQUAL_EXPRESSION, lessOrEqual->getNodeType());
     BOOST_CHECK_EQUAL(types::operatorType::LESS_OR_EQUAL, lessOrEqual->getOperator());
     
@@ -353,7 +353,7 @@ BOOST_AUTO_TEST_CASE(nodesProceduralBinary) {
     TEST_SYMBOL(symbol, "p");
     
     // Check parens
-    ptr(ast_greaterorequal) greaterOrEqual = cast(ast_greaterorequal)(assignment->getRValue());
+    ptr(ast_greaterorequal) greaterOrEqual = cast(ast_greaterorequal)(assignment->getRightSide());
     BOOST_CHECK_EQUAL(types::nodeType::GREATER_OR_EQUAL_EXPRESSION, greaterOrEqual->getNodeType());
     BOOST_CHECK_EQUAL(types::operatorType::GREATER_OR_EQUAL, greaterOrEqual->getOperator());
     
@@ -451,7 +451,7 @@ BOOST_AUTO_TEST_CASE(nodesForStatement) {
     TEST_SYMBOL(var, "i");
     
     // Check constant
-    ptr(ast_constant) constant = cast(ast_constant)(init->getRValue());
+    ptr(ast_constant) constant = cast(ast_constant)(init->getRightSide());
     TEST_CONSTANT(constant, 1);
     
     // Check condition
@@ -475,7 +475,7 @@ BOOST_AUTO_TEST_CASE(nodesForStatement) {
     TEST_SYMBOL(var, "i");
     
     // Check right-hand side
-    ptr(ast_addition) addition = cast(ast_addition)(increment->getRValue());
+    ptr(ast_addition) addition = cast(ast_addition)(increment->getRightSide());
     var = cast(ast_symbol)(addition->getOperand1());
     TEST_SYMBOL(var, "i");
     constant = cast(ast_constant)(addition->getOperand2());

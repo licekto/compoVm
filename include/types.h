@@ -48,6 +48,7 @@ namespace types {
 		WHILE,
 		IF,
 		CONSTANT,
+                BOOLEAN,
 		STRING_LITERAL,
 		PARENS,
 		ASSIGNMENT_EXPRESSION,

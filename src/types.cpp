@@ -26,7 +26,7 @@ namespace types {
 		{nodeType::FOR, "for"},
 		{nodeType::WHILE, "while"},
 		{nodeType::IF, "if"},
-		{nodeType::CONSTANT, "constraint"},
+		{nodeType::CONSTANT, "constant"},
 		{nodeType::STRING_LITERAL, "string literal"},
 		{nodeType::PARENS, "parens"},
 		{nodeType::ASSIGNMENT_EXPRESSION, "assignment"},
@@ -46,6 +46,7 @@ namespace types {
 		{nodeType::RETURN, "return"},
 		{nodeType::BREAK, "break"},
 		{nodeType::CONTINUE, "continue"},
+                {nodeType::BOOLEAN, "boolean"},
 	};
 
 	std::string typeName(nodeType type) {

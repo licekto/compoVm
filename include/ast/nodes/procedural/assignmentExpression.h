@@ -48,7 +48,7 @@ namespace ast {
 				* Right-hand side expression getter
 				* @return Expression node
 				*/
-				std::shared_ptr<CNode> getRValue() const;
+				std::shared_ptr<CNode> getRightSide() const;
 			};
 
 		}

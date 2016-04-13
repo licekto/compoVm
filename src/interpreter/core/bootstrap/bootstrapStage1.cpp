@@ -11,7 +11,11 @@ namespace interpreter {
 				: m_coreModules(coreModules),
 				  m_interpreter(interpreter) {
 				m_coreModules->loadCoreModules();
-			}
+                        }
+
+                        void CBootstrapStage1::setInterpreter(ptr(core::CInterpreter) interpreter) {
+                                m_interpreter = interpreter;
+                        }
 
 			void CBootstrapStage1::addPrimitiveServices(ptr(mem_component) component, ptr(ast_descriptor) descriptor,
 			        std::map<std::string, ptr(mem_primitiveservice)>& servicesNames) {

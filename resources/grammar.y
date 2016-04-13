@@ -55,6 +55,8 @@
 %token LE_OP
 %token AND_OP
 %token OR_OP
+%token TRUE
+%token FALSE
 %token BREAK
 %token CONTINUE
 %token END
@@ -89,6 +91,14 @@ primary_expression
                 |   service_invocation
                     {
                         $$ = $1;
+                    }
+                |   TRUE
+                    {
+                        $$ = new_ptr(ast_boolean)(true);
+                    }
+                |   FALSE
+                    {
+                        $$ = new_ptr(ast_boolean)(false);
                     }
                 ;
 

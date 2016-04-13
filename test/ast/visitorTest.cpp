@@ -49,6 +49,7 @@ class testVisitor : public ast::visitors::CAbstractVisitor, public std::enable_s
         virtual void visit(ptr(ast_break)  /* node */) {nodes += " CBreakStatement";}
         virtual void visit(ptr(ast_compound)  /* node */) {nodes += " CCompoundBody";}
         virtual void visit(ptr(ast_constant)  /* node */) {nodes += " CConstant";}
+        virtual void visit(ptr(ast_boolean)  /* node */) {nodes += " CBoolean";}
         virtual void visit(ptr(ast_continue)  /* node */) {nodes += " CContinueStatement";}
         virtual void visit(ptr(ast_division)  /* node */) {nodes += " CDivisionExpression";}
         virtual void visit(ptr(ast_equality)  /* node */) {nodes += " CEqualityExpression";}
