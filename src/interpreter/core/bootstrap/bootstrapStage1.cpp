@@ -356,7 +356,7 @@ namespace interpreter {
 					if (contextComponent.use_count()) {
 						ptr(mem_string) code = cast(mem_string)(contextComponent->getPortByName("code")->getConnectedPortAt(0)->getOwner());
 
-						m_interpreter->execService(code->getValue());
+						m_interpreter->execServiceCode(code->getValue());
 					}
 					return nullptr;
 				};

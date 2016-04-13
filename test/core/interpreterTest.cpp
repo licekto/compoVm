@@ -58,15 +58,20 @@ BOOST_AUTO_TEST_CASE(basicTest) {
     table->clear();
 }
 
-BOOST_AUTO_TEST_CASE(variablesTest) {
+BOOST_AUTO_TEST_CASE(instantiationTest) {
     bootstrap1->setInterpreter(interpreter);
     // Testing input
     std::stringstream input;
     input.str(
-   "descriptor CompoContainer {\
+   "descriptor Inst {\
+        service test() {\
+        }\
+    }\
+    descriptor CompoContainer {\
         service main() {\
-            |a|\
-            a := 1;\
+            |i|\
+            i := Inst.new();\
+            i.test();\
         }\
     }");
     
@@ -82,7 +87,7 @@ BOOST_AUTO_TEST_CASE(variablesTest) {
     table->clear();
 }
 
-BOOST_AUTO_TEST_CASE(proceduralTest) {
+BOOST_AUTO_TEST_CASE(binaryOperatorsTest) {
     bootstrap1->setInterpreter(interpreter);
     // Testing input
     std::stringstream input;
@@ -90,7 +95,6 @@ BOOST_AUTO_TEST_CASE(proceduralTest) {
    "descriptor CompoContainer {\
         service main() {\
             |a|\
-            a := 1;\
             a := 1 + 1;\
             a := 1 - 1;\
             a := 1 * 1;\

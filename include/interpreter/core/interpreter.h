@@ -61,6 +61,8 @@ namespace interpreter {
                         ptr(mem_port) execLogicalOp(ptr(ast_binary) expr, type_operator op);
                         
                         ptr(mem_port) execRelationalOp(ptr(ast_binary) expr, type_operator op);
+                        
+                        ptr(mem_port) execServiceInvocation(ptr(ast_serviceinvocation) node);
 
 			ptr(mem_port) exec(ptr(ast_node));
 
@@ -68,7 +70,7 @@ namespace interpreter {
 
 			CInterpreter(ptr(ParserWrapper) parser = nullptr, ptr(bootstrap::CBootstrapStage2) bootstrap = nullptr, ptr(memory::memspace::CDescriptorTable) table = nullptr);
 
-			ptr(mem_port) execService(const std::string& code);
+			ptr(mem_port) execServiceCode(const std::string& code);
 
 			void run(ptr(ast_program) ast);
 		};

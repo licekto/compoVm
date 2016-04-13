@@ -45,8 +45,10 @@ namespace interpreter {
                 }
 
                 void CInterpreter::execAssignment(ptr(ast_assignment) node) {
-                    ptr(mem_port) port = m_contextStack.top()->getVariable(node->getVariable()->getStringValue());
+                    std::string variable = node->getVariable()->getStringValue();
+                    ptr(mem_port) port = m_contextStack.top()->getVariable(variable);
                     port = exec(node->getRightSide());
+                    m_contextStack.top()->setVariable(variable, port);
                 }
 
                 ptr(mem_port) CInterpreter::execArithmeticOp(ptr(ast_binary) expr, type_operator op) {
@@ -123,7 +125,20 @@ namespace interpreter {
                     }
                     return m_bootstrap->getBoolComponent(res);
                 }
-                
+
+                ptr(mem_port) CInterpreter::execServiceInvocation(ptr(ast_serviceinvocation) node) {
+                    std::string receiver = node->getReceiverName()->getStringValue();
+                    ptr(mem_port) port;
+                    if (m_contextStack.top()->variableFound(receiver)) {
+                        port = m_contextStack.top()->getVariable(receiver);
+                    }
+                    else {
+                        port = m_descriptorTable->getDescriptor(receiver)->getPortByName("default");
+                    }
+                    
+                    return port->getOwner()->getServiceByName(node->getSelectorName()->getStringValue())->invoke();
+                }
+
 		ptr(mem_port)  CInterpreter::exec(ptr(ast_node) node) {
 			switch (node->getNodeType()) {
 			case type_node::PROGRAM : {
@@ -138,6 +153,11 @@ namespace interpreter {
 				execCompound(cast(ast_compound)(node));
 				break;
 			}
+                        case type_node::SERVICE_INVOCATION : {
+				return execServiceInvocation(cast(ast_serviceinvocation)(node));
+				break;
+			}
+                        /*------------------ Procedural ----------------------*/
                         case type_node::ASSIGNMENT_EXPRESSION : {
 				execAssignment(cast(ast_assignment)(node));
 				break;
@@ -198,6 +218,7 @@ namespace interpreter {
 				return execArithmeticOp(cast(ast_greaterorequal)(node), type_operator::GREATER_OR_EQUAL);
 				break;
 			}
+                        /*------------------ Procedural ----------------------*/
 			default : {
 				throw exceptions::runtime::CUnknownAstNodeTypeException(typeName(node->getNodeType()));
 			}
@@ -205,7 +226,7 @@ namespace interpreter {
                         return nullptr;
 		}
 
-		ptr(mem_port)  CInterpreter::execService(const std::string& code) {
+		ptr(mem_port)  CInterpreter::execServiceCode(const std::string& code) {
 			std::stringstream input;
 			std::string serviceCode = code;
 			input.str(serviceCode);
