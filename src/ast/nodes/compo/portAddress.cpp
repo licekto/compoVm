@@ -10,6 +10,10 @@ namespace ast {
 			                           std::shared_ptr<ast::nodes::CNode> component)
 				:   CNode(types::nodeType::PORT_ADDRESS),
 				    m_portName(portName), m_component(component) {
+                                    
+                            if (!m_component.use_count()) {
+                                m_component = std::make_shared<nodes::procedural::CSymbol>("self");
+                            }
 			}
 
 			void CPortAddress::accept(std::shared_ptr<visitors::CAbstractVisitor> visitor) {

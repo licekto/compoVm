@@ -222,6 +222,7 @@ BOOST_AUTO_TEST_CASE(compoArchitecture) {
     input.str(
     "descriptor test {\
 	architecture {\
+            connect logger to req;\
             connect logger@analyzer to logging@logger;\
             connect outReqHa@analyzer to reqHa@handlers[i];\
             connect logger@&analyzer to logging@&logger;\
@@ -239,7 +240,7 @@ BOOST_AUTO_TEST_CASE(compoArchitecture) {
     
     // Check architecture
     ptr(ast_architecture) architecture = cast(ast_architecture)(descriptor->getArchitecture());
-    TEST_ARCHITECTURE(architecture, 5);
+    TEST_ARCHITECTURE(architecture, 6);
     
     // Check bind node
     ptr(ast_delegation) delegation = cast(ast_delegation)(architecture->getBodyNodeAt(0));
@@ -303,6 +304,18 @@ BOOST_AUTO_TEST_CASE(compoArchitecture) {
     // Check port address
     portAddress = cast(ast_portaddress)(connection->getDestinationPortIdentification());
     TEST_PORT_ADDRES_IDENTIFIER(portAddress, "logging", "logger");
+    
+    // Check bind node
+    connection = cast(ast_connection)(architecture->getBodyNodeAt(5));
+    TEST_CONNECTION(connection);
+    
+    // Check port address
+    portAddress = cast(ast_portaddress)(connection->getSourcePortIdentification());
+    TEST_PORT_ADDRES_IDENTIFIER(portAddress, "logger", "self");
+    
+    // Check port address
+    portAddress = cast(ast_portaddress)(connection->getDestinationPortIdentification());
+    TEST_PORT_ADDRES_IDENTIFIER(portAddress, "req", "self");
     
     // Clear AST for next test
     parser.clearAll();

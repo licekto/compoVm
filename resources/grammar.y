@@ -686,6 +686,10 @@ port_address
                     {
                         $$ = new_ptr(ast_portaddress)(cast(ast_symbol)($1), $3);
                     }
+                |   IDENTIFIER
+                    {
+                        $$ = new_ptr(ast_portaddress)(cast(ast_symbol)($1));
+                    }
                 ;
 
 component_identifier
