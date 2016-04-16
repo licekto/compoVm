@@ -13,6 +13,7 @@
 #include "exceptions/runtime/mainServiceMissingException.h"
 #include "exceptions/runtime/unknownAstNodeTypeException.h"
 #include "variablesTable.h"
+#include "context.h"
 
 /**
  *  \addtogroup interpreter
@@ -46,7 +47,7 @@ namespace interpreter {
 
 			ptr(memory::memspace::CDescriptorTable) m_descriptorTable;
                         
-                        std::stack<ptr(CVariablesTable)> m_contextStack;
+                        ptr(CContext) m_context;
 
 			void execProgram(ptr(ast_program) node);
 
@@ -68,7 +69,10 @@ namespace interpreter {
 
 		  public:
 
-			CInterpreter(ptr(ParserWrapper) parser = nullptr, ptr(bootstrap::CBootstrapStage2) bootstrap = nullptr, ptr(memory::memspace::CDescriptorTable) table = nullptr);
+			CInterpreter(ptr(ParserWrapper) parser = nullptr,
+                                     ptr(bootstrap::CBootstrapStage2) bootstrap = nullptr,
+                                     ptr(memory::memspace::CDescriptorTable) table = nullptr,
+                                     ptr(CContext) context = nullptr);
 
 			ptr(mem_port) execServiceCode(const std::string& code);
 

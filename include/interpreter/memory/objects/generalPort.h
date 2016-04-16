@@ -27,7 +27,7 @@ namespace interpreter {
 
 				types::visibilityType m_visibility;
 
-				types::roleType m_type;
+				types::roleType m_role;
 
 				bool m_primitive;
                                 
@@ -71,6 +71,8 @@ namespace interpreter {
                                 size_t getConnectedPrimitiveServicesNumber() const;
                                 
                                 ptr(CGeneralService) getPrimitiveServiceAt(size_t index);
+                                
+                                ptr(CGeneralPort) invokeByName(const std::string& selector, u64 index);
 			};
 		}
 	}

@@ -25,17 +25,20 @@
 
 BOOST_AUTO_TEST_SUITE(interpreterTest)
 
-
-// Global parser for testing purposes
 ptr(ParserWrapper) parser = new_ptr(ParserWrapper)(new_ptr(Lexer)(), new_ptr(ast::semantic::CSyntaxDescriptorTable)());
-ptr(core_modules) coreModules = new_ptr(core_modules)();
-ptr(core_bootstrap1) bootstrap1 = new_ptr(core_bootstrap1)(new_ptr(interpreter::core::CCoreModules)(parser));
-ptr(core_bootstrap2) bootstrap2 = new_ptr(core_bootstrap2)(bootstrap1);
 ptr(interpreter::memory::memspace::CDescriptorTable) table = new_ptr(interpreter::memory::memspace::CDescriptorTable)();
-ptr(core_interpreter) interpreter = new_ptr(core_interpreter)(parser, bootstrap2, table);
+
+ptr(core_interpreter) initInterpreter() {
+    ptr(core_bootstrap1) bootstrap1 = new_ptr(core_bootstrap1)(new_ptr(interpreter::core::CCoreModules)(parser));
+    ptr(core_bootstrap2) bootstrap2 = new_ptr(core_bootstrap2)(bootstrap1);
+    ptr(interpreter::core::CContext) context = new_ptr(interpreter::core::CContext)();
+    ptr(core_interpreter) interpreter = new_ptr(core_interpreter)(parser, bootstrap2, table, context);
+    bootstrap1->setInterpreter(interpreter);
+    return interpreter;
+}
 
 BOOST_AUTO_TEST_CASE(basicTest) {
-    bootstrap1->setInterpreter(interpreter);
+    ptr(core_interpreter) interpreter = initInterpreter();
     // Testing input
     std::stringstream input;
     input.str(
@@ -59,7 +62,7 @@ BOOST_AUTO_TEST_CASE(basicTest) {
 }
 
 BOOST_AUTO_TEST_CASE(instantiationTest) {
-    bootstrap1->setInterpreter(interpreter);
+    ptr(core_interpreter) interpreter = initInterpreter();
     // Testing input
     std::stringstream input;
     input.str(
@@ -88,7 +91,7 @@ BOOST_AUTO_TEST_CASE(instantiationTest) {
 }
 
 BOOST_AUTO_TEST_CASE(binaryOperatorsTest) {
-    bootstrap1->setInterpreter(interpreter);
+    ptr(core_interpreter) interpreter = initInterpreter();
     // Testing input
     std::stringstream input;
     input.str(
@@ -123,6 +126,8 @@ BOOST_AUTO_TEST_CASE(binaryOperatorsTest) {
 }
 
 BOOST_AUTO_TEST_CASE(calcTest) {
+    ptr(core_interpreter) interpreter = initInterpreter();
+    
     // Testing input
     std::stringstream input;
     input.str(

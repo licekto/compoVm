@@ -735,6 +735,18 @@ service_invocation
                                                             cast(ast_servicesignature)($3)->getNameSymbol(),
                                                             $3);
                     }
+                |   IDENTIFIER '[' index ']' '.' service_signature_call
+                    {
+                        $$ = new_ptr(ast_serviceinvocation)(cast(ast_symbol)($1),
+                                                            cast(ast_servicesignature)($6)->getNameSymbol(),
+                                                            $6,
+                                                            $3);
+                    }
+                ;
+
+index
+                :   IDENTIFIER
+                |   CONSTANT
                 ;
 
 dereference_literal

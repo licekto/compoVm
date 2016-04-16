@@ -8,11 +8,13 @@ namespace ast {
 
 			CServiceInvocation::CServiceInvocation(std::shared_ptr<ast::nodes::procedural::CSymbol> receiver,
 			                                       std::shared_ptr<ast::nodes::procedural::CSymbol> selector,
-			                                       std::shared_ptr<ast::nodes::CNode> parameters)
+			                                       std::shared_ptr<ast::nodes::CNode> parameters,
+                                                               std::shared_ptr<ast::nodes::CNode> index)
 				:   CNode(types::nodeType::SERVICE_INVOCATION),
 				    m_receiver(receiver),
 				    m_selector(selector),
-				    m_parameters(parameters) {
+				    m_parameters(parameters),
+                                    m_index(index) {
 			}
 
 			void CServiceInvocation::accept(std::shared_ptr<visitors::CAbstractVisitor> visitor) {
@@ -30,7 +32,12 @@ namespace ast {
 
 			std::shared_ptr<ast::nodes::CNode> CServiceInvocation::getParameters() const {
 				return m_parameters;
-			}
+                        }
+
+                        std::shared_ptr<CNode> CServiceInvocation::getIndex() const {
+                                return m_index;
+                        }
+
 		}
 	}
 }

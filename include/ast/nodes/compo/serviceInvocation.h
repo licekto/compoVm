@@ -23,7 +23,10 @@ namespace ast {
 
 				/**< Parameters of service invocation. Only CServiceSignature or CServiceInvocation nodes allowed. */
 				std::shared_ptr<CNode> m_parameters;
-
+                                
+                                /**< Index for collection port call */
+                                std::shared_ptr<CNode> m_index;
+                                
 			  public:
 				/**
 				* Parametric constructor with default value
@@ -32,12 +35,13 @@ namespace ast {
 				*/
 				CServiceInvocation(std::shared_ptr<procedural::CSymbol> receiver = nullptr,
 				                   std::shared_ptr<procedural::CSymbol> selector = nullptr,
-				                   std::shared_ptr<CNode> parameters = nullptr);
+				                   std::shared_ptr<CNode> parameters = nullptr,
+                                                   std::shared_ptr<CNode> index = nullptr);
 
 				/**
-				                * Accept method for visitor acceptation.
-				                * @param visitor: Pointer to abstract visitor.
-				                */
+                                * Accept method for visitor acceptation.
+                                * @param visitor: Pointer to abstract visitor.
+                                */
 				virtual void accept(std::shared_ptr<visitors::CAbstractVisitor> visitor);
 
 				/**
@@ -48,15 +52,17 @@ namespace ast {
 
 				/**
 				* Signatures getter
-				                * @return shared_ptr to CServiceSignature
-				                */
+                                * @return shared_ptr to CServiceSignature
+                                */
 				std::shared_ptr<procedural::CSymbol> getSelectorName() const;
 
 				/**
 				* Index expression getter
-				                * @return shared_ptr to CAbstractExpression
-				                */
+                                * @return shared_ptr to CAbstractExpression
+                                */
 				std::shared_ptr<CNode> getParameters() const;
+                                
+                                std::shared_ptr<CNode> getIndex() const;
 			};
 
 		}

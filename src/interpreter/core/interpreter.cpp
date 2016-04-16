@@ -6,10 +6,14 @@ namespace interpreter {
 
 	namespace core {
 
-		CInterpreter::CInterpreter(ptr(ParserWrapper) parser, ptr(bootstrap::CBootstrapStage2) bootstrap, ptr(memory::memspace::CDescriptorTable) table)
+		CInterpreter::CInterpreter(ptr(ParserWrapper) parser,
+                                           ptr(bootstrap::CBootstrapStage2) bootstrap,
+                                           ptr(memory::memspace::CDescriptorTable) table,
+                                           ptr(CContext) context)
 			: m_parser(parser),
 			  m_bootstrap(bootstrap),
-			  m_descriptorTable(table) {
+			  m_descriptorTable(table),
+                          m_context(context) {
 		}
 
 		void CInterpreter::execProgram(ptr(ast_program) node) {
@@ -31,24 +35,20 @@ namespace interpreter {
                 }
 
                 void CInterpreter::execCompound(ptr(ast_compound) node) {
-                    ptr(CVariablesTable) context = new_ptr(CVariablesTable)();
-                    for (size_t i = 0; i < node->getTemporariesSize(); ++i) {
-                        context->addVariable(node->getTemporaryAt(i)->getStringValue());
-                    }
-                    m_contextStack.push(context);
+                    m_context->pushContext(node);
                     
                     for (size_t i = 0; i < node->getBodySize(); ++i) {
                         exec(node->getBodyNodeAt(i));
                     }
                     
-                    m_contextStack.pop();
+                    m_context->popContext();
                 }
 
                 void CInterpreter::execAssignment(ptr(ast_assignment) node) {
                     std::string variable = node->getVariable()->getStringValue();
-                    ptr(mem_port) port = m_contextStack.top()->getVariable(variable);
+                    ptr(mem_port) port = m_context->getVariable(variable);
                     port = exec(node->getRightSide());
-                    m_contextStack.top()->setVariable(variable, port);
+                    m_context->setVariable(variable, port);
                 }
 
                 ptr(mem_port) CInterpreter::execArithmeticOp(ptr(ast_binary) expr, type_operator op) {
@@ -128,15 +128,24 @@ namespace interpreter {
 
                 ptr(mem_port) CInterpreter::execServiceInvocation(ptr(ast_serviceinvocation) node) {
                     std::string receiver = node->getReceiverName()->getStringValue();
+                    std::string selector = node->getSelectorName()->getStringValue();
+                    u64 index = 0;
+                    if (node->getIndex().use_count() && node->getIndex()->getNodeType() == type_node::SYMBOL) {
+                        std::string var = cast(ast_symbol)(node->getIndex())->getStringValue();
+                        index = cast(mem_uint)(m_context->getVariable(var)->getOwner())->getValue();
+                    }
+                    else if (node->getIndex().use_count() && node->getIndex()->getNodeType() == type_node::CONSTANT) {
+                        index = cast(ast_constant)(node->getIndex())->getValue();
+                    }
                     ptr(mem_port) port;
-                    if (m_contextStack.top()->variableFound(receiver)) {
-                        port = m_contextStack.top()->getVariable(receiver);
+                    if (m_context->getTopContext()->variableFound(receiver)) {
+                        port = m_context->getVariable(receiver);
                     }
                     else {
                         port = m_descriptorTable->getDescriptor(receiver)->getPortByName("default");
                     }
                     
-                    return port->getOwner()->getServiceByName(node->getSelectorName()->getStringValue())->invoke();
+                    return port->invokeByName(selector, index);
                 }
 
 		ptr(mem_port)  CInterpreter::exec(ptr(ast_node) node) {

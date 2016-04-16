@@ -9,12 +9,12 @@ namespace interpreter {
 		namespace objects {
 
 			CGeneralPort::CGeneralPort(ptr(CComponent) port, types::visibilityType v, types::roleType t)
-				: m_port(port), m_primitivePort(nullptr), m_visibility(v), m_type(t), m_primitive(false) {
+				: m_port(port), m_primitivePort(nullptr), m_visibility(v), m_role(t), m_primitive(false) {
 
 			}
 
 			CGeneralPort::CGeneralPort(ptr(primitives::CPrimitivePort) port, types::visibilityType v, types::roleType t)
-				: m_port(nullptr), m_primitivePort(port), m_visibility(v), m_type(t), m_primitive(true) {
+				: m_port(nullptr), m_primitivePort(port), m_visibility(v), m_role(t), m_primitive(true) {
 
 			}
 
@@ -23,7 +23,7 @@ namespace interpreter {
 			}
 
 			types::roleType CGeneralPort::getRole() const {
-				return m_type;
+				return m_role;
 			}
 
 			bool CGeneralPort::isPrimitive() const {
@@ -109,6 +109,42 @@ namespace interpreter {
 
                         ptr(CGeneralService) CGeneralPort::getPrimitiveServiceAt(size_t index) {
                                 return m_connectedPrimitiveServices.at(index);
+                        }
+
+                        ptr(CGeneralPort) CGeneralPort::invokeByName(const std::string& selector, u64 index) {
+                            if (m_primitive) {
+                                return m_primitivePort->getConnectedServiceByName(selector)->invoke();
+                            }
+                            else {
+                                std::string type = cast(objects::values::CStringComponent)
+                                        (m_port->getPortByName("interfaceDescription")->getConnectedPortAt(0)
+                                               ->getOwner()->getPortByName("type")->getConnectedPortAt(0)->getOwner())->getValue();
+                                if (type == PORT_TYPE_SIGNATURES) {
+                                    bool found = false;
+                                    std::string definedSelector = "";
+                                    for (size_t i = 0; i < m_port->getPortByName("signatures")->getConnectedPortsNumber(); ++i) {
+                                        definedSelector = cast(objects::values::CStringComponent)(m_port->getPortByName("signatures")->getConnectedPortAt(i)->getOwner())->getValue();
+                                        if (definedSelector == selector) {
+                                            found = true;
+                                            break;
+                                        }
+                                    }
+                                    if (!found) {
+                                        // throw
+                                    }
+                                    return getOwner()->getSelfServiceByName(selector)->invoke();
+                                }
+                                else if (type == PORT_TYPE_UNIVERSAL) {
+                                    return getOwner()->getServiceByName(selector)->invoke();
+                                }
+                                else if (type == PORT_TYPE_NAMED) {
+                                    return m_port->getPortByName("connectedPorts")->getConnectedPortAt(index)->getOwner()->getServiceByName(selector)->invoke();
+                                }
+                                else if (type == PORT_TYPE_INJECTED) {
+                                    // throw
+                                }
+                            }
+                            // throw
                         }
 
 		}

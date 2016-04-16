@@ -426,6 +426,40 @@ BOOST_AUTO_TEST_CASE(compoDescriptor) {
     parser.clearAll();
 }
 
+BOOST_AUTO_TEST_CASE(compoCollectionServiceCall) {
+    // Testing input
+    std::stringstream input;
+    input.str(
+    "descriptor Test{\
+        service test() {\
+            fE[i].call();\
+            bE[2].call();\
+        }\
+    }");
+    // Parse input and create AST
+    parser.parseAll(input);
+    
+    // Check descriptor
+    ptr(ast_descriptor) descriptor = cast(ast_descriptor)(parser.getRootNode()->getNodeAt(0));
+    TEST_DESCRIPTOR(descriptor, "Test", "", 0, 1, 0);
+    TEST_SERVICE(cast(ast_service)(descriptor->getServiceAt(0)), "test", 0, 2, 0);
+    
+    ptr(ast_serviceinvocation) inv = cast(ast_serviceinvocation)(descriptor->getServiceAt(0)->getBodyNodeAt(0));
+    BOOST_CHECK_EQUAL(inv->getNodeType(), type_node::SERVICE_INVOCATION);
+    BOOST_CHECK_EQUAL(inv->getReceiverName()->getStringValue(), "fE");
+    BOOST_CHECK_EQUAL(inv->getSelectorName()->getStringValue(), "call");
+    BOOST_CHECK_EQUAL(cast(ast_symbol)(inv->getIndex())->getStringValue(), "i");
+    
+    inv = cast(ast_serviceinvocation)(descriptor->getServiceAt(0)->getBodyNodeAt(1));
+    BOOST_CHECK_EQUAL(inv->getNodeType(), type_node::SERVICE_INVOCATION);
+    BOOST_CHECK_EQUAL(inv->getReceiverName()->getStringValue(), "bE");
+    BOOST_CHECK_EQUAL(inv->getSelectorName()->getStringValue(), "call");
+    BOOST_CHECK_EQUAL(cast(ast_constant)(inv->getIndex())->getValue(), 2);
+    
+    // Clear AST for next test
+    parser.clearAll();
+}
+
 BOOST_AUTO_TEST_CASE(compoCollectionPort) {
     // Testing input
     std::stringstream input;
