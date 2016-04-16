@@ -122,7 +122,7 @@ namespace interpreter {
                                 return newService;
                         }
 
-                        ptr(mem_port) CBootstrapStage2::getUintComponent(u64 value) {
+                        ptr(mem_port) CBootstrapStage2::getIntComponent(i64 value) {
                             return m_bootstrapStage1->bootstrapUIntValue(value)->getDefaultPort();
                         }
 
@@ -221,7 +221,7 @@ namespace interpreter {
                                                         // throw
                                                         return nullptr;
                                                     }
-                                                    u64 index = cast(mem_uint)(connection->getPortByName(dstSrc + "ComponentIndex")->getConnectedPortAt(0)->getOwner())->getValue();
+                                                    u64 index = cast(mem_int)(connection->getPortByName(dstSrc + "ComponentIndex")->getConnectedPortAt(0)->getOwner())->getValue();
                                                     port = newComponent->getPortByName(componentName)->getConnectedPortAt(index)->getOwner()->getBottomChild()->getPortByName(portName);
                                                 }
                                                 else if (type == CONNECTION_INVOCATION) {

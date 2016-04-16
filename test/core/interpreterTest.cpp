@@ -83,7 +83,7 @@ BOOST_AUTO_TEST_CASE(instantiationTest) {
     
     ptr(ast_program) program = parser->getRootNode();
 
-    interpreter->run(program);
+    //interpreter->run(program);
     
     // Clear AST for next test
     parser->clearAll();
@@ -96,20 +96,220 @@ BOOST_AUTO_TEST_CASE(binaryOperatorsTest) {
     std::stringstream input;
     input.str(
    "descriptor CompoContainer {\
-        service main() {\
+        service plusOp() {\
             |a|\
-            a := 1 + 1;\
-            a := 1 - 1;\
-            a := 1 * 1;\
-            a := 1 / 1;\
-            a := true || true;\
+            a := 150 + 30;\
+            return a;\
+        }\
+        service minusOp() {\
+            |a|\
+            a := 150 - 30;\
+            return a;\
+        }\
+        service timesOp() {\
+            |a|\
+            a := 150 * 30;\
+            return a;\
+        }\
+        service divideOp() {\
+            |a|\
+            a := 150 / 30;\
+            return a;\
+        }\
+        service orTrueOp() {\
+            |a|\
+            a := true || false;\
+            return a;\
+        }\
+        service orFalseOp() {\
+            |a|\
+            a := false || false;\
+            return a;\
+        }\
+        service andTrueOp() {\
+            |a|\
+            a := true && true;\
+            return a;\
+        }\
+        service andFalseOp() {\
+            |a|\
             a := true && false;\
-            a := 1 == 1;\
-            a := 1 != 1;\
-            a := 1 < 1;\
-            a := 1 <= 1;\
-            a := 1 > 1;\
-            a := 1 >= 1;\
+            return a;\
+        }\
+        service lessTrueOp() {\
+            |a|\
+            a := 15 < 20;\
+            return a;\
+        }\
+        service lessFalseOp() {\
+            |a|\
+            a := 35 < 20;\
+            return a;\
+        }\
+        service lessEqTrueOp() {\
+            |a|\
+            a := 15 <= 15;\
+            return a;\
+        }\
+        service lessEqFalseOp() {\
+            |a|\
+            a := 15 <= 14;\
+            return a;\
+        }\
+        service greaterTrueOp() {\
+            |a|\
+            a := 30 > 20;\
+            return a;\
+        }\
+        service greaterFalseOp() {\
+            |a|\
+            a := 10 > 20;\
+            return a;\
+        }\
+        service greaterEqTrueOp() {\
+            |a|\
+            a := 15 >= 15;\
+            return a;\
+        }\
+        service greaterEqFalseOp() {\
+            |a|\
+            a := 11 >= 14;\
+            return a;\
+        }\
+        service eqTrueOp() {\
+            |a|\
+            a := 30 == 30;\
+            return a;\
+        }\
+        service eqFalseOp() {\
+            |a|\
+            a := 10 == 20;\
+            return a;\
+        }\
+        service nonEqTrueOp() {\
+            |a|\
+            a := 15 != 10;\
+            return a;\
+        }\
+        service nonEqFalseOp() {\
+            |a|\
+            a := 11 != 11;\
+            return a;\
+        }\
+        service main() {\
+        }\
+    }");
+    
+    // Parse input and create AST
+    parser->parseAll(input);
+    
+    ptr(ast_program) program = parser->getRootNode();
+    ptr(mem_port) port;
+    
+    port = interpreter->execServiceCode(cast(ast_descriptor)(program->getNodeAt(0))->getServiceAt(0)->getBodyCode());
+    BOOST_CHECK_EQUAL(cast(mem_int)(port->getOwner())->getValue(), 180);
+    port = interpreter->execServiceCode(cast(ast_descriptor)(program->getNodeAt(0))->getServiceAt(1)->getBodyCode());
+    BOOST_CHECK_EQUAL(cast(mem_int)(port->getOwner())->getValue(), 120);
+    port = interpreter->execServiceCode(cast(ast_descriptor)(program->getNodeAt(0))->getServiceAt(2)->getBodyCode());
+    BOOST_CHECK_EQUAL(cast(mem_int)(port->getOwner())->getValue(), 4500);
+    port = interpreter->execServiceCode(cast(ast_descriptor)(program->getNodeAt(0))->getServiceAt(3)->getBodyCode());
+    BOOST_CHECK_EQUAL(cast(mem_int)(port->getOwner())->getValue(), 5);
+    port = interpreter->execServiceCode(cast(ast_descriptor)(program->getNodeAt(0))->getServiceAt(4)->getBodyCode());
+    BOOST_CHECK_EQUAL(cast(mem_bool)(port->getOwner())->getValue(), true);
+    port = interpreter->execServiceCode(cast(ast_descriptor)(program->getNodeAt(0))->getServiceAt(5)->getBodyCode());
+    BOOST_CHECK_EQUAL(cast(mem_bool)(port->getOwner())->getValue(), false);
+    port = interpreter->execServiceCode(cast(ast_descriptor)(program->getNodeAt(0))->getServiceAt(6)->getBodyCode());
+    BOOST_CHECK_EQUAL(cast(mem_bool)(port->getOwner())->getValue(), true);
+    port = interpreter->execServiceCode(cast(ast_descriptor)(program->getNodeAt(0))->getServiceAt(7)->getBodyCode());
+    BOOST_CHECK_EQUAL(cast(mem_bool)(port->getOwner())->getValue(), false);
+    port = interpreter->execServiceCode(cast(ast_descriptor)(program->getNodeAt(0))->getServiceAt(8)->getBodyCode());
+    BOOST_CHECK_EQUAL(cast(mem_bool)(port->getOwner())->getValue(), true);
+    port = interpreter->execServiceCode(cast(ast_descriptor)(program->getNodeAt(0))->getServiceAt(9)->getBodyCode());
+    BOOST_CHECK_EQUAL(cast(mem_bool)(port->getOwner())->getValue(), false);
+    port = interpreter->execServiceCode(cast(ast_descriptor)(program->getNodeAt(0))->getServiceAt(10)->getBodyCode());
+    BOOST_CHECK_EQUAL(cast(mem_bool)(port->getOwner())->getValue(), true);
+    port = interpreter->execServiceCode(cast(ast_descriptor)(program->getNodeAt(0))->getServiceAt(11)->getBodyCode());
+    BOOST_CHECK_EQUAL(cast(mem_bool)(port->getOwner())->getValue(), false);
+    port = interpreter->execServiceCode(cast(ast_descriptor)(program->getNodeAt(0))->getServiceAt(12)->getBodyCode());
+    BOOST_CHECK_EQUAL(cast(mem_bool)(port->getOwner())->getValue(), true);
+    port = interpreter->execServiceCode(cast(ast_descriptor)(program->getNodeAt(0))->getServiceAt(13)->getBodyCode());
+    BOOST_CHECK_EQUAL(cast(mem_bool)(port->getOwner())->getValue(), false);
+    port = interpreter->execServiceCode(cast(ast_descriptor)(program->getNodeAt(0))->getServiceAt(14)->getBodyCode());
+    BOOST_CHECK_EQUAL(cast(mem_bool)(port->getOwner())->getValue(), true);
+    port = interpreter->execServiceCode(cast(ast_descriptor)(program->getNodeAt(0))->getServiceAt(15)->getBodyCode());
+    BOOST_CHECK_EQUAL(cast(mem_bool)(port->getOwner())->getValue(), false);
+    port = interpreter->execServiceCode(cast(ast_descriptor)(program->getNodeAt(0))->getServiceAt(16)->getBodyCode());
+    BOOST_CHECK_EQUAL(cast(mem_bool)(port->getOwner())->getValue(), true);
+    port = interpreter->execServiceCode(cast(ast_descriptor)(program->getNodeAt(0))->getServiceAt(17)->getBodyCode());
+    BOOST_CHECK_EQUAL(cast(mem_bool)(port->getOwner())->getValue(), false);
+    port = interpreter->execServiceCode(cast(ast_descriptor)(program->getNodeAt(0))->getServiceAt(18)->getBodyCode());
+    BOOST_CHECK_EQUAL(cast(mem_bool)(port->getOwner())->getValue(), true);
+    port = interpreter->execServiceCode(cast(ast_descriptor)(program->getNodeAt(0))->getServiceAt(19)->getBodyCode());
+    BOOST_CHECK_EQUAL(cast(mem_bool)(port->getOwner())->getValue(), false);
+    
+    // Clear AST for next test
+    parser->clearAll();
+    table->clear();
+}
+
+BOOST_AUTO_TEST_CASE(binaryOperatorsComplexTest) {
+    ptr(core_interpreter) interpreter = initInterpreter();
+    // Testing input
+    std::stringstream input;
+    input.str(
+   "descriptor CompoContainer {\
+        service complexTest0() {\
+            |a|\
+            a := 15 / 3;\
+            a := a * 20;\
+            a := 105 - a;\
+            a := a + 25;\
+            return a;\
+        }\
+        service complexTest1() {\
+            |a|\
+            a := (15 / 3) * 5 - 15 + 25;\
+            return a;\
+        }\
+        service complexTest2() {\
+            |a|\
+            a := (250 / 50) * (5 - 15) + 25;\
+            return a;\
+        }\
+        service complexTest3() {\
+            |a|\
+            a := 10 - 20;\
+            return a;\
+        }\
+        service complexTest4() {\
+            |a b c|\
+            a := 10;\
+            b := -13;\
+            c := 44;\
+            return a + (c * b) / 2;\
+        }\
+        service complexTest5() {\
+            |a b c|\
+            a := true;\
+            b := false;\
+            c := true;\
+            return (a || b) && c;\
+        }\
+        service complexTest6() {\
+            |a b c|\
+            a := false;\
+            b := false;\
+            c := true;\
+            return (a || b) && c;\
+        }\
+        service complexTest7() {\
+            |a b c|\
+            a := 10;\
+            b := 15;\
+            c := 151;\
+            return (a > b) || (c >= a);\
+        }\
+        service main() {\
         }\
     }");
     
@@ -118,7 +318,24 @@ BOOST_AUTO_TEST_CASE(binaryOperatorsTest) {
     
     ptr(ast_program) program = parser->getRootNode();
 
-    interpreter->run(program);
+    ptr(mem_port) port;
+    
+    port = interpreter->execServiceCode(cast(ast_descriptor)(program->getNodeAt(0))->getServiceAt(0)->getBodyCode());
+    BOOST_CHECK_EQUAL(cast(mem_int)(port->getOwner())->getValue(), 30);
+    port = interpreter->execServiceCode(cast(ast_descriptor)(program->getNodeAt(0))->getServiceAt(1)->getBodyCode());
+    BOOST_CHECK_EQUAL(cast(mem_int)(port->getOwner())->getValue(), 35);
+    port = interpreter->execServiceCode(cast(ast_descriptor)(program->getNodeAt(0))->getServiceAt(2)->getBodyCode());
+    BOOST_CHECK_EQUAL(cast(mem_int)(port->getOwner())->getValue(), -25);
+    port = interpreter->execServiceCode(cast(ast_descriptor)(program->getNodeAt(0))->getServiceAt(3)->getBodyCode());
+    BOOST_CHECK_EQUAL(cast(mem_int)(port->getOwner())->getValue(), -10);
+    port = interpreter->execServiceCode(cast(ast_descriptor)(program->getNodeAt(0))->getServiceAt(4)->getBodyCode());
+    BOOST_CHECK_EQUAL(cast(mem_int)(port->getOwner())->getValue(), -276);
+    port = interpreter->execServiceCode(cast(ast_descriptor)(program->getNodeAt(0))->getServiceAt(5)->getBodyCode());
+    BOOST_CHECK_EQUAL(cast(mem_bool)(port->getOwner())->getValue(), true);
+    port = interpreter->execServiceCode(cast(ast_descriptor)(program->getNodeAt(0))->getServiceAt(6)->getBodyCode());
+    BOOST_CHECK_EQUAL(cast(mem_bool)(port->getOwner())->getValue(), false);
+    port = interpreter->execServiceCode(cast(ast_descriptor)(program->getNodeAt(0))->getServiceAt(7)->getBodyCode());
+    BOOST_CHECK_EQUAL(cast(mem_bool)(port->getOwner())->getValue(), true);
     
     // Clear AST for next test
     parser->clearAll();

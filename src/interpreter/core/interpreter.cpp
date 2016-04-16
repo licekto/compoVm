@@ -1,5 +1,6 @@
 #include "interpreter/core/interpreter.h"
 #include "exceptions/runtime/wrongFormOfMainException.h"
+#include "exceptions/execution/returnException.h"
 
 
 namespace interpreter {
@@ -52,28 +53,32 @@ namespace interpreter {
                 }
 
                 ptr(mem_port) CInterpreter::execArithmeticOp(ptr(ast_binary) expr, type_operator op) {
-                    u64 l = cast(mem_uint)(exec(expr->getOperand1())->getOwner())->getValue();
-                    u64 r = cast(mem_uint)(exec(expr->getOperand2())->getOwner())->getValue();
-                    u64 res = 0;
+                    i64 l = cast(mem_int)(exec(expr->getOperand1())->getOwner())->getValue();
+                    i64 r = cast(mem_int)(exec(expr->getOperand2())->getOwner())->getValue();
+                    i64 res = 0;
                     
                     switch (op) {
                         case type_operator::PLUS : {
                             res = l + r;
+                            break;
                         }
                         case type_operator::MINUS : {
                             res = l - r;
+                            break;
                         }
                         case type_operator::TIMES : {
                             res = l * r;
+                            break;
                         }
                         case type_operator::DIVISION : {
                             res = l / r;
+                            break;
                         }
                         default : {
                             // throw
                         }
                     }
-                    return m_bootstrap->getUintComponent(res);
+                    return m_bootstrap->getIntComponent(res);
                 }
 
                 ptr(mem_port) CInterpreter::execLogicalOp(ptr(ast_binary) expr, type_operator op) {
@@ -84,9 +89,11 @@ namespace interpreter {
                     switch (op) {
                         case type_operator::LOGICAL_OR : {
                             res = l || r;
+                            break;
                         }
                         case type_operator::LOGICAL_AND : {
                             res = l && r;
+                            break;
                         }
                         default : {
                             // throw
@@ -96,28 +103,34 @@ namespace interpreter {
                 }
 
                 ptr(mem_port) CInterpreter::execRelationalOp(ptr(ast_binary) expr, type_operator op) {
-                    u64 l = cast(mem_uint)(exec(expr->getOperand1())->getOwner())->getValue();
-                    u64 r = cast(mem_uint)(exec(expr->getOperand2())->getOwner())->getValue();
-                    u64 res = 0;
+                    i64 l = cast(mem_int)(exec(expr->getOperand1())->getOwner())->getValue();
+                    i64 r = cast(mem_int)(exec(expr->getOperand2())->getOwner())->getValue();
+                    bool res = 0;
                     
                     switch (op) {
                         case type_operator::EQUALITY : {
                             res = l == r;
+                            break;
                         }
                         case type_operator::NON_EQUALITY : {
                             res = l != r;
+                            break;
                         }
                         case type_operator::LESS : {
                             res = l < r;
+                            break;
                         }
                         case type_operator::LESS_OR_EQUAL : {
                             res = l <= r;
+                            break;
                         }
                         case type_operator::GREATER : {
                             res = l > r;
+                            break;
                         }
                         case type_operator::GREATER_OR_EQUAL : {
                             res = l >= r;
+                            break;
                         }
                         default : {
                             // throw
@@ -132,7 +145,7 @@ namespace interpreter {
                     u64 index = 0;
                     if (node->getIndex().use_count() && node->getIndex()->getNodeType() == type_node::SYMBOL) {
                         std::string var = cast(ast_symbol)(node->getIndex())->getStringValue();
-                        index = cast(mem_uint)(m_context->getVariable(var)->getOwner())->getValue();
+                        index = cast(mem_int)(m_context->getVariable(var)->getOwner())->getValue();
                     }
                     else if (node->getIndex().use_count() && node->getIndex()->getNodeType() == type_node::CONSTANT) {
                         index = cast(ast_constant)(node->getIndex())->getValue();
@@ -164,68 +177,62 @@ namespace interpreter {
 			}
                         case type_node::SERVICE_INVOCATION : {
 				return execServiceInvocation(cast(ast_serviceinvocation)(node));
-				break;
 			}
                         /*------------------ Procedural ----------------------*/
                         case type_node::ASSIGNMENT_EXPRESSION : {
 				execAssignment(cast(ast_assignment)(node));
 				break;
 			}
+                        case type_node::SYMBOL : {
+                                return m_context->getVariable(cast(ast_symbol)(node)->getStringValue());
+			}
                         case type_node::CONSTANT : {
-                                return m_bootstrap->getUintComponent(cast(ast_constant)(node)->getValue());
-				break;
+                                return m_bootstrap->getIntComponent(cast(ast_constant)(node)->getValue());
 			}
                         case type_node::BOOLEAN : {
                                 return m_bootstrap->getBoolComponent(cast(ast_boolean)(node)->getValue());
-				break;
+			}
+                        case type_node::RETURN : {
+                                throw exceptions::execution::CReturnException(exec(cast(ast_return)(node)->getExpression()));
+			}
+                        case type_node::PARENS : {
+                                return exec(cast(ast_parens)(node)->getExpression());
 			}
                         case type_node::ADDITION_EXPRESSION : {
 				return execArithmeticOp(cast(ast_addition)(node), type_operator::PLUS);
-				break;
 			}
                         case type_node::SUBTRACTION_EXPRESSION : {
 				return execArithmeticOp(cast(ast_subtraction)(node), type_operator::MINUS);
-				break;
 			}
                         case type_node::MULTIPLICATION_EXPRESSION : {
 				return execArithmeticOp(cast(ast_multiplication)(node), type_operator::TIMES);
-				break;
 			}
                         case type_node::DIVISION_EXPRESSION : {
 				return execArithmeticOp(cast(ast_division)(node), type_operator::DIVISION);
-				break;
 			}
                         case type_node::LOGICAL_OR_EXPRESSION : {
 				return execLogicalOp(cast(ast_or)(node), type_operator::LOGICAL_OR);
-				break;
 			}
                         case type_node::LOGICAL_AND_EXPRESSION : {
 				return execLogicalOp(cast(ast_and)(node), type_operator::LOGICAL_AND);
-				break;
 			}
                         case type_node::EQUALITY_EXPRESSION : {
 				return execRelationalOp(cast(ast_equality)(node), type_operator::EQUALITY);
-				break;
 			}
                         case type_node::NON_EQUALITY_EXPRESSION : {
 				return execRelationalOp(cast(ast_nonequality)(node), type_operator::NON_EQUALITY);
-				break;
 			}
                         case type_node::LESS_EXPRESSION : {
 				return execRelationalOp(cast(ast_less)(node), type_operator::LESS);
-				break;
 			}
                         case type_node::LESS_OR_EQUAL_EXPRESSION : {
 				return execRelationalOp(cast(ast_lessorequal)(node), type_operator::LESS_OR_EQUAL);
-				break;
 			}
                         case type_node::GREATER_EXPRESSION : {
 				return execRelationalOp(cast(ast_greater)(node), type_operator::GREATER);
-				break;
 			}
                         case type_node::GREATER_OR_EQUAL_EXPRESSION : {
-				return execArithmeticOp(cast(ast_greaterorequal)(node), type_operator::GREATER_OR_EQUAL);
-				break;
+				return execRelationalOp(cast(ast_greaterorequal)(node), type_operator::GREATER_OR_EQUAL);
 			}
                         /*------------------ Procedural ----------------------*/
 			default : {
@@ -243,8 +250,17 @@ namespace interpreter {
 			m_parser->parse(serviceCode);
 
 			ptr(ast_compound) body = m_parser->getServiceBody();
-
-			return exec(body);
+                        ptr(mem_port) ret;
+                        
+                        try {
+                            exec(body);
+                        }
+                        catch (exceptions::execution::CReturnException& ex) {
+                            ret = ex.getPort();
+                        }
+                        m_context->clear();
+                        
+                        return ret;
 		}
 
 		void CInterpreter::run(ptr(ast_program) ast) {

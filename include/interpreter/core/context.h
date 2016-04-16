@@ -25,6 +25,8 @@ namespace interpreter {
                     void setVariable(const std::string& var, ptr(mem_port) port);
                     
                     ptr(mem_port) getVariable(const std::string& var);
+                    
+                    void clear();
 		};
 
 	}

@@ -9,7 +9,7 @@
 #include "interpreter/config.h"
 #include "interpreter/core/coreModules.h"
 #include "interpreter/memory/objects/component.h"
-#include "interpreter/memory/objects/values/unsignedIntegerComponent.h"
+#include "interpreter/memory/objects/values/signedIntegerComponent.h"
 #include "interpreter/memory/objects/values/stringComponent.h"
 #include "interpreter/memory/objects/values/boolComponent.h"
 #include "interpreter/memory/objects/primitives/abstractPrimitive.h"
@@ -57,7 +57,7 @@ namespace interpreter {
                                 
                                 void setInterpreter(ptr(core::CInterpreter) interpreter);
 
-				ptr(mem_uint) bootstrapUIntValue(u64 value);
+				ptr(mem_int) bootstrapUIntValue(i64 value);
 
 				ptr(mem_string) bootstrapStringValue(const std::string& value);
 

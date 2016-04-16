@@ -33,6 +33,10 @@ namespace interpreter {
                 // throw
             }
 
+            void CContext::clear() {
+                m_stack.clear();
+            }
+
 	}
         
 }

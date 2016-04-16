@@ -6,7 +6,7 @@ namespace ast {
 
 		namespace procedural {
 
-			CConstant::CConstant(u64 val)
+			CConstant::CConstant(i64 val)
 				: CNode(types::nodeType::CONSTANT),
 				  CAbstractExpression(),
 				  CAbstractPrimaryExpression(),
@@ -17,7 +17,7 @@ namespace ast {
 				visitor->visit(shared_from_this());
 			}
 
-			u64 CConstant::getValue() const {
+			i64 CConstant::getValue() const {
 				return m_intValue;
 			}
 		}

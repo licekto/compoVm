@@ -55,7 +55,7 @@ BOOST_AUTO_TEST_CASE(valuesComponentsTest) {
     BOOST_CHECK_EQUAL(boolComponent->getDefaultPort()->getOwner().get(), boolComponent.get());
     BOOST_CHECK_EQUAL(boolComponent->getValue(), false);
     
-    ptr(mem_uint) uintComponent = bootstrap1->bootstrapUIntValue(159456);
+    ptr(mem_int) uintComponent = bootstrap1->bootstrapUIntValue(159456);
     
     BOOST_CHECK_EQUAL(uintComponent->getDefaultPort()->getName(), "default");
     BOOST_CHECK_EQUAL(uintComponent->getDefaultPort()->getOwner().get(), uintComponent.get());
@@ -120,7 +120,7 @@ BOOST_AUTO_TEST_CASE(serviceSignatureComponentTest) {
     
     TEST_PRIMITIVE_SERVICE(signatureComponent, "default", "getParamsCount", 0, ret, retPort);
     BOOST_CHECK_EQUAL(signatureComponent->getPortByName("args")->getConnectedPortsNumber(), 0);
-    BOOST_CHECK_EQUAL(cast(mem_uint)(signatureComponent->getServiceByName("getParamsCount")->invoke()->getOwner())->getValue(), 2);
+    BOOST_CHECK_EQUAL(cast(mem_int)(signatureComponent->getServiceByName("getParamsCount")->invoke()->getOwner())->getValue(), 2);
     
     signatureComponent->getPortByName("args")->connectPort(bootstrap1->bootstrapUIntValue(0)->getDefaultPort());
     TEST_PRIMITIVE_SERVICE(signatureComponent, "default", "getParamName", 1, ret, retPort);
@@ -180,7 +180,7 @@ BOOST_AUTO_TEST_CASE(serviceInvocationComponentTest) {
     
     BOOST_CHECK_EQUAL(cast(mem_string)(invocationComponent->getPortByName("params")->getConnectedPortAt(0)->getOwner())->getValue(), "param1");
     BOOST_CHECK_EQUAL(cast(mem_string)(invocationComponent->getPortByName("params")->getConnectedPortAt(1)->getOwner())->getValue(), "param2");
-    BOOST_CHECK_EQUAL(cast(mem_uint)(invocationComponent->getPortByName("params")->getConnectedPortAt(2)->getOwner())->getValue(), 25);
+    BOOST_CHECK_EQUAL(cast(mem_int)(invocationComponent->getPortByName("params")->getConnectedPortAt(2)->getOwner())->getValue(), 25);
     
     ptr(mem_component) innerInv = invocationComponent->getPortByName("params")->getConnectedPortAt(3)->getOwner()->getChild();
     
@@ -218,7 +218,7 @@ BOOST_AUTO_TEST_CASE(serviceInvocationComponentTest) {
     
     TEST_PRIMITIVE_SERVICE(invocationComponent, "default", "getParamsCount", 0, ret, retPort);
     BOOST_CHECK_EQUAL(invocationComponent->getPortByName("args")->getConnectedPortsNumber(), 0);
-    BOOST_CHECK_EQUAL(cast(mem_uint)(retPort->getOwner())->getValue(), 4);
+    BOOST_CHECK_EQUAL(cast(mem_int)(retPort->getOwner())->getValue(), 4);
     
     ret = false;
     BOOST_CHECK_EQUAL(invocationComponent->getPortByName("args")->getConnectedPortsNumber(), 0);
@@ -287,7 +287,7 @@ BOOST_AUTO_TEST_CASE(namedInterfaceComponentTest) {
     
     TEST_PRIMITIVE_SERVICE(interfaceComponent, "default", "getSignaturesCount", 0, ret, retPort);
     BOOST_CHECK_EQUAL(interfaceComponent->getPortByName("args")->getConnectedPortsNumber(), 0);
-    BOOST_CHECK_EQUAL(cast(mem_uint)(retPort->getOwner())->getValue(), 0);
+    BOOST_CHECK_EQUAL(cast(mem_int)(retPort->getOwner())->getValue(), 0);
     
     BOOST_CHECK_THROW(interfaceComponent->getPortByName("default")->getPrimitivePort()->getConnectedServiceByName("getConnectedComponentName")->getPrimitiveService()->invoke(),
             exceptions::runtime::CWrongPortTypeException);
@@ -369,7 +369,7 @@ BOOST_AUTO_TEST_CASE(signatureInterfaceComponentTest) {
     ret = true;
     TEST_PRIMITIVE_SERVICE(interfaceComponent, "default", "getSignaturesCount", 0, ret, retPort);
     BOOST_CHECK_EQUAL(interfaceComponent->getPortByName("args")->getConnectedPortsNumber(), 0);
-    BOOST_CHECK_EQUAL(cast(mem_uint)(retPort->getOwner())->getValue(), 3);
+    BOOST_CHECK_EQUAL(cast(mem_int)(retPort->getOwner())->getValue(), 3);
     
     BOOST_CHECK_EQUAL(interfaceComponent->getPortByName("args")->getConnectedPortsNumber(), 0);
     interfaceComponent->getPortByName("args")->connectPort(bootstrap1->bootstrapUIntValue(2)->getDefaultPort());
@@ -791,7 +791,7 @@ BOOST_AUTO_TEST_CASE(signatureConnectionDescriptionComponentTest) {
             (connectionDescriptionComponent
             ->getPortByName("sourceComponentInvocation")->getConnectedPortAt(0)->getOwner()
             ->getPortByName("params")->getConnectedPortAt(1)->getOwner())->getValue(), "param2");
-    BOOST_CHECK_EQUAL(cast(mem_uint)
+    BOOST_CHECK_EQUAL(cast(mem_int)
             (connectionDescriptionComponent
             ->getPortByName("sourceComponentInvocation")->getConnectedPortAt(0)->getOwner()
             ->getPortByName("params")->getConnectedPortAt(2)->getOwner())->getValue(), 25);

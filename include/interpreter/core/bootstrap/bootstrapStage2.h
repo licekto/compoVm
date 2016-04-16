@@ -37,7 +37,7 @@ namespace interpreter {
 			  public:
 				CBootstrapStage2(ptr(CBootstrapStage1) stage1 = nullptr);
                                 
-                                ptr(mem_port) getUintComponent(u64 value);
+                                ptr(mem_port) getIntComponent(i64 value);
                                 
                                 ptr(mem_port) getStringComponent(const std::string& value);
                                 

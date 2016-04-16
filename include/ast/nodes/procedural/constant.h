@@ -20,14 +20,14 @@ namespace ast {
 			class CConstant : public CAbstractPrimaryExpression, public std::enable_shared_from_this<CConstant> {
 			  private:
 				/**< Integer 4B value */
-				u64 m_intValue;
+				i64 m_intValue;
 
 			  public:
 				/**
 				* Parametric constructor with default value
 				* @param val: integer value
 				*/
-				CConstant(u64 val = 0);
+				CConstant(i64 val = 0);
 
 				/**
                                 * Accept method for visitor acceptation.
@@ -39,7 +39,7 @@ namespace ast {
 				 * Integer value getter
 				 * @return integer value
 				 */
-				u64 getValue() const;
+				i64 getValue() const;
 			};
 
 		}
