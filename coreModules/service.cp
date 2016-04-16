@@ -2,7 +2,7 @@ descriptor Service extends Component {
     internally requires {
         serviceSign : ServiceSignature;
         tempsN[] : String;
-        tempsV[] : *;
+        tempsV[] : Component;
         code : String;
     }
 

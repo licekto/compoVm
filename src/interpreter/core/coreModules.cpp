@@ -68,7 +68,10 @@ namespace interpreter {
 		size_t CCoreModules::getCoreDescriptorsSize() const {
 			return m_coreDescriptors.size();
 		}
-
+                
+                std::shared_ptr<ParserWrapper> CCoreModules::getParser() {
+                        return m_parser;
+                }
 	}
 
 }

@@ -123,7 +123,7 @@ namespace interpreter {
                         }
 
                         ptr(mem_port) CBootstrapStage2::getIntComponent(i64 value) {
-                            return m_bootstrapStage1->bootstrapUIntValue(value)->getDefaultPort();
+                            return m_bootstrapStage1->bootstrapIntValue(value)->getDefaultPort();
                         }
 
                         ptr(mem_port) CBootstrapStage2::getStringComponent(const std::string& value) {

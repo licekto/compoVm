@@ -19,6 +19,7 @@
 #include "exceptions/runtime/unknownPortTypeException.h"
 #include "exceptions/runtime/wrongPortTypeException.h"
 #include "exceptions/runtime/unknownAstNodeTypeException.h"
+#include "ast/visitor/constantsVisitor.h"
 
 namespace interpreter {
 
@@ -57,7 +58,7 @@ namespace interpreter {
                                 
                                 void setInterpreter(ptr(core::CInterpreter) interpreter);
 
-				ptr(mem_int) bootstrapUIntValue(i64 value);
+				ptr(mem_int) bootstrapIntValue(i64 value);
 
 				ptr(mem_string) bootstrapStringValue(const std::string& value);
 

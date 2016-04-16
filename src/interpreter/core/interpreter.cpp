@@ -17,14 +17,14 @@ namespace interpreter {
                           m_context(context) {
 		}
 
-		void CInterpreter::execProgram(ptr(ast_program) node) {
+		ptr(mem_port) CInterpreter::execProgram(ptr(ast_program) node) {
 			for (size_t i = 0; i < node->getNodesSize(); ++i) {
 				exec(node->getNodeAt(i));
 			}
 			ptr(mem_component) main = m_descriptorTable->getDescriptor(COMPO_MAIN_COMPONENT_NAME);
                         
                         ptr(mem_component) mainComponent = main->getServiceByName("new")->invoke()->getOwner();
-                        mainComponent->getServiceByName(COMPO_MAIN_SERVICE_NAME)->invoke();
+                        return mainComponent->getServiceByName(COMPO_MAIN_SERVICE_NAME)->invoke();
 		}
 
 		void CInterpreter::execDescriptor(ptr(ast_descriptor) node) {
@@ -261,10 +261,10 @@ namespace interpreter {
                         m_context->clear();
                         
                         return ret;
-		}
+                }
 
-		void CInterpreter::run(ptr(ast_program) ast) {
-			exec(ast);
+		ptr(mem_port) CInterpreter::run(ptr(ast_program) ast) {
+			return exec(ast);
 		}
 
 	}

@@ -129,4 +129,14 @@ namespace types {
 		INTERNAL,
 		EXTERNAL,
 	};
+        
+        /**
+	 * \enum valueComponentType
+	 * \brief Types of value components
+	 */
+        enum valueComponentType {
+            BOOL,
+            INTEGER,
+            STRING
+        };
 }

@@ -327,9 +327,9 @@ iteration_statement
                 |   FOR '(' assignment_expression ';' expression_statement expression ')' statement
                     {
                         $$ = new_ptr(ast_for)(cast(ast_assignment)($3),
-                                                   cast(ast_expression)($5),
-                                                   cast(ast_expression)($6),
-                                                   cast(ast_compound)($8));
+                                              cast(ast_expression)($5),
+                                              cast(ast_expression)($6),
+                                              cast(ast_compound)($8));
                     }
                 ;
 

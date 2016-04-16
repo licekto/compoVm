@@ -49,7 +49,7 @@ namespace interpreter {
                         
                         ptr(CContext) m_context;
 
-			void execProgram(ptr(ast_program) node);
+			ptr(mem_port) execProgram(ptr(ast_program) node);
 
 			void execDescriptor(ptr(ast_descriptor) node);
                         
@@ -75,8 +75,8 @@ namespace interpreter {
                                      ptr(CContext) context = nullptr);
 
 			ptr(mem_port) execServiceCode(const std::string& code);
-
-			void run(ptr(ast_program) ast);
+                        
+			ptr(mem_port) run(ptr(ast_program) ast);
 		};
 
 	}

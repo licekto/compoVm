@@ -8,7 +8,7 @@ namespace interpreter {
 
 			namespace values {
 
-				CValueComponent::CValueComponent() {
+				CValueComponent::CValueComponent(type_values type) : m_type(type) {
 				}
 
 				CValueComponent::~CValueComponent() {
@@ -28,7 +28,11 @@ namespace interpreter {
 						return nullptr;
 					}
 					return m_ports.at(0);
-				}
+                                }
+
+                                type_values CValueComponent::getType() const {
+                                        return m_type;
+                                }
 
 			}
 

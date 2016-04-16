@@ -66,7 +66,25 @@ BOOST_AUTO_TEST_CASE(instantiationTest) {
     // Testing input
     std::stringstream input;
     input.str(
-   "descriptor Inst {\
+   "descriptor A {\
+    }\
+    descriptor B {\
+    }\
+    descriptor C {\
+    }\
+    descriptor Inst {\
+        internally requires {\
+            a : A;\
+        }\
+        internally provides {\
+            b : B;\
+        }\
+        externally requires {\
+            c : C;\
+        }\
+        externally provides {\
+            d : { test(); };\
+        }\
         service test() {\
         }\
     }\
@@ -74,7 +92,7 @@ BOOST_AUTO_TEST_CASE(instantiationTest) {
         service main() {\
             |i|\
             i := Inst.new();\
-            i.test();\
+            return i;\
         }\
     }");
     
@@ -83,7 +101,7 @@ BOOST_AUTO_TEST_CASE(instantiationTest) {
     
     ptr(ast_program) program = parser->getRootNode();
 
-    //interpreter->run(program);
+    ptr(mem_port) port = interpreter->run(program);
     
     // Clear AST for next test
     parser->clearAll();

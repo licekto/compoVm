@@ -98,7 +98,7 @@ namespace interpreter {
 				}
 			}
 
-			ptr(mem_int) CBootstrapStage1::bootstrapUIntValue(i64 value) {
+			ptr(mem_int) CBootstrapStage1::bootstrapIntValue(i64 value) {
 				ptr(mem_int) component = new_ptr(mem_int)(value);
 				addDefaultPort(component);
 				return component;
@@ -342,7 +342,46 @@ namespace interpreter {
 
 				service->getPortByName("serviceSign")->connectPort(bootstrapServiceSignatureComponent(astService->getSignature(), owner)->getPortByName("default"));
 				service->getPortByName("code")->connectPort(cast(mem_string)(bootstrapStringValue(astService->getBodyCode()))->getDefaultPort());
+                                
+                                if (m_coreModules.use_count()) {
+                                    m_coreModules->getParser()->clearAll();
+                                    m_coreModules->getParser()->parse(astService->getBodyCode());
+                                    astService->setParsedBodyNode(m_coreModules->getParser()->getServiceBody());
+                                    m_coreModules->getParser()->clearAll();
 
+                                    for (size_t i = 0; i < astService->getTemporariesSize(); ++i) {
+                                        std::string temporary = astService->getTemporaryAt(i)->getStringValue();
+                                        service->getPortByName("tempsN")->connectPort(cast(mem_string)(bootstrapStringValue(temporary))->getDefaultPort());
+                                    }
+                                    
+                                    ptr(ast::visitors::CConstantsVisitor) visitor = new_ptr(ast::visitors::CConstantsVisitor)();
+                                    astService->accept(visitor);
+                                    
+                                    for (size_t i = 0; i < visitor->getConstantsSize(); ++i) {
+                                        type_node t = visitor->getConstantAt(i)->getNodeType();
+                                        ptr(ast_primaryexpression) pex = visitor->getConstantAt(i);
+                                        ptr(mem_value) val;
+                                        switch(t) {
+                                            case type_node::CONSTANT : {
+                                                val = bootstrapIntValue(cast(ast_constant)(pex)->getValue());
+                                                break;
+                                            }
+                                            case type_node::STRING_LITERAL : {
+                                                val = bootstrapStringValue(cast(ast_string)(pex)->getValue());
+                                                break;
+                                            }
+                                            case type_node::BOOLEAN : {
+                                                val = bootstrapBoolValue(cast(ast_boolean)(pex)->getValue());
+                                                break;
+                                            }
+                                            default : {
+                                                // throw
+                                            }
+                                        }
+                                        service->getPortByName("tempsV")->connectPort(val->getDefaultPort());
+                                    }
+                                }
+                                
 				return service;
 			}
 
@@ -395,7 +434,7 @@ namespace interpreter {
 				std::function<ptr(mem_port)(const std::vector<ptr(mem_component)>&, const ptr(mem_component)&)> callback
 				= [this](const std::vector<ptr(mem_component)>& /*params*/, const ptr(mem_component)& context) -> ptr(mem_port) {
 					u64 count = context->getPortByName("paramNames")->getConnectedPortsNumber();
-					return bootstrapUIntValue(count)->getDefaultPort();
+					return bootstrapIntValue(count)->getDefaultPort();
 				};
 				servicesNames.at("getParamsCount")->setCallback(callback);
 
@@ -519,7 +558,7 @@ namespace interpreter {
 							break;
 						}
 						case type_node::CONSTANT : {
-							invocation->getPortByName("params")->connectPort(bootstrapUIntValue(cast(ast_constant)(sign->getParamAt(i))->getValue())->getDefaultPort());
+							invocation->getPortByName("params")->connectPort(bootstrapIntValue(cast(ast_constant)(sign->getParamAt(i))->getValue())->getDefaultPort());
 							break;
 						}
 						case type_node::SERVICE_INVOCATION : {
@@ -545,7 +584,7 @@ namespace interpreter {
 				std::function<ptr(mem_port)(const std::vector<ptr(mem_component)>&, const ptr(mem_component)&)> callback;
 
 				callback = [this](const std::vector<ptr(mem_component)>& /*params*/, const ptr(mem_component)& context) -> ptr(mem_port) {
-					return bootstrapUIntValue(context->getPortByName("params")->getConnectedPortsNumber())->getDefaultPort();
+					return bootstrapIntValue(context->getPortByName("params")->getConnectedPortsNumber())->getDefaultPort();
 				};
 				servicesNames.at("getParamsCount")->setCallback(callback);
 
@@ -676,7 +715,7 @@ namespace interpreter {
 				callback = [this](const std::vector<ptr(mem_component)>& /*params*/, const ptr(mem_component)& context) -> ptr(mem_port) {
 					u64 index = cast(mem_int)(context->getPortByName("args")->getConnectedPortAt(0)->getOwner())->getValue();
 					context->getPortByName("args")->disconnectPortAt(0);
-					context->getPortByName("sourceComponentIndex")->connectPort(bootstrapUIntValue(index)->getDefaultPort());
+					context->getPortByName("sourceComponentIndex")->connectPort(bootstrapIntValue(index)->getDefaultPort());
 					return nullptr;
 				};
 				servicesNames.at("setSourceComponentIndex")->setCallback(callback);
@@ -706,7 +745,7 @@ namespace interpreter {
 				callback = [this](const std::vector<ptr(mem_component)>& /*params*/, const ptr(mem_component)& context) -> ptr(mem_port) {
 					u64 index = cast(mem_int)(context->getPortByName("args")->getConnectedPortAt(0)->getOwner())->getValue();
 					context->getPortByName("args")->disconnectPortAt(0);
-					context->getPortByName("destinationComponentIndex")->connectPort(bootstrapUIntValue(index)->getDefaultPort());
+					context->getPortByName("destinationComponentIndex")->connectPort(bootstrapIntValue(index)->getDefaultPort());
 					return nullptr;
 				};
 				servicesNames.at("setDestinationComponentIndex")->setCallback(callback);
@@ -749,7 +788,7 @@ namespace interpreter {
 				callback = [this](const std::vector<ptr(mem_component)>& /*params*/, const ptr(mem_component)& context) -> ptr(mem_port) {
 					u64 count = context->getPortByName("signatures")->getConnectedPortsNumber();
 
-					return bootstrapUIntValue(count)->getDefaultPort();
+					return bootstrapIntValue(count)->getDefaultPort();
 				};
 				servicesNames.at("getSignaturesCount")->setCallback(callback);
 
