@@ -379,8 +379,7 @@ namespace interpreter {
 
 				addPrimitivePorts(service, m_coreModules->getCoreDescriptor("Service"));
 
-				std::function<ptr(mem_port)(const ptr(mem_component)&)> executeCallback =
-				[this](const ptr(mem_component)& contextComponent) -> ptr(mem_port) {
+				std::function<ptr(mem_port)(const ptr(mem_component)&)> executeCallback = [this](const ptr(mem_component)& contextComponent) -> ptr(mem_port) {
 					if (contextComponent.use_count()) {
 						ptr(mem_string) code = cast(mem_string)(contextComponent->getPortByName("code")->getConnectedPortAt(0)->getOwner());
                                                 
@@ -393,7 +392,7 @@ namespace interpreter {
                                                     context->setVariable(paramName, port);
                                                 }
                                                 
-						m_interpreter->execServiceCode(code->getValue(), context);
+						return m_interpreter->execServiceCode(code->getValue(), context);
 					}
 					return nullptr;
 				};
@@ -673,8 +672,20 @@ namespace interpreter {
 				std::string destinationPortName = bind->getDestinationPortIdentification()->getPortName()->getStringValue();
 				connection->getPortByName("destinationPort")->connectPort(bootstrapStringValue(destinationPortName)->getDefaultPort());
 
-				bool isDisconnection = bind->getNodeType() == types::nodeType::DISCONNECTION;
-				connection->getPortByName("isDisconnection")->connectPort(bootstrapBoolValue(isDisconnection)->getDefaultPort());
+                                std::string bindType;
+                                if (bind->getNodeType() == types::nodeType::CONNECTION) {
+                                    bindType = BIND_CONNECTION;
+                                }
+                                else if (bind->getNodeType() == types::nodeType::DISCONNECTION) {
+                                    bindType = BIND_DISCONNECTION;
+                                }
+                                else if (bind->getNodeType() == types::nodeType::DELEGATION) {
+                                    bindType = BIND_DELEGATION;
+                                }
+                                else {
+                                    // throw
+                                }
+				connection->getPortByName("bindType")->connectPort(bootstrapStringValue(bindType)->getDefaultPort());
 
 				servicesNames.at("setSourceType")->setCallback(prepareStringSetter("sourceType"));
 				servicesNames.at("getSourceType")->setCallback(prepareStringGetter("sourceType"));
@@ -693,22 +704,22 @@ namespace interpreter {
 				std::function<ptr(mem_port)(const ptr(mem_component)&)> callback;
 
 				callback = [](const ptr(mem_component)& context) -> ptr(mem_port) {
-					ptr(mem_bool) boolComponent = cast(mem_bool)(context->getPortByName("args")->getConnectedPortAt(0)->getOwner());
+					ptr(mem_string) stringComponent = cast(mem_string)(context->getPortByName("args")->getConnectedPortAt(0)->getOwner());
 					context->getPortByName("args")->disconnectPortAt(0);
-					context->getPortByName("isDisconnection")->disconnectPortAt(0);
-					context->getPortByName("isDisconnection")->connectPort(boolComponent->getDefaultPort());
+					context->getPortByName("bindType")->disconnectPortAt(0);
+					context->getPortByName("bindType")->connectPort(stringComponent->getDefaultPort());
 					return nullptr;
 				};
-				servicesNames.at("setIsDisconnection")->setCallback(callback);
+				servicesNames.at("setBindType")->setCallback(callback);
 
 				callback = [](const ptr(mem_component)& context) -> ptr(mem_port) {
-					ptr(mem_port) port = context->getPortByName("isDisconnection");
+					ptr(mem_port) port = context->getPortByName("bindType");
 					port = port->getConnectedPortAt(0);
 					port = port->getOwner()->getPortByName("default");
 
 					return port;
 				};
-				servicesNames.at("isDisconnection")->setCallback(callback);
+				servicesNames.at("getBindType")->setCallback(callback);
 
 				callback = [this](const ptr(mem_component)& context) -> ptr(mem_port) {
 					u64 index = cast(mem_int)(context->getPortByName("args")->getConnectedPortAt(0)->getOwner())->getValue();

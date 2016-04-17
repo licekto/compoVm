@@ -692,8 +692,8 @@ BOOST_AUTO_TEST_CASE(namedConnectionDescriptionComponentTest) {
     BOOST_CHECK_EQUAL(cast(mem_string)(connectionDescriptionComponent->getPortByName("destinationComponent")->getConnectedPortAt(0)->getOwner())->getValue(), "frontend");
     TEST_PRIMITIVE_PORT(connectionDescriptionComponent, "destinationPort", types::roleType::REQUIRES, types::visibilityType::INTERNAL, 0);
     BOOST_CHECK_EQUAL(cast(mem_string)(connectionDescriptionComponent->getPortByName("destinationPort")->getConnectedPortAt(0)->getOwner())->getValue(), "self");
-    TEST_PRIMITIVE_PORT(connectionDescriptionComponent, "isDisconnection", types::roleType::REQUIRES, types::visibilityType::INTERNAL, 0);
-    BOOST_CHECK_EQUAL(cast(mem_bool)(connectionDescriptionComponent->getPortByName("isDisconnection")->getConnectedPortAt(0)->getOwner())->getValue(), false);
+    TEST_PRIMITIVE_PORT(connectionDescriptionComponent, "bindType", types::roleType::REQUIRES, types::visibilityType::INTERNAL, 0);
+    BOOST_CHECK_EQUAL(cast(mem_string)(connectionDescriptionComponent->getPortByName("bindType")->getConnectedPortAt(0)->getOwner())->getValue(), BIND_CONNECTION);
     
     ptr(mem_port) retPort;
     bool ret = false;
@@ -750,16 +750,16 @@ BOOST_AUTO_TEST_CASE(namedConnectionDescriptionComponentTest) {
     
     ret = false;
     BOOST_CHECK_EQUAL(connectionDescriptionComponent->getPortByName("args")->getConnectedPortsNumber(), 0);
-    connectionDescriptionComponent->getPortByName("args")->connectPort(bootstrap1->bootstrapBoolValue(true)->getDefaultPort());
-    TEST_PRIMITIVE_SERVICE(connectionDescriptionComponent, "default", "setIsDisconnection", ret, retPort);
+    connectionDescriptionComponent->getPortByName("args")->connectPort(bootstrap1->bootstrapStringValue(BIND_DISCONNECTION)->getDefaultPort());
+    TEST_PRIMITIVE_SERVICE(connectionDescriptionComponent, "default", "setBindType", ret, retPort);
     BOOST_CHECK_EQUAL(connectionDescriptionComponent->getPortByName("args")->getConnectedPortsNumber(), 0);
     
     ret = true;
-    TEST_PRIMITIVE_SERVICE(connectionDescriptionComponent, "default", "isDisconnection", ret, retPort);
+    TEST_PRIMITIVE_SERVICE(connectionDescriptionComponent, "default", "getBindType", ret, retPort);
     BOOST_CHECK_EQUAL(connectionDescriptionComponent->getPortByName("args")->getConnectedPortsNumber(), 0);
-    BOOST_CHECK_EQUAL(cast(mem_bool)(retPort->getOwner())->getValue(), true);
-    ptr(mem_bool) boolVal = cast(mem_bool)(retPort->getOwner());
-    BOOST_CHECK_EQUAL(boolVal->getValue(), true);
+    BOOST_CHECK_EQUAL(cast(mem_string)(retPort->getOwner())->getValue(), BIND_DISCONNECTION);
+    ptr(mem_string) stringVal = cast(mem_string)(retPort->getOwner());
+    BOOST_CHECK_EQUAL(stringVal->getValue(), BIND_DISCONNECTION);
     
     BOOST_CHECK_THROW(connectionDescriptionComponent->getServiceByName("abcd"), exceptions::runtime::CServiceNotFoundException);
     BOOST_CHECK_THROW(connectionDescriptionComponent->getPortByName("abcd"), exceptions::runtime::CPortNotFoundException);
@@ -822,8 +822,8 @@ BOOST_AUTO_TEST_CASE(signatureConnectionDescriptionComponentTest) {
     BOOST_CHECK_EQUAL(cast(mem_string)(connectionDescriptionComponent->getPortByName("destinationComponent")->getConnectedPortAt(0)->getOwner())->getValue(), "frontend");
     TEST_PRIMITIVE_PORT(connectionDescriptionComponent, "destinationPort", types::roleType::REQUIRES, types::visibilityType::INTERNAL, 0);
     BOOST_CHECK_EQUAL(cast(mem_string)(connectionDescriptionComponent->getPortByName("destinationPort")->getConnectedPortAt(0)->getOwner())->getValue(), "self");
-    TEST_PRIMITIVE_PORT(connectionDescriptionComponent, "isDisconnection", types::roleType::REQUIRES, types::visibilityType::INTERNAL, 0);
-    BOOST_CHECK_EQUAL(cast(mem_bool)(connectionDescriptionComponent->getPortByName("isDisconnection")->getConnectedPortAt(0)->getOwner())->getValue(), false);
+    TEST_PRIMITIVE_PORT(connectionDescriptionComponent, "bindType", types::roleType::REQUIRES, types::visibilityType::INTERNAL, 0);
+    BOOST_CHECK_EQUAL(cast(mem_string)(connectionDescriptionComponent->getPortByName("bindType")->getConnectedPortAt(0)->getOwner())->getValue(), BIND_CONNECTION);
     
     ptr(mem_port) retPort;
     bool ret = false;
@@ -927,16 +927,16 @@ BOOST_AUTO_TEST_CASE(signatureConnectionDescriptionComponentTest) {
     
     ret = false;
     BOOST_CHECK_EQUAL(connectionDescriptionComponent->getPortByName("args")->getConnectedPortsNumber(), 0);
-    connectionDescriptionComponent->getPortByName("args")->connectPort(bootstrap1->bootstrapBoolValue(true)->getDefaultPort());
-    TEST_PRIMITIVE_SERVICE(connectionDescriptionComponent, "default", "setIsDisconnection", ret, retPort);
+    connectionDescriptionComponent->getPortByName("args")->connectPort(bootstrap1->bootstrapStringValue(BIND_DISCONNECTION)->getDefaultPort());
+    TEST_PRIMITIVE_SERVICE(connectionDescriptionComponent, "default", "setBindType", ret, retPort);
     BOOST_CHECK_EQUAL(connectionDescriptionComponent->getPortByName("args")->getConnectedPortsNumber(), 0);
     
     ret = true;
-    TEST_PRIMITIVE_SERVICE(connectionDescriptionComponent, "default", "isDisconnection", ret, retPort);
+    TEST_PRIMITIVE_SERVICE(connectionDescriptionComponent, "default", "getBindType", ret, retPort);
     BOOST_CHECK_EQUAL(connectionDescriptionComponent->getPortByName("args")->getConnectedPortsNumber(), 0);
-    BOOST_CHECK_EQUAL(cast(mem_bool)(retPort->getOwner())->getValue(), true);
-    ptr(mem_bool) boolVal = cast(mem_bool)(retPort->getOwner());
-    BOOST_CHECK_EQUAL(boolVal->getValue(), true);
+    BOOST_CHECK_EQUAL(cast(mem_string)(retPort->getOwner())->getValue(), BIND_DISCONNECTION);
+    ptr(mem_string) stringVal = cast(mem_string)(retPort->getOwner());
+    BOOST_CHECK_EQUAL(stringVal->getValue(), BIND_DISCONNECTION);
     
     BOOST_CHECK_THROW(connectionDescriptionComponent->getServiceByName("abcd"), exceptions::runtime::CServiceNotFoundException);
     BOOST_CHECK_THROW(connectionDescriptionComponent->getPortByName("abcd"), exceptions::runtime::CPortNotFoundException);

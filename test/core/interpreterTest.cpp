@@ -60,7 +60,7 @@ BOOST_AUTO_TEST_CASE(basicTest) {
     table->clear();
 }
 
-BOOST_AUTO_TEST_CASE(instantiationTest) {
+BOOST_AUTO_TEST_CASE(basicInstantiationTest) {
     ptr(core_interpreter) interpreter = initInterpreter();
     // Testing input
     std::stringstream input;
@@ -85,6 +85,9 @@ BOOST_AUTO_TEST_CASE(instantiationTest) {
             d : { test(); };\
         }\
         service test() {\
+            |a|\
+            a := 1;\
+            return a;\
         }\
     }\
     descriptor CompoContainer {\
@@ -100,7 +103,44 @@ BOOST_AUTO_TEST_CASE(instantiationTest) {
     
     ptr(ast_program) program = parser->getRootNode();
 
-    ptr(mem_port) port = interpreter->run(program);
+    ptr(mem_component) inst = interpreter->run(program)->getOwner();
+    TEST_PORT_COMPONENT(inst->getPortByName("a")->getPort(), "a", 0);
+    TEST_PORT_COMPONENT(inst->getPortByName("b")->getPort(), "b", 0);
+    TEST_PORT_COMPONENT(inst->getPortByName("c")->getPort(), "c", 0);
+    TEST_PORT_COMPONENT(inst->getPortByName("d")->getPort(), "d", 0);
+    ptr(mem_port) port = inst->getPortByName("d")->invokeByName("test");
+    BOOST_CHECK_EQUAL(cast(mem_int)(port->getOwner())->getValue(), 1);
+    
+    // Clear AST for next test
+    parser->clearAll();
+    table->clear();
+}
+
+BOOST_AUTO_TEST_CASE(serviceParamsTest) {
+    ptr(core_interpreter) interpreter = initInterpreter();
+    // Testing input
+    std::stringstream input;
+    input.str(
+   "descriptor Inst {\
+        service test(a, b) {\
+            return a + b;\
+        }\
+    }\
+    descriptor CompoContainer {\
+        service main() {\
+            |i|\
+            i := Inst.new();\
+            return i.test(1, 2);\
+        }\
+    }");
+    
+    // Parse input and create AST
+    parser->parseAll(input);
+    
+    ptr(ast_program) program = parser->getRootNode();
+
+    //ptr(mem_component) inst = interpreter->run(program)->getOwner();
+    //BOOST_CHECK_EQUAL(cast(mem_int)(inst)->getValue(), 3);
     
     // Clear AST for next test
     parser->clearAll();

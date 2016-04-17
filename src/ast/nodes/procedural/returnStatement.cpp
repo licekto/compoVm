@@ -6,7 +6,7 @@ namespace ast {
 
 		namespace procedural {
 
-			CReturnStatement::CReturnStatement(std::shared_ptr<ast::nodes::procedural::CAbstractExpression> expression)
+			CReturnStatement::CReturnStatement(std::shared_ptr<CNode> expression)
 				:   CNode(types::nodeType::RETURN),
 				    m_expression(expression) {
 			}
@@ -15,7 +15,7 @@ namespace ast {
 				visitor->visit(shared_from_this());
 			}
 
-			std::shared_ptr<ast::nodes::procedural::CAbstractExpression> CReturnStatement::getExpression() const {
+			std::shared_ptr<CNode> CReturnStatement::getExpression() const {
 				return m_expression;
 			}
 

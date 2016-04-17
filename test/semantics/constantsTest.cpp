@@ -26,7 +26,7 @@ BOOST_AUTO_TEST_SUITE(constantsTest)
 // Global parser for testing purposes
 ParserWrapper parser(new_ptr(Lexer)(), new_ptr(ast::semantic::CSyntaxDescriptorTable)());
 
-BOOST_AUTO_TEST_CASE(basicTest) {
+BOOST_AUTO_TEST_CASE(complexTest) {
     // Testing input
     std::stringstream input;
     input.str(
@@ -73,6 +73,30 @@ BOOST_AUTO_TEST_CASE(basicTest) {
     BOOST_CHECK_EQUAL(cast(ast_constant)(visitor->getConstantAt(11))->getValue(), 1);
     BOOST_CHECK_EQUAL(cast(ast_string)(visitor->getConstantAt(12))->getValue(), "test");
     BOOST_CHECK_EQUAL(cast(ast_constant)(visitor->getConstantAt(13))->getValue(), 5);
+    
+    // Clear AST for next test
+    parser.clearAll();
+}
+
+BOOST_AUTO_TEST_CASE(returnTest) {
+    // Testing input
+    std::stringstream input;
+    input.str(
+    "descriptor test{\
+        service testService(a, b) {\
+            return a - b;\
+        }\
+    }");
+    
+    // Parse input and create AST
+    parser.parseAll(input);
+    
+    ptr(ast_program) program = parser.getRootNode();
+    
+    ptr(ast::visitors::CConstantsVisitor) visitor = new_ptr(ast::visitors::CConstantsVisitor)();
+
+    cast(ast_descriptor)(program->getNodeAt(0))->getServiceAt(0)->accept(visitor);
+    BOOST_CHECK_EQUAL(visitor->getConstantsSize(), 0);
     
     // Clear AST for next test
     parser.clearAll();

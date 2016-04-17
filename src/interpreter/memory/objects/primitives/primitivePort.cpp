@@ -10,7 +10,7 @@ namespace interpreter {
 			namespace primitives {
 
 				CPrimitivePort::CPrimitivePort(const std::string& name, std::shared_ptr<objects::CComponent> owner)
-					: CAbstractPrimitive(name, owner) {
+					: CAbstractPrimitive(name, owner), m_isDelegated(false) {
 				}
 
 				CPrimitivePort::CPrimitivePort(ptr(CPrimitivePort) instance)
@@ -85,7 +85,20 @@ namespace interpreter {
 					if (it != m_connectedServices.end()) {
 						m_connectedServices.erase(it);
 					}
-				}
+                                }
+
+                                void CPrimitivePort::delegateToPort(ptr(objects::CGeneralPort) port) {
+                                        m_isDelegated = true;
+                                        m_delegatedPort = port;
+                                }
+
+                                ptr(objects::CGeneralPort) CPrimitivePort::getDelegatedPort() {
+                                        return m_delegatedPort;
+                                }
+
+                                bool CPrimitivePort::isDelegated() const {
+                                        return m_isDelegated;
+                                }
 
 			}
 

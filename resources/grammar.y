@@ -344,7 +344,7 @@ jump_statement
                     }
                 |   RETURN expression ';'
                     {
-                        $$ = new_ptr(ast_return)(cast(ast_expression)($2));
+                        $$ = new_ptr(ast_return)($2);
                     }
                 ;
 

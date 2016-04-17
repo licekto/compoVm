@@ -175,10 +175,6 @@ namespace interpreter {
 				callback = [this](const ptr(mem_component)& context) -> ptr(mem_port) {
 					ptr(mem_component) newComponent = new_ptr(mem_component)();
 
-					// TODO set proper owner
-					//                                                   ||
-					//                                                  \||/
-					//                                                   \/
 					ptr(mem_component) parent = bootstrapRootComponent(nullptr);
 					newComponent->setParent(parent);
 					parent->setChild(newComponent);
@@ -244,7 +240,20 @@ namespace interpreter {
                                             
                                             ptr(mem_port) srcPort = func(sourceType, sourcePortName, "source");
                                             ptr(mem_port) dstPort = func(destinationType, destinationPortName, "destination");
-                                            srcPort->connectPort(dstPort);
+                                            
+                                            std::string bindType = cast(mem_string)(connection->getPortByName("bindType")->getConnectedPortAt(0)->getOwner())->getValue();
+                                            if (bindType == BIND_CONNECTION) {
+                                                srcPort->connectPort(dstPort);
+                                            }
+                                            else if (bindType == BIND_DISCONNECTION) {
+                                                srcPort->disconnectPortByName(dstPort->getName());
+                                            }
+                                            else if (bindType == BIND_DELEGATION) {
+                                                srcPort->delegateTo(dstPort);
+                                            }
+                                            else {
+                                                // throw
+                                            }
                                         }
                                         
 					return newComponent->getPortByName("default");

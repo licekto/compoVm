@@ -66,13 +66,19 @@ namespace interpreter {
 
 				void disconnectPortAt(size_t index);
                                 
+                                void disconnectPortByName(const std::string& name);
+                                
                                 void connectPrimitiveService(ptr(CGeneralService) service);
                                 
                                 size_t getConnectedPrimitiveServicesNumber() const;
                                 
                                 ptr(CGeneralService) getPrimitiveServiceAt(size_t index);
                                 
-                                ptr(CGeneralPort) invokeByName(const std::string& selector, u64 index);
+                                ptr(CGeneralPort) invokeByName(const std::string& selector, u64 index = 0);
+                                
+                                void delegateTo(ptr(CGeneralPort) port);
+                                
+                                ptr(CGeneralPort) getDelegatedPort();
 			};
 		}
 	}

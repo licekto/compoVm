@@ -12,7 +12,7 @@ descriptor ConnectionDescription extends Component {
         destinationComponentInvocation : ServiceInvocation;
         destinationPort : String;
 
-        isDisconnection : Bool;
+        bindType : String;
     }
 
     service getType() {}
@@ -41,6 +41,6 @@ descriptor ConnectionDescription extends Component {
     service setDestinationPort(port) {}
     service getDestinationPort() {}
 
-    service setIsDisconnection(bool) {}
-    service isDisconnection() {}
+    service setBindType(type) {}
+    service getBindType() {}
 }

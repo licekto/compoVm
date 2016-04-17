@@ -19,14 +19,14 @@ namespace ast {
 			class CReturnStatement : public CAbstractStatement, public std::enable_shared_from_this<CReturnStatement> {
 			  private:
 				/**< Start condition node */
-				std::shared_ptr<procedural::CAbstractExpression> m_expression;
+				std::shared_ptr<CNode> m_expression;
 
 			  public:
 				/**
 				* Parametric constructor with default value
 				* @param expression: expression smart pointer
 				*/
-				CReturnStatement(std::shared_ptr<procedural::CAbstractExpression> expression = nullptr);
+				CReturnStatement(std::shared_ptr<CNode> expression = nullptr);
 
 				/**
 				            * Accept method for visitor acceptation.
@@ -38,7 +38,7 @@ namespace ast {
 				* End condition getter
 				* @return Pointer to end condition node
 				*/
-				std::shared_ptr<procedural::CAbstractExpression> getExpression() const;
+				std::shared_ptr<CNode> getExpression() const;
 			};
 
 		}

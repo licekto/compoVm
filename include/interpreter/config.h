@@ -100,3 +100,15 @@
 
 // String for dereference
 #define CONNECTION_DEREFERENCE "dereference"
+
+/* String representation of types of bindings */
+/******************************************************************************/
+
+// String for connection bind type
+#define BIND_CONNECTION "connection"
+
+// String for disconnection bind type
+#define BIND_DISCONNECTION "disconnection"
+
+// String for delegation bind type
+#define BIND_DELEGATION "delegation"

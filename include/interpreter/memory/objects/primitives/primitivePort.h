@@ -24,8 +24,12 @@ namespace interpreter {
 				class CPrimitivePort : public CAbstractPrimitive {
 				  private:
 					std::vector<ptr(objects::CGeneralPort)> m_connectedPorts;
+                                        
+                                        ptr(objects::CGeneralPort) m_delegatedPort;
 
 					std::vector<ptr(objects::CGeneralService)> m_connectedServices;
+                                        
+                                        bool m_isDelegated;
 
 				  public:
 					CPrimitivePort(const std::string& name = "", ptr(objects::CComponent) owner = nullptr);
@@ -51,6 +55,12 @@ namespace interpreter {
 					ptr(objects::CGeneralService) getConnectedServiceAt(size_t index);
 
 					ptr(objects::CGeneralService) getConnectedServiceByName(const std::string& name);
+                                        
+                                        void delegateToPort(ptr(objects::CGeneralPort) port);
+                                        
+                                        ptr(objects::CGeneralPort) getDelegatedPort();
+                                        
+                                        bool isDelegated() const;
 				};
 
 			}

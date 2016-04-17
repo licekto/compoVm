@@ -99,6 +99,20 @@ namespace interpreter {
 				}
                         }
 
+                        void CGeneralPort::disconnectPortByName(const std::string& name) {
+                            if (m_primitive) {
+                                for (size_t i = 0; i < m_primitivePort->getConnectedPortsNumber(); ++i) {
+                                    if (m_primitivePort->getConnectedPortAt(i)->getName() == name) {
+                                        m_primitivePort->getConnectedPortAt(i)->disconnectPortAt(0);
+                                        break;
+                                    }
+                                }
+                            }
+                            else {
+                                m_port->getPortByName("connectedPorts")->disconnectPortByName(name);
+                            }
+                        }
+
                         void CGeneralPort::connectPrimitiveService(ptr(CGeneralService) service) {
                                 m_connectedPrimitiveServices.push_back(service);
                         }
@@ -122,8 +136,11 @@ namespace interpreter {
                                 if (type == PORT_TYPE_SIGNATURES) {
                                     bool found = false;
                                     std::string definedSelector = "";
-                                    for (size_t i = 0; i < m_port->getPortByName("signatures")->getConnectedPortsNumber(); ++i) {
-                                        definedSelector = cast(objects::values::CStringComponent)(m_port->getPortByName("signatures")->getConnectedPortAt(i)->getOwner())->getValue();
+                                    ptr(CComponent) interface = m_port->getPortByName("interfaceDescription")->getConnectedPortAt(0)->getOwner();
+                                    for (size_t i = 0; i < interface->getPortByName("signatures")->getConnectedPortsNumber(); ++i) {
+                                        ptr(CComponent) signatures = interface->getPortByName("signatures")->getConnectedPortAt(i)->getOwner();
+                                        ptr(CComponent) component = signatures->getPortByName("selector")->getConnectedPortAt(0)->getOwner();
+                                        definedSelector = cast(objects::values::CStringComponent)(component)->getValue();
                                         if (definedSelector == selector) {
                                             found = true;
                                             break;
@@ -132,7 +149,7 @@ namespace interpreter {
                                     if (!found) {
                                         // throw
                                     }
-                                    return getOwner()->getSelfServiceByName(selector)->invoke();
+                                    return getOwner()->getServiceByName(selector)->invoke();
                                 }
                                 else if (type == PORT_TYPE_UNIVERSAL) {
                                     return getOwner()->getServiceByName(selector)->invoke();
@@ -145,6 +162,24 @@ namespace interpreter {
                                 }
                             }
                             // throw
+                        }
+
+                        void CGeneralPort::delegateTo(ptr(CGeneralPort) port) {
+                            if (m_primitive) {
+                                m_primitivePort->delegateToPort(port);
+                            }
+                            else {
+                                m_port->getPortByName("delegatedPorts")->connectPort(port);
+                            }
+                        }
+
+                        ptr(CGeneralPort) CGeneralPort::getDelegatedPort() {
+                            if (m_primitive) {
+                                return m_primitivePort->getDelegatedPort();
+                            }
+                            else {
+                                return m_port->getPortByName("delegatedPorts")->getConnectedPortAt(0);
+                            }
                         }
 
 		}

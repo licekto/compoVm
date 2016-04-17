@@ -409,6 +409,38 @@ BOOST_AUTO_TEST_CASE(compoInterface) {
     parser.clearAll();
 }
 
+BOOST_AUTO_TEST_CASE(compoServiceBodyParams) {
+    // Testing input
+    std::stringstream input;
+    input.str(
+    "descriptor Test{\
+        service test() {\
+            return a.call();\
+        }\
+    }");
+    // Parse input and create AST
+    parser.parseAll(input);
+    
+    // Check descriptor
+    ptr(ast_descriptor) descriptor = cast(ast_descriptor)(parser.getRootNode()->getNodeAt(0));
+    TEST_DESCRIPTOR(descriptor, "Test", "", 0, 1, 0);
+    
+    ptr(ast_service) service = descriptor->getServiceAt(0);
+    TEST_SERVICE(service, "test", 0, 1, 0);
+    
+    parser.clearAll();
+    
+    parser.parse(service->getBodyCode());
+    ptr(ast_compound) body = parser.getServiceBody();
+    
+    BOOST_CHECK_EQUAL(body->getBodySize(), 1);
+    BOOST_CHECK_EQUAL(body->getBodyNodeAt(0)->getNodeType(), type_node::RETURN);
+    BOOST_CHECK_EQUAL(cast(ast_return)(body->getBodyNodeAt(0))->getExpression()->getNodeType(), type_node::SERVICE_INVOCATION);
+    
+    // Clear AST for next test
+    parser.clearAll();
+}
+
 BOOST_AUTO_TEST_CASE(compoDescriptor) {
     // Testing input
     std::stringstream input;

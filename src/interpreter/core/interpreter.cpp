@@ -22,7 +22,6 @@ namespace interpreter {
 			ptr(mem_component) main = m_descriptorTable->getDescriptor(COMPO_MAIN_COMPONENT_NAME);
                         
                         ptr(mem_component) mainComponent = main->getServiceByName("new")->invoke()->getOwner();
-                        m_serviceContextStack.push(new_ptr(CContext)());
                         return mainComponent->getServiceByName(COMPO_MAIN_SERVICE_NAME)->invoke();
 		}
 
@@ -186,8 +185,8 @@ namespace interpreter {
                                 default : {
                                     // throw
                                 }
-                                port->getOwner()->getPortByName("args")->connectPort(connectedPort);
                             }
+                            port->getOwner()->getPortByName("args")->connectPort(connectedPort);
                         }
                     }
                     else if (node->getParameters()->getNodeType() == type_node::SERVICE_INVOCATION) {
@@ -197,14 +196,14 @@ namespace interpreter {
                         // throw
                     }
                     
-                    return port->invokeByName(selector, index);
+                    ptr(mem_port) ret = port->invokeByName(selector, index);
+                    return ret;
                 }
 
 		ptr(mem_port)  CInterpreter::exec(ptr(ast_node) node) {
 			switch (node->getNodeType()) {
 			case type_node::PROGRAM : {
-				execProgram(cast(ast_program)(node));
-				break;
+				return execProgram(cast(ast_program)(node));
 			}
 			case type_node::DESCRIPTOR : {
 				execDescriptor(cast(ast_descriptor)(node));
