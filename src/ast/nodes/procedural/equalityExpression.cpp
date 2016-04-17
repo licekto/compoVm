@@ -6,8 +6,8 @@ namespace ast {
 
 		namespace procedural {
 
-			CEqualityExpression::CEqualityExpression( std::shared_ptr<ast::nodes::procedural::CAbstractExpression> op1,
-			        std::shared_ptr<ast::nodes::procedural::CAbstractExpression> op2)
+			CEqualityExpression::CEqualityExpression( std::shared_ptr<ast::nodes::CNode> op1,
+			        std::shared_ptr<ast::nodes::CNode> op2)
 				:   CNode(types::nodeType::EQUALITY_EXPRESSION),
 				    CAbstractExpression(),
 				    CBinaryExpression(types::operatorType::EQUALITY, op1, op2) {

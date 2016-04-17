@@ -109,11 +109,11 @@ multiplicative_expression
                     }
                 |   multiplicative_expression '*' primary_expression
                     {
-                        $$ = new_ptr(ast_multiplication)(cast(ast_expression)($1), cast(ast_expression)($3));
+                        $$ = new_ptr(ast_multiplication)($1, $3);
                     }
                 |   multiplicative_expression '/' primary_expression
                     {
-                        $$ = new_ptr(ast_division)(cast(ast_expression)($1), cast(ast_expression)($3));
+                        $$ = new_ptr(ast_division)($1, $3);
                     }
                 ;
 
@@ -124,11 +124,11 @@ additive_expression
                     }
                 |   additive_expression '+' multiplicative_expression
                     {
-                        $$ = new_ptr(ast_addition)(cast(ast_expression)($1), cast(ast_expression)($3));
+                        $$ = new_ptr(ast_addition)($1, $3);
                     }
                 |   additive_expression '-' multiplicative_expression
                     {
-                        $$ = new_ptr(ast_subtraction)(cast(ast_expression)($1), cast(ast_expression)($3));
+                        $$ = new_ptr(ast_subtraction)($1, $3);
                     }
                 ;
 
@@ -139,19 +139,19 @@ relational_expression
                     }
                 |   relational_expression '<' additive_expression
                     {
-                        $$ = new_ptr(ast_less)(cast(ast_expression)($1), cast(ast_expression)($3));
+                        $$ = new_ptr(ast_less)($1, $3);
                     }
                 |   relational_expression '>' additive_expression
                     {
-                        $$ = new_ptr(ast_greater)(cast(ast_expression)($1), cast(ast_expression)($3));
+                        $$ = new_ptr(ast_greater)($1, $3);
                     }
                 |   relational_expression LE_OP additive_expression
                     {
-                        $$ = new_ptr(ast_lessorequal)(cast(ast_expression)($1), cast(ast_expression)($3));
+                        $$ = new_ptr(ast_lessorequal)($1, $3);
                     }
                 |   relational_expression GE_OP additive_expression
                     {
-                        $$ = new_ptr(ast_greaterorequal)(cast(ast_expression)($1), cast(ast_expression)($3));
+                        $$ = new_ptr(ast_greaterorequal)($1, $3);
                     }
                 ;
 
@@ -162,11 +162,11 @@ equality_expression
                     }
                 |   equality_expression EQ_OP additive_expression
                     {
-                        $$ = new_ptr(ast_equality)(cast(ast_expression)($1), cast(ast_expression)($3));
+                        $$ = new_ptr(ast_equality)($1, $3);
                     }
                 |   equality_expression NE_OP additive_expression
                     {
-                        $$ = new_ptr(ast_nonequality)(cast(ast_expression)($1), cast(ast_expression)($3));
+                        $$ = new_ptr(ast_nonequality)($1, $3);
                     }
                 ;
 
@@ -177,7 +177,7 @@ logical_and_expression
                     }
                 |   logical_and_expression AND_OP equality_expression
                     {
-                        $$ = new_ptr(ast_and)(cast(ast_expression)($1), cast(ast_expression)($3));
+                        $$ = new_ptr(ast_and)($1, cast(ast_expression)($3));
                     }
                 ;
 
@@ -188,7 +188,7 @@ logical_or_expression
                     }
                 |   logical_or_expression OR_OP logical_and_expression
                     {
-                        $$ = new_ptr(ast_or)(cast(ast_expression)($1), cast(ast_expression)($3));
+                        $$ = new_ptr(ast_or)($1, $3);
                     }
                 ;
 

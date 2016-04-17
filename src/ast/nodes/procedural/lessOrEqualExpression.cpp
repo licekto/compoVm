@@ -6,8 +6,8 @@ namespace ast {
 
 		namespace procedural {
 
-			CLessOrEqualExpression::CLessOrEqualExpression( std::shared_ptr<ast::nodes::procedural::CAbstractExpression> op1,
-			        std::shared_ptr<ast::nodes::procedural::CAbstractExpression> op2)
+			CLessOrEqualExpression::CLessOrEqualExpression( std::shared_ptr<ast::nodes::CNode> op1,
+			        std::shared_ptr<ast::nodes::CNode> op2)
 				:   CNode(types::nodeType::LESS_OR_EQUAL_EXPRESSION),
 				    CAbstractExpression(),
 				    CBinaryExpression(types::operatorType::LESS_OR_EQUAL, op1, op2) {

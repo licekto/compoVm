@@ -6,8 +6,8 @@ namespace ast {
 
 		namespace procedural {
 
-			CMultiplicationExpression::CMultiplicationExpression( std::shared_ptr<ast::nodes::procedural::CAbstractExpression> op1,
-			        std::shared_ptr<ast::nodes::procedural::CAbstractExpression> op2)
+			CMultiplicationExpression::CMultiplicationExpression( std::shared_ptr<ast::nodes::CNode> op1,
+			        std::shared_ptr<ast::nodes::CNode> op2)
 				:   CNode(types::nodeType::MULTIPLICATION_EXPRESSION),
 				    CAbstractExpression(),
 				    CBinaryExpression(types::operatorType::TIMES, op1, op2) {

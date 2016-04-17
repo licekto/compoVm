@@ -22,13 +22,13 @@ namespace ast {
 				* @param variable: name of variable
 				* @param rval: right-hand side of assignment
 				*/
-				CSubtractionExpression(std::shared_ptr<procedural::CAbstractExpression> op1 = nullptr,
-				                       std::shared_ptr<procedural::CAbstractExpression> op2 = nullptr);
+				CSubtractionExpression(std::shared_ptr<CNode> op1 = nullptr,
+				                       std::shared_ptr<CNode> op2 = nullptr);
 
 				/**
 				* Accept method for visitor acceptation.
-						* @param visitor: Pointer to abstract visitor.
-						*/
+                                * @param visitor: Pointer to abstract visitor.
+                                */
 				virtual void accept(std::shared_ptr<visitors::CAbstractVisitor> visitor);
 			};
 

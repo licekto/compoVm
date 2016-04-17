@@ -22,8 +22,8 @@ namespace ast {
 				* @param variable: name of variable
 				* @param rval: right-hand side of assignment
 				*/
-				CLessExpression(std::shared_ptr<procedural::CAbstractExpression> op1 = nullptr,
-				                std::shared_ptr<procedural::CAbstractExpression> op2 = nullptr);
+				CLessExpression(std::shared_ptr<CNode> op1 = nullptr,
+				                std::shared_ptr<CNode> op2 = nullptr);
 
 				/**
 				* Accept method for visitor acceptation.

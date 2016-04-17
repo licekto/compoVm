@@ -166,8 +166,8 @@ BOOST_AUTO_TEST_CASE(connectionsTest) {
         }\
         service test() {\
             |b|\
-            b := a.add(2);\
-            return b + 1;\
+            b := 1;\
+            return b + a.add(2);\
         }\
     }\
     descriptor CompoContainer {\
@@ -187,6 +187,8 @@ BOOST_AUTO_TEST_CASE(connectionsTest) {
     
     BOOST_CHECK_EQUAL(inst->getPortByName("a")->getConnectedPortsNumber(), 1);
     TEST_PORT_COMPONENT(inst->getPortByName("a")->getConnectedPortAt(0)->getPort(), "default", 0);
+    
+    ptr(mem_port) port = inst->getServiceByName("test")->invoke();
     
     // Clear AST for next test
     parser->clearAll();

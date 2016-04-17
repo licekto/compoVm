@@ -21,10 +21,10 @@ namespace ast {
 				types::operatorType m_operator;
 
 				/**< First operand */
-				std::shared_ptr<procedural::CAbstractExpression> m_operand1;
+				std::shared_ptr<CNode> m_operand1;
 
 				/**< Second operand */
-				std::shared_ptr<procedural::CAbstractExpression> m_operand2;
+				std::shared_ptr<CNode> m_operand2;
 
 				/**
 				* Parametric constructor with default values
@@ -32,8 +32,8 @@ namespace ast {
 				* @param rval: right-hand side of assignment
 				*/
 				CBinaryExpression         ( types::operatorType type = types::operatorType::PLUS,
-				                            std::shared_ptr<procedural::CAbstractExpression> op1 = nullptr,
-				                            std::shared_ptr<procedural::CAbstractExpression> op2 = nullptr);
+				                            std::shared_ptr<CNode> op1 = nullptr,
+				                            std::shared_ptr<CNode> op2 = nullptr);
 
 			  public:
 
@@ -53,13 +53,13 @@ namespace ast {
 				* First operand getter
 				* @return Operand expression pointer
 				*/
-				std::shared_ptr<procedural::CAbstractExpression> getOperand1() const;
+				std::shared_ptr<CNode> getOperand1() const;
 
 				/**
 				* Second operand getter
 				* @return Operand expression pointer
 				*/
-				std::shared_ptr<procedural::CAbstractExpression> getOperand2() const;
+				std::shared_ptr<CNode> getOperand2() const;
 			};
 
 		}
