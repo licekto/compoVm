@@ -278,7 +278,11 @@ namespace interpreter {
 			}
 			}
                         return nullptr;
-		}
+                }
+
+                void CInterpreter::addPortsToContext(ptr(CContext) context) {
+                    
+                }
 
 		ptr(mem_port)  CInterpreter::execServiceCode(const std::string& code, ptr(CContext) context) {
 			std::stringstream input;
@@ -304,6 +308,11 @@ namespace interpreter {
                         m_serviceContextStack.pop();
                         
                         return ret;
+                }
+
+                ptr(mem_port) CInterpreter::execService(const std::string& receiver, const std::string& selector) {
+                    ptr(mem_component) descriptor = m_descriptorTable->getDescriptor(receiver);
+                    return descriptor->getServiceByName(selector)->invoke();
                 }
 
 		ptr(mem_port) CInterpreter::run(ptr(ast_program) ast) {

@@ -147,6 +147,52 @@ BOOST_AUTO_TEST_CASE(serviceParamsTest) {
     table->clear();
 }
 
+BOOST_AUTO_TEST_CASE(connectionsTest) {
+    ptr(core_interpreter) interpreter = initInterpreter();
+    // Testing input
+    std::stringstream input;
+    input.str(
+   "descriptor A {\
+        service add(a) {\
+            return a + 1;\
+        }\
+    }\
+    descriptor Inst {\
+        internally requires {\
+            a : A;\
+        }\
+        architecture {\
+            connect a to default@(A.new());\
+        }\
+        service test() {\
+            |b|\
+            b := a.add(2);\
+            return b + 1;\
+        }\
+    }\
+    descriptor CompoContainer {\
+        service main() {\
+            |i|\
+            i := Inst.new();\
+            return i;\
+        }\
+    }");
+    
+    // Parse input and create AST
+    parser->parseAll(input);
+    
+    ptr(ast_program) program = parser->getRootNode();
+
+    ptr(mem_component) inst = interpreter->run(program)->getOwner();
+    
+    BOOST_CHECK_EQUAL(inst->getPortByName("a")->getConnectedPortsNumber(), 1);
+    TEST_PORT_COMPONENT(inst->getPortByName("a")->getConnectedPortAt(0)->getPort(), "default", 0);
+    
+    // Clear AST for next test
+    parser->clearAll();
+    table->clear();
+}
+
 BOOST_AUTO_TEST_CASE(binaryOperatorsTest) {
     ptr(core_interpreter) interpreter = initInterpreter();
     // Testing input

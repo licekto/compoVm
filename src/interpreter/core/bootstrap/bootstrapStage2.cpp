@@ -1,4 +1,5 @@
 #include "interpreter/core/bootstrap/bootstrapStage2.h"
+#include "interpreter/core/interpreter.h"
 
 namespace interpreter {
 
@@ -43,6 +44,7 @@ namespace interpreter {
                                 if (owner.use_count()) {
                                     component->getPortByName("owner")->connectPort(owner->getPortByName("default"));
                                 }
+                                component->setParent(nullptr);
 
 				return component;
 			}
@@ -200,7 +202,7 @@ namespace interpreter {
                                         for (size_t i = 0; i < context->getPortByName("architectureDefinition")->getConnectedPortsNumber(); ++i) {
                                             ptr(mem_component) connection = context->getPortByName("architectureDefinition")->getConnectedPortAt(0)->getOwner()->getBottomChild();
                                             
-                                            auto func = [&connection, &newComponent](const std::string& type, const std::string& portName, const std::string& dstSrc) -> ptr(mem_port) {
+                                            auto func = [this, &connection, &newComponent](const std::string& type, const std::string& portName, const std::string& dstSrc) -> ptr(mem_port) {
                                                 ptr(mem_port) port;
                                                 if (type == CONNECTION_NAMED) {
                                                     std::string componentName = cast(mem_string)(connection->getPortByName(dstSrc + "Component")->getConnectedPortAt(0)->getOwner())->getValue();
@@ -224,6 +226,16 @@ namespace interpreter {
                                                     ptr(mem_component) inv = connection->getPortByName(dstSrc + "ComponentInvocation")->getConnectedPortAt(0)->getOwner()->getBottomChild();
                                                     std::string receiverName = cast(mem_string)(inv->getPortByName("receiver")->getConnectedPortAt(0)->getOwner())->getValue();
                                                     std::string selectorName = cast(mem_string)(inv->getPortByName("selector")->getConnectedPortAt(0)->getOwner())->getValue();
+                                                    
+                                                    if (inv->getPortByName("params")->getConnectedPortsNumber()) {
+                                                        // arguments not allowed in connection
+                                                        // throw
+                                                    }
+                                                    else if (selectorName != "new") {
+                                                        // other serivce than "new" not allowed
+                                                        // throw
+                                                    }
+                                                    port = m_bootstrapStage1->m_interpreter->execService(receiverName, selectorName);
                                                 }
                                                 else if (type == CONNECTION_DEREFERENCE) {
                                                     // throw

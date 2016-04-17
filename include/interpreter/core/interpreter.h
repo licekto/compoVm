@@ -66,6 +66,8 @@ namespace interpreter {
                         ptr(mem_port) execServiceInvocation(ptr(ast_serviceinvocation) node);
 
 			ptr(mem_port) exec(ptr(ast_node));
+                        
+                        void addPortsToContext(ptr(CContext) context);
 
 		  public:
 
@@ -74,6 +76,8 @@ namespace interpreter {
                                      ptr(memory::memspace::CDescriptorTable) table = nullptr);
 
 			ptr(mem_port) execServiceCode(const std::string& code, ptr(CContext) context = nullptr);
+                        
+                        ptr(mem_port) execService(const std::string& receiver, const std::string& selector);
                         
 			ptr(mem_port) run(ptr(ast_program) ast);
 		};

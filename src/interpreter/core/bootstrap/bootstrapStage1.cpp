@@ -379,7 +379,7 @@ namespace interpreter {
 
 				addPrimitivePorts(service, m_coreModules->getCoreDescriptor("Service"));
 
-				std::function<ptr(mem_port)(const ptr(mem_component)&)> executeCallback = [this](const ptr(mem_component)& contextComponent) -> ptr(mem_port) {
+				std::function<ptr(mem_port)(const ptr(mem_component)&)> executeCallback = [this, owner](const ptr(mem_component)& contextComponent) -> ptr(mem_port) {
 					if (contextComponent.use_count()) {
 						ptr(mem_string) code = cast(mem_string)(contextComponent->getPortByName("code")->getConnectedPortAt(0)->getOwner());
                                                 
@@ -406,6 +406,14 @@ namespace interpreter {
                                                     std::string paramName = cast(mem_string)(sign->getPortByName("paramNames")->getConnectedPortAt(i)->getOwner())->getValue();
                                                     ptr(mem_port) port = argsPort->getConnectedPortAt(i);
                                                     context->setVariable(paramName, port);
+                                                }
+                                                
+                                                if (owner.use_count()) {
+                                                    std::map<std::string, ptr(mem_port)> portsMap = owner->getAllPorts();
+
+                                                    for (auto item : portsMap) {
+                                                        context->setVariable(item.first, item.second);
+                                                    }
                                                 }
                                                 
 						return m_interpreter->execServiceCode(code->getValue(), context);

@@ -8,7 +8,7 @@ namespace interpreter {
 
 		namespace objects {
 
-			CComponent::CComponent() : m_parent(nullptr), m_child(nullptr) {
+			CComponent::CComponent() {
 			}
 
 			CComponent::~CComponent() {
@@ -238,7 +238,38 @@ namespace interpreter {
 				}
 
 				return dump;
-			}
+                        }
+
+                        size_t CComponent::getSelfPortsNumber() {
+                            return m_ports.size();
+                        }
+
+                        ptr(CGeneralPort) CComponent::getSelfPortAt(size_t index) {
+                            return m_ports.at(index);
+                        }
+
+                        std::map<std::string, ptr(CGeneralPort)> CComponent::getAllPorts() {
+                                std::map<std::string, ptr(CGeneralPort)> portsMap;
+
+				ptr(CComponent) tmp = m_parent;
+
+				while (tmp.use_count()) {
+                                        for (size_t i = 0; i < tmp->getSelfPortsNumber(); ++i) {
+                                            portsMap[tmp->getSelfPortAt(i)->getName()] = tmp->getSelfPortAt(i);
+                                        }
+					tmp = tmp->m_parent;
+				}
+
+				tmp = m_child;
+				while (tmp.use_count()) {
+					for (size_t i = 0; i < tmp->getSelfPortsNumber(); ++i) {
+                                            portsMap[tmp->getSelfPortAt(i)->getName()] = tmp->getSelfPortAt(i);
+                                        }
+					tmp = tmp->m_child;
+				}
+				
+                                return portsMap;
+                        }
 
 		}
 	}

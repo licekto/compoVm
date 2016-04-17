@@ -3,6 +3,7 @@
 #include <vector>
 #include <algorithm>
 #include <iostream>
+#include <map>
 
 #include "logger/logger.h"
 #include "definitions/allDefinitions.h"
@@ -79,6 +80,12 @@ namespace interpreter {
 				void setChild(ptr(CComponent) child);
 
 				std::stringstream dump() const;
+                                
+                                size_t getSelfPortsNumber();
+                                
+                                ptr(CGeneralPort) getSelfPortAt(size_t index);
+                                
+                                std::map<std::string, ptr(CGeneralPort)> getAllPorts();
 			};
 
 		}
