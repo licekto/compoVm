@@ -66,8 +66,6 @@ namespace interpreter {
                         ptr(mem_port) execServiceInvocation(ptr(ast_serviceinvocation) node);
 
 			ptr(mem_port) exec(ptr(ast_node));
-                        
-                        void addPortsToContext(ptr(CContext) context);
 
 		  public:
 

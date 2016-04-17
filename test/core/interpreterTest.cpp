@@ -85,9 +85,9 @@ BOOST_AUTO_TEST_CASE(basicInstantiationTest) {
             d : { test(); };\
         }\
         service test() {\
-            |a|\
-            a := 1;\
-            return a;\
+            |e|\
+            e := 1;\
+            return e;\
         }\
     }\
     descriptor CompoContainer {\

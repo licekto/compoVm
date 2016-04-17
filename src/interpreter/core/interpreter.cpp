@@ -277,10 +277,6 @@ namespace interpreter {
                         return nullptr;
                 }
 
-                void CInterpreter::addPortsToContext(ptr(CContext) context) {
-                    
-                }
-
 		ptr(mem_port)  CInterpreter::execServiceCode(const std::string& code, ptr(CContext) context) {
 			std::stringstream input;
 			std::string serviceCode = code;
