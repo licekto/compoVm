@@ -171,8 +171,8 @@ namespace interpreter {
 
 				component->removeServiceByName("new");
 
-				std::function<ptr(mem_port)(const std::vector<ptr(mem_component)>&, const ptr(mem_component)&)> callback;
-				callback = [this](const std::vector<ptr(mem_component)>& /*params*/, const ptr(mem_component)& context) -> ptr(mem_port) {
+				std::function<ptr(mem_port)(const ptr(mem_component)&)> callback;
+				callback = [this](const ptr(mem_component)& context) -> ptr(mem_port) {
 					ptr(mem_component) newComponent = new_ptr(mem_component)();
 
 					// TODO set proper owner

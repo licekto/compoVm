@@ -28,10 +28,6 @@ namespace interpreter {
 					ptr(mem_primitiveservice) primitiveService =
 					    new_ptr(mem_primitiveservice)(serviceName, component);
 
-					for (size_t j = 0; j < astService->getParamsSize(); ++j) {
-						primitiveService->setArgumentName(cast(ast::nodes::procedural::CSymbol)(astService->getParamAt(j))->getStringValue());
-					}
-
 					servicesNames[serviceName] = primitiveService;
 					component->addService(new_ptr(mem_service)(primitiveService));
 				}
@@ -116,10 +112,10 @@ namespace interpreter {
 				return component;
 			}
 
-			std::function<ptr(mem_port)(const std::vector<ptr(mem_component) >&, const ptr(mem_component)&)>
+			std::function<ptr(mem_port)(const ptr(mem_component)&)>
 			CBootstrapStage1::prepareStringSetter(const std::string& portName) {
 
-				return [portName](const std::vector<ptr(mem_component)>& /*params*/, const ptr(mem_component)& context) -> ptr(mem_port) {
+				return [portName](const ptr(mem_component)& context) -> ptr(mem_port) {
 					ptr(mem_component) paramComponent = context->getPortByName("args")->getConnectedPortAt(0)->getOwner();
 
 					context->getPortByName("args")->disconnectPortAt(0);
@@ -131,9 +127,9 @@ namespace interpreter {
 				};
 			}
 
-			std::function<ptr(mem_port)(const std::vector<ptr(mem_component) >&, const ptr(mem_component)&)>
+			std::function<ptr(mem_port)(const ptr(mem_component)&)>
 			CBootstrapStage1::prepareStringGetter(const std::string& portName) {
-				return [portName](const std::vector<ptr(mem_component)>& /*params*/, const ptr(mem_component)& context) -> ptr(mem_port) {
+				return [portName](const ptr(mem_component)& context) -> ptr(mem_port) {
 					return context->getPortByName(portName)->getConnectedPortAt(0)->getOwner()->getPortByName("default");
 				};
 			}
@@ -150,15 +146,15 @@ namespace interpreter {
 					component->getPortByName("owner")->connectPort(port);
 				}
 
-				std::function<ptr(mem_port)(const std::vector<ptr(mem_component)>&, const ptr(mem_component)&)> callback;
+				std::function<ptr(mem_port)(const ptr(mem_component)&)> callback;
 
-				callback = [](const std::vector<ptr(mem_component)>& /*params*/, const ptr(mem_component)& /*context*/) -> ptr(mem_port) {
+				callback = [](const ptr(mem_component)& /*context*/) -> ptr(mem_port) {
 					//return context->getPortByName("")
 					return nullptr;
 				};
 				servicesNames.at("getPorts")->setCallback(callback);
 
-				callback = [](const std::vector<ptr(mem_component)>& /*params*/, const ptr(mem_component)& context) -> ptr(mem_port) {
+				callback = [](const ptr(mem_component)& context) -> ptr(mem_port) {
 					ptr(mem_string) name =
 					    cast(mem_string)(context->getPortByName("args")->getConnectedPortAt(0)->getOwner());
 
@@ -168,7 +164,7 @@ namespace interpreter {
 				};
 				servicesNames.at("getPortNamed")->setCallback(callback);
 
-				callback = [](const std::vector<ptr(mem_component)>& /*params*/, const ptr(mem_component)& context) -> ptr(mem_port) {
+				callback = [](const ptr(mem_component)& context) -> ptr(mem_port) {
 					if (context->getPortByName("descriptorPort")->getConnectedPortsNumber()) {
 						return context->getPortByName("descriptorPort")->getConnectedPortAt(0)->getOwner()->getPortByName("default");
 					}
@@ -176,7 +172,7 @@ namespace interpreter {
 				};
 				servicesNames.at("getDescriptor")->setCallback(callback);
 
-				callback = [](const std::vector<ptr(mem_component)>& /*params*/, const ptr(mem_component)& context) -> ptr(mem_port) {
+				callback = [](const ptr(mem_component)& context) -> ptr(mem_port) {
 					if (context->getPortByName("owner")->getConnectedPortsNumber()) {
 						return context->getPortByName("owner")->getConnectedPortAt(0)->getOwner()->getPortByName("default");
 					}
@@ -184,7 +180,7 @@ namespace interpreter {
 				};
 				servicesNames.at("getOwner")->setCallback(callback);
 
-				callback = [](const std::vector<ptr(mem_component)>& /*params*/, const ptr(mem_component)& /*context*/) -> ptr(mem_port) {
+				callback = [](const ptr(mem_component)& /*context*/) -> ptr(mem_port) {
 					//return new_ptr(memory::objects::CUnsignedIntComponent)(std::hash<mem_component>()(context.get()));
 					return 0;
 				};
@@ -209,18 +205,18 @@ namespace interpreter {
 				std::map<std::string, ptr(mem_primitiveservice)> servicesNames;
 				ptr(mem_component) port = bootstrapPrologueWithComponent(m_coreModules->getCoreDescriptor("Port"), servicesNames, owner);
 
-				std::function<ptr(mem_port)(const std::vector<ptr(mem_component)>&, const ptr(mem_component)&)> callback;
-				callback = [](const std::vector<ptr(mem_component)>& /*params*/, const ptr(mem_component)& context) -> ptr(mem_port) {
+				std::function<ptr(mem_port)(const ptr(mem_component)&)> callback;
+				callback = [](const ptr(mem_component)& context) -> ptr(mem_port) {
 					return context->getPortByName("name")->getConnectedPortAt(0)->getOwner()->getPortByName("default");
 				};
 				servicesNames.at("getName")->setCallback(callback);
 
-				callback = [](const std::vector<ptr(mem_component)>& /*params*/, const ptr(mem_component)& context) -> ptr(mem_port) {
+				callback = [](const ptr(mem_component)& context) -> ptr(mem_port) {
 					return context->getPortByName("interfaceDescription")->getConnectedPortAt(0)->getOwner()->getPortByName("default");
 				};
 				servicesNames.at("getInterface")->setCallback(callback);
 
-				callback = [](const std::vector<ptr(mem_component)>& /*params*/, const ptr(mem_component)& context) -> ptr(mem_port) {
+				callback = [](const ptr(mem_component)& context) -> ptr(mem_port) {
 
 					ptr(mem_component) calleeComponent = context->getPortByName("owner")->getConnectedPortAt(0)->getOwner();
 
@@ -246,19 +242,19 @@ namespace interpreter {
 				};
 				servicesNames.at("invoke")->setCallback(callback);
 
-				callback = [this](const std::vector<ptr(mem_component)>& /*params*/, const ptr(mem_component)& context) -> ptr(mem_port) {
+				callback = [this](const ptr(mem_component)& context) -> ptr(mem_port) {
 					bool connected = context->getPortByName("connectedPorts")->getConnectedPortsNumber() > 0;
 					return bootstrapBoolValue(connected)->getDefaultPort();
 				};
 				servicesNames.at("isConnected")->setCallback(callback);
 
-				callback = [this](const std::vector<ptr(mem_component)>& /*params*/, const ptr(mem_component)& context) -> ptr(mem_port) {
+				callback = [this](const ptr(mem_component)& context) -> ptr(mem_port) {
 					bool connected = context->getPortByName("delegatedPorts")->getConnectedPortsNumber() > 0;
 					return bootstrapBoolValue(connected)->getDefaultPort();
 				};
 				servicesNames.at("isDelegated")->setCallback(callback);
 
-				callback = [](const std::vector<ptr(mem_component)>& /*params*/, const ptr(mem_component)& context) -> ptr(mem_port) {
+				callback = [](const ptr(mem_component)& context) -> ptr(mem_port) {
 					context->getPortByName("connectedPorts")->disconnectPortAt(0);
 					context->getPortByName("connectedPorts")->connectPort(context->getPortByName("args")->getConnectedPortAt(0));
 					context->getPortByName("args")->disconnectPortAt(0);
@@ -266,7 +262,7 @@ namespace interpreter {
 				};
 				servicesNames.at("connectTo")->setCallback(callback);
 
-				callback = [](const std::vector<ptr(mem_component)>& /*params*/, const ptr(mem_component)& context) -> ptr(mem_port) {
+				callback = [](const ptr(mem_component)& context) -> ptr(mem_port) {
 					context->getPortByName("connectedPorts")->disconnectPortAt(0);
 					return nullptr;
 				};
@@ -283,8 +279,8 @@ namespace interpreter {
 				port->removeServiceByName("disconnectPort");
 				port->removeServiceByName("connectTo");
 
-				std::function<ptr(mem_port)(const std::vector<ptr(mem_component)>&, const ptr(mem_component)&)> callback;
-				callback = [](const std::vector<ptr(mem_component)>& /*params*/, const ptr(mem_component)& context) -> ptr(mem_port) {
+				std::function<ptr(mem_port)(const ptr(mem_component)&)> callback;
+				callback = [](const ptr(mem_component)& context) -> ptr(mem_port) {
 					ptr(mem_component) arg = context->getPortByName("args")->getConnectedPortAt(0)->getOwner();
 					std::string name = cast(mem_string)(arg)->getValue();
 
@@ -297,37 +293,30 @@ namespace interpreter {
 					cast(mem_string)(context->getPortByName("paramNames")->getConnectedPortAt(index)->getOwner())->setValue(name);
 					return nullptr;
 				};
-				std::vector<std::string> argumentsNames;
-				argumentsNames.push_back("name");
-				argumentsNames.push_back("index");
-				ptr(mem_service) srv = new_ptr(mem_service)(new_ptr(mem_primitiveservice)("invoke", port, callback, argumentsNames));
+				ptr(mem_service) srv = new_ptr(mem_service)(new_ptr(mem_primitiveservice)("invoke", port, callback));
 				port->addService(srv);
 				port->getPortByName("default")->getPrimitivePort()->connectService(srv);
 				port->getPortByName("self")->getPrimitivePort()->connectService(srv);
 
-				callback = [](const std::vector<ptr(mem_component)>& /*params*/, const ptr(mem_component)& context) -> ptr(mem_port) {
+				callback = [](const ptr(mem_component)& context) -> ptr(mem_port) {
 					u64 val = cast(mem_int)(context->getPortByName("args")->getConnectedPortAt(0)->getOwner())->getValue();
 					context->getPortByName("args")->disconnectPortAt(0);
 					context->getPortByName("connectedPorts")->disconnectPortAt(val);
 					return nullptr;
 				};
-				argumentsNames.clear();
-				argumentsNames.push_back("index");
-				srv = new_ptr(mem_service)(new_ptr(mem_primitiveservice)("disconnectPort", port, callback, argumentsNames));
+				srv = new_ptr(mem_service)(new_ptr(mem_primitiveservice)("disconnectPort", port, callback));
 				port->addService(srv);
 				port->getPortByName("default")->getPrimitivePort()->disconnectServiceByName("disconnectPort");
 				port->getPortByName("self")->getPrimitivePort()->disconnectServiceByName("disconnectPort");
 				port->getPortByName("default")->getPrimitivePort()->connectService(srv);
 				port->getPortByName("self")->getPrimitivePort()->connectService(srv);
 
-				callback = [](const std::vector<ptr(mem_component)>& /*params*/, const ptr(mem_component)& context) -> ptr(mem_port) {
+				callback = [](const ptr(mem_component)& context) -> ptr(mem_port) {
 					context->getPortByName("connectedPorts")->connectPort(context->getPortByName("args")->getConnectedPortAt(0));
 					context->getPortByName("args")->disconnectPortAt(0);
 					return nullptr;
 				};
-				argumentsNames.clear();
-				argumentsNames.push_back("port");
-				srv = new_ptr(mem_service)(new_ptr(mem_primitiveservice)("connectTo", port, callback, argumentsNames));
+				srv = new_ptr(mem_service)(new_ptr(mem_primitiveservice)("connectTo", port, callback));
 				port->addService(srv);
 				port->getPortByName("default")->getPrimitivePort()->disconnectServiceByName("connectTo");
 				port->getPortByName("self")->getPrimitivePort()->disconnectServiceByName("connectTo");
@@ -390,8 +379,8 @@ namespace interpreter {
 
 				addPrimitivePorts(service, m_coreModules->getCoreDescriptor("Service"));
 
-				std::function<ptr(mem_port)(const std::vector<ptr(mem_component)>&, const ptr(mem_component)&)> executeCallback =
-				[this](const std::vector<ptr(mem_component)>& /*params*/, const ptr(mem_component)& contextComponent) -> ptr(mem_port) {
+				std::function<ptr(mem_port)(const ptr(mem_component)&)> executeCallback =
+				[this](const ptr(mem_component)& contextComponent) -> ptr(mem_port) {
 					if (contextComponent.use_count()) {
 						ptr(mem_string) code = cast(mem_string)(contextComponent->getPortByName("code")->getConnectedPortAt(0)->getOwner());
                                                 
@@ -440,14 +429,14 @@ namespace interpreter {
 				servicesNames.at("setSelector")->setCallback(prepareStringSetter("selector"));
 				servicesNames.at("getSelector")->setCallback(prepareStringGetter("selector"));
 
-				std::function<ptr(mem_port)(const std::vector<ptr(mem_component)>&, const ptr(mem_component)&)> callback
-				= [this](const std::vector<ptr(mem_component)>& /*params*/, const ptr(mem_component)& context) -> ptr(mem_port) {
+				std::function<ptr(mem_port)(const ptr(mem_component)&)> callback
+				= [this](const ptr(mem_component)& context) -> ptr(mem_port) {
 					u64 count = context->getPortByName("paramNames")->getConnectedPortsNumber();
 					return bootstrapIntValue(count)->getDefaultPort();
 				};
 				servicesNames.at("getParamsCount")->setCallback(callback);
 
-				callback = [](const std::vector<ptr(mem_component)>& /*params*/, const ptr(mem_component)& context) -> ptr(mem_port) {
+				callback = [](const ptr(mem_component)& context) -> ptr(mem_port) {
 
 					ptr(mem_port) params = context->getPortByName("paramNames");
 					ptr(mem_component) indexComponent = context->getPortByName("args")->getConnectedPortAt(0)->getOwner();
@@ -462,7 +451,7 @@ namespace interpreter {
 				};
 				servicesNames.at("getParamName")->setCallback(callback);
 
-				callback = [](const std::vector<ptr(mem_component)>& /*params*/, const ptr(mem_component)& context) -> ptr(mem_port) {
+				callback = [](const ptr(mem_component)& context) -> ptr(mem_port) {
 
 					ptr(mem_component) arg = context->getPortByName("args")->getConnectedPortAt(0)->getOwner();
 					u64 index = cast(mem_int)(arg)->getValue();
@@ -510,9 +499,9 @@ namespace interpreter {
 				servicesNames.at("setVisibility")->setCallback(prepareStringSetter("visibility"));
 				servicesNames.at("getVisibility")->setCallback(prepareStringGetter("visibility"));
 
-				std::function<ptr(mem_port)(const std::vector<ptr(mem_component)>&, const ptr(mem_component)&)> callback;
+				std::function<ptr(mem_port)(const ptr(mem_component)&)> callback;
 
-				callback = [](const std::vector<ptr(mem_component)>& /*params*/, const ptr(mem_component)& context) -> ptr(mem_port) {
+				callback = [](const ptr(mem_component)& context) -> ptr(mem_port) {
 					ptr(mem_component) paramComponent = context->getPortByName("args")->getConnectedPortAt(0)->getOwner();
 					context->getPortByName("args")->disconnectPortAt(0);
 					context->getPortByName("interfaceDefinition")->disconnectPortAt(0);
@@ -521,12 +510,12 @@ namespace interpreter {
 				};
 				servicesNames.at("setInterface")->setCallback(callback);
 
-				callback = [](const std::vector<ptr(mem_component)>& /*params*/, const ptr(mem_component)& context) -> ptr(mem_port) {
+				callback = [](const ptr(mem_component)& context) -> ptr(mem_port) {
 					return context->getPortByName("interfaceDefinition")->getConnectedPortAt(0)->getOwner()->getPortByName("default");
 				};
 				servicesNames.at("getInterface")->setCallback(callback);
 
-				callback = [](const std::vector<ptr(mem_component)>& /*params*/, const ptr(mem_component)& context) -> ptr(mem_port) {
+				callback = [](const ptr(mem_component)& context) -> ptr(mem_port) {
 					ptr(mem_bool) paramComponent = cast(mem_bool)(context->getPortByName("args")->getConnectedPortAt(0)->getOwner());
 					context->getPortByName("args")->disconnectPortAt(0);
 					context->getPortByName("isCollectionPort")->disconnectPortAt(0);
@@ -535,7 +524,7 @@ namespace interpreter {
 				};
 				servicesNames.at("setIsCollection")->setCallback(callback);
 
-				callback = [](const std::vector<ptr(mem_component)>& /*params*/, const ptr(mem_component)& context) -> ptr(mem_port) {
+				callback = [](const ptr(mem_component)& context) -> ptr(mem_port) {
 					return cast(mem_bool)(context->getPortByName("isCollectionPort")->getConnectedPortAt(0)->getOwner())->getDefaultPort();
 				};
 				servicesNames.at("isCollection")->setCallback(callback);
@@ -590,14 +579,14 @@ namespace interpreter {
 				servicesNames.at("setSelector")->setCallback(prepareStringSetter("selector"));
 				servicesNames.at("getSelector")->setCallback(prepareStringGetter("selector"));
 
-				std::function<ptr(mem_port)(const std::vector<ptr(mem_component)>&, const ptr(mem_component)&)> callback;
+				std::function<ptr(mem_port)(const ptr(mem_component)&)> callback;
 
-				callback = [this](const std::vector<ptr(mem_component)>& /*params*/, const ptr(mem_component)& context) -> ptr(mem_port) {
+				callback = [this](const ptr(mem_component)& context) -> ptr(mem_port) {
 					return bootstrapIntValue(context->getPortByName("params")->getConnectedPortsNumber())->getDefaultPort();
 				};
 				servicesNames.at("getParamsCount")->setCallback(callback);
 
-				callback = [](const std::vector<ptr(mem_component)>& /*params*/, const ptr(mem_component)& context) -> ptr(mem_port) {
+				callback = [](const ptr(mem_component)& context) -> ptr(mem_port) {
 					ptr(mem_component) arg = context->getPortByName("args")->getConnectedPortAt(0)->getOwner();
 					context->getPortByName("args")->disconnectPortAt(0);
 					u64 index = cast(mem_int)(arg)->getValue();
@@ -605,7 +594,7 @@ namespace interpreter {
 				};
 				servicesNames.at("getParamAt")->setCallback(callback);
 
-				callback = [](const std::vector<ptr(mem_component)>& /*params*/, const ptr(mem_component)& context) -> ptr(mem_port) {
+				callback = [](const ptr(mem_component)& context) -> ptr(mem_port) {
 					ptr(mem_component) arg = context->getPortByName("args")->getConnectedPortAt(0)->getOwner();
 					context->getPortByName("args")->disconnectPortAt(0);
 					context->getPortByName("params")->connectPort(arg->getPortByName("default"));
@@ -701,9 +690,9 @@ namespace interpreter {
 				servicesNames.at("setDestinationPort")->setCallback(prepareStringSetter("destinationPort"));
 				servicesNames.at("getDestinationPort")->setCallback(prepareStringGetter("destinationPort"));
 
-				std::function<ptr(mem_port)(const std::vector<ptr(mem_component)>&, const ptr(mem_component)&)> callback;
+				std::function<ptr(mem_port)(const ptr(mem_component)&)> callback;
 
-				callback = [](const std::vector<ptr(mem_component)>& /*params*/, const ptr(mem_component)& context) -> ptr(mem_port) {
+				callback = [](const ptr(mem_component)& context) -> ptr(mem_port) {
 					ptr(mem_bool) boolComponent = cast(mem_bool)(context->getPortByName("args")->getConnectedPortAt(0)->getOwner());
 					context->getPortByName("args")->disconnectPortAt(0);
 					context->getPortByName("isDisconnection")->disconnectPortAt(0);
@@ -712,7 +701,7 @@ namespace interpreter {
 				};
 				servicesNames.at("setIsDisconnection")->setCallback(callback);
 
-				callback = [](const std::vector<ptr(mem_component)>& /*params*/, const ptr(mem_component)& context) -> ptr(mem_port) {
+				callback = [](const ptr(mem_component)& context) -> ptr(mem_port) {
 					ptr(mem_port) port = context->getPortByName("isDisconnection");
 					port = port->getConnectedPortAt(0);
 					port = port->getOwner()->getPortByName("default");
@@ -721,7 +710,7 @@ namespace interpreter {
 				};
 				servicesNames.at("isDisconnection")->setCallback(callback);
 
-				callback = [this](const std::vector<ptr(mem_component)>& /*params*/, const ptr(mem_component)& context) -> ptr(mem_port) {
+				callback = [this](const ptr(mem_component)& context) -> ptr(mem_port) {
 					u64 index = cast(mem_int)(context->getPortByName("args")->getConnectedPortAt(0)->getOwner())->getValue();
 					context->getPortByName("args")->disconnectPortAt(0);
 					context->getPortByName("sourceComponentIndex")->connectPort(bootstrapIntValue(index)->getDefaultPort());
@@ -729,12 +718,12 @@ namespace interpreter {
 				};
 				servicesNames.at("setSourceComponentIndex")->setCallback(callback);
 
-				callback = [](const std::vector<ptr(mem_component)>& /*params*/, const ptr(mem_component)& context) -> ptr(mem_port) {
+				callback = [](const ptr(mem_component)& context) -> ptr(mem_port) {
 					return cast(mem_int)(context->getPortByName("sourceComponentIndex")->getConnectedPortAt(0)->getOwner())->getDefaultPort();
 				};
 				servicesNames.at("getSourceComponentIndex")->setCallback(callback);
 
-				callback = [](const std::vector<ptr(mem_component)>& /*params*/, const ptr(mem_component)& context) -> ptr(mem_port) {
+				callback = [](const ptr(mem_component)& context) -> ptr(mem_port) {
 					ptr(mem_component) invocation = context->getPortByName("args")->getConnectedPortAt(0)->getOwner()->getBottomChild();
 					if (!invocation.use_count()) {
 						invocation = context->getPortByName("args")->getConnectedPortAt(0)->getOwner();
@@ -746,12 +735,12 @@ namespace interpreter {
 				};
 				servicesNames.at("setSourceComponentInvocation")->setCallback(callback);
 
-				callback = [](const std::vector<ptr(mem_component)>& /*params*/, const ptr(mem_component)& context) -> ptr(mem_port) {
+				callback = [](const ptr(mem_component)& context) -> ptr(mem_port) {
 					return context->getPortByName("sourceComponentInvocation")->getConnectedPortAt(0)->getOwner()->getPortByName("default");
 				};
 				servicesNames.at("getSourceComponentInvocation")->setCallback(callback);
 
-				callback = [this](const std::vector<ptr(mem_component)>& /*params*/, const ptr(mem_component)& context) -> ptr(mem_port) {
+				callback = [this](const ptr(mem_component)& context) -> ptr(mem_port) {
 					u64 index = cast(mem_int)(context->getPortByName("args")->getConnectedPortAt(0)->getOwner())->getValue();
 					context->getPortByName("args")->disconnectPortAt(0);
 					context->getPortByName("destinationComponentIndex")->connectPort(bootstrapIntValue(index)->getDefaultPort());
@@ -759,12 +748,12 @@ namespace interpreter {
 				};
 				servicesNames.at("setDestinationComponentIndex")->setCallback(callback);
 
-				callback = [](const std::vector<ptr(mem_component)>& /*params*/, const ptr(mem_component)& context) -> ptr(mem_port) {
+				callback = [](const ptr(mem_component)& context) -> ptr(mem_port) {
 					return cast(mem_int)(context->getPortByName("destinationComponentIndex")->getConnectedPortAt(0)->getOwner())->getDefaultPort();
 				};
 				servicesNames.at("getDestinationComponentIndex")->setCallback(callback);
 
-				callback = [](const std::vector<ptr(mem_component)>& /*params*/, const ptr(mem_component)& context) -> ptr(mem_port) {
+				callback = [](const ptr(mem_component)& context) -> ptr(mem_port) {
 					ptr(mem_component) invocation = context->getPortByName("args")->getConnectedPortAt(0)->getOwner()->getBottomChild();
 					if (!invocation.use_count()) {
 						invocation = context->getPortByName("args")->getConnectedPortAt(0)->getOwner();
@@ -776,7 +765,7 @@ namespace interpreter {
 				};
 				servicesNames.at("setDestinationComponentInvocation")->setCallback(callback);
 
-				callback = [](const std::vector<ptr(mem_component)>& /*params*/, const ptr(mem_component)& context) -> ptr(mem_port) {
+				callback = [](const ptr(mem_component)& context) -> ptr(mem_port) {
 					return context->getPortByName("destinationComponentInvocation")->getConnectedPortAt(0)->getOwner()->getPortByName("default");
 				};
 				servicesNames.at("getDestinationComponentInvocation")->setCallback(callback);
@@ -792,16 +781,16 @@ namespace interpreter {
 				servicesNames.at("setType")->setCallback(prepareStringSetter("type"));
 				servicesNames.at("getType")->setCallback(prepareStringGetter("type"));
 
-				std::function<ptr(mem_port)(const std::vector<ptr(mem_component)>&, const ptr(mem_component)&)> callback;
+				std::function<ptr(mem_port)(const ptr(mem_component)&)> callback;
 
-				callback = [this](const std::vector<ptr(mem_component)>& /*params*/, const ptr(mem_component)& context) -> ptr(mem_port) {
+				callback = [this](const ptr(mem_component)& context) -> ptr(mem_port) {
 					u64 count = context->getPortByName("signatures")->getConnectedPortsNumber();
 
 					return bootstrapIntValue(count)->getDefaultPort();
 				};
 				servicesNames.at("getSignaturesCount")->setCallback(callback);
 
-				callback = [](const std::vector<ptr(mem_component)>& /*params*/, const ptr(mem_component)& context) -> ptr(mem_port) {
+				callback = [](const ptr(mem_component)& context) -> ptr(mem_port) {
 					std::string type = cast(mem_string)(context->getPortByName("type")->getConnectedPortAt(0)->getOwner())->getValue();
 					if (type != PORT_TYPE_SIGNATURES) {
 						throw exceptions::runtime::CWrongPortTypeException(type, "getSignatureAt");
@@ -812,7 +801,7 @@ namespace interpreter {
 				};
 				servicesNames.at("getSignatureAt")->setCallback(callback);
 
-				callback = [](const std::vector<ptr(mem_component)>& /*params*/, const ptr(mem_component)& context) -> ptr(mem_port) {
+				callback = [](const ptr(mem_component)& context) -> ptr(mem_port) {
 					std::string type = cast(mem_string)(context->getPortByName("type")->getConnectedPortAt(0)->getOwner())->getValue();
 					if (type != PORT_TYPE_SIGNATURES) {
 						throw exceptions::runtime::CWrongPortTypeException(type, "addSignature");
@@ -824,7 +813,7 @@ namespace interpreter {
 				};
 				servicesNames.at("addSignature")->setCallback(callback);
 
-				callback = [](const std::vector<ptr(mem_component)>& /*params*/, const ptr(mem_component)& context) -> ptr(mem_port) {
+				callback = [](const ptr(mem_component)& context) -> ptr(mem_port) {
 					std::string type = cast(mem_string)(context->getPortByName("type")->getConnectedPortAt(0)->getOwner())->getValue();
 					if (type != PORT_TYPE_NAMED) {
 						throw exceptions::runtime::CWrongPortTypeException(type, "getConnectedComponentName");
@@ -836,7 +825,7 @@ namespace interpreter {
 				};
 				servicesNames.at("getConnectedComponentName")->setCallback(callback);
 
-				callback = [](const std::vector<ptr(mem_component)>& /*params*/, const ptr(mem_component)& context) -> ptr(mem_port) {
+				callback = [](const ptr(mem_component)& context) -> ptr(mem_port) {
 					std::string type = cast(mem_string)(context->getPortByName("type")->getConnectedPortAt(0)->getOwner())->getValue();
 					if (type != PORT_TYPE_NAMED) {
 						throw exceptions::runtime::CWrongPortTypeException(type, "setConnectedComponentName");
@@ -850,7 +839,7 @@ namespace interpreter {
 				};
 				servicesNames.at("setConnectedComponentName")->setCallback(callback);
 
-				callback = [](const std::vector<ptr(mem_component)>& /*params*/, const ptr(mem_component)& context) -> ptr(mem_port) {
+				callback = [](const ptr(mem_component)& context) -> ptr(mem_port) {
 					std::string type = cast(mem_string)(context->getPortByName("type")->getConnectedPortAt(0)->getOwner())->getValue();
 					if (type != PORT_TYPE_NAMED) {
 						throw exceptions::runtime::CWrongPortTypeException(type, "getConnectedComponent");
@@ -862,7 +851,7 @@ namespace interpreter {
 				};
 				servicesNames.at("getConnectedComponent")->setCallback(callback);
 
-				callback = [](const std::vector<ptr(mem_component)>& /*params*/, const ptr(mem_component)& context) -> ptr(mem_port) {
+				callback = [](const ptr(mem_component)& context) -> ptr(mem_port) {
 					std::string type = cast(mem_string)(context->getPortByName("type")->getConnectedPortAt(0)->getOwner())->getValue();
 					if (type != PORT_TYPE_NAMED) {
 						throw exceptions::runtime::CWrongPortTypeException(type, "setConnectedComponent");
@@ -876,7 +865,7 @@ namespace interpreter {
 				};
 				servicesNames.at("setConnectedComponent")->setCallback(callback);
 
-				callback = [](const std::vector<ptr(mem_component)>& /*params*/, const ptr(mem_component)& context) -> ptr(mem_port) {
+				callback = [](const ptr(mem_component)& context) -> ptr(mem_port) {
 					std::string type = cast(mem_string)(context->getPortByName("type")->getConnectedPortAt(0)->getOwner())->getValue();
 					if (type != PORT_TYPE_NAMED) {
 						throw exceptions::runtime::CWrongPortTypeException(type, "getServiceAt");
@@ -891,7 +880,7 @@ namespace interpreter {
 				};
 				servicesNames.at("getServiceAt")->setCallback(callback);
 
-				callback = [](const std::vector<ptr(mem_component)>& /*params*/, const ptr(mem_component)& context) -> ptr(mem_port) {
+				callback = [](const ptr(mem_component)& context) -> ptr(mem_port) {
 					std::string type = cast(mem_string)(context->getPortByName("type")->getConnectedPortAt(0)->getOwner())->getValue();
 					if (type != PORT_TYPE_NAMED) {
 						throw exceptions::runtime::CWrongPortTypeException(type, "addService");

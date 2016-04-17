@@ -18,19 +18,14 @@ namespace interpreter {
 
 				class CPrimitiveService : public CAbstractPrimitive {
 
-					std::function<ptr(objects::CGeneralPort)(const std::vector<ptr(objects::CComponent)>&, const ptr(objects::CComponent)&)> m_callback;
-
-					std::vector<std::string> m_argumentsNames;
-
-					std::vector<ptr(objects::CComponent)> m_arguments;
+					std::function<ptr(objects::CGeneralPort)(const ptr(objects::CComponent)&)> m_callback;
 
 				  public:
 
 					CPrimitiveService(const std::string& name = "",
 					                  ptr(CComponent) context = nullptr,
-					                  std::function<ptr(objects::CGeneralPort)(const std::vector<ptr(objects::CComponent)>&, const ptr(objects::CComponent)&)> callback
-					                  = std::function<ptr(objects::CGeneralPort)(const std::vector<ptr(objects::CComponent)>&, const ptr(objects::CComponent)&)>(),
-					                  std::vector<std::string> argumentsNames = std::vector<std::string>(0));
+					                  std::function<ptr(objects::CGeneralPort)(const ptr(objects::CComponent)&)> callback
+					                  = std::function<ptr(objects::CGeneralPort)(const ptr(objects::CComponent)&)>());
 
 					CPrimitiveService(ptr(CPrimitiveService) instance);
 
@@ -46,21 +41,7 @@ namespace interpreter {
 
 					ptr(objects::CGeneralPort) invoke();
 
-					size_t getArgumentsNamesCount() const;
-
-					void setArgumentName(std::string argumentName);
-
-					std::string getArgumentNameAt(size_t index);
-
-					std::string getName() const;
-
-					void addArgument(ptr(objects::CComponent) arg);
-
-					size_t getArgumentCount() const;
-
-					ptr(objects::CComponent) getArgumentAt(size_t index);
-
-					void setCallback(std::function<ptr(objects::CGeneralPort)(const std::vector<ptr(objects::CComponent)>&, const ptr(objects::CComponent)&)> callback);
+					void setCallback(std::function<ptr(objects::CGeneralPort)(const ptr(objects::CComponent)&)> callback);
 				};
 
 			}

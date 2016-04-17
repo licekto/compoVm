@@ -41,9 +41,9 @@ namespace interpreter {
 
 				void addPrimitivePorts(ptr(mem_component) component, ptr(ast_descriptor) descriptor);
 
-				std::function<ptr(mem_port)(const std::vector<ptr(mem_component)>&, const ptr(mem_component)&)> prepareStringSetter(const std::string& portName);
+				std::function<ptr(mem_port)(const ptr(mem_component)&)> prepareStringSetter(const std::string& portName);
 
-				std::function<ptr(mem_port)(const std::vector<ptr(mem_component)>&, const ptr(mem_component)&)> prepareStringGetter(const std::string& portName);
+				std::function<ptr(mem_port)(const ptr(mem_component)&)> prepareStringGetter(const std::string& portName);
 
 				void addDefaultPort(ptr(mem_value) value);
 

@@ -136,11 +136,10 @@ do { \
     BOOST_CHECK_EQUAL(component->getPortByName(portName)->getPrimitivePort()->getConnectedServicesNumber(), connectedServices); \
 } while(0)
 
-#define TEST_PRIMITIVE_SERVICE(component, portName, serviceName, argsCount, ret, retPort) \
+#define TEST_PRIMITIVE_SERVICE(component, portName, serviceName, ret, retPort) \
 do { \
     BOOST_CHECK(component->getPortByName(portName)->getPrimitivePort()->getConnectedServiceByName(serviceName)->isPrimitive()); \
     BOOST_CHECK_EQUAL(component->getPortByName(portName)->getPrimitivePort()->getConnectedServiceByName(serviceName)->getName(), serviceName); \
-    BOOST_CHECK_EQUAL(component->getPortByName(portName)->getPrimitivePort()->getConnectedServiceByName(serviceName)->getPrimitiveService()->getArgumentsNamesCount(), argsCount); \
     retPort = component->getPortByName(portName)->getPrimitivePort()->getConnectedServiceByName(serviceName)->getPrimitiveService()->invoke(); \
     if (ret) { \
         BOOST_CHECK(retPort.use_count()); \
@@ -154,14 +153,14 @@ do { \
 do { \
     ptr(mem_port) _retPort_; \
     TEST_PRIMITIVE_PORT(component, "default", types::roleType::PROVIDES, types::visibilityType::EXTERNAL, servicesTotal); \
-    TEST_PRIMITIVE_SERVICE(component, "default", "getPorts", 0, false, _retPort_); \
+    TEST_PRIMITIVE_SERVICE(component, "default", "getPorts", false, _retPort_); \
     component->getPortByName("args")->connectPort(bootstrap1->bootstrapStringValue("default")->getDefaultPort()); \
-    TEST_PRIMITIVE_SERVICE(component, "default", "getPortNamed", 1, true, _retPort_); \
+    TEST_PRIMITIVE_SERVICE(component, "default", "getPortNamed", true, _retPort_); \
     BOOST_CHECK_EQUAL(component->getPortByName("args")->getConnectedPortsNumber(), 0); \
-    TEST_PRIMITIVE_SERVICE(component, "default", "getDescriptor", 0, false, _retPort_); \
-    TEST_PRIMITIVE_SERVICE(component, "default", "getIdentityHash", 0, false, _retPort_); \
+    TEST_PRIMITIVE_SERVICE(component, "default", "getDescriptor", false, _retPort_); \
+    TEST_PRIMITIVE_SERVICE(component, "default", "getIdentityHash", false, _retPort_); \
     if (owner.get()) { \
-        TEST_PRIMITIVE_SERVICE(component, "default", "getOwner", 0, true, _retPort_); \
+        TEST_PRIMITIVE_SERVICE(component, "default", "getOwner", true, _retPort_); \
         BOOST_CHECK_EQUAL(component->getPortByName("default")->getPrimitivePort()->getConnectedServiceByName("getOwner")->getPrimitiveService()->invoke().get(), owner->getPortByName("default").get()); \
     } \
     TEST_PRIMITIVE_PORT(component, "self", types::roleType::PROVIDES, types::visibilityType::INTERNAL, servicesTotal); \
