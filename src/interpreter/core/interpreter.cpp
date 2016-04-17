@@ -9,12 +9,10 @@ namespace interpreter {
 
 		CInterpreter::CInterpreter(ptr(ParserWrapper) parser,
                                            ptr(bootstrap::CBootstrapStage2) bootstrap,
-                                           ptr(memory::memspace::CDescriptorTable) table,
-                                           ptr(CContext) context)
+                                           ptr(memory::memspace::CDescriptorTable) table)
 			: m_parser(parser),
 			  m_bootstrap(bootstrap),
-			  m_descriptorTable(table),
-                          m_context(context) {
+			  m_descriptorTable(table){
 		}
 
 		ptr(mem_port) CInterpreter::execProgram(ptr(ast_program) node) {
@@ -24,6 +22,7 @@ namespace interpreter {
 			ptr(mem_component) main = m_descriptorTable->getDescriptor(COMPO_MAIN_COMPONENT_NAME);
                         
                         ptr(mem_component) mainComponent = main->getServiceByName("new")->invoke()->getOwner();
+                        m_serviceContextStack.push(new_ptr(CContext)());
                         return mainComponent->getServiceByName(COMPO_MAIN_SERVICE_NAME)->invoke();
 		}
 
@@ -36,20 +35,20 @@ namespace interpreter {
                 }
 
                 void CInterpreter::execCompound(ptr(ast_compound) node) {
-                    m_context->pushContext(node);
+                    m_serviceContextStack.top()->pushContext(node);
                     
                     for (size_t i = 0; i < node->getBodySize(); ++i) {
                         exec(node->getBodyNodeAt(i));
                     }
                     
-                    m_context->popContext();
+                    m_serviceContextStack.top()->popContext();
                 }
 
                 void CInterpreter::execAssignment(ptr(ast_assignment) node) {
                     std::string variable = node->getVariable()->getStringValue();
-                    ptr(mem_port) port = m_context->getVariable(variable);
+                    ptr(mem_port) port = m_serviceContextStack.top()->getVariable(variable);
                     port = exec(node->getRightSide());
-                    m_context->setVariable(variable, port);
+                    m_serviceContextStack.top()->setVariable(variable, port);
                 }
 
                 ptr(mem_port) CInterpreter::execArithmeticOp(ptr(ast_binary) expr, type_operator op) {
@@ -145,17 +144,57 @@ namespace interpreter {
                     u64 index = 0;
                     if (node->getIndex().use_count() && node->getIndex()->getNodeType() == type_node::SYMBOL) {
                         std::string var = cast(ast_symbol)(node->getIndex())->getStringValue();
-                        index = cast(mem_int)(m_context->getVariable(var)->getOwner())->getValue();
+                        index = cast(mem_int)(m_serviceContextStack.top()->getVariable(var)->getOwner())->getValue();
                     }
                     else if (node->getIndex().use_count() && node->getIndex()->getNodeType() == type_node::CONSTANT) {
                         index = cast(ast_constant)(node->getIndex())->getValue();
                     }
                     ptr(mem_port) port;
-                    if (m_context->getTopContext()->variableFound(receiver)) {
-                        port = m_context->getVariable(receiver);
+                    if (m_serviceContextStack.top()->getTopContext()->variableFound(receiver)) {
+                        port = m_serviceContextStack.top()->getVariable(receiver);
                     }
                     else {
                         port = m_descriptorTable->getDescriptor(receiver)->getPortByName("default");
+                    }
+                    
+                    if (node->getParameters()->getNodeType() == type_node::SERVICE_SIGNATURE) {
+                        ptr(ast_servicesignature) sign = cast(ast_servicesignature)(node->getParameters());
+                        for (size_t i = 0; i < sign->getParamsSize(); ++i) {
+                            type_node t = sign->getParamAt(i)->getNodeType();
+                            ptr(mem_port) connectedPort;
+                            switch(t) {
+                                case type_node::SYMBOL : {
+                                    connectedPort = m_serviceContextStack.top()->getVariable(cast(ast_symbol)(sign->getParamAt(i))->getStringValue());
+                                    break;
+                                }
+                                case type_node::STRING_LITERAL : {
+                                    connectedPort = m_bootstrap->getStringComponent(cast(ast_string)(sign->getParamAt(i))->getValue());
+                                    break;
+                                }
+                                case type_node::CONSTANT : {
+                                    connectedPort = m_bootstrap->getIntComponent(cast(ast_constant)(sign->getParamAt(i))->getValue());
+                                    break;
+                                }
+                                case type_node::BOOLEAN : {
+                                    connectedPort = m_bootstrap->getBoolComponent(cast(ast_boolean)(sign->getParamAt(i))->getValue());
+                                    break;
+                                }
+                                case type_node::SERVICE_INVOCATION : {
+                                    connectedPort = exec(sign->getParamAt(i));
+                                    break;
+                                }
+                                default : {
+                                    // throw
+                                }
+                                port->getOwner()->getPortByName("args")->connectPort(connectedPort);
+                            }
+                        }
+                    }
+                    else if (node->getParameters()->getNodeType() == type_node::SERVICE_INVOCATION) {
+                        port->getOwner()->getPortByName("args")->connectPort(exec(node->getParameters()));
+                    }
+                    else {
+                        // throw
                     }
                     
                     return port->invokeByName(selector, index);
@@ -184,7 +223,7 @@ namespace interpreter {
 				break;
 			}
                         case type_node::SYMBOL : {
-                                return m_context->getVariable(cast(ast_symbol)(node)->getStringValue());
+                                return m_serviceContextStack.top()->getVariable(cast(ast_symbol)(node)->getStringValue());
 			}
                         case type_node::CONSTANT : {
                                 return m_bootstrap->getIntComponent(cast(ast_constant)(node)->getValue());
@@ -242,7 +281,7 @@ namespace interpreter {
                         return nullptr;
 		}
 
-		ptr(mem_port)  CInterpreter::execServiceCode(const std::string& code) {
+		ptr(mem_port)  CInterpreter::execServiceCode(const std::string& code, ptr(CContext) context) {
 			std::stringstream input;
 			std::string serviceCode = code;
 			input.str(serviceCode);
@@ -252,13 +291,18 @@ namespace interpreter {
 			ptr(ast_compound) body = m_parser->getServiceBody();
                         ptr(mem_port) ret;
                         
+                        if (!context.use_count()) {
+                            context = new_ptr(CContext)();
+                        }
+                        m_serviceContextStack.push(context);
+                        
                         try {
                             exec(body);
                         }
                         catch (exceptions::execution::CReturnException& ex) {
                             ret = ex.getPort();
                         }
-                        m_context->clear();
+                        m_serviceContextStack.pop();
                         
                         return ret;
                 }

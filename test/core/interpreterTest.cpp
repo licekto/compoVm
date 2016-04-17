@@ -31,8 +31,7 @@ ptr(interpreter::memory::memspace::CDescriptorTable) table = new_ptr(interpreter
 ptr(core_interpreter) initInterpreter() {
     ptr(core_bootstrap1) bootstrap1 = new_ptr(core_bootstrap1)(new_ptr(interpreter::core::CCoreModules)(parser));
     ptr(core_bootstrap2) bootstrap2 = new_ptr(core_bootstrap2)(bootstrap1);
-    ptr(interpreter::core::CContext) context = new_ptr(interpreter::core::CContext)();
-    ptr(core_interpreter) interpreter = new_ptr(core_interpreter)(parser, bootstrap2, table, context);
+    ptr(core_interpreter) interpreter = new_ptr(core_interpreter)(parser, bootstrap2, table);
     bootstrap1->setInterpreter(interpreter);
     return interpreter;
 }

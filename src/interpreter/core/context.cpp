@@ -12,6 +12,10 @@ namespace interpreter {
                 m_stack.push_back(context);
             }
 
+            void CContext::pushContext() {
+                m_stack.push_back(new_ptr(CVariablesTable)());
+            }
+
             void CContext::popContext() {
                 m_stack.pop_back();
             }
@@ -21,6 +25,9 @@ namespace interpreter {
             }
 
             void CContext::setVariable(const std::string& var, ptr(mem_port) port) {
+                if (m_stack.empty()) {
+                    pushContext();
+                }
                 getTopContext()->setVariable(var, port);
             }
 

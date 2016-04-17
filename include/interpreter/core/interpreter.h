@@ -47,7 +47,7 @@ namespace interpreter {
 
 			ptr(memory::memspace::CDescriptorTable) m_descriptorTable;
                         
-                        ptr(CContext) m_context;
+                        std::stack<ptr(CContext)> m_serviceContextStack;
 
 			ptr(mem_port) execProgram(ptr(ast_program) node);
 
@@ -71,10 +71,9 @@ namespace interpreter {
 
 			CInterpreter(ptr(ParserWrapper) parser = nullptr,
                                      ptr(bootstrap::CBootstrapStage2) bootstrap = nullptr,
-                                     ptr(memory::memspace::CDescriptorTable) table = nullptr,
-                                     ptr(CContext) context = nullptr);
+                                     ptr(memory::memspace::CDescriptorTable) table = nullptr);
 
-			ptr(mem_port) execServiceCode(const std::string& code);
+			ptr(mem_port) execServiceCode(const std::string& code, ptr(CContext) context = nullptr);
                         
 			ptr(mem_port) run(ptr(ast_program) ast);
 		};

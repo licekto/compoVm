@@ -394,8 +394,17 @@ namespace interpreter {
 				[this](const std::vector<ptr(mem_component)>& /*params*/, const ptr(mem_component)& contextComponent) -> ptr(mem_port) {
 					if (contextComponent.use_count()) {
 						ptr(mem_string) code = cast(mem_string)(contextComponent->getPortByName("code")->getConnectedPortAt(0)->getOwner());
-
-						m_interpreter->execServiceCode(code->getValue());
+                                                
+                                                ptr(interpreter::core::CContext) context = new_ptr(interpreter::core::CContext)();
+                                                
+                                                ptr(mem_component) sign = contextComponent->getPortByName("serviceSign")->getConnectedPortAt(0)->getOwner();
+                                                for (size_t i = 0; i < sign->getPortByName("paramNames")->getConnectedPortsNumber(); ++i) {
+                                                    std::string paramName = cast(mem_string)(sign->getPortByName("paramNames")->getConnectedPortAt(i)->getOwner())->getValue();
+                                                    ptr(mem_port) port = contextComponent->getPortByName("args")->getConnectedPortAt(i);
+                                                    context->setVariable(paramName, port);
+                                                }
+                                                
+						m_interpreter->execServiceCode(code->getValue(), context);
 					}
 					return nullptr;
 				};

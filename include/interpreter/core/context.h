@@ -18,6 +18,8 @@ namespace interpreter {
                 public:
                     void pushContext(ptr(ast_compound) node);
                     
+                    void pushContext();
+                    
                     void popContext();
                     
                     ptr(CVariablesTable) getTopContext();
