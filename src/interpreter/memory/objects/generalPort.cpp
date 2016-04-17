@@ -133,6 +133,11 @@ namespace interpreter {
                                 std::string type = cast(objects::values::CStringComponent)
                                         (m_port->getPortByName("interfaceDescription")->getConnectedPortAt(0)
                                                ->getOwner()->getPortByName("type")->getConnectedPortAt(0)->getOwner())->getValue();
+                                
+                                if (!getOwner()->getServiceByName(selector)->isPrimitive()) {
+                                    getOwner()->getServiceByName(selector)->getService()->getPortByName("args")->delegateTo(getOwner()->getPortByName("args"));
+                                }
+                                
                                 if (type == PORT_TYPE_SIGNATURES) {
                                     bool found = false;
                                     std::string definedSelector = "";
@@ -178,7 +183,10 @@ namespace interpreter {
                                 return m_primitivePort->getDelegatedPort();
                             }
                             else {
-                                return m_port->getPortByName("delegatedPorts")->getConnectedPortAt(0);
+                                if (m_port->getPortByName("delegatedPorts")->getConnectedPortsNumber()) {
+                                    return m_port->getPortByName("delegatedPorts")->getConnectedPortAt(0);
+                                }
+                                return nullptr;
                             }
                         }
 

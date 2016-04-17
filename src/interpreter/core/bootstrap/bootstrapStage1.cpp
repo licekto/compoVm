@@ -386,9 +386,25 @@ namespace interpreter {
                                                 ptr(interpreter::core::CContext) context = new_ptr(interpreter::core::CContext)();
                                                 
                                                 ptr(mem_component) sign = contextComponent->getPortByName("serviceSign")->getConnectedPortAt(0)->getOwner();
-                                                for (size_t i = 0; i < sign->getPortByName("paramNames")->getConnectedPortsNumber(); ++i) {
+                                                
+                                                size_t paramsNumber = sign->getPortByName("paramNames")->getConnectedPortsNumber();
+                                                ptr(mem_port) argsPort = contextComponent->getPortByName("args");
+                                                if (paramsNumber != argsPort->getConnectedPortsNumber()) {
+                                                    ptr(mem_port) delegatedPort = contextComponent->getPortByName("args");
+                                                    
+                                                    while (delegatedPort->getDelegatedPort().use_count()) {
+                                                        delegatedPort = delegatedPort->getDelegatedPort();
+                                                    }
+                                                    
+                                                    argsPort = delegatedPort;
+                                                    if (paramsNumber != argsPort->getConnectedPortsNumber()) {
+                                                        // throw
+                                                    }
+                                                }
+                                                
+                                                for (size_t i = 0; i < paramsNumber; ++i) {
                                                     std::string paramName = cast(mem_string)(sign->getPortByName("paramNames")->getConnectedPortAt(i)->getOwner())->getValue();
-                                                    ptr(mem_port) port = contextComponent->getPortByName("args")->getConnectedPortAt(i);
+                                                    ptr(mem_port) port = argsPort->getConnectedPortAt(i);
                                                     context->setVariable(paramName, port);
                                                 }
                                                 
