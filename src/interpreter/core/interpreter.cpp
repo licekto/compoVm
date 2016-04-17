@@ -148,11 +148,8 @@ namespace interpreter {
                     else if (node->getIndex().use_count() && node->getIndex()->getNodeType() == type_node::CONSTANT) {
                         index = cast(ast_constant)(node->getIndex())->getValue();
                     }
-                    ptr(mem_port) port;
-                    if (m_serviceContextStack.top()->getTopContext()->variableFound(receiver)) {
-                        port = m_serviceContextStack.top()->getVariable(receiver);
-                    }
-                    else {
+                    ptr(mem_port) port = m_serviceContextStack.top()->getVariable(receiver);
+                    if (!port.use_count()) {
                         port = m_descriptorTable->getDescriptor(receiver)->getPortByName("default");
                     }
                     

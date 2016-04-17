@@ -260,6 +260,10 @@ namespace interpreter {
 					tmp = tmp->m_parent;
 				}
 
+                                for (size_t i = 0; i < getSelfPortsNumber(); ++i) {
+                                    portsMap[getSelfPortAt(i)->getName()] = getSelfPortAt(i);
+                                }
+                                
 				tmp = m_child;
 				while (tmp.use_count()) {
 					for (size_t i = 0; i < tmp->getSelfPortsNumber(); ++i) {
