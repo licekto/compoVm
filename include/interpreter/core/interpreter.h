@@ -69,6 +69,10 @@ namespace interpreter {
                         
                         ptr(mem_port) execServiceInvocation(ptr(ast_serviceinvocation) node);
 
+                        ptr(mem_port) execConnection(ptr(ast_connection) node);
+                        
+                        ptr(mem_port) execDisconnection(ptr(ast_disconnection) node);
+                        
 			ptr(mem_port) exec(ptr(ast_node));
 
 		  public:

@@ -199,6 +199,28 @@ namespace interpreter {
                     return ret;
                 }
 
+                ptr(mem_port) CInterpreter::execConnection(ptr(ast_connection) node) {
+                    ptr(ast_portaddress) source = node->getSourcePortIdentification();
+                    ptr(ast_portaddress) destination = node->getDestinationPortIdentification();
+                    
+                    ptr(mem_port) srcComponent = exec(source->getComponent());
+                    ptr(mem_port) srcPort = srcComponent->getOwner()->getPortByName(source->getPortName()->getStringValue());
+                    
+                    ptr(mem_port) dstComponent = exec(destination->getComponent());
+                    ptr(mem_port) dstPort = dstComponent->getOwner()->getPortByName(destination->getPortName()->getStringValue());
+                    
+                    srcPort->connectPort(dstPort);
+                }
+
+                ptr(mem_port) CInterpreter::execDisconnection(ptr(ast_disconnection) node) {
+                    ptr(ast_portaddress) source = node->getSourcePortIdentification();
+                    
+                    ptr(mem_port) srcComponent = exec(source->getComponent());
+                    ptr(mem_port) srcPort = srcComponent->getOwner()->getPortByName(source->getPortName()->getStringValue());
+                    
+                    srcPort->disconnectPortAt(0);
+                }
+
 		ptr(mem_port)  CInterpreter::exec(ptr(ast_node) node) {
 			switch (node->getNodeType()) {
 			case type_node::PROGRAM : {
@@ -214,6 +236,12 @@ namespace interpreter {
 			}
                         case type_node::SERVICE_INVOCATION : {
 				return execServiceInvocation(cast(ast_serviceinvocation)(node));
+			}
+                        case type_node::CONNECTION : {
+				return execConnection(cast(ast_connection)(node));
+			}
+                        case type_node::DISCONNECTION : {
+				return execDisconnection(cast(ast_disconnection)(node));
 			}
                         /*------------------ Procedural ----------------------*/
                         case type_node::ASSIGNMENT_EXPRESSION : {

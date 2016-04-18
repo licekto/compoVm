@@ -130,18 +130,27 @@ namespace interpreter {
                                 return m_primitivePort->getConnectedServiceByName(selector)->invoke();
                             }
                             else {
+                                ptr(CGeneralPort) port = this->shared_from_this();
+                                
+                                while (!port->getOwner()->containsService(selector)) {
+                                    port = port->getDelegatedPort();
+                                    if (!port.use_count()) {
+                                        throw exceptions::runtime::CServiceNotFoundException(selector);
+                                    }
+                                }
+                                
                                 std::string type = cast(objects::values::CStringComponent)
-                                        (m_port->getPortByName("interfaceDescription")->getConnectedPortAt(0)
+                                        (port->getPort()->getPortByName("interfaceDescription")->getConnectedPortAt(0)
                                                ->getOwner()->getPortByName("type")->getConnectedPortAt(0)->getOwner())->getValue();
                                 
-                                if (!getOwner()->getServiceByName(selector)->isPrimitive()) {
-                                    getOwner()->getServiceByName(selector)->getService()->getPortByName("args")->delegateTo(getOwner()->getPortByName("args"));
+                                if (!port->getOwner()->getServiceByName(selector)->isPrimitive()) {
+                                    port->getOwner()->getServiceByName(selector)->getService()->getPortByName("args")->delegateTo(getOwner()->getPortByName("args"));
                                 }
                                 
                                 if (type == PORT_TYPE_SIGNATURES) {
                                     bool found = false;
                                     std::string definedSelector = "";
-                                    ptr(CComponent) interface = m_port->getPortByName("interfaceDescription")->getConnectedPortAt(0)->getOwner();
+                                    ptr(CComponent) interface = port->getPort()->getPortByName("interfaceDescription")->getConnectedPortAt(0)->getOwner();
                                     for (size_t i = 0; i < interface->getPortByName("signatures")->getConnectedPortsNumber(); ++i) {
                                         ptr(CComponent) signatures = interface->getPortByName("signatures")->getConnectedPortAt(i)->getOwner();
                                         ptr(CComponent) component = signatures->getPortByName("selector")->getConnectedPortAt(0)->getOwner();
@@ -154,13 +163,13 @@ namespace interpreter {
                                     if (!found) {
                                         throw exceptions::runtime::CServiceNotFoundException(selector);
                                     }
-                                    return getOwner()->getServiceByName(selector)->invoke();
+                                    return port->getOwner()->getServiceByName(selector)->invoke();
                                 }
                                 else if (type == PORT_TYPE_UNIVERSAL) {
-                                    return getOwner()->getServiceByName(selector)->invoke();
+                                    return port->getOwner()->getServiceByName(selector)->invoke();
                                 }
                                 else if (type == PORT_TYPE_NAMED) {
-                                    return m_port->getPortByName("connectedPorts")->getConnectedPortAt(index)->getOwner()->getServiceByName(selector)->invoke();
+                                    return port->getPort()->getPortByName("connectedPorts")->getConnectedPortAt(index)->getOwner()->getServiceByName(selector)->invoke();
                                 }
                                 else if (type == PORT_TYPE_INJECTED) {
                                     throw exceptions::semantic::CUnsupportedFeatureException("injected port");

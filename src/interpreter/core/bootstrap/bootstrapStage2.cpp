@@ -202,8 +202,8 @@ namespace interpreter {
                                                 newComponent->addPort(newPort);
 					}
                                         
-                                        for (size_t i = 0; i < context->getPortByName("architectureDefinition")->getConnectedPortsNumber(); ++i) {
-                                            ptr(mem_component) connection = context->getPortByName("architectureDefinition")->getConnectedPortAt(0)->getOwner()->getBottomChild();
+                                        for (int i = context->getPortByName("architectureDefinition")->getConnectedPortsNumber() - 1; i >= 0; --i) {
+                                            ptr(mem_component) connection = context->getPortByName("architectureDefinition")->getConnectedPortAt(i)->getOwner()->getBottomChild();
                                             
                                             auto func = [this, &connection, &newComponent](const std::string& type, const std::string& portName, const std::string& dstSrc) -> ptr(mem_port) {
                                                 ptr(mem_port) port;

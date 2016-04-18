@@ -61,6 +61,8 @@ namespace interpreter {
 
 				ptr(CGeneralService) getServiceByName(const std::string& name);
 
+                                bool containsService(const std::string& name);
+                                
 				void addService(ptr(CGeneralService) service);
 
 				ptr(CGeneralPort) getPortOfService(const std::string& serviceName);

@@ -21,7 +21,7 @@ namespace interpreter {
                                 class CPrimitivePort;
 			}
 
-			class CGeneralPort {
+			class CGeneralPort : public std::enable_shared_from_this<CGeneralPort> {
 			  protected:
 				ptr(CComponent) m_port;
 

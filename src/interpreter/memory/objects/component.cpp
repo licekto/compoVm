@@ -144,7 +144,18 @@ namespace interpreter {
 					tmp = tmp->m_child;
 				}
 				throw exceptions::runtime::CServiceNotFoundException(name);
-			}
+                        }
+
+                        bool CComponent::containsService(const std::string& name) {
+                            bool ret = true;
+                            try {
+                                getServiceByName(name);
+                            }
+                            catch (const exceptions::runtime::CServiceNotFoundException& ex) {
+                                ret = false;
+                            }
+                            return ret;
+                        }
 
 			void CComponent::addService(std::shared_ptr<CGeneralService> service) {
 				m_services.push_back(service);
