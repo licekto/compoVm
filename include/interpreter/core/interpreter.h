@@ -12,6 +12,10 @@
 #include "exceptions/runtime/mainComponentMissingException.h"
 #include "exceptions/runtime/mainServiceMissingException.h"
 #include "exceptions/runtime/unknownAstNodeTypeException.h"
+#include "exceptions/runtime/wrongFormOfMainException.h"
+#include "exceptions/execution/returnException.h"
+#include "exceptions/runtime/unknownOperatorTypeException.h"
+#include "exceptions/runtime/wrongServiceInvocationParameterTypeException.h"
 #include "variablesTable.h"
 #include "context.h"
 

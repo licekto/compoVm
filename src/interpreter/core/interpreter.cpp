@@ -1,6 +1,4 @@
 #include "interpreter/core/interpreter.h"
-#include "exceptions/runtime/wrongFormOfMainException.h"
-#include "exceptions/execution/returnException.h"
 
 
 namespace interpreter {
@@ -73,7 +71,7 @@ namespace interpreter {
                             break;
                         }
                         default : {
-                            // throw
+                            throw exceptions::runtime::CUnknownOperatorTypeException();
                         }
                     }
                     return m_bootstrap->getIntComponent(res);
@@ -94,7 +92,7 @@ namespace interpreter {
                             break;
                         }
                         default : {
-                            // throw
+                            throw exceptions::runtime::CUnknownOperatorTypeException();
                         }
                     }
                     return m_bootstrap->getBoolComponent(res);
@@ -131,7 +129,7 @@ namespace interpreter {
                             break;
                         }
                         default : {
-                            // throw
+                            throw exceptions::runtime::CUnknownOperatorTypeException();
                         }
                     }
                     return m_bootstrap->getBoolComponent(res);
@@ -180,7 +178,7 @@ namespace interpreter {
                                     break;
                                 }
                                 default : {
-                                    // throw
+                                    throw exceptions::runtime::CWrongServiceInvocationParameterTypeException(t);
                                 }
                             }
                             port->getOwner()->getPortByName("args")->connectPort(connectedPort);
@@ -190,7 +188,7 @@ namespace interpreter {
                         port->getOwner()->getPortByName("args")->connectPort(exec(node->getParameters()));
                     }
                     else {
-                        // throw
+                        throw exceptions::runtime::CWrongServiceInvocationParameterTypeException(node->getParameters()->getNodeType());
                     }
                     
                     ptr(mem_port) ret = port->invokeByName(selector, index);

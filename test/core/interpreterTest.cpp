@@ -189,6 +189,7 @@ BOOST_AUTO_TEST_CASE(connectionsTest) {
     TEST_PORT_COMPONENT(inst->getPortByName("a")->getConnectedPortAt(0)->getPort(), "default", 0);
     
     ptr(mem_port) port = inst->getServiceByName("test")->invoke();
+    BOOST_CHECK_EQUAL(cast(mem_int)(port->getOwner())->getValue(), 4);
     
     // Clear AST for next test
     parser->clearAll();

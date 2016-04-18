@@ -1,5 +1,8 @@
 #include "interpreter/core/bootstrap/bootstrapStage2.h"
 #include "interpreter/core/interpreter.h"
+#include "exceptions/runtime/selfPortNotCollectionException.h"
+#include "exceptions/runtime/wrongServiceTypeInArchitectureException.h"
+#include "exceptions/runtime/wrongBindTypeException.h"
 
 namespace interpreter {
 
@@ -216,8 +219,7 @@ namespace interpreter {
                                                 else if (type == CONNECTION_COLLECTION) {
                                                     std::string componentName = cast(mem_string)(connection->getPortByName(dstSrc + "Component")->getConnectedPortAt(0)->getOwner())->getValue();
                                                     if (componentName == "self") {
-                                                        // throw
-                                                        return nullptr;
+                                                        throw exceptions::runtime::CSelfPortNotCollectionException();
                                                     }
                                                     u64 index = cast(mem_int)(connection->getPortByName(dstSrc + "ComponentIndex")->getConnectedPortAt(0)->getOwner())->getValue();
                                                     port = newComponent->getPortByName(componentName)->getConnectedPortAt(index)->getOwner()->getBottomChild()->getPortByName(portName);
@@ -228,20 +230,18 @@ namespace interpreter {
                                                     std::string selectorName = cast(mem_string)(inv->getPortByName("selector")->getConnectedPortAt(0)->getOwner())->getValue();
                                                     
                                                     if (inv->getPortByName("params")->getConnectedPortsNumber()) {
-                                                        // arguments not allowed in connection
-                                                        // throw
+                                                        throw exceptions::runtime::CWrongServiceTypeInArchitectureException();
                                                     }
                                                     else if (selectorName != "new") {
-                                                        // other serivce than "new" not allowed
-                                                        // throw
+                                                        throw exceptions::runtime::CWrongServiceTypeInArchitectureException();
                                                     }
                                                     port = m_bootstrapStage1->m_interpreter->execService(receiverName, selectorName);
                                                 }
                                                 else if (type == CONNECTION_DEREFERENCE) {
-                                                    // throw
+                                                    throw exceptions::semantic::CUnsupportedFeatureException("dereference");
                                                 }
                                                 else {
-                                                    // throw
+                                                    throw exceptions::runtime::CWrongBindTypeException(type);
                                                 }
                                                 return port;
                                             };
@@ -264,7 +264,7 @@ namespace interpreter {
                                                 srcPort->delegateTo(dstPort);
                                             }
                                             else {
-                                                // throw
+                                                throw exceptions::runtime::CWrongBindTypeException(bindType);
                                             }
                                         }
                                         

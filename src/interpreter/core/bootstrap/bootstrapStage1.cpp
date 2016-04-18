@@ -1,5 +1,9 @@
 #include "interpreter/core/bootstrap/bootstrapStage1.h"
 #include "interpreter/core/interpreter.h"
+#include "exceptions/runtime/unknownValueComponentTypeException.h"
+#include "exceptions/runtime/wrongNumberOfParametersException.h"
+#include "exceptions/runtime/wrongServiceInvocationParameterTypeException.h"
+#include "exceptions/runtime/wrongBindTypeException.h"
 
 namespace interpreter {
 
@@ -364,7 +368,7 @@ namespace interpreter {
                                                 break;
                                             }
                                             default : {
-                                                // throw
+                                                throw exceptions::runtime::CUnknownValueComponentTypeException();
                                             }
                                         }
                                         service->getPortByName("tempsV")->connectPort(val->getDefaultPort());
@@ -398,7 +402,7 @@ namespace interpreter {
                                                     
                                                     argsPort = delegatedPort;
                                                     if (paramsNumber != argsPort->getConnectedPortsNumber()) {
-                                                        // throw
+                                                        throw exceptions::runtime::CWrongNumberOfParametersException(argsPort->getConnectedPortsNumber());
                                                     }
                                                 }
                                                 
@@ -412,7 +416,12 @@ namespace interpreter {
                                                     std::map<std::string, ptr(mem_port)> portsMap = owner->getAllPorts();
 
                                                     for (auto item : portsMap) {
-                                                        context->setVariable(item.first, item.second);
+                                                        if (item.second->getConnectedPortsNumber()) {
+                                                            context->setVariable(item.first, item.second->getConnectedPortAt(0));
+                                                        }
+                                                        else {
+                                                            context->setVariable(item.first, item.second);
+                                                        }
                                                     }
                                                 }
                                                 
@@ -588,13 +597,12 @@ namespace interpreter {
 							break;
 						}
 						default : {
-							// throw
-							break;
+                                                        throw exceptions::runtime::CWrongServiceInvocationParameterTypeException(sign->getParamAt(i)->getNodeType());
 						}
 						}
 					}
 				} else {
-					// throw
+					throw exceptions::runtime::CWrongServiceInvocationParameterTypeException(astServiceInv->getParameters()->getNodeType());
 				}
 
 				servicesNames.at("setReceiver")->setCallback(prepareStringSetter("receiver"));
@@ -707,7 +715,7 @@ namespace interpreter {
                                     bindType = BIND_DELEGATION;
                                 }
                                 else {
-                                    // throw
+                                    throw exceptions::runtime::CWrongBindTypeException(bindType);
                                 }
 				connection->getPortByName("bindType")->connectPort(bootstrapStringValue(bindType)->getDefaultPort());
 

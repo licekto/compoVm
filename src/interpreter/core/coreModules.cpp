@@ -38,8 +38,7 @@ namespace interpreter {
 			});
 
 			if (it == m_coreDescriptors.end()) {
-				// throw
-				return nullptr;
+                                throw exceptions::runtime::CCoreModuleNotFoundException(module);
 			}
 			return *it;
 		}
