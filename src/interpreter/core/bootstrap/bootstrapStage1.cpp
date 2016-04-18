@@ -409,6 +409,7 @@ namespace interpreter {
                                                 for (size_t i = 0; i < paramsNumber; ++i) {
                                                     std::string paramName = cast(mem_string)(sign->getPortByName("paramNames")->getConnectedPortAt(i)->getOwner())->getValue();
                                                     ptr(mem_port) port = argsPort->getConnectedPortAt(i);
+                                                    context->addVariable(paramName);
                                                     context->setVariable(paramName, port);
                                                 }
                                                 
@@ -417,9 +418,11 @@ namespace interpreter {
 
                                                     for (auto item : portsMap) {
                                                         if (item.second->getConnectedPortsNumber()) {
+                                                            context->addVariable(item.first);
                                                             context->setVariable(item.first, item.second->getConnectedPortAt(0));
                                                         }
                                                         else {
+                                                            context->addVariable(item.first);
                                                             context->setVariable(item.first, item.second);
                                                         }
                                                     }

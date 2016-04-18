@@ -1,4 +1,5 @@
 #include "interpreter/core/interpreter.h"
+#include "exceptions/runtime/variableNotFoundException.h"
 
 
 namespace interpreter {
@@ -146,8 +147,11 @@ namespace interpreter {
                     else if (node->getIndex().use_count() && node->getIndex()->getNodeType() == type_node::CONSTANT) {
                         index = cast(ast_constant)(node->getIndex())->getValue();
                     }
-                    ptr(mem_port) port = m_serviceContextStack.top()->getVariable(receiver);
-                    if (!port.use_count()) {
+                    ptr(mem_port) port;
+                    try {
+                        port = m_serviceContextStack.top()->getVariable(receiver);
+                    }
+                    catch (const exceptions::runtime::CVariableNotFoundException& ex) {
                         port = m_descriptorTable->getDescriptor(receiver)->getPortByName("default");
                     }
                     

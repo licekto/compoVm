@@ -1,4 +1,5 @@
 #include "interpreter/core/context.h"
+#include "exceptions/runtime/variableNotFoundException.h"
 
 namespace interpreter {
     
@@ -31,13 +32,20 @@ namespace interpreter {
                 getTopContext()->setVariable(var, port);
             }
 
+            void CContext::addVariable(const std::string& var) {
+                if (m_stack.empty()) {
+                    pushContext();
+                }
+                getTopContext()->addVariable(var);
+            }
+
             ptr(mem_port) CContext::getVariable(const std::string& var) {
                 for (ptr(CVariablesTable) table : m_stack) {
                     if (table->variableFound(var)) {
                         return table->getVariable(var);
                     }
                 }
-                // throw
+                throw exceptions::runtime::CVariableNotFoundException(var);
             }
 
             void CContext::clear() {
