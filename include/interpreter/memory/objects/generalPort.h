@@ -5,6 +5,8 @@
 #include "definitions/allDefinitions.h"
 #include "types.h"
 #include "generalService.h"
+#include "exceptions/semantic/unsupportedFeatureException.h"
+#include "exceptions/runtime/unknownPortTypeException.h"
 
 namespace interpreter {
 

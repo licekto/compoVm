@@ -152,7 +152,7 @@ namespace interpreter {
                                         }
                                     }
                                     if (!found) {
-                                        // throw
+                                        throw exceptions::runtime::CServiceNotFoundException(selector);
                                     }
                                     return getOwner()->getServiceByName(selector)->invoke();
                                 }
@@ -163,10 +163,12 @@ namespace interpreter {
                                     return m_port->getPortByName("connectedPorts")->getConnectedPortAt(index)->getOwner()->getServiceByName(selector)->invoke();
                                 }
                                 else if (type == PORT_TYPE_INJECTED) {
-                                    // throw
+                                    throw exceptions::semantic::CUnsupportedFeatureException("injected port");
+                                }
+                                else {
+                                    throw exceptions::runtime::CUnknownPortTypeException();
                                 }
                             }
-                            // throw
                         }
 
                         void CGeneralPort::delegateTo(ptr(CGeneralPort) port) {

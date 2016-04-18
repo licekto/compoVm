@@ -3,6 +3,7 @@
 #include "definitions/allDefinitions.h"
 #include "interpreter/memory/objects/generalPort.h"
 #include "interpreter/memory/objects/primitives/primitiveService.h"
+#include "exceptions/runtime/primitiveServiceNoPortException.h"
 
 namespace interpreter {
 

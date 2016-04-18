@@ -3,6 +3,7 @@
 #include <string>
 
 #include "interpreter/memory/objects/component.h"
+#include "exceptions/runtime/wrongValueComponentPortException.h"
 
 namespace interpreter {
 

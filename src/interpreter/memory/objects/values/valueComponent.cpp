@@ -24,8 +24,7 @@ namespace interpreter {
 
 				ptr(CGeneralPort) CValueComponent::getPortByName(const std::string& name) {
 					if (name != "default") {
-						// throw
-						return nullptr;
+                                            throw exceptions::runtime::CWrongValueComponentPortException(name);
 					}
 					return m_ports.at(0);
                                 }
