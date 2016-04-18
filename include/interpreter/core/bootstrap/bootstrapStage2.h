@@ -33,6 +33,8 @@ namespace interpreter {
                                 ptr(mem_component) cloneSignature(ptr(mem_component) signature, ptr(mem_component) owner);
                                 
                                 ptr(mem_component) cloneService(ptr(mem_component) service, ptr(mem_component) owner);
+                                
+                                void checkPortSemantics(ptr(mem_port) port, ptr(mem_component) owner);
 
 			  public:
 				CBootstrapStage2(ptr(CBootstrapStage1) stage1 = nullptr);

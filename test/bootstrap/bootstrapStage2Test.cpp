@@ -49,8 +49,6 @@ BOOST_AUTO_TEST_CASE(basicTest) {
     // Check descriptor
     ptr(ast_descriptor) descriptorAst = cast(ast_descriptor)(parser->getRootNode()->getNodeAt(0));
     
-    std::cout << descriptorAst->getNameSymbol()->getStringValue() << std::endl;
-    
     ptr(mem_component) descriptorComponent = bootstrap2->bootstrapDescriptorComponent(descriptorAst);
     
     TEST_BASE_COMPONENT_COMPONENT(descriptorComponent);

@@ -3,6 +3,7 @@
 #include "exceptions/runtime/selfPortNotCollectionException.h"
 #include "exceptions/runtime/wrongServiceTypeInArchitectureException.h"
 #include "exceptions/runtime/wrongBindTypeException.h"
+#include "exceptions/semantic/externalPortConnectionException.h"
 
 namespace interpreter {
 
@@ -253,6 +254,9 @@ namespace interpreter {
                                             ptr(mem_port) srcPort = func(sourceType, sourcePortName, "source");
                                             ptr(mem_port) dstPort = func(destinationType, destinationPortName, "destination");
                                             
+                                            checkPortSemantics(srcPort, newComponent);
+                                            checkPortSemantics(dstPort, newComponent);
+                                            
                                             std::string bindType = cast(mem_string)(connection->getPortByName("bindType")->getConnectedPortAt(0)->getOwner())->getValue();
                                             if (bindType == BIND_CONNECTION) {
                                                 srcPort->connectPort(dstPort);
@@ -289,7 +293,17 @@ namespace interpreter {
 				component->connectAllParentServicesTo(generalPort);
 
 				return component;
-			}
+                        }
+
+                        void CBootstrapStage2::checkPortSemantics(ptr(mem_port) port, ptr(mem_component) owner) {
+                                std::string portName = port->getName();
+                                if (port->getOwner()->getBottomChild().get() == owner.get()
+                                 && portName != "default"
+                                 && port->getVisibility() == type_visibility::EXTERNAL) {
+                                    throw exceptions::semantic::CExternalPortConnectionException(portName);
+                                }
+                        }
+
 		}
 
 	}

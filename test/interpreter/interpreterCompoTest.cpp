@@ -22,6 +22,7 @@
 #include "interpreter/core/interpreter.h"
 #include "interpreter/core/coreModules.h"
 #include "interpreter/core/bootstrap/bootstrapStage1.h"
+#include "exceptions/semantic/externalPortConnectionException.h"
 
 BOOST_AUTO_TEST_SUITE(interpreterCompoTest)
 
@@ -147,7 +148,7 @@ BOOST_AUTO_TEST_CASE(serviceParamsTest) {
     table->clear();
 }
 
-BOOST_AUTO_TEST_CASE(connections1Test) {
+BOOST_AUTO_TEST_CASE(connection1Test) {
     ptr(core_interpreter) interpreter = initInterpreter();
     // Testing input
     std::stringstream input;
@@ -196,7 +197,7 @@ BOOST_AUTO_TEST_CASE(connections1Test) {
     table->clear();
 }
 
-BOOST_AUTO_TEST_CASE(connections2Test) {
+BOOST_AUTO_TEST_CASE(connection2Test) {
     ptr(core_interpreter) interpreter = initInterpreter();
     // Testing input
     std::stringstream input;
@@ -238,7 +239,7 @@ BOOST_AUTO_TEST_CASE(connections2Test) {
     table->clear();
 }
 
-BOOST_AUTO_TEST_CASE(disconnectionsTest) {
+BOOST_AUTO_TEST_CASE(disconnectionTest) {
     ptr(core_interpreter) interpreter = initInterpreter();
     // Testing input
     std::stringstream input;
@@ -329,6 +330,300 @@ BOOST_AUTO_TEST_CASE(delegationTest) {
     
     ptr(mem_port) port = inst->getServiceByName("test")->invoke();
     BOOST_CHECK_EQUAL(cast(mem_int)(port->getOwner())->getValue(), 4);
+    
+    // Clear AST for next test
+    parser->clearAll();
+    table->clear();
+}
+
+BOOST_AUTO_TEST_CASE(selfExternalRequirementSourceThrowTest) {
+    ptr(core_interpreter) interpreter = initInterpreter();
+    // Testing input
+    std::stringstream input;
+    input.str(
+   "descriptor A {\
+        service add(a) {\
+            return a + 1;\
+        }\
+    }\
+    descriptor Inst {\
+        externally requires {\
+            a : A;\
+        }\
+        architecture {\
+            connect a to default@(A.new());\
+        }\
+    }\
+    descriptor CompoContainer {\
+        service main() {\
+            |i|\
+            i := Inst.new();\
+            return i;\
+        }\
+    }");
+    
+    // Parse input and create AST
+    parser->parseAll(input);
+    
+    ptr(ast_program) program = parser->getRootNode();
+
+    BOOST_CHECK_THROW(interpreter->run(program), exceptions::semantic::CExternalPortConnectionException);
+    
+    // Clear AST for next test
+    parser->clearAll();
+    table->clear();
+}
+
+BOOST_AUTO_TEST_CASE(selfExternalRequirementDestinationThrowTest) {
+    ptr(core_interpreter) interpreter = initInterpreter();
+    // Testing input
+    std::stringstream input;
+    input.str(
+   "descriptor A {\
+        service add(a) {\
+            return a + 1;\
+        }\
+    }\
+    descriptor Inst {\
+        externally requires {\
+            a : A;\
+        }\
+        architecture {\
+            connect default@(A.new()) to a;\
+        }\
+    }\
+    descriptor CompoContainer {\
+        service main() {\
+            |i|\
+            i := Inst.new();\
+            return i;\
+        }\
+    }");
+    
+    // Parse input and create AST
+    parser->parseAll(input);
+    
+    ptr(ast_program) program = parser->getRootNode();
+
+    BOOST_CHECK_THROW(interpreter->run(program), exceptions::semantic::CExternalPortConnectionException);
+    
+    // Clear AST for next test
+    parser->clearAll();
+    table->clear();
+}
+
+BOOST_AUTO_TEST_CASE(outerExternalRequirementSourceThrowTest) {
+    ptr(core_interpreter) interpreter = initInterpreter();
+    // Testing input
+    std::stringstream input;
+    input.str(
+   "descriptor A {\
+        \
+        service add(a) {\
+            return a + 1;\
+        }\
+    }\
+    descriptor Inst {\
+        externally requires {\
+            a : A;\
+        }\
+        architecture {\
+            connect a to default@(A.new());\
+        }\
+    }\
+    descriptor CompoContainer {\
+        service main() {\
+            |i|\
+            i := Inst.new();\
+            return i;\
+        }\
+    }");
+    
+    // Parse input and create AST
+    parser->parseAll(input);
+    
+    ptr(ast_program) program = parser->getRootNode();
+
+    BOOST_CHECK_THROW(interpreter->run(program), exceptions::semantic::CExternalPortConnectionException);
+    
+    // Clear AST for next test
+    parser->clearAll();
+    table->clear();
+}
+
+BOOST_AUTO_TEST_CASE(outerExternalRequirementDestinationThrowTest) {
+    ptr(core_interpreter) interpreter = initInterpreter();
+    // Testing input
+    std::stringstream input;
+    input.str(
+   "descriptor A {\
+        service add(a) {\
+            return a + 1;\
+        }\
+    }\
+    descriptor Inst {\
+        externally requires {\
+            a : A;\
+        }\
+        architecture {\
+            connect default@(A.new()) to a;\
+        }\
+    }\
+    descriptor CompoContainer {\
+        service main() {\
+            |i|\
+            i := Inst.new();\
+            return i;\
+        }\
+    }");
+    
+    // Parse input and create AST
+    parser->parseAll(input);
+    
+    ptr(ast_program) program = parser->getRootNode();
+
+    BOOST_CHECK_THROW(interpreter->run(program), exceptions::semantic::CExternalPortConnectionException);
+    
+    // Clear AST for next test
+    parser->clearAll();
+    table->clear();
+}
+
+BOOST_AUTO_TEST_CASE(internalProvisionTest) {
+    ptr(core_interpreter) interpreter = initInterpreter();
+    // Testing input
+    std::stringstream input;
+    input.str(
+   "descriptor A {\
+        service add(a) {\
+            return a + 1;\
+        }\
+    }\
+    descriptor Inst {\
+        internally requires {\
+            a : A;\
+        }\
+    }\
+    descriptor CompoContainer {\
+        service main() {\
+            |i|\
+            i := Inst.new();\
+            connect a@i to default@(A.new());\
+            return i;\
+        }\
+    }");
+    
+    // Parse input and create AST
+    parser->parseAll(input);
+    
+    ptr(ast_program) program = parser->getRootNode();
+
+    interpreter->run(program);
+    //BOOST_CHECK_THROW(interpreter->run(program), exceptions::semantic::CExternalPortConnectionException);
+    
+    // Clear AST for next test
+    parser->clearAll();
+    table->clear();
+}
+
+BOOST_AUTO_TEST_CASE(complexTest) {
+    ptr(core_interpreter) interpreter = initInterpreter();
+    // Testing input
+    std::stringstream input;
+    input.str(
+   "descriptor Add {\
+        provides {\
+            provAdd : { add(a, b); };\
+        }\
+        service add(a, b) {\
+            return a + b;\
+        }\
+        service testAdd(a, b) {\
+            return a + b + 2;\
+        }\
+    }\
+    descriptor Sub {\
+        provides {\
+            provSub : { sub(a, b); };\
+        }\
+        service sub(a, b) {\
+            return a - b;\
+        }\
+        service testSub(a, b) {\
+            return a - b - 2;\
+        }\
+    }\
+    descriptor Div {\
+        provides {\
+            provDiv : { div(a, b); };\
+        }\
+        service div(a, b) {\
+            return a / b;\
+        }\
+        service testDiv(a, b) {\
+            return a / b / 2;\
+        }\
+    }\
+    descriptor Mul {\
+        provides {\
+            provMul : { mul(a, b); };\
+        }\
+        service mul(a, b) {\
+            return a * b;\
+        }\
+        service testMul(a, b) {\
+            return a * b * 2;\
+        }\
+    }\
+    descriptor Inst {\
+        internally requires {\
+            a : { add(a, b); };\
+            b : Sub;\
+        }\
+        externally requires {\
+            c : { div(a, b); };\
+            d : Mul;\
+        }\
+        internally provides {\
+            e : { testInternal(a); };\
+        }\
+        externally provides {\
+            g : { test(); };\
+        }\
+        architecture {\
+            connect a to default@(Add.new());\
+            connect b to default@(Sub.new());\
+            connect c to default@(Div.new());\
+            connect d to default@(Mul.new());\
+        }\
+        service testInternal(a) {\
+            return 1 + a;\
+        }\
+        service test() {\
+            |b|\
+            b := 1;\
+            return b + default.add(2);\
+        }\
+    }\
+    descriptor CompoContainer {\
+        service main() {\
+            |i|\
+            i := Inst.new();\
+            return i;\
+        }\
+    }");
+    
+    // Parse input and create AST
+    parser->parseAll(input);
+    
+    ptr(ast_program) program = parser->getRootNode();
+
+//    ptr(mem_component) inst = interpreter->run(program)->getOwner();
+//    
+//    BOOST_CHECK_EQUAL(inst->getPortByName("a")->getConnectedPortsNumber(), 1);
+//    
+//    ptr(mem_port) port = inst->getServiceByName("test")->invoke();
+//    BOOST_CHECK_EQUAL(cast(mem_int)(port->getOwner())->getValue(), 4);
     
     // Clear AST for next test
     parser->clearAll();
