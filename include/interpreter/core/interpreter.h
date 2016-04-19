@@ -16,6 +16,7 @@
 #include "exceptions/execution/returnException.h"
 #include "exceptions/runtime/unknownOperatorTypeException.h"
 #include "exceptions/runtime/wrongServiceInvocationParameterTypeException.h"
+#include "exceptions/semantic/wrongPortVisibiltyException.h"
 #include "variablesTable.h"
 #include "context.h"
 

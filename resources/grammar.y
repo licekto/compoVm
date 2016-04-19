@@ -74,6 +74,15 @@ literal
                     {
                         $$ = $1;
                     }
+                |   TRUE
+                    {
+                        $$ = $1;
+                    }
+                |   FALSE
+                    {
+                        $$ = $1;
+                    }
+                ;
 
 primary_expression
                 :   IDENTIFIER
@@ -92,15 +101,20 @@ primary_expression
                     {
                         $$ = $1;
                     }
-                |   TRUE
+                |   disconnection
                     {
-                        $$ = new_ptr(ast_boolean)(true);
+                        $$ = $1;
                     }
-                |   FALSE
+                |   connection
                     {
-                        $$ = new_ptr(ast_boolean)(false);
+                        $$ = $1;
+                    }
+                |   delegation
+                    {
+                        $$ = $1;
                     }
                 ;
+
 
 multiplicative_expression
                 :   primary_expression
@@ -232,18 +246,6 @@ statement
                         $$ = $1;
                     }
                 |   compound_statement
-                    {
-                        $$ = $1;
-                    }
-                |   disconnections
-                    {
-                        $$ = $1;
-                    }
-                |   connections
-                    {
-                        $$ = $1;
-                    }
-                |   delegations
                     {
                         $$ = $1;
                     }

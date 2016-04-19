@@ -1,9 +1,5 @@
 #include "interpreter/core/bootstrap/bootstrapStage2.h"
 #include "interpreter/core/interpreter.h"
-#include "exceptions/runtime/selfPortNotCollectionException.h"
-#include "exceptions/runtime/wrongServiceTypeInArchitectureException.h"
-#include "exceptions/runtime/wrongBindTypeException.h"
-#include "exceptions/semantic/externalPortConnectionException.h"
 
 namespace interpreter {
 
@@ -77,11 +73,6 @@ namespace interpreter {
                                     for(size_t i = 0; i < interface->getPortByName("signatures")->getConnectedPortsNumber(); ++i) {
                                         ptr(mem_component) sign = cloneSignature(interface->getPortByName("signatures")->getConnectedPortAt(i)->getOwner()->getBottomChild(), newInterface);
                                         newInterface->getPortByName("signatures")->connectPort(sign->getPortByName("default"));
-                                        
-                                        if (portOwner.use_count()) {
-                                            std::string serviceName = cast(mem_string)(sign->getPortByName("selector")->getConnectedPortAt(0)->getOwner())->getValue();
-                                            newInterface->getPortByName("services")->connectPort(portOwner->getServiceByName(serviceName)->getDefaultPort());
-                                        }
                                     }
 				}
 				else if (type == PORT_TYPE_INJECTED) {
@@ -300,7 +291,11 @@ namespace interpreter {
                                 if (port->getOwner()->getBottomChild().get() == owner.get()
                                  && portName != "default"
                                  && port->getVisibility() == type_visibility::EXTERNAL) {
-                                    throw exceptions::semantic::CExternalPortConnectionException(portName);
+                                    throw exceptions::semantic::CWrongPortVisibilityException(portName);
+                                }
+                                if (port->getOwner()->getBottomChild().get() != owner.get()
+                                 && port->getVisibility() != type_visibility::EXTERNAL) {
+                                    throw exceptions::semantic::CWrongPortVisibilityException(portName);
                                 }
                         }
 

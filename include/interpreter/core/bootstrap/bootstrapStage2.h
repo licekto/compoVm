@@ -9,6 +9,10 @@
 #include "interpreter/config.h"
 #include "interpreter/core/coreModules.h"
 #include "bootstrapStage1.h"
+#include "exceptions/runtime/selfPortNotCollectionException.h"
+#include "exceptions/runtime/wrongServiceTypeInArchitectureException.h"
+#include "exceptions/runtime/wrongBindTypeException.h"
+#include "exceptions/semantic/wrongPortVisibiltyException.h"
 
 namespace interpreter {
 
@@ -33,11 +37,11 @@ namespace interpreter {
                                 ptr(mem_component) cloneSignature(ptr(mem_component) signature, ptr(mem_component) owner);
                                 
                                 ptr(mem_component) cloneService(ptr(mem_component) service, ptr(mem_component) owner);
-                                
-                                void checkPortSemantics(ptr(mem_port) port, ptr(mem_component) owner);
 
 			  public:
 				CBootstrapStage2(ptr(CBootstrapStage1) stage1 = nullptr);
+                                
+                                void checkPortSemantics(ptr(mem_port) port, ptr(mem_component) owner);
                                 
                                 ptr(mem_port) getIntComponent(i64 value);
                                 

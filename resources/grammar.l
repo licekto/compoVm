@@ -118,9 +118,15 @@ Identifier                  [a-zA-Z][a-zA-Z_0-9]*
 
 <INITIAL>continue                       {return CONTINUE;}
 
-<INITIAL>true				{return TRUE;}
+<INITIAL>true				{
+                                            yylval = new_ptr(ast_boolean)(true);
+                                            return TRUE;
+                                        }
 
-<INITIAL>false                          {return FALSE;}
+<INITIAL>false                          {
+                                            yylval = new_ptr(ast_boolean)(false);
+                                            return FALSE;
+                                        }
 
 <INITIAL>":="				{return ASSIGNMENT;}
 

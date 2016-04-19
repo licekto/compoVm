@@ -67,6 +67,58 @@ BOOST_AUTO_TEST_CASE(unsignedTest) {
     parser.clearAll();
 }
 
+BOOST_AUTO_TEST_CASE(booleanTest) {
+    // Testing input
+    std::stringstream input;
+    input.str("descriptor test {\
+        service main() {\
+            |a b|\
+            a := true;\
+            b := false;\
+        }\
+    }");
+    
+    // Parse input and create AST
+    parser.parseAll(input);
+    
+    // Check descriptor
+    ptr(ast_descriptor) descriptor = cast(ast_descriptor)(parser.getRootNode()->getNodeAt(0));
+    TEST_DESCRIPTOR(descriptor, "test", "", 0, 1, 0);
+    
+    // Check service
+    ptr(ast_service) service = cast(ast_service)(descriptor->getServiceAt(0));
+    TEST_SERVICE(service, "main", 0, 2, 2);
+    
+    // Check assignment
+    ptr(ast_assignment) assignment = cast(ast_assignment)(service->getBodyNodeAt(0));
+    BOOST_CHECK_EQUAL(types::nodeType::ASSIGNMENT_EXPRESSION, assignment->getNodeType());
+    
+    // Check symbol
+    ptr(ast_symbol) symbol = cast(ast_symbol)(assignment->getVariable());
+    TEST_SYMBOL(symbol, "a");
+    
+    
+    // Check constant
+    ptr(ast_boolean) constant = cast(ast_boolean)(assignment->getRightSide());
+    TEST_BOOL(constant, true);
+    
+        // Check assignment
+    assignment = cast(ast_assignment)(service->getBodyNodeAt(1));
+    BOOST_CHECK_EQUAL(types::nodeType::ASSIGNMENT_EXPRESSION, assignment->getNodeType());
+    
+    // Check symbol
+    symbol = cast(ast_symbol)(assignment->getVariable());
+    TEST_SYMBOL(symbol, "b");
+    
+    
+    // Check constant
+    constant = cast(ast_boolean)(assignment->getRightSide());
+    TEST_BOOL(constant, false);
+    
+    // Clear parser
+    parser.clearAll();
+}
+
 // This is very long shit-fuck, but I decided to leave it as is because binary ops should be together
 BOOST_AUTO_TEST_CASE(nodesProceduralBinary) {
     // Testing input

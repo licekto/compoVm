@@ -7,6 +7,7 @@
 #include "testDefinitions.h"
 #include "definitions/allDefinitions.h"
 #include "types.h"
+#include "ast/visitor/printVisitor.h"
 
 BOOST_AUTO_TEST_SUITE(parserCompoTest)
 
@@ -145,6 +146,39 @@ BOOST_AUTO_TEST_CASE(compoServiceBody) {
     // Check constant
     ptr(ast_constant) constant = cast(ast_constant)(assignment->getRightSide());
     TEST_CONSTANT(constant, 1);
+    
+    // Clear AST for next test
+    parser.clearAll();
+}
+
+BOOST_AUTO_TEST_CASE(compoServiceConnectionBody) {
+    // Testing input
+    std::stringstream input;
+    input.str(
+    "descriptor test {\
+        service body() {\
+            connect a@i to default@abcd;\
+            disconnect a@i from default@xyz;\
+        }\
+    }");
+    
+    // Parse input and create AST
+    parser.parseAll(input);
+    
+    // Check descriptor
+    ptr(ast_descriptor) descriptor = cast(ast_descriptor)(parser.getRootNode()->getNodeAt(0));
+    TEST_DESCRIPTOR(descriptor, "test", "", 0, 1, 0);
+    
+    // Check service
+    ptr(ast_service) service = cast(ast_service)(descriptor->getServiceAt(0));
+    
+    TEST_SERVICE(service, "body", 0, 2, 0);
+    
+    ptr(ast_connection) connection = cast(ast_connection)(service->getBodyNodeAt(0));
+    TEST_CONNECTION(connection);
+    
+    ptr(ast_disconnection) disconnection = cast(ast_disconnection)(service->getBodyNodeAt(1));
+    TEST_DISCONNECTION(disconnection);
     
     // Clear AST for next test
     parser.clearAll();

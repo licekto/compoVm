@@ -64,6 +64,12 @@ do { \
     BOOST_CHECK_EQUAL(val, constant->getValue()); \
 } while(0)
 
+#define TEST_BOOL(boolean, val) \
+do { \
+    BOOST_CHECK_EQUAL(types::nodeType::BOOLEAN, boolean->getNodeType()); \
+    BOOST_CHECK_EQUAL(val, boolean->getValue()); \
+} while(0)
+
 #define TEST_PORT(signPort, portName, visibility, role) \
 do { \
     BOOST_CHECK_EQUAL(portName, signPort->getNameSymbol()->getStringValue()); \

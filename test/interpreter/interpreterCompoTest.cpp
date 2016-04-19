@@ -22,7 +22,8 @@
 #include "interpreter/core/interpreter.h"
 #include "interpreter/core/coreModules.h"
 #include "interpreter/core/bootstrap/bootstrapStage1.h"
-#include "exceptions/semantic/externalPortConnectionException.h"
+#include "exceptions/semantic/wrongPortVisibiltyException.h"
+#include "ast/visitor/printVisitor.h"
 
 BOOST_AUTO_TEST_SUITE(interpreterCompoTest)
 
@@ -250,11 +251,8 @@ BOOST_AUTO_TEST_CASE(disconnectionTest) {
         }\
     }\
     descriptor Inst {\
-        internally requires {\
+        externally requires {\
             a : A;\
-        }\
-        architecture {\
-            connect a to default@(A.new());\
         }\
         service test() {\
             |b|\
@@ -264,9 +262,11 @@ BOOST_AUTO_TEST_CASE(disconnectionTest) {
     }\
     descriptor CompoContainer {\
         service main() {\
-            |i|\
+            |i j|\
             i := Inst.new();\
-            disconnect a@i from default@a;\
+            j := A.new();\
+            connect a@i to default@j;\
+            disconnect a@i from default@j;\
             return i;\
         }\
     }");
@@ -279,8 +279,6 @@ BOOST_AUTO_TEST_CASE(disconnectionTest) {
     ptr(mem_component) inst = interpreter->run(program)->getOwner();
     
     BOOST_CHECK_EQUAL(inst->getPortByName("a")->getConnectedPortsNumber(), 0);
-    
-    BOOST_CHECK_THROW(inst->getServiceByName("test")->invoke(), exceptions::runtime::CServiceNotFoundException);
     
     // Clear AST for next test
     parser->clearAll();
@@ -367,7 +365,7 @@ BOOST_AUTO_TEST_CASE(selfExternalRequirementSourceThrowTest) {
     
     ptr(ast_program) program = parser->getRootNode();
 
-    BOOST_CHECK_THROW(interpreter->run(program), exceptions::semantic::CExternalPortConnectionException);
+    BOOST_CHECK_THROW(interpreter->run(program), exceptions::semantic::CWrongPortVisibilityException);
     
     // Clear AST for next test
     parser->clearAll();
@@ -405,7 +403,7 @@ BOOST_AUTO_TEST_CASE(selfExternalRequirementDestinationThrowTest) {
     
     ptr(ast_program) program = parser->getRootNode();
 
-    BOOST_CHECK_THROW(interpreter->run(program), exceptions::semantic::CExternalPortConnectionException);
+    BOOST_CHECK_THROW(interpreter->run(program), exceptions::semantic::CWrongPortVisibilityException);
     
     // Clear AST for next test
     parser->clearAll();
@@ -418,17 +416,21 @@ BOOST_AUTO_TEST_CASE(outerExternalRequirementSourceThrowTest) {
     std::stringstream input;
     input.str(
    "descriptor A {\
-        \
+        internally provides {\
+            b : { add(a); };\
+        }\
         service add(a) {\
             return a + 1;\
         }\
     }\
     descriptor Inst {\
-        externally requires {\
+        internally requires {\
             a : A;\
+            c : { add(a); };\
         }\
         architecture {\
             connect a to default@(A.new());\
+            connect c to b@a;\
         }\
     }\
     descriptor CompoContainer {\
@@ -444,7 +446,7 @@ BOOST_AUTO_TEST_CASE(outerExternalRequirementSourceThrowTest) {
     
     ptr(ast_program) program = parser->getRootNode();
 
-    BOOST_CHECK_THROW(interpreter->run(program), exceptions::semantic::CExternalPortConnectionException);
+    BOOST_CHECK_THROW(interpreter->run(program), exceptions::semantic::CWrongPortVisibilityException);
     
     // Clear AST for next test
     parser->clearAll();
@@ -457,16 +459,21 @@ BOOST_AUTO_TEST_CASE(outerExternalRequirementDestinationThrowTest) {
     std::stringstream input;
     input.str(
    "descriptor A {\
+        internally provides {\
+            b : { add(a); };\
+        }\
         service add(a) {\
             return a + 1;\
         }\
     }\
     descriptor Inst {\
-        externally requires {\
+        internally requires {\
             a : A;\
+            c : { add(a); };\
         }\
         architecture {\
-            connect default@(A.new()) to a;\
+            connect a to default@(A.new());\
+            connect b@a to c;\
         }\
     }\
     descriptor CompoContainer {\
@@ -482,19 +489,22 @@ BOOST_AUTO_TEST_CASE(outerExternalRequirementDestinationThrowTest) {
     
     ptr(ast_program) program = parser->getRootNode();
 
-    BOOST_CHECK_THROW(interpreter->run(program), exceptions::semantic::CExternalPortConnectionException);
+    BOOST_CHECK_THROW(interpreter->run(program), exceptions::semantic::CWrongPortVisibilityException);
     
     // Clear AST for next test
     parser->clearAll();
     table->clear();
 }
 
-BOOST_AUTO_TEST_CASE(internalProvisionTest) {
+BOOST_AUTO_TEST_CASE(manualConnectionTest) {
     ptr(core_interpreter) interpreter = initInterpreter();
     // Testing input
     std::stringstream input;
     input.str(
    "descriptor A {\
+        internally provides {\
+            b : { add(a); };\
+        }\
         service add(a) {\
             return a + 1;\
         }\
@@ -502,13 +512,15 @@ BOOST_AUTO_TEST_CASE(internalProvisionTest) {
     descriptor Inst {\
         internally requires {\
             a : A;\
+            c : { add(a); };\
         }\
     }\
     descriptor CompoContainer {\
         service main() {\
-            |i|\
+            |i j|\
             i := Inst.new();\
-            connect a@i to default@(A.new());\
+            j := A.new();\
+            connect b@j to c@i;\
             return i;\
         }\
     }");
@@ -518,177 +530,7 @@ BOOST_AUTO_TEST_CASE(internalProvisionTest) {
     
     ptr(ast_program) program = parser->getRootNode();
 
-    interpreter->run(program);
-    //BOOST_CHECK_THROW(interpreter->run(program), exceptions::semantic::CExternalPortConnectionException);
-    
-    // Clear AST for next test
-    parser->clearAll();
-    table->clear();
-}
-
-BOOST_AUTO_TEST_CASE(complexTest) {
-    ptr(core_interpreter) interpreter = initInterpreter();
-    // Testing input
-    std::stringstream input;
-    input.str(
-   "descriptor Add {\
-        provides {\
-            provAdd : { add(a, b); };\
-        }\
-        service add(a, b) {\
-            return a + b;\
-        }\
-        service testAdd(a, b) {\
-            return a + b + 2;\
-        }\
-    }\
-    descriptor Sub {\
-        provides {\
-            provSub : { sub(a, b); };\
-        }\
-        service sub(a, b) {\
-            return a - b;\
-        }\
-        service testSub(a, b) {\
-            return a - b - 2;\
-        }\
-    }\
-    descriptor Div {\
-        provides {\
-            provDiv : { div(a, b); };\
-        }\
-        service div(a, b) {\
-            return a / b;\
-        }\
-        service testDiv(a, b) {\
-            return a / b / 2;\
-        }\
-    }\
-    descriptor Mul {\
-        provides {\
-            provMul : { mul(a, b); };\
-        }\
-        service mul(a, b) {\
-            return a * b;\
-        }\
-        service testMul(a, b) {\
-            return a * b * 2;\
-        }\
-    }\
-    descriptor Inst {\
-        internally requires {\
-            a : { add(a, b); };\
-            b : Sub;\
-        }\
-        externally requires {\
-            c : { div(a, b); };\
-            d : Mul;\
-        }\
-        internally provides {\
-            e : { testInternal(a); };\
-        }\
-        externally provides {\
-            g : { test(); };\
-        }\
-        architecture {\
-            connect a to default@(Add.new());\
-            connect b to default@(Sub.new());\
-            connect c to default@(Div.new());\
-            connect d to default@(Mul.new());\
-        }\
-        service testInternal(a) {\
-            return 1 + a;\
-        }\
-        service test() {\
-            |b|\
-            b := 1;\
-            return b + default.add(2);\
-        }\
-    }\
-    descriptor CompoContainer {\
-        service main() {\
-            |i|\
-            i := Inst.new();\
-            return i;\
-        }\
-    }");
-    
-    // Parse input and create AST
-    parser->parseAll(input);
-    
-    ptr(ast_program) program = parser->getRootNode();
-
-//    ptr(mem_component) inst = interpreter->run(program)->getOwner();
-//    
-//    BOOST_CHECK_EQUAL(inst->getPortByName("a")->getConnectedPortsNumber(), 1);
-//    
-//    ptr(mem_port) port = inst->getServiceByName("test")->invoke();
-//    BOOST_CHECK_EQUAL(cast(mem_int)(port->getOwner())->getValue(), 4);
-    
-    // Clear AST for next test
-    parser->clearAll();
-    table->clear();
-}
-
-BOOST_AUTO_TEST_CASE(calcTest) {
-    ptr(core_interpreter) interpreter = initInterpreter();
-    
-    // Testing input
-    std::stringstream input;
-    input.str(
-   "descriptor Calc {\
-        provides {\
-                arithmetic : { add(x,y); mul(x,y); pow(base,exp) };\
-                probability : { rand() };\
-        }\
-        requires {\
-                randGen : { getRandVal(seed) };\
-        }\
-        service add(x, y) { return x+y; }\
-        service mul(x, y) { return x*y; }\
-        service pow(base, exp) {\
-                | res i |\
-                res := 1;\
-                for (i := 0; i < exp; i := i + 1) {\
-                        res := self.mul(res, base);\
-                }\
-                return res;\
-        }\
-        service rand() {\
-                return randGen.getRandVal(101);\
-        }\
-    }\
-\
-    descriptor RandomGen {\
-        provides {\
-            default : { getRandVal(seed) };\
-        }\
-        service getRandVal(seed) {\
-            return 15;\
-        }\
-    }\
-    descriptor CompoContainer {\
-        service main() {\
-            c := Calc.new();\
-            connect randGen@c to default@(RandomGen.new());\
-            c.add(c.rand(),1);\
-            c.mul(3,c.pow(2,3));\
-        }\
-    }");
-    
-    // Parse input and create AST
-    //parser->parseAll(input);
-    
-    //ptr(ast_program) program = parser->getRootNode();
-    
-    
-    //ptr(ast::visitors::CSemanticCheckVisitor) visitor = new_ptr(ast::visitors::CSemanticCheckVisitor)(parser->getDescriptorTable());
-
-    //program->accept(visitor);
-    
-    //interpreter::core::CInterpreter interpreter(parser, new_ptr(interpreter::core::CBootstrap)());
-    
-    //interpreter.run(program);
+    BOOST_CHECK_THROW(interpreter->run(program), exceptions::semantic::CWrongPortVisibilityException);
     
     // Clear AST for next test
     parser->clearAll();

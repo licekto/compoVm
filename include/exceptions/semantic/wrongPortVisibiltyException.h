@@ -7,9 +7,9 @@ namespace exceptions {
 
 	namespace semantic {
 
-		class CExternalPortConnectionException : public CAbstractException {
+		class CWrongPortVisibilityException : public CAbstractException {
 		  public:
-			CExternalPortConnectionException(const std::string& name);
+			CWrongPortVisibilityException(const std::string& name);
 
 			virtual const char* what() const throw();
 		};

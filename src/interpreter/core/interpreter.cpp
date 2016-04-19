@@ -209,16 +209,29 @@ namespace interpreter {
                     ptr(mem_port) dstComponent = exec(destination->getComponent());
                     ptr(mem_port) dstPort = dstComponent->getOwner()->getPortByName(destination->getPortName()->getStringValue());
                     
+                    if (srcPort->getName() != "default" && dstPort->getName() != "default"
+                     && (srcPort->getVisibility() == type_visibility::INTERNAL
+                     || dstPort->getVisibility() == type_visibility::INTERNAL
+                     || srcPort->getRole() == dstPort->getRole())) {
+                        std::string portNames = srcPort->getName() + " and " + dstPort->getName();
+                        throw exceptions::semantic::CWrongPortVisibilityException(portNames);
+                    }
+                    
                     srcPort->connectPort(dstPort);
                 }
 
                 ptr(mem_port) CInterpreter::execDisconnection(ptr(ast_disconnection) node) {
                     ptr(ast_portaddress) source = node->getSourcePortIdentification();
+                    ptr(ast_portaddress) destination = node->getDestinationPortIdentification();
                     
                     ptr(mem_port) srcComponent = exec(source->getComponent());
                     ptr(mem_port) srcPort = srcComponent->getOwner()->getPortByName(source->getPortName()->getStringValue());
                     
+                    ptr(mem_port) dstComponent = exec(destination->getComponent());
+                    ptr(mem_port) dstPort = dstComponent->getOwner()->getPortByName(destination->getPortName()->getStringValue());
+                    
                     srcPort->disconnectPortAt(0);
+                    dstPort->disconnectPortAt(0);
                 }
 
 		ptr(mem_port)  CInterpreter::exec(ptr(ast_node) node) {
