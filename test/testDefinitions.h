@@ -160,7 +160,8 @@ do { \
     ptr(mem_port) _retPort_; \
     TEST_PRIMITIVE_PORT(component, "default", types::roleType::PROVIDES, types::visibilityType::EXTERNAL, servicesTotal); \
     TEST_PRIMITIVE_SERVICE(component, "default", "getPorts", false, _retPort_); \
-    component->getPortByName("args")->connectPort(bootstrap1->bootstrapStringValue("default")->getDefaultPort()); \
+    ptr(mem_string) strComp = bootstrap1->bootstrapStringValue("default"); \
+    component->getPortByName("args")->connectPort(strComp->getDefaultPort()); \
     TEST_PRIMITIVE_SERVICE(component, "default", "getPortNamed", true, _retPort_); \
     BOOST_CHECK_EQUAL(component->getPortByName("args")->getConnectedPortsNumber(), 0); \
     TEST_PRIMITIVE_SERVICE(component, "default", "getDescriptor", false, _retPort_); \

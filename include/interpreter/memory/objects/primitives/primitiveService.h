@@ -42,6 +42,8 @@ namespace interpreter {
 					ptr(objects::CGeneralPort) invoke();
 
 					void setCallback(std::function<ptr(objects::CGeneralPort)(const ptr(objects::CComponent)&)> callback);
+                                        
+                                        std::function<ptr(objects::CGeneralPort)(const ptr(objects::CComponent)&)> getCallback() const;
 				};
 
 			}

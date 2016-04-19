@@ -1,5 +1,4 @@
 #include "interpreter/memory/objects/primitives/primitivePort.h"
-//#include <boost/log/trivial.hpp>
 
 namespace interpreter {
 
@@ -31,7 +30,7 @@ namespace interpreter {
 				ptr(objects::CGeneralPort) CPrimitivePort::getConnectedPortAt(size_t index) {
 					ptr(objects::CGeneralPort) port;
 					try {
-						port = m_connectedPorts.at(index);
+						port = m_connectedPorts.at(index).lock();
 					} catch (const std::out_of_range& ex) {
 						TRACE(ERROR, "Connected ports index out of range exception, index: " << index << ", exception: '" << ex.what() << "'");
 					}
@@ -49,7 +48,7 @@ namespace interpreter {
 				ptr(objects::CGeneralService) CPrimitivePort::getConnectedServiceAt(size_t index) {
 					ptr(objects::CGeneralService) service;
 					try {
-						service = m_connectedServices.at(index);
+						service = m_connectedServices.at(index).lock();
 					} catch (const std::out_of_range& ex) {
 						TRACE(ERROR, "Connected services index out of range exception, index: " << index << ", exception: '" << ex.what() << "'");
 					}
@@ -57,14 +56,15 @@ namespace interpreter {
 				}
 
 				std::shared_ptr<objects::CGeneralService> CPrimitivePort::getConnectedServiceByName(const std::string& name) {
-					auto it = std::find_if(m_connectedServices.begin(), m_connectedServices.end(), [&name](ptr(CGeneralService) service) {
-						return service->getName() == name;
+					auto it = std::find_if(m_connectedServices.begin(), m_connectedServices.end(), [&name](wptr(CGeneralService) service) {
+						return service.lock()->getName() == name;
 					});
 
 					if (it == m_connectedServices.end()) {
 						throw exceptions::runtime::CServiceNotFoundException(name);
 					}
-					return *it;
+					//return *it.base()->lock();
+                                        return it.base()->lock();
 				}
 
 				void CPrimitivePort::disconnectPortAt(size_t index) {
@@ -78,8 +78,8 @@ namespace interpreter {
 				}
 
 				void CPrimitivePort::disconnectServiceByName(const std::string& name) {
-					auto it = std::find_if(m_connectedServices.begin(), m_connectedServices.end(), [&name](ptr(CGeneralService) service) {
-						return service->getName() == name;
+					auto it = std::find_if(m_connectedServices.begin(), m_connectedServices.end(), [&name](wptr(CGeneralService) service) {
+						return service.lock()->getName() == name;
 					});
 
 					if (it != m_connectedServices.end()) {
@@ -93,7 +93,7 @@ namespace interpreter {
                                 }
 
                                 ptr(objects::CGeneralPort) CPrimitivePort::getDelegatedPort() {
-                                        return m_delegatedPort;
+                                        return m_delegatedPort.lock();
                                 }
 
                                 bool CPrimitivePort::isDelegated() const {

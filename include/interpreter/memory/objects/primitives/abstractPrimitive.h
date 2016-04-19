@@ -32,6 +32,8 @@ namespace interpreter {
 					ptr(CComponent) getOwner();
 
 					void setOwner(ptr(CComponent) owner);
+                                        
+                                        std::string printExpired() const;
 				};
 
 			}

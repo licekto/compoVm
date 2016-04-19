@@ -36,7 +36,8 @@ namespace interpreter {
 				ptr(core::CCoreModules) m_coreModules;
 
 				ptr(core::CInterpreter) m_interpreter;
-                                    
+                                
+                        public:
 				void addPrimitiveServices(ptr(mem_component) component, ptr(ast_descriptor) descriptor, std::map<std::string, ptr(mem_primitiveservice)>& servicesNames);
 
 				void addPrimitivePorts(ptr(mem_component) component, ptr(ast_descriptor) descriptor);

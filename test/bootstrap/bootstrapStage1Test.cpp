@@ -84,7 +84,8 @@ BOOST_AUTO_TEST_CASE(serviceComponentTest) {
     ptr(mem_component) service = bootstrap1->bootstrapServiceComponent(serviceAst, owner);
     
     TEST_BASE_COMPONENT_PRIMITIVE(service, 6, owner, bootstrap1);
-    BOOST_CHECK_EQUAL(cast(mem_string)(service->getPortByName("code")->getConnectedPortAt(0)->getOwner())->getValue(), codeStr);
+    ptr(mem_string) strComp = cast(mem_string)(service->getPortByName("code")->getConnectedPortAt(0)->getOwner());
+    BOOST_CHECK_EQUAL(strComp->getValue(), codeStr);
     
     BOOST_CHECK_EQUAL(service->getPortByName("tempsN")->getConnectedPortsNumber(), 1);
     BOOST_CHECK_EQUAL(cast(mem_string)(service->getPortByName("tempsN")->getConnectedPortAt(0)->getOwner())->getValue(), "a");
@@ -508,7 +509,7 @@ BOOST_AUTO_TEST_CASE(collectionPortComponentTest) {
     
     ptr(mem_component) portComponent = bootstrap1->bootstrapCollectionPortComponent(astPort, owner);
     
-    TEST_BASE_COMPONENT_PRIMITIVE(portComponent->getParent(), 14, owner, bootstrap1);
+    TEST_BASE_COMPONENT_PRIMITIVE(portComponent->getParent(), 13, owner, bootstrap1);
     
     TEST_PRIMITIVE_PORT(portComponent, "name", types::roleType::REQUIRES, types::visibilityType::INTERNAL, 0);
     BOOST_CHECK_EQUAL(cast(mem_string)(portComponent->getPortByName("name")->getConnectedPortAt(0)->getOwner())->getValue(), "testPort");

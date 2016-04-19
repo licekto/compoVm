@@ -51,12 +51,6 @@ namespace interpreter {
 				}
 			}
 
-			void CBootstrapStage1::addDefaultPort(ptr(mem_value) value) {
-				ptr(mem_primitiveport) primitivePort = new_ptr(mem_primitiveport)("default", value, false);
-				ptr(mem_port) generalPort = new_ptr(mem_port)(primitivePort, types::visibilityType::EXTERNAL, types::roleType::PROVIDES);
-				value->addDefaultPort(generalPort);
-			}
-
 			ptr(mem_component) CBootstrapStage1::bootstrapPrologueWithComponent(ptr(ast_descriptor) descriptor,
 			        std::map<std::string,ptr(mem_primitiveservice)>& servicesNames,
 			        ptr(mem_component) owner) {
@@ -88,11 +82,21 @@ namespace interpreter {
 				ptr(mem_primitiveport) selfPort = component->getPortByName("self")->getPrimitivePort();
 
 				for(auto const &record : servicesNames) {
-					defaultPort->connectService(new_ptr(mem_service)(record.second));
-					selfPort->connectService(new_ptr(mem_service)(record.second));
+                                        std::function<ptr(mem_port)(const ptr(mem_component)&)> callback = record.second->getCallback();
+                                        
+                                        component->getServiceByName(record.first)->getPrimitiveService()->setCallback(callback);
+                                        
+                                        defaultPort->connectService(component->getServiceByName(record.first));
+                                        selfPort->connectService(component->getServiceByName(record.first));
 				}
 			}
 
+                        void CBootstrapStage1::addDefaultPort(ptr(mem_value) value) {
+				ptr(mem_primitiveport) primitivePort = new_ptr(mem_primitiveport)("default", value, false);
+				ptr(mem_port) generalPort = new_ptr(mem_port)(primitivePort, types::visibilityType::EXTERNAL, types::roleType::PROVIDES);
+				value->addDefaultPort(generalPort);
+			}
+                        
 			ptr(mem_int) CBootstrapStage1::bootstrapIntValue(i64 value) {
 				ptr(mem_int) component = new_ptr(mem_int)(value);
 				addDefaultPort(component);
@@ -296,6 +300,12 @@ namespace interpreter {
                                 port->getPortByName("isCollection")->disconnectPortAt(0);
                                 port->getPortByName("isCollection")->connectPort(bootstrapBoolValue(true)->getDefaultPort());
                                 
+                                port->getPortByName("default")->getPrimitivePort()->disconnectServiceByName("connectTo");
+				port->getPortByName("self")->getPrimitivePort()->disconnectServiceByName("connectTo");
+                                port->getPortByName("default")->getPrimitivePort()->disconnectServiceByName("disconnectPort");
+				port->getPortByName("self")->getPrimitivePort()->disconnectServiceByName("disconnectPort");
+                                port->getPortByName("default")->getPrimitivePort()->disconnectServiceByName("invoke");
+				port->getPortByName("self")->getPrimitivePort()->disconnectServiceByName("invoke");
 				port->removeServiceByName("invoke");
 				port->removeServiceByName("disconnectPort");
 				port->removeServiceByName("connectTo");
@@ -327,8 +337,6 @@ namespace interpreter {
 				};
 				srv = new_ptr(mem_service)(new_ptr(mem_primitiveservice)("disconnectPort", port, callback));
 				port->addService(srv);
-				port->getPortByName("default")->getPrimitivePort()->disconnectServiceByName("disconnectPort");
-				port->getPortByName("self")->getPrimitivePort()->disconnectServiceByName("disconnectPort");
 				port->getPortByName("default")->getPrimitivePort()->connectService(srv);
 				port->getPortByName("self")->getPrimitivePort()->connectService(srv);
 
@@ -339,8 +347,6 @@ namespace interpreter {
 				};
 				srv = new_ptr(mem_service)(new_ptr(mem_primitiveservice)("connectTo", port, callback));
 				port->addService(srv);
-				port->getPortByName("default")->getPrimitivePort()->disconnectServiceByName("connectTo");
-				port->getPortByName("self")->getPrimitivePort()->disconnectServiceByName("connectTo");
 				port->getPortByName("default")->getPrimitivePort()->connectService(srv);
 				port->getPortByName("self")->getPrimitivePort()->connectService(srv);
 

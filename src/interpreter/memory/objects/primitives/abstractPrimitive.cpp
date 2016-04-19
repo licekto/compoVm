@@ -13,7 +13,7 @@ namespace interpreter {
 				}
 
 				CAbstractPrimitive::CAbstractPrimitive(ptr(CAbstractPrimitive) instance)
-					: m_name(instance->m_name), m_owner(nullptr) {
+					: m_name(instance->m_name) {
 
 				}
 
@@ -29,8 +29,19 @@ namespace interpreter {
 				}
 
 				void CAbstractPrimitive::setOwner(ptr(CComponent) owner) {
-					m_owner = owner;
-				}
+					//m_owner = wptr(CComponent)(owner);
+                                    m_owner = owner;
+                                }
+
+                                std::string CAbstractPrimitive::printExpired() const {
+//                                    if (m_owner.expired()) {
+//                                        return "EXPIRED";
+//                                    }
+//                                    else {
+//                                        return "VALID";
+//                                    }
+                                    return "";
+                                }
 
 			}
 
