@@ -189,7 +189,7 @@ do { \
     BOOST_CHECK(port->getPortByName("delegatedPorts")->isPrimitive()); \
     BOOST_CHECK(port->getPortByName("name")->isPrimitive()); \
     BOOST_CHECK(port->getPortByName("interfaceDescription")->isPrimitive()); \
-    BOOST_CHECK_EQUAL(port->getPortByName("default")->getPrimitivePort()->getConnectedServicesNumber(), 12); \
+    BOOST_CHECK_EQUAL(port->getPortByName("default")->getPrimitivePort()->getConnectedServicesNumber(), 13); \
     BOOST_CHECK_EQUAL(port->getPortByName("default")->getPrimitivePort()->getConnectedPortsNumber(), 0); \
     BOOST_CHECK_EQUAL(port->getPortByName("args")->getPrimitivePort()->getConnectedServicesNumber(), 0); \
     BOOST_CHECK_EQUAL(port->getPortByName("args")->getPrimitivePort()->getConnectedPortsNumber(), 0); \
@@ -197,7 +197,7 @@ do { \
     BOOST_CHECK_EQUAL(port->getPortByName("owner")->getPrimitivePort()->getConnectedPortsNumber(), 1); \
     BOOST_CHECK_EQUAL(port->getPortByName("descriptorPort")->getPrimitivePort()->getConnectedServicesNumber(), 0); \
     BOOST_CHECK_EQUAL(port->getPortByName("descriptorPort")->getPrimitivePort()->getConnectedPortsNumber(), 0); \
-    BOOST_CHECK_EQUAL(port->getPortByName("self")->getPrimitivePort()->getConnectedServicesNumber(), 12); \
+    BOOST_CHECK_EQUAL(port->getPortByName("self")->getPrimitivePort()->getConnectedServicesNumber(), 13); \
     BOOST_CHECK_EQUAL(port->getPortByName("self")->getPrimitivePort()->getConnectedPortsNumber(), 0); \
     BOOST_CHECK_EQUAL(port->getPortByName("super")->getPrimitivePort()->getConnectedServicesNumber(), 0); \
     BOOST_CHECK_EQUAL(port->getPortByName("super")->getPrimitivePort()->getConnectedPortsNumber(), 0); \

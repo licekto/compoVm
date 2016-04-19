@@ -201,6 +201,10 @@ namespace interpreter {
                             }
                         }
 
+                        bool CGeneralPort::isCollection() const {
+                            return false;
+                        }
+
 		}
 	}
 }

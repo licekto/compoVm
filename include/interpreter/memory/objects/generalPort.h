@@ -81,6 +81,8 @@ namespace interpreter {
                                 void delegateTo(ptr(CGeneralPort) port);
                                 
                                 ptr(CGeneralPort) getDelegatedPort();
+                                
+                                bool isCollection() const;
 			};
 		}
 	}

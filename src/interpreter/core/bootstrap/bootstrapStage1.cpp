@@ -47,8 +47,10 @@ namespace interpreter {
 					types::roleType role = port->getRole();
 
 					std::string name = port->getNameSymbol()->getStringValue();
+                                        
+                                        bool collection = port->getNodeType() == type_node::COLLECTION_PORT;
 
-					ptr(mem_primitiveport) primitivePort = new_ptr(mem_primitiveport)(name, component);
+					ptr(mem_primitiveport) primitivePort = new_ptr(mem_primitiveport)(name, component, collection);
 
 					ptr(mem_port) generalPort = new_ptr(mem_port)(primitivePort, visibility, role);
 
@@ -57,7 +59,7 @@ namespace interpreter {
 			}
 
 			void CBootstrapStage1::addDefaultPort(ptr(mem_value) value) {
-				ptr(mem_primitiveport) primitivePort = new_ptr(mem_primitiveport)("default", value);
+				ptr(mem_primitiveport) primitivePort = new_ptr(mem_primitiveport)("default", value, false);
 				ptr(mem_port) generalPort = new_ptr(mem_port)(primitivePort, types::visibilityType::EXTERNAL, types::roleType::PROVIDES);
 				value->addDefaultPort(generalPort);
 			}
@@ -201,6 +203,7 @@ namespace interpreter {
 
 				port->getPortByName("name")->connectPort(bootstrapStringValue(name)->getDefaultPort());
 				port->getPortByName("interfaceDescription")->connectPort(bootstrapInterfaceComponent(astPort, port, owner)->getPortByName("default"));
+                                port->getPortByName("isCollection")->connectPort(bootstrapBoolValue(false)->getDefaultPort());
 
 				return port;
 			}
@@ -271,6 +274,12 @@ namespace interpreter {
 					return nullptr;
 				};
 				servicesNames.at("disconnectPort")->setCallback(callback);
+                                
+                                callback = [this](const ptr(mem_component)& context) -> ptr(mem_port) {
+					bool collection = cast(mem_bool)(context->getPortByName("isCollection")->getConnectedPortAt(0)->getOwner())->getValue();
+					return bootstrapBoolValue(collection)->getDefaultPort();
+				};
+				servicesNames.at("isCollectionPort")->setCallback(callback);
 
 				bootstrapEpilogue(port, servicesNames);
 				return port;
@@ -279,6 +288,9 @@ namespace interpreter {
 			ptr(mem_component) CBootstrapStage1::bootstrapCollectionPortComponent(ptr(ast_port) astPort, ptr(mem_component) owner) {
 				ptr(mem_component) port = bootstrapPortComponent(astPort, owner);
 
+                                port->getPortByName("isCollection")->disconnectPortAt(0);
+                                port->getPortByName("isCollection")->connectPort(bootstrapBoolValue(true)->getDefaultPort());
+                                
 				port->removeServiceByName("invoke");
 				port->removeServiceByName("disconnectPort");
 				port->removeServiceByName("connectTo");

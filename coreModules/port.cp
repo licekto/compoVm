@@ -7,17 +7,18 @@ descriptor Port extends Component {
     internally requires {
         name : String;
         interfaceDescription : Interface;
+        isCollection : Bool;
     }
 
     service getName() {}
     service getInterface() {}
 
-    /* Primitive invoke */
     service invoke(serviceName) {}
     service isConnected() {}
     service isDelegated() {}
 
-    /* Primitive connectTo*/
     service connectTo(port) {}
     service disconnectPort() {}
+
+    service isCollectionPort() {}
 }

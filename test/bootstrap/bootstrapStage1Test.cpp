@@ -436,10 +436,12 @@ BOOST_AUTO_TEST_CASE(portComponentTest) {
     
     ptr(mem_component) portComponent = bootstrap1->bootstrapPortComponent(astPort, owner);
     
-    TEST_BASE_COMPONENT_PRIMITIVE(portComponent->getParent(), 12, owner, bootstrap1);
+    TEST_BASE_COMPONENT_PRIMITIVE(portComponent->getParent(), 13, owner, bootstrap1);
     
     TEST_PRIMITIVE_PORT(portComponent, "name", types::roleType::REQUIRES, types::visibilityType::INTERNAL, 0);
     BOOST_CHECK_EQUAL(cast(mem_string)(portComponent->getPortByName("name")->getConnectedPortAt(0)->getOwner())->getValue(), "testPort");
+    TEST_PRIMITIVE_PORT(portComponent, "isCollection", types::roleType::REQUIRES, types::visibilityType::INTERNAL, 0);
+    BOOST_CHECK_EQUAL(cast(mem_bool)(portComponent->getPortByName("isCollection")->getConnectedPortAt(0)->getOwner())->getValue(), false);
     
     ptr(mem_port) retPort;
     bool ret = true;
@@ -459,6 +461,10 @@ BOOST_AUTO_TEST_CASE(portComponentTest) {
     BOOST_CHECK_EQUAL(cast(mem_bool)(retPort->getOwner())->getValue(), false);
     
     TEST_PRIMITIVE_SERVICE(portComponent, "default", "isDelegated", ret, retPort);
+    BOOST_CHECK_EQUAL(portComponent->getPortByName("args")->getConnectedPortsNumber(), 0);
+    BOOST_CHECK_EQUAL(cast(mem_bool)(retPort->getOwner())->getValue(), false);
+    
+    TEST_PRIMITIVE_SERVICE(portComponent, "default", "isCollectionPort", ret, retPort);
     BOOST_CHECK_EQUAL(portComponent->getPortByName("args")->getConnectedPortsNumber(), 0);
     BOOST_CHECK_EQUAL(cast(mem_bool)(retPort->getOwner())->getValue(), false);
     
@@ -502,10 +508,12 @@ BOOST_AUTO_TEST_CASE(collectionPortComponentTest) {
     
     ptr(mem_component) portComponent = bootstrap1->bootstrapCollectionPortComponent(astPort, owner);
     
-    TEST_BASE_COMPONENT_PRIMITIVE(portComponent->getParent(), 13, owner, bootstrap1);
+    TEST_BASE_COMPONENT_PRIMITIVE(portComponent->getParent(), 14, owner, bootstrap1);
     
     TEST_PRIMITIVE_PORT(portComponent, "name", types::roleType::REQUIRES, types::visibilityType::INTERNAL, 0);
     BOOST_CHECK_EQUAL(cast(mem_string)(portComponent->getPortByName("name")->getConnectedPortAt(0)->getOwner())->getValue(), "testPort");
+    TEST_PRIMITIVE_PORT(portComponent, "isCollection", types::roleType::REQUIRES, types::visibilityType::INTERNAL, 0);
+    BOOST_CHECK_EQUAL(cast(mem_bool)(portComponent->getPortByName("isCollection")->getConnectedPortAt(0)->getOwner())->getValue(), true);
     
     ptr(mem_component) connectedComponent = bootstrap1->bootstrapComponent(nullptr);
     
@@ -548,6 +556,11 @@ BOOST_AUTO_TEST_CASE(collectionPortComponentTest) {
     TEST_PRIMITIVE_SERVICE(portComponent, "default", "disconnectPort", ret, retPort);
     BOOST_CHECK_EQUAL(portComponent->getPortByName("args")->getConnectedPortsNumber(), 0);
     BOOST_CHECK_EQUAL(portComponent->getPortByName("connectedPorts")->getConnectedPortsNumber(), 0);
+    
+    ret = true;
+    TEST_PRIMITIVE_SERVICE(portComponent, "default", "isCollectionPort", ret, retPort);
+    BOOST_CHECK_EQUAL(portComponent->getPortByName("args")->getConnectedPortsNumber(), 0);
+    BOOST_CHECK_EQUAL(cast(mem_bool)(retPort->getOwner())->getValue(), true);
     
     BOOST_CHECK_THROW(portComponent->getServiceByName("abcd"), exceptions::runtime::CServiceNotFoundException);
     BOOST_CHECK_THROW(portComponent->getPortByName("abcd"), exceptions::runtime::CPortNotFoundException);

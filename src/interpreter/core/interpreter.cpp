@@ -209,13 +209,7 @@ namespace interpreter {
                     ptr(mem_port) dstComponent = exec(destination->getComponent());
                     ptr(mem_port) dstPort = dstComponent->getOwner()->getPortByName(destination->getPortName()->getStringValue());
                     
-                    if (srcPort->getName() != "default" && dstPort->getName() != "default"
-                     && (srcPort->getVisibility() == type_visibility::INTERNAL
-                     || dstPort->getVisibility() == type_visibility::INTERNAL
-                     || srcPort->getRole() == dstPort->getRole())) {
-                        std::string portNames = srcPort->getName() + " and " + dstPort->getName();
-                        throw exceptions::semantic::CWrongPortVisibilityException(portNames);
-                    }
+                    checkBindAddresses(srcPort, dstPort);
                     
                     srcPort->connectPort(dstPort);
                 }
@@ -230,8 +224,20 @@ namespace interpreter {
                     ptr(mem_port) dstComponent = exec(destination->getComponent());
                     ptr(mem_port) dstPort = dstComponent->getOwner()->getPortByName(destination->getPortName()->getStringValue());
                     
+                    checkBindAddresses(srcPort, dstPort);
+                    
                     srcPort->disconnectPortAt(0);
                     dstPort->disconnectPortAt(0);
+                }
+
+                void CInterpreter::checkBindAddresses(ptr(mem_port) srcPort, ptr(mem_port) dstPort) {
+                    if (srcPort->getName() != "default" && dstPort->getName() != "default"
+                     && (srcPort->getVisibility() == type_visibility::INTERNAL
+                     || dstPort->getVisibility() == type_visibility::INTERNAL
+                     || srcPort->getRole() == dstPort->getRole())) {
+                        std::string portNames = srcPort->getName() + " and " + dstPort->getName();
+                        throw exceptions::semantic::CWrongPortVisibilityException(portNames);
+                    }
                 }
 
 		ptr(mem_port)  CInterpreter::exec(ptr(ast_node) node) {

@@ -25,7 +25,7 @@
 #include "exceptions/semantic/wrongPortVisibiltyException.h"
 #include "ast/visitor/printVisitor.h"
 
-BOOST_AUTO_TEST_SUITE(interpreterCompoTest)
+BOOST_AUTO_TEST_SUITE(interpreterSimplePortsTest)
 
 ptr(ParserWrapper) parser = new_ptr(ParserWrapper)(new_ptr(Lexer)(), new_ptr(ast::semantic::CSyntaxDescriptorTable)());
 ptr(interpreter::memory::memspace::CDescriptorTable) table = new_ptr(interpreter::memory::memspace::CDescriptorTable)();
@@ -521,6 +521,47 @@ BOOST_AUTO_TEST_CASE(manualConnectionTest) {
             i := Inst.new();\
             j := A.new();\
             connect b@j to c@i;\
+            return i;\
+        }\
+    }");
+    
+    // Parse input and create AST
+    parser->parseAll(input);
+    
+    ptr(ast_program) program = parser->getRootNode();
+
+    BOOST_CHECK_THROW(interpreter->run(program), exceptions::semantic::CWrongPortVisibilityException);
+    
+    // Clear AST for next test
+    parser->clearAll();
+    table->clear();
+}
+
+BOOST_AUTO_TEST_CASE(manualDisconnectionTest) {
+    ptr(core_interpreter) interpreter = initInterpreter();
+    // Testing input
+    std::stringstream input;
+    input.str(
+   "descriptor A {\
+        internally provides {\
+            b : { add(a); };\
+        }\
+        service add(a) {\
+            return a + 1;\
+        }\
+    }\
+    descriptor Inst {\
+        internally requires {\
+            a : A;\
+            c : { add(a); };\
+        }\
+    }\
+    descriptor CompoContainer {\
+        service main() {\
+            |i j|\
+            i := Inst.new();\
+            j := A.new();\
+            disconnect b@j from c@i;\
             return i;\
         }\
     }");

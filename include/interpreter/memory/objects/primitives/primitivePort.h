@@ -30,9 +30,11 @@ namespace interpreter {
 					std::vector<ptr(objects::CGeneralService)> m_connectedServices;
                                         
                                         bool m_isDelegated;
+                                        
+                                        bool m_isCollection;
 
 				  public:
-					CPrimitivePort(const std::string& name = "", ptr(objects::CComponent) owner = nullptr);
+					CPrimitivePort(const std::string& name = "", ptr(objects::CComponent) owner = nullptr, bool collection = false);
 
 					CPrimitivePort(ptr(CPrimitivePort) instance);
 
@@ -61,6 +63,8 @@ namespace interpreter {
                                         ptr(objects::CGeneralPort) getDelegatedPort();
                                         
                                         bool isDelegated() const;
+                                        
+                                        bool isCollection() const;
 				};
 
 			}
