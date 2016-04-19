@@ -18,7 +18,7 @@ namespace interpreter {
 				  protected:
 					std::string m_name;
 
-					ptr(CComponent) m_owner;
+					wptr(CComponent) m_owner;
 
 				  public:
 					CAbstractPrimitive(const std::string& name = "", ptr(CComponent) owner = nullptr);
@@ -32,8 +32,6 @@ namespace interpreter {
 					ptr(CComponent) getOwner();
 
 					void setOwner(ptr(CComponent) owner);
-                                        
-                                        std::string printExpired() const;
 				};
 
 			}

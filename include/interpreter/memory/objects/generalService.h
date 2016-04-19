@@ -15,9 +15,9 @@ namespace interpreter {
 
 			class CGeneralService {
 			  private:
-				ptr(CComponent) m_service;
+				wptr(CComponent) m_service;
 
-				ptr(primitives::CPrimitiveService) m_primitiveService;
+				wptr(primitives::CPrimitiveService) m_primitiveService;
 
 				bool m_primitive;
 

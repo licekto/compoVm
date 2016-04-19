@@ -31,7 +31,7 @@ BOOST_AUTO_TEST_CASE(basicTest) {
     TEST_DESCRIPTOR(descriptor, "Component", "", 6, 5, 0);
     
     descriptor = coreModules->getCoreDescriptor("ConnectionDescription");
-    TEST_DESCRIPTOR(descriptor, "ConnectionDescription", "Component", 11, 23, 0);
+    TEST_DESCRIPTOR(descriptor, "ConnectionDescription", "Component", 11, 22, 0);
     
     descriptor = coreModules->getCoreDescriptor("Descriptor");
     TEST_DESCRIPTOR(descriptor, "Descriptor", "Component", 5, 15, 0);

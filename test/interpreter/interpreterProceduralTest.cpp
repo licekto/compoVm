@@ -22,15 +22,18 @@ ptr(ParserWrapper) parser = new_ptr(ParserWrapper)(new_ptr(Lexer)(), new_ptr(ast
 ptr(interpreter::memory::memspace::CDescriptorTable) table = new_ptr(interpreter::memory::memspace::CDescriptorTable)();
 
 ptr(core_interpreter) initInterpreter() {
-    ptr(core_bootstrap1) bootstrap1 = new_ptr(core_bootstrap1)(new_ptr(interpreter::core::CCoreModules)(parser));
+    ptr(interpreter::memory::memspace::CMemory) memory = new_ptr(interpreter::memory::memspace::CMemory)();
+    ptr(core_bootstrap1) bootstrap1 = new_ptr(core_bootstrap1)(new_ptr(interpreter::core::CCoreModules)(parser), nullptr, memory);
+    memory->setBootstrap1(bootstrap1);
     ptr(core_bootstrap2) bootstrap2 = new_ptr(core_bootstrap2)(bootstrap1);
     ptr(core_interpreter) interpreter = new_ptr(core_interpreter)(parser, bootstrap2, table);
     bootstrap1->setInterpreter(interpreter);
     return interpreter;
 }
 
+ptr(core_interpreter) interpreter = initInterpreter();
+
 BOOST_AUTO_TEST_CASE(binaryOperatorsTest) {
-    ptr(core_interpreter) interpreter = initInterpreter();
     // Testing input
     std::stringstream input;
     input.str(
@@ -192,7 +195,6 @@ BOOST_AUTO_TEST_CASE(binaryOperatorsTest) {
 }
 
 BOOST_AUTO_TEST_CASE(binaryOperatorsComplexTest) {
-    ptr(core_interpreter) interpreter = initInterpreter();
     // Testing input
     std::stringstream input;
     input.str(

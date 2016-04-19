@@ -31,15 +31,18 @@ ptr(ParserWrapper) parser = new_ptr(ParserWrapper)(new_ptr(Lexer)(), new_ptr(ast
 ptr(interpreter::memory::memspace::CDescriptorTable) table = new_ptr(interpreter::memory::memspace::CDescriptorTable)();
 
 ptr(core_interpreter) initInterpreter() {
-    ptr(core_bootstrap1) bootstrap1 = new_ptr(core_bootstrap1)(new_ptr(interpreter::core::CCoreModules)(parser));
+    ptr(interpreter::memory::memspace::CMemory) memory = new_ptr(interpreter::memory::memspace::CMemory)();
+    ptr(core_bootstrap1) bootstrap1 = new_ptr(core_bootstrap1)(new_ptr(interpreter::core::CCoreModules)(parser), nullptr, memory);
+    memory->setBootstrap1(bootstrap1);
     ptr(core_bootstrap2) bootstrap2 = new_ptr(core_bootstrap2)(bootstrap1);
     ptr(core_interpreter) interpreter = new_ptr(core_interpreter)(parser, bootstrap2, table);
     bootstrap1->setInterpreter(interpreter);
     return interpreter;
 }
 
+ptr(core_interpreter) interpreter = initInterpreter();
+
 BOOST_AUTO_TEST_CASE(basicTest) {
-    ptr(core_interpreter) interpreter = initInterpreter();
     // Testing input
     std::stringstream input;
     input.str(
@@ -63,7 +66,6 @@ BOOST_AUTO_TEST_CASE(basicTest) {
 }
 
 BOOST_AUTO_TEST_CASE(basicInstantiationTest) {
-    ptr(core_interpreter) interpreter = initInterpreter();
     // Testing input
     std::stringstream input;
     input.str(
@@ -119,7 +121,6 @@ BOOST_AUTO_TEST_CASE(basicInstantiationTest) {
 }
 
 BOOST_AUTO_TEST_CASE(serviceParamsTest) {
-    ptr(core_interpreter) interpreter = initInterpreter();
     // Testing input
     std::stringstream input;
     input.str(
@@ -150,7 +151,6 @@ BOOST_AUTO_TEST_CASE(serviceParamsTest) {
 }
 
 BOOST_AUTO_TEST_CASE(connection1Test) {
-    ptr(core_interpreter) interpreter = initInterpreter();
     // Testing input
     std::stringstream input;
     input.str(
@@ -199,7 +199,6 @@ BOOST_AUTO_TEST_CASE(connection1Test) {
 }
 
 BOOST_AUTO_TEST_CASE(connection2Test) {
-    ptr(core_interpreter) interpreter = initInterpreter();
     // Testing input
     std::stringstream input;
     input.str(
@@ -241,7 +240,6 @@ BOOST_AUTO_TEST_CASE(connection2Test) {
 }
 
 BOOST_AUTO_TEST_CASE(disconnectionTest) {
-    ptr(core_interpreter) interpreter = initInterpreter();
     // Testing input
     std::stringstream input;
     input.str(
@@ -286,7 +284,6 @@ BOOST_AUTO_TEST_CASE(disconnectionTest) {
 }
 
 BOOST_AUTO_TEST_CASE(delegationTest) {
-    ptr(core_interpreter) interpreter = initInterpreter();
     // Testing input
     std::stringstream input;
     input.str(
@@ -335,7 +332,6 @@ BOOST_AUTO_TEST_CASE(delegationTest) {
 }
 
 BOOST_AUTO_TEST_CASE(selfExternalRequirementSourceThrowTest) {
-    ptr(core_interpreter) interpreter = initInterpreter();
     // Testing input
     std::stringstream input;
     input.str(
@@ -373,7 +369,6 @@ BOOST_AUTO_TEST_CASE(selfExternalRequirementSourceThrowTest) {
 }
 
 BOOST_AUTO_TEST_CASE(selfExternalRequirementDestinationThrowTest) {
-    ptr(core_interpreter) interpreter = initInterpreter();
     // Testing input
     std::stringstream input;
     input.str(
@@ -411,7 +406,6 @@ BOOST_AUTO_TEST_CASE(selfExternalRequirementDestinationThrowTest) {
 }
 
 BOOST_AUTO_TEST_CASE(outerExternalRequirementSourceThrowTest) {
-    ptr(core_interpreter) interpreter = initInterpreter();
     // Testing input
     std::stringstream input;
     input.str(
@@ -454,7 +448,6 @@ BOOST_AUTO_TEST_CASE(outerExternalRequirementSourceThrowTest) {
 }
 
 BOOST_AUTO_TEST_CASE(outerExternalRequirementDestinationThrowTest) {
-    ptr(core_interpreter) interpreter = initInterpreter();
     // Testing input
     std::stringstream input;
     input.str(
@@ -497,7 +490,6 @@ BOOST_AUTO_TEST_CASE(outerExternalRequirementDestinationThrowTest) {
 }
 
 BOOST_AUTO_TEST_CASE(manualConnectionTest) {
-    ptr(core_interpreter) interpreter = initInterpreter();
     // Testing input
     std::stringstream input;
     input.str(
@@ -538,7 +530,6 @@ BOOST_AUTO_TEST_CASE(manualConnectionTest) {
 }
 
 BOOST_AUTO_TEST_CASE(manualDisconnectionTest) {
-    ptr(core_interpreter) interpreter = initInterpreter();
     // Testing input
     std::stringstream input;
     input.str(

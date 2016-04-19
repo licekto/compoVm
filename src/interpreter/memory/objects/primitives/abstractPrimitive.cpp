@@ -25,22 +25,11 @@ namespace interpreter {
 				}
 
 				ptr(CComponent) CAbstractPrimitive::getOwner() {
-					return m_owner;
+					return m_owner.lock();
 				}
 
 				void CAbstractPrimitive::setOwner(ptr(CComponent) owner) {
-					//m_owner = wptr(CComponent)(owner);
-                                    m_owner = owner;
-                                }
-
-                                std::string CAbstractPrimitive::printExpired() const {
-//                                    if (m_owner.expired()) {
-//                                        return "EXPIRED";
-//                                    }
-//                                    else {
-//                                        return "VALID";
-//                                    }
-                                    return "";
+					m_owner = wptr(CComponent)(owner);
                                 }
 
 			}

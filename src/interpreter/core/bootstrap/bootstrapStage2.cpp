@@ -16,23 +16,23 @@ namespace interpreter {
 					if (port->getNameSymbol()->getStringValue() == "default") {
 						continue;
 					}
-					component->addPort(new_ptr(mem_port)(m_bootstrapStage1->bootstrapPortComponent(port, component), port->getVisibility(), port->getRole()));
+					component->addPort(m_bootstrapStage1->m_memory->newComponentPort(component, port).lock());
 				}
 			}
 
 			void CBootstrapStage2::addServices(ptr(mem_component) component, ptr(ast_descriptor) descriptor) {
 				for (size_t i = 0; i < descriptor->getServicesSize(); ++i) {
-					component->addService(new_ptr(mem_service)(m_bootstrapStage1->bootstrapServiceComponent(descriptor->getServiceAt(i), component)));
+					component->addService(m_bootstrapStage1->m_memory->newComponentService(component, descriptor->getServiceAt(i)).lock());
 				}
 			}
 
 			ptr(mem_component) CBootstrapStage2::bootstrapRootComponent(ptr(mem_component) owner) {
 				ptr(ast_descriptor) descriptor = m_bootstrapStage1->m_coreModules->getCoreDescriptor("Component");
 
-				ptr(mem_component) component = new_ptr(mem_component)();
+				ptr(mem_component) component = m_bootstrapStage1->m_memory->newComponent().lock();
 
                                 ptr(ast_port) port = descriptor->getPortByName("default");
-				ptr(mem_port) generalPort = new_ptr(mem_port)(m_bootstrapStage1->bootstrapPortComponent(port, nullptr), port->getVisibility(), port->getRole());
+				ptr(mem_port) generalPort = m_bootstrapStage1->m_memory->newComponentPort(nullptr, port).lock();
 				component->addPort(generalPort);
 
 				addPorts(component, descriptor);
@@ -50,7 +50,6 @@ namespace interpreter {
 			}
 
 			ptr(mem_component) CBootstrapStage2::buildPortFromDescription(ptr(mem_component) description, ptr(mem_component) owner) {
-
                                 bool isCollection = cast(mem_bool)(description->getPortByName("isCollectionPort")->getConnectedPortAt(0)->getOwner())->getValue();
                                 
                                 ptr(mem_component) port;
@@ -142,7 +141,7 @@ namespace interpreter {
 
 			ptr(mem_component) CBootstrapStage2::bootstrapDescriptorComponent(ptr(ast_descriptor) descriptor) {
 				ptr(mem_component) parentComponent = bootstrapRootComponent(nullptr);
-				ptr(mem_component) component = new_ptr(mem_component)();
+				ptr(mem_component) component = m_bootstrapStage1->m_memory->newComponent().lock();
 				ptr(ast_descriptor) coreDescriptor = m_bootstrapStage1->m_coreModules->getCoreDescriptor("Descriptor");
                                 
 				component->setParent(parentComponent);
@@ -179,7 +178,7 @@ namespace interpreter {
 
 				std::function<ptr(mem_port)(const ptr(mem_component)&)> callback;
 				callback = [this](const ptr(mem_component)& context) -> ptr(mem_port) {
-					ptr(mem_component) newComponent = new_ptr(mem_component)();
+					ptr(mem_component) newComponent = m_bootstrapStage1->m_memory->newComponent().lock();
 
 					ptr(mem_component) parent = bootstrapRootComponent(nullptr);
 					newComponent->setParent(parent);
@@ -189,7 +188,7 @@ namespace interpreter {
 
                                         for (size_t i = 0; i < context->getPortByName("services")->getConnectedPortsNumber(); ++i) {
                                                 ptr(mem_component) newService = cloneService(context->getPortByName("services")->getConnectedPortAt(i)->getOwner()->getBottomChild(), newComponent);
-                                                newComponent->addService(new_ptr(mem_service)(newService));
+                                                newComponent->addService(m_bootstrapStage1->m_memory->newComponentService(newService).lock());
                                         }
 
 					for (size_t i = 0; i < context->getPortByName("ports")->getConnectedPortsNumber(); ++i) {
@@ -199,7 +198,7 @@ namespace interpreter {
                                                 std::string role = cast(mem_string)(portDescriptionComponent->getPortByName("role")->getConnectedPortAt(0)->getOwner())->getValue();
                                                 type_role r = role == ROLE_REQUIREMENT ? type_role::REQUIRES : type_role::PROVIDES;
                                                 
-                                                ptr(mem_port) newPort = new_ptr(mem_port)(buildPortFromDescription(portDescriptionComponent, newComponent), v, r);
+                                                ptr(mem_port) newPort = m_bootstrapStage1->m_memory->newComponentPort(buildPortFromDescription(portDescriptionComponent, newComponent), v, r).lock();
                                                 newComponent->addPort(newPort);
 					}
                                         
@@ -274,7 +273,7 @@ namespace interpreter {
                                         
 					return newComponent->getPortByName("default");
 				};
-                                ptr(mem_service) newService = new_ptr(mem_service)(new_ptr(memory::objects::primitives::CPrimitiveService)("new", component, callback));
+                                ptr(mem_service) newService = m_bootstrapStage1->m_memory->newPrimitiveService(component, "new", callback).lock();
                                 component->addService(newService);
 
 				ptr(mem_port) generalPort = component->getPortByName("default")->getPort()

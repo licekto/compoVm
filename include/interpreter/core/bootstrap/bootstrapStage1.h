@@ -20,6 +20,7 @@
 #include "exceptions/runtime/wrongPortTypeException.h"
 #include "exceptions/runtime/unknownAstNodeTypeException.h"
 #include "ast/visitor/constantsVisitor.h"
+#include "interpreter/memory/memspace/memory.h"
 
 namespace interpreter {
 
@@ -37,8 +38,9 @@ namespace interpreter {
 
 				ptr(core::CInterpreter) m_interpreter;
                                 
-                        public:
-				void addPrimitiveServices(ptr(mem_component) component, ptr(ast_descriptor) descriptor, std::map<std::string, ptr(mem_primitiveservice)>& servicesNames);
+                                ptr(memory::memspace::CMemory) m_memory;
+                                
+				void addPrimitiveServices(ptr(mem_component) component, ptr(ast_descriptor) descriptor);
 
 				void addPrimitivePorts(ptr(mem_component) component, ptr(ast_descriptor) descriptor);
 
@@ -48,14 +50,14 @@ namespace interpreter {
 
 				void addDefaultPort(ptr(mem_value) value);
                                 
-				ptr(mem_component) bootstrapPrologueWithComponent(ptr(ast_descriptor) descriptor, std::map<std::string, ptr(mem_primitiveservice)>& servicesNames, ptr(mem_component) owner);
+				ptr(mem_component) bootstrapPrologueWithComponent(ptr(ast_descriptor) descriptor, ptr(mem_component) owner);
 
-				ptr(mem_component) bootstrapPrologue(ptr(ast_descriptor) descriptor, std::map<std::string, ptr(mem_primitiveservice)>& servicesNames);
+				ptr(mem_component) bootstrapPrologue(ptr(ast_descriptor) descriptor);
 
-				void bootstrapEpilogue(ptr(mem_component) component, std::map<std::string,std::shared_ptr<mem_primitiveservice> >& servicesNames);
+				void bootstrapEpilogue(ptr(mem_component) component, std::map<std::string, std::function<ptr(mem_port)(const ptr(mem_component)&)> >& servicesNames);
 
 			  public:
-				CBootstrapStage1(ptr(core::CCoreModules) coreModules = nullptr, ptr(core::CInterpreter) interpreter = nullptr);
+				CBootstrapStage1(ptr(core::CCoreModules) coreModules = nullptr, ptr(core::CInterpreter) interpreter = nullptr, ptr(memory::memspace::CMemory) memory = nullptr);
                                 
                                 void setInterpreter(ptr(core::CInterpreter) interpreter);
 

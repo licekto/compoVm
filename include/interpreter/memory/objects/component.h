@@ -23,13 +23,13 @@ namespace interpreter {
 			class CComponent : public std::enable_shared_from_this<CComponent> {
 			  protected:
 
-				ptr(CComponent) m_parent;
+				wptr(CComponent) m_parent;
 
-				ptr(CComponent) m_child;
+				wptr(CComponent) m_child;
 
-				std::vector<ptr(CGeneralPort)> m_ports;
+				std::vector<wptr(CGeneralPort)> m_ports;
 
-				std::vector<ptr(CGeneralService)> m_services;
+				std::vector<wptr(CGeneralService)> m_services;
 
 			  public:
 

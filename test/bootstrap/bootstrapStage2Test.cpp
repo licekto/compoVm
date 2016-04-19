@@ -23,11 +23,20 @@
 
 BOOST_AUTO_TEST_SUITE(bootstrapStage2Test)
 
-// Create parser, core modules, interpreter and bootstrap
 ptr(ParserWrapper) parser = new_ptr(ParserWrapper)(new_ptr(Lexer)(), new_ptr(ast::semantic::CSyntaxDescriptorTable)());
-ptr(core_modules) coreModules = new_ptr(core_modules)(parser);
-ptr(core_bootstrap1) bootstrap1 = new_ptr(core_bootstrap1)(coreModules);
-ptr(core_bootstrap2) bootstrap2 = new_ptr(core_bootstrap2)(bootstrap1);
+
+ptr(core_bootstrap2) init() {
+    // Create parser, core modules, interpreter and bootstrap
+    ptr(core_modules) coreModules = new_ptr(core_modules)(parser);
+    ptr(interpreter::memory::memspace::CMemory) memory = new_ptr(interpreter::memory::memspace::CMemory)();
+    ptr(core_bootstrap1) bootstrap1 = new_ptr(core_bootstrap1)(coreModules, nullptr, memory);
+    memory->setBootstrap1(bootstrap1);
+    ptr(core_bootstrap2) bootstrap2 = new_ptr(core_bootstrap2)(bootstrap1);
+    
+    return bootstrap2;
+}
+
+ptr(core_bootstrap2) bootstrap2 = init();
 
 BOOST_AUTO_TEST_CASE(basicTest) {
     // Testing input

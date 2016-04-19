@@ -26,7 +26,8 @@ BOOST_AUTO_TEST_SUITE(bootstrapStage1Test)
 // Create parser, core modules, interpreter and bootstrap
 ptr(ParserWrapper) parser = new_ptr(ParserWrapper)(new_ptr(Lexer)(), new_ptr(ast::semantic::CSyntaxDescriptorTable)());
 ptr(core_modules) coreModules = new_ptr(core_modules)(parser);
-ptr(core_bootstrap1) bootstrap1 = new_ptr(core_bootstrap1)(coreModules/*, interpreter*/);
+ptr(interpreter::memory::memspace::CMemory) memory = new_ptr(interpreter::memory::memspace::CMemory)();
+ptr(core_bootstrap1) bootstrap1 = new_ptr(core_bootstrap1)(coreModules, nullptr, memory);
 
 BOOST_AUTO_TEST_CASE(componentTest) {
     // Bootstrap
@@ -689,7 +690,7 @@ BOOST_AUTO_TEST_CASE(namedConnectionDescriptionComponentTest) {
     
     ptr(mem_component) connectionDescriptionComponent = bootstrap1->bootstrapConnectionDescriptionComponent(astConnection, owner);
     
-    TEST_BASE_COMPONENT_PRIMITIVE(connectionDescriptionComponent->getParent(), 28, owner, bootstrap1);
+    TEST_BASE_COMPONENT_PRIMITIVE(connectionDescriptionComponent->getParent(), 27, owner, bootstrap1);
     
     TEST_PRIMITIVE_PORT(connectionDescriptionComponent, "sourceType", types::roleType::REQUIRES, types::visibilityType::INTERNAL, 0);
     TEST_PRIMITIVE_PORT(connectionDescriptionComponent, "sourceComponentIndex", types::roleType::REQUIRES, types::visibilityType::INTERNAL, 0);
@@ -798,7 +799,7 @@ BOOST_AUTO_TEST_CASE(signatureConnectionDescriptionComponentTest) {
     
     ptr(mem_component) connectionDescriptionComponent = bootstrap1->bootstrapConnectionDescriptionComponent(astConnection, owner);
     
-    TEST_BASE_COMPONENT_PRIMITIVE(connectionDescriptionComponent->getParent(), 28, owner, bootstrap1);
+    TEST_BASE_COMPONENT_PRIMITIVE(connectionDescriptionComponent->getParent(), 27, owner, bootstrap1);
     
     TEST_PRIMITIVE_PORT(connectionDescriptionComponent, "sourceType", types::roleType::REQUIRES, types::visibilityType::INTERNAL, 0);
     BOOST_CHECK_EQUAL(cast(mem_string)(connectionDescriptionComponent->getPortByName("sourceType")->getConnectedPortAt(0)->getOwner())->getValue(), CONNECTION_INVOCATION);

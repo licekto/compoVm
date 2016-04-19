@@ -23,9 +23,9 @@ namespace interpreter {
 
 			class CGeneralPort : public std::enable_shared_from_this<CGeneralPort> {
 			  protected:
-				ptr(CComponent) m_port;
+				wptr(CComponent) m_port;
 
-				ptr(primitives::CPrimitivePort) m_primitivePort;
+				wptr(primitives::CPrimitivePort) m_primitivePort;
 
 				types::visibilityType m_visibility;
 
@@ -33,7 +33,7 @@ namespace interpreter {
 
 				bool m_primitive;
                                 
-                                std::vector<ptr(CGeneralService)> m_connectedPrimitiveServices;
+                                std::vector<wptr(CGeneralService)> m_connectedPrimitiveServices;
 
 			  public:
 				CGeneralPort(ptr(CComponent) port,

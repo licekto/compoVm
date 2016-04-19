@@ -15,8 +15,6 @@ descriptor ConnectionDescription extends Component {
         bindType : String;
     }
 
-    service getType() {}
-
     service setSourceType(type) {}
     service getSourceType() {}
     service setSourceComponent(scd) {}

@@ -24,18 +24,15 @@ namespace interpreter {
 				}
 
 				ptr(CComponent) CPrimitiveService::getContext() {
-					//return m_owner.lock();
-                                    return m_owner;
+					return m_owner.lock();
 				}
 
 				void CPrimitiveService::setContext(ptr(CComponent) context) {
-					//m_owner = wptr(CComponent)(context);
-                                    m_owner = context;
+					m_owner = wptr(CComponent)(context);
 				}
 
 				ptr(objects::CGeneralPort) CPrimitiveService::invoke() {
-					//return m_callback(m_owner.lock());
-                                    	return m_callback(m_owner);
+					return m_callback(m_owner.lock());
 				}
 
 				void CPrimitiveService::setCallback(std::function<ptr(objects::CGeneralPort)(const ptr(objects::CComponent)&)> callback) {

@@ -8,23 +8,21 @@ namespace interpreter {
 		namespace objects {
 
 			CGeneralService::CGeneralService(ptr(CComponent) service)
-				: m_service(service),
-				  m_primitiveService(nullptr),
+				: m_service(wptr(CComponent)(service)),
 				  m_primitive(false) {
 			}
 
 			CGeneralService::CGeneralService(ptr(primitives::CPrimitiveService) primitiveService)
-				: m_service(nullptr),
-				  m_primitiveService(primitiveService),
+				: m_primitiveService(wptr(primitives::CPrimitiveService)(primitiveService)),
 				  m_primitive(true) {
 			}
 
 			ptr(CComponent) CGeneralService::getService() {
-				return m_service;
+				return m_service.lock();
 			}
 
 			ptr(primitives::CPrimitiveService) CGeneralService::getPrimitiveService() {
-				return m_primitiveService;
+				return m_primitiveService.lock();
 			}
 
 			bool CGeneralService::isPrimitive() const {
@@ -33,19 +31,19 @@ namespace interpreter {
 
 			std::string CGeneralService::getName() const {
 				if (m_primitive) {
-					return m_primitiveService->getName();
+					return m_primitiveService.lock()->getName();
 				} else {
 					return cast(values::CStringComponent)
-					       (m_service->getPortByName("serviceSign")->getConnectedPortAt(0)
+					       (m_service.lock()->getPortByName("serviceSign")->getConnectedPortAt(0)
 					        ->getOwner()->getPortByName("selector")->getConnectedPortAt(0)->getOwner())->getValue();
 				}
 			}
 
 			ptr(objects::CGeneralPort) CGeneralService::invoke() {
 				if (m_primitive) {
-					return m_primitiveService->invoke();
+					return m_primitiveService.lock()->invoke();
 				} else {
-                                        return m_service->getServiceByName("execute")->invoke();
+                                        return m_service.lock()->getServiceByName("execute")->invoke();
 				}
 			}
 
@@ -53,7 +51,7 @@ namespace interpreter {
                                 if (m_primitive) {
                                     throw exceptions::runtime::CPrimitiveServiceNoPortException();
                                 }
-				return m_service->getPortByName("default");
+				return m_service.lock()->getPortByName("default");
 			}
 
 		}
