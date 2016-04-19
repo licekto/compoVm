@@ -13,17 +13,25 @@ namespace interpreter {
 
 			class CMemory {
 			  private:
-				std::vector<ptr(mem_component)> m_memory;
+				std::vector<ptr(mem_component)> m_componentsMemory;
+                                
+                                std::vector<ptr(mem_port)> m_portsMemory;
+                                
+                                std::vector<ptr(mem_service)> m_servicesMemory;
 
 			  public:
-                                wptr(mem_component) getNewComponent();
+                                wptr(mem_component) newComponent();
                                 
-                                wptr(mem_int) getIntComponent(i64 value);
+                                wptr(mem_int) newIntComponent(i64 value);
                                 
-                                wptr(mem_string) getStringComponent(const std::string& value);
+                                wptr(mem_string) newStringComponent(const std::string& value);
                                 
-                                wptr(mem_bool) getBoolComponent(bool value);
+                                wptr(mem_bool) newBoolComponent(bool value);
 
+                                wptr(mem_port) newPort();
+                                
+                                wptr(mem_service) newService();
+                                
                                 size_t getComponentsNumber() const;
                                 
 				wptr(mem_component) getComponentAt(size_t index);

@@ -6,40 +6,48 @@ namespace interpreter {
 
 		namespace memspace {
 
-                    wptr(mem_component) CMemory::getNewComponent() {
+                    wptr(mem_component) CMemory::newComponent() {
                         ptr(mem_component) component = new_ptr(mem_component)();
-                        m_memory.push_back(component);
+                        m_componentsMemory.push_back(component);
                         
                         return wptr(mem_component)(component);
                     }
 
-                    wptr(mem_int) CMemory::getIntComponent(i64 value) {
+                    wptr(mem_int) CMemory::newIntComponent(i64 value) {
                         ptr(mem_int) component = new_ptr(mem_int)(value);
-                        m_memory.push_back(component);
+                        m_componentsMemory.push_back(component);
                         
                         return wptr(mem_int)(component);
                     }
 
-                    wptr(mem_string) CMemory::getStringComponent(const std::string& value) {
+                    wptr(mem_string) CMemory::newStringComponent(const std::string& value) {
                         ptr(mem_string) component = new_ptr(mem_string)(value);
-                        m_memory.push_back(component);
+                        m_componentsMemory.push_back(component);
                         
                         return wptr(mem_string)(component);
                     }
 
-                    wptr(mem_bool) CMemory::getBoolComponent(bool value) {
+                    wptr(mem_bool) CMemory::newBoolComponent(bool value) {
                         ptr(mem_bool) component = new_ptr(mem_bool)(value);
-                        m_memory.push_back(component);
+                        m_componentsMemory.push_back(component);
                         
                         return wptr(mem_bool)(component);
                     }
-                    
+
+                    wptr(mem_port) CMemory::newPort() {
+
+                    }
+
+                    wptr(mem_service) CMemory::newService() {
+
+                    }
+
                     size_t CMemory::getComponentsNumber() const {
-                        return m_memory.size();
+                        return m_componentsMemory.size();
                     }
 
                     wptr(mem_component) CMemory::getComponentAt(size_t index) {
-                        return wptr(mem_component)(m_memory.at(index));
+                        return wptr(mem_component)(m_componentsMemory.at(index));
                     }
 
 		}
