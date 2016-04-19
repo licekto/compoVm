@@ -1,6 +1,7 @@
 #include "interpreter/memory/objects/generalPort.h"
 #include "interpreter/memory/objects/primitives/primitivePort.h"
 #include "interpreter/memory/objects/values/stringComponent.h"
+#include "interpreter/memory/objects/values/boolComponent.h"
 
 namespace interpreter {
 
@@ -85,8 +86,14 @@ namespace interpreter {
 
 			void CGeneralPort::connectPort(std::shared_ptr<objects::CGeneralPort> port) {
 				if (m_primitive) {
+//                                        if (!isCollection()) {
+//                                            m_primitivePort->disconnectPortAt(0);
+//                                        }
 					return m_primitivePort->connectPort(port);
 				} else {
+//                                        if (!isCollection()) {
+//                                            m_port->getPortByName("connectedPorts")->disconnectPortAt(0);
+//                                        }
 					return m_port->getPortByName("connectedPorts")->connectPort(port);
 				}
 			}
@@ -202,7 +209,12 @@ namespace interpreter {
                         }
 
                         bool CGeneralPort::isCollection() const {
-                            return false;
+                            if (m_primitive) {
+                                return m_primitivePort->isCollection();
+                            }
+                            else {
+                                return cast(values::CBoolComponent)(m_port->getPortByName("isCollection")->getConnectedPortAt(0)->getOwner())->getValue();
+                            }
                         }
 
 		}

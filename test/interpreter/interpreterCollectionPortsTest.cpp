@@ -61,6 +61,8 @@ BOOST_AUTO_TEST_CASE(basicTest) {
             |a|\
             a := A.new();\
             connect arithmetics@a to default@(B.new());\
+            connect arithmetics@a to default@(B.new());\
+            connect arithmetics@a to default@(B.new());\
         }\
     }");
     

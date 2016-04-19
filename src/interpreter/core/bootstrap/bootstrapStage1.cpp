@@ -42,17 +42,9 @@ namespace interpreter {
 				for (size_t i = 0; i < descriptor->getPortsSize(); ++i) {
 					ptr(ast_port) port = descriptor->getPortAt(i);
 
-					types::visibilityType visibility = port->getVisibility();
+					ptr(mem_primitiveport) primitivePort = new_ptr(mem_primitiveport)(port->getNameSymbol()->getStringValue(), component, port->isCollection());
 
-					types::roleType role = port->getRole();
-
-					std::string name = port->getNameSymbol()->getStringValue();
-                                        
-                                        bool collection = port->getNodeType() == type_node::COLLECTION_PORT;
-
-					ptr(mem_primitiveport) primitivePort = new_ptr(mem_primitiveport)(name, component, collection);
-
-					ptr(mem_port) generalPort = new_ptr(mem_port)(primitivePort, visibility, role);
+					ptr(mem_port) generalPort = new_ptr(mem_port)(primitivePort, port->getVisibility(), port->getRole());
 
 					component->addPort(generalPort);
 				}
