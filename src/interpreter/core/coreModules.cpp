@@ -16,7 +16,6 @@ namespace interpreter {
 			if (file.is_open()) {
 				while (std::getline(file, line)) {
 					content += line;
-					content.push_back('\n');
 				}
 				file.close();
 				return content;

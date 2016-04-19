@@ -51,7 +51,15 @@ namespace interpreter {
 
 			ptr(mem_component) CBootstrapStage2::buildPortFromDescription(ptr(mem_component) description, ptr(mem_component) owner) {
 
-				ptr(mem_component) port = m_bootstrapStage1->bootstrapPortComponent(owner);
+                                bool isCollection = cast(mem_bool)(description->getPortByName("isCollectionPort")->getConnectedPortAt(0)->getOwner())->getValue();
+                                
+                                ptr(mem_component) port;
+                                if (isCollection) {
+                                    port = m_bootstrapStage1->bootstrapCollectionPortComponent(owner);
+                                }
+                                else {
+                                    port = m_bootstrapStage1->bootstrapPortComponent(owner);
+                                }
 
 				std::string name = cast(mem_string)(description->getPortByName("name")->getConnectedPortAt(0)->getOwner())->getValue();
 
@@ -59,6 +67,7 @@ namespace interpreter {
                                 port->getPortByName("interfaceDescription")->connectPort(
                                     cloneInterface(description->getPortByName("interfaceDefinition")->getConnectedPortAt(0)->getOwner(), owner)
                                         ->getPortByName("default"));
+                                port->getPortByName("isCollection")->connectPort(m_bootstrapStage1->bootstrapBoolValue(isCollection)->getDefaultPort());
 
 				return port;
 			}

@@ -38,7 +38,7 @@ namespace interpreter {
                                 
                                 ptr(mem_component) cloneService(ptr(mem_component) service, ptr(mem_component) owner);
 
-			  public:
+			  public:                              
 				CBootstrapStage2(ptr(CBootstrapStage1) stage1 = nullptr);
                                 
                                 void checkPortSemantics(ptr(mem_port) port, ptr(mem_component) owner);

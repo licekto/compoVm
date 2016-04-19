@@ -86,14 +86,14 @@ namespace interpreter {
 
 			void CGeneralPort::connectPort(std::shared_ptr<objects::CGeneralPort> port) {
 				if (m_primitive) {
-//                                        if (!isCollection()) {
-//                                            m_primitivePort->disconnectPortAt(0);
-//                                        }
+                                        if (!isCollection()) {
+                                            //m_primitivePort->disconnectPortAt(0);
+                                        }
 					return m_primitivePort->connectPort(port);
 				} else {
-//                                        if (!isCollection()) {
-//                                            m_port->getPortByName("connectedPorts")->disconnectPortAt(0);
-//                                        }
+                                        if (!isCollection()) {
+                                            //m_port->getPortByName("connectedPorts")->disconnectPortAt(0);
+                                        }
 					return m_port->getPortByName("connectedPorts")->connectPort(port);
 				}
 			}

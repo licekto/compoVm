@@ -14,7 +14,9 @@ namespace interpreter {
 			CBootstrapStage1::CBootstrapStage1(ptr(core::CCoreModules) coreModules, ptr(core::CInterpreter) interpreter)
 				: m_coreModules(coreModules),
 				  m_interpreter(interpreter) {
+                            if (m_coreModules.use_count()) {
 				m_coreModules->loadCoreModules();
+                            }
                         }
 
                         void CBootstrapStage1::setInterpreter(ptr(core::CInterpreter) interpreter) {
@@ -29,8 +31,7 @@ namespace interpreter {
 
 					std::string serviceName = astService->getNameSymbol()->getStringValue();
 
-					ptr(mem_primitiveservice) primitiveService =
-					    new_ptr(mem_primitiveservice)(serviceName, component);
+					ptr(mem_primitiveservice) primitiveService = new_ptr(mem_primitiveservice)(serviceName, component);
 
 					servicesNames[serviceName] = primitiveService;
 					component->addService(new_ptr(mem_service)(primitiveService));
@@ -275,10 +276,22 @@ namespace interpreter {
 
 				bootstrapEpilogue(port, servicesNames);
 				return port;
-			}
+                        }
 
-			ptr(mem_component) CBootstrapStage1::bootstrapCollectionPortComponent(ptr(ast_port) astPort, ptr(mem_component) owner) {
-				ptr(mem_component) port = bootstrapPortComponent(astPort, owner);
+                        ptr(mem_component) CBootstrapStage1::bootstrapCollectionPortComponent(ptr(ast_port) astPort, ptr(mem_component) owner) {
+                                ptr(mem_component) port = bootstrapCollectionPortComponent(owner);
+
+				std::string name = astPort->getNameSymbol()->getStringValue();
+
+				port->getPortByName("name")->connectPort(bootstrapStringValue(name)->getDefaultPort());
+				port->getPortByName("interfaceDescription")->connectPort(bootstrapInterfaceComponent(astPort, port, owner)->getPortByName("default"));
+                                port->getPortByName("isCollection")->connectPort(bootstrapBoolValue(true)->getDefaultPort());
+                                
+                                return port;
+                        }
+
+			ptr(mem_component) CBootstrapStage1::bootstrapCollectionPortComponent(ptr(mem_component) owner) {
+				ptr(mem_component) port = bootstrapPortComponent(owner);
 
                                 port->getPortByName("isCollection")->disconnectPortAt(0);
                                 port->getPortByName("isCollection")->connectPort(bootstrapBoolValue(true)->getDefaultPort());

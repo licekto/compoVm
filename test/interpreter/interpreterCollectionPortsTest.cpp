@@ -63,6 +63,7 @@ BOOST_AUTO_TEST_CASE(basicTest) {
             connect arithmetics@a to default@(B.new());\
             connect arithmetics@a to default@(B.new());\
             connect arithmetics@a to default@(B.new());\
+            return a;\
         }\
     }");
     
@@ -71,7 +72,7 @@ BOOST_AUTO_TEST_CASE(basicTest) {
     
     ptr(ast_program) program = parser->getRootNode();
 
-    interpreter->run(program);
+    ptr(mem_component) component = interpreter->run(program)->getOwner();
     
     // Clear AST for next test
     parser->clearAll();

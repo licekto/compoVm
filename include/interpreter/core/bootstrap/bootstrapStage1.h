@@ -36,7 +36,7 @@ namespace interpreter {
 				ptr(core::CCoreModules) m_coreModules;
 
 				ptr(core::CInterpreter) m_interpreter;
-
+                                    
 				void addPrimitiveServices(ptr(mem_component) component, ptr(ast_descriptor) descriptor, std::map<std::string, ptr(mem_primitiveservice)>& servicesNames);
 
 				void addPrimitivePorts(ptr(mem_component) component, ptr(ast_descriptor) descriptor);
@@ -46,7 +46,7 @@ namespace interpreter {
 				std::function<ptr(mem_port)(const ptr(mem_component)&)> prepareStringGetter(const std::string& portName);
 
 				void addDefaultPort(ptr(mem_value) value);
-
+                                
 				ptr(mem_component) bootstrapPrologueWithComponent(ptr(ast_descriptor) descriptor, std::map<std::string, ptr(mem_primitiveservice)>& servicesNames, ptr(mem_component) owner);
 
 				ptr(mem_component) bootstrapPrologue(ptr(ast_descriptor) descriptor, std::map<std::string, ptr(mem_primitiveservice)>& servicesNames);
@@ -71,6 +71,8 @@ namespace interpreter {
 				ptr(mem_component) bootstrapPortComponent(ptr(mem_component) owner);
 
 				ptr(mem_component) bootstrapCollectionPortComponent(ptr(ast_port) astPort, ptr(mem_component) owner);
+                                
+                                ptr(mem_component) bootstrapCollectionPortComponent(ptr(mem_component) owner);
 
 				ptr(mem_component) bootstrapServiceComponent(ptr(ast_service) astService, ptr(mem_component) owner);
                                 
