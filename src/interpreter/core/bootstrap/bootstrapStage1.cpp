@@ -26,7 +26,7 @@ namespace interpreter {
                         }
 
                         void CBootstrapStage1::setInterpreter(ptr(core::CInterpreter) interpreter) {
-                                m_interpreter = interpreter;
+                                m_interpreter = wptr(core::CInterpreter)(interpreter);
                         }
 
 			void CBootstrapStage1::addPrimitiveServices(ptr(mem_component) component, ptr(ast_descriptor) descriptor) {
@@ -38,10 +38,7 @@ namespace interpreter {
 
 			void CBootstrapStage1::addPrimitivePorts(ptr(mem_component) component, ptr(ast_descriptor) descriptor) {
 				for (size_t i = 0; i < descriptor->getPortsSize(); ++i) {
-					ptr(ast_port) port = descriptor->getPortAt(i);
-
-					component->addPort(
-                                            m_memory->newPrimitivePort(component,port).lock());
+					component->addPort(m_memory->newPrimitivePort(component, descriptor->getPortAt(i)).lock());
 				}
 			}
 
@@ -399,7 +396,7 @@ namespace interpreter {
                                                     }
                                                 }
                                                 
-						return m_interpreter->execServiceCode(code->getValue(), context);
+						return m_interpreter.lock()->execServiceCode(code->getValue(), context);
 					}
 					return nullptr;
 				};

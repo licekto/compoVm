@@ -29,7 +29,7 @@ namespace interpreter {
                                 
                                 std::vector<ptr(mem_primitiveservice)> m_primitiveServicesMemory;
                                 
-                                ptr(core::bootstrap::CBootstrapStage1) m_bootstrap1;
+                                wptr(core::bootstrap::CBootstrapStage1) m_bootstrap1;
 
 			  public:
                                 CMemory(ptr(core::bootstrap::CBootstrapStage1) bootstrap1 = nullptr);

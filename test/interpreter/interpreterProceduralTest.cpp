@@ -283,4 +283,31 @@ BOOST_AUTO_TEST_CASE(binaryOperatorsComplexTest) {
     table->clear();
 }
 
+BOOST_AUTO_TEST_CASE(forLoopTest) {
+    // Testing input
+    std::stringstream input;
+    input.str(
+   "descriptor CompoContainer {\
+        service main() {\
+            |i|\
+            for (i := 1; i < 4; i := i + 1) {\
+            }\
+        }\
+    }");
+    
+    // Parse input and create AST
+    parser->parseAll(input);
+    
+    ptr(ast_program) program = parser->getRootNode();
+
+    ptr(mem_port) port;
+    
+//    port = interpreter->execServiceCode(cast(ast_descriptor)(program->getNodeAt(0))->getServiceAt(0)->getBodyCode());
+//    BOOST_CHECK_EQUAL(cast(mem_int)(port->getOwner())->getValue(), 30);
+    
+    // Clear AST for next test
+    parser->clearAll();
+    table->clear();
+}
+
 BOOST_AUTO_TEST_SUITE_END()

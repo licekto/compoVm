@@ -235,7 +235,7 @@ namespace interpreter {
                                                     else if (selectorName != "new") {
                                                         throw exceptions::runtime::CWrongServiceTypeInArchitectureException();
                                                     }
-                                                    port = m_bootstrapStage1->m_interpreter->execService(receiverName, selectorName);
+                                                    port = m_bootstrapStage1->m_interpreter.lock()->execService(receiverName, selectorName);
                                                 }
                                                 else if (type == CONNECTION_DEREFERENCE) {
                                                     throw exceptions::semantic::CUnsupportedFeatureException("dereference");

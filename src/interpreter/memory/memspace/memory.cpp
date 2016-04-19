@@ -11,7 +11,7 @@ namespace interpreter {
                     }
 
                     void CMemory::setBootstrap1(ptr(core::bootstrap::CBootstrapStage1) bootstrap1) {
-                        m_bootstrap1 = bootstrap1;
+                        m_bootstrap1 = wptr(core::bootstrap::CBootstrapStage1)(bootstrap1);
                     }
 
                     wptr(mem_component) CMemory::newComponent() {
@@ -60,7 +60,7 @@ namespace interpreter {
                     }
 
                     wptr(mem_port) CMemory::newComponentPort(ptr(mem_component) owner, ptr(ast_port) port) {
-                        ptr(mem_port) newPort = new_ptr(mem_port)(m_bootstrap1->bootstrapPortComponent(port, owner), port->getVisibility(), port->getRole());
+                        ptr(mem_port) newPort = new_ptr(mem_port)(m_bootstrap1.lock()->bootstrapPortComponent(port, owner), port->getVisibility(), port->getRole());
                         m_portsMemory.push_back(newPort);
                         
                         return wptr(mem_port)(newPort);
@@ -83,7 +83,7 @@ namespace interpreter {
                     }
 
                     wptr(mem_service) CMemory::newComponentService(ptr(mem_component) owner, ptr(ast_service) astService) {
-                        ptr(mem_service) service = new_ptr(mem_service)(m_bootstrap1->bootstrapServiceComponent(astService, owner));
+                        ptr(mem_service) service = new_ptr(mem_service)(m_bootstrap1.lock()->bootstrapServiceComponent(astService, owner));
                         m_servicesMemory.push_back(service);
                         
                         return wptr(mem_service)(service);

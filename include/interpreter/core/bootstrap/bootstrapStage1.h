@@ -36,7 +36,7 @@ namespace interpreter {
 
 				ptr(core::CCoreModules) m_coreModules;
 
-				ptr(core::CInterpreter) m_interpreter;
+				wptr(core::CInterpreter) m_interpreter;
                                 
                                 ptr(memory::memspace::CMemory) m_memory;
                                 
