@@ -1,5 +1,7 @@
 #include "interpreter/core/interpreter.h"
 #include "exceptions/runtime/variableNotFoundException.h"
+#include "exceptions/execution/breakException.h"
+#include "exceptions/execution/continueException.h"
 
 
 namespace interpreter {
@@ -243,14 +245,28 @@ namespace interpreter {
                 void CInterpreter::execFor(ptr(ast_for) node) {
                     exec(node->getInitExpression());
                     while (cast(mem_bool)(exec(node->getCondition())->getOwner())->getValue()) {
-                        exec(node->getBody());
+                        try {
+                            exec(node->getBody());
+                        }
+                        catch (const exceptions::execution::CBreakException& ex) {
+                            break;
+                        }
+                        catch (const exceptions::execution::CContinueException& ex) {
+                        }
                         exec(node->getIncrement());
                     }
                 }
 
                 void CInterpreter::execWhile(ptr(ast_while) node) {
                     while (cast(mem_bool)(exec(node->getCondition())->getOwner())->getValue()) {
-                        exec(node->getBody());
+                        try {
+                            exec(node->getBody());
+                        }
+                        catch (const exceptions::execution::CBreakException& ex) {
+                            break;
+                        }
+                        catch (const exceptions::execution::CContinueException& ex) {
+                        }
                     }
                 }
 
@@ -284,6 +300,12 @@ namespace interpreter {
                         case type_node::WHILE : {
 				execWhile(cast(ast_while)(node));
 				break;
+			}
+                        case type_node::BREAK : {
+				throw exceptions::execution::CBreakException();
+			}
+                        case type_node::CONTINUE : {
+				throw exceptions::execution::CContinueException();
 			}
                         case type_node::ASSIGNMENT_EXPRESSION : {
 				execAssignment(cast(ast_assignment)(node));
