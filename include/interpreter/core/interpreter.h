@@ -83,6 +83,8 @@ namespace interpreter {
 			ptr(mem_port) exec(ptr(ast_node));
                         
                         void checkBindAddresses(ptr(mem_port) src, ptr(mem_port) dst);
+                        
+                        std::string getStringRepresentation(ptr(mem_value) val);
 
 		  public:
 

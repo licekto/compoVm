@@ -30,10 +30,23 @@ namespace interpreter {
                     pushContext();
                 }
                 getTableWithVariable(var)->setVariable(var, port);
+                
+                if (m_ports.find(var) != m_ports.end()) {
+                    m_ports[var].m_connectingPort = port;
+                }
             }
 
-            void CContext::AddPort(ptr(mem_port) port) {
-                m_ports[port->getName()] = port;
+            void CContext::connectPorts() {
+                for (auto item : m_ports) {
+                    if (item.second.m_origPort.use_count() && item.second.m_connectingPort.use_count()) {
+                        item.second.m_origPort->connectPort(item.second.m_connectingPort);
+                    }
+                }
+            }
+
+            void CContext::setPort(const std::string& var, ptr(mem_port) port) {
+                setVariable(var, port);
+                m_ports[var].m_origPort = port;
             }
 
             void CContext::addVariable(const std::string& var) {

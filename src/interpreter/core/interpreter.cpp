@@ -2,6 +2,8 @@
 #include "exceptions/runtime/variableNotFoundException.h"
 #include "exceptions/execution/breakException.h"
 #include "exceptions/execution/continueException.h"
+#include "exceptions/runtime/unknownValueComponentTypeException.h"
+#include "exceptions/runtime/wrongStringOperationException.h"
 
 
 namespace interpreter {
@@ -51,9 +53,36 @@ namespace interpreter {
                     m_serviceContextStack.top()->setVariable(variable, port);
                 }
 
+                std::string CInterpreter::getStringRepresentation(ptr(mem_value) val) {
+                    switch(val->getType()) {
+                        case type_values::STRING : {
+                            return cast(mem_string)(val)->getValue();
+                        }
+                        case type_values::INTEGER : {
+                            return std::to_string(cast(mem_int)(val)->getValue());
+                        }
+                        case type_values::BOOL : {
+                            return cast(mem_bool)(val)->getValue() ? "true" : "false";
+                        }
+                        default : {
+                            throw exceptions::runtime::CUnknownValueComponentTypeException();
+                        }
+                    }
+                }
+
                 ptr(mem_port) CInterpreter::execArithmeticOp(ptr(ast_binary) expr, type_operator op) {
-                    i64 l = cast(mem_int)(exec(expr->getOperand1())->getOwner())->getValue();
-                    i64 r = cast(mem_int)(exec(expr->getOperand2())->getOwner())->getValue();
+                    ptr(mem_value) val1 = cast(mem_value)(exec(expr->getOperand1())->getOwner());
+                    ptr(mem_value) val2 = cast(mem_value)(exec(expr->getOperand2())->getOwner());
+                    
+                    if (val1->getType() == type_values::STRING || val2->getType() == type_values::STRING) {
+                        if (op != type_operator::PLUS) {
+                            throw exceptions::runtime::CWrongStringOperationException();
+                        }
+                        return m_bootstrap->getStringComponent(getStringRepresentation(val1) + getStringRepresentation(val2));
+                    }
+                    
+                    i64 l = cast(mem_int)(val1)->getValue();
+                    i64 r = cast(mem_int)(val2)->getValue();
                     i64 res = 0;
                     
                     switch (op) {
@@ -142,6 +171,7 @@ namespace interpreter {
                     std::string receiver = node->getReceiverName()->getStringValue();
                     std::string selector = node->getSelectorName()->getStringValue();
                     u64 index = 0;
+                    
                     if (node->getIndex().use_count() && node->getIndex()->getNodeType() == type_node::SYMBOL) {
                         std::string var = cast(ast_symbol)(node->getIndex())->getStringValue();
                         index = cast(mem_int)(m_serviceContextStack.top()->getVariable(var)->getOwner())->getValue();
@@ -149,6 +179,7 @@ namespace interpreter {
                     else if (node->getIndex().use_count() && node->getIndex()->getNodeType() == type_node::CONSTANT) {
                         index = cast(ast_constant)(node->getIndex())->getValue();
                     }
+                    
                     ptr(mem_port) port;
                     try {
                         port = m_serviceContextStack.top()->getVariable(receiver);
@@ -338,6 +369,9 @@ namespace interpreter {
 			}
                         case type_node::BOOLEAN : {
                                 return m_bootstrap->getBoolComponent(cast(ast_boolean)(node)->getValue());
+			}
+                        case type_node::STRING_LITERAL : {
+                                return m_bootstrap->getStringComponent(cast(ast_string)(node)->getValue());
 			}
                         case type_node::RETURN : {
                                 throw exceptions::execution::CReturnException(exec(cast(ast_return)(node)->getExpression()));

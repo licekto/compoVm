@@ -388,15 +388,17 @@ namespace interpreter {
                                                     for (auto item : portsMap) {
                                                         context->addVariable(item.first);
                                                         if (item.second->getConnectedPortsNumber()) {
-                                                            context->setVariable(item.first, item.second->getConnectedPortAt(0));
+                                                            context->setPort(item.first, item.second->getConnectedPortAt(0));
                                                         }
                                                         else {
-                                                            context->setVariable(item.first, item.second);
+                                                            context->setPort(item.first, item.second);
                                                         }
                                                     }
                                                 }
                                                 
 						ptr(mem_port) retPort = m_interpreter.lock()->execServiceCode(code->getValue(), context);
+                                                
+                                                context->connectPorts();
                                                 
                                                 for (size_t i = 0; i < argsPort->getConnectedPortsNumber(); ++i) {
                                                     argsPort->disconnectPortAt(i);

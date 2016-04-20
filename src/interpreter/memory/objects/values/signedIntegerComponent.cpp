@@ -9,11 +9,11 @@ namespace interpreter {
 			namespace values {
 
 				CSignedIntegerComponent::CSignedIntegerComponent(i64 value)
-					: m_value(value) {
+					: CValueComponent(type_values::INTEGER), m_value(value) {
 				}
 
 				CSignedIntegerComponent::CSignedIntegerComponent(ptr(CSignedIntegerComponent) instance)
-					: CValueComponent(), m_value(instance->m_value) {
+					: CValueComponent(type_values::INTEGER), m_value(instance->m_value) {
 				}
 
 				CSignedIntegerComponent::~CSignedIntegerComponent() {

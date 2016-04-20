@@ -17,6 +17,7 @@
 #include "interpreter/core/bootstrap/bootstrapStage1.h"
 #include "exceptions/semantic/wrongPortVisibiltyException.h"
 #include "ast/visitor/printVisitor.h"
+#include "exceptions/runtime/wrongStringOperationException.h"
 
 BOOST_AUTO_TEST_SUITE(interpreterValuesTest)
 
@@ -79,14 +80,61 @@ BOOST_AUTO_TEST_CASE(valuesTest) {
     parser->parseAll(input);
     
     ptr(ast_program) program = parser->getRootNode();
-//    ptr(mem_component) component = interpreter->run(program)->getOwner();
-//    
-//    BOOST_CHECK_EQUAL(component->getPortByName("name")->getConnectedPortsNumber(), 1);
-//    BOOST_CHECK_EQUAL(cast(mem_string)(component->getPortByName("name")->getConnectedPortAt(0)->getOwner())->getValue(), "Linus");
-//    BOOST_CHECK_EQUAL(component->getPortByName("age")->getConnectedPortsNumber(), 1);
-//    BOOST_CHECK_EQUAL(cast(mem_int)(component->getPortByName("age")->getConnectedPortAt(0)->getOwner())->getValue(), 46);
-//    BOOST_CHECK_EQUAL(component->getPortByName("married")->getConnectedPortsNumber(), 1);
-//    BOOST_CHECK_EQUAL(cast(mem_bool)(component->getPortByName("married")->getConnectedPortAt(0)->getOwner())->getValue(), true);
+    ptr(mem_component) component = interpreter->run(program)->getOwner();
+    
+    BOOST_CHECK_EQUAL(component->getPortByName("name")->getConnectedPortsNumber(), 1);
+    BOOST_CHECK_EQUAL(cast(mem_string)(component->getPortByName("name")->getConnectedPortAt(0)->getOwner())->getValue(), "Linus");
+    BOOST_CHECK_EQUAL(component->getPortByName("age")->getConnectedPortsNumber(), 1);
+    BOOST_CHECK_EQUAL(cast(mem_int)(component->getPortByName("age")->getConnectedPortAt(0)->getOwner())->getValue(), 46);
+    BOOST_CHECK_EQUAL(component->getPortByName("married")->getConnectedPortsNumber(), 1);
+    BOOST_CHECK_EQUAL(cast(mem_bool)(component->getPortByName("married")->getConnectedPortAt(0)->getOwner())->getValue(), true);
+    
+    // Clear AST for next test
+    parser->clearAll();
+    table->clear();
+}
+
+BOOST_AUTO_TEST_CASE(stringConcatenationTest) {
+    // Testing input
+    std::stringstream input;
+    input.str(
+   "descriptor CompoContainer {\
+        service main() {\
+            |str|\
+            str := \"abc\" + \"xyz\" + false + 5486;\
+            return str;\
+        }\
+    }");
+    
+    // Parse input and create AST
+    parser->parseAll(input);
+    
+    ptr(ast_program) program = parser->getRootNode();
+    ptr(mem_component) component = interpreter->run(program)->getOwner();
+    BOOST_CHECK_EQUAL(cast(mem_string)(component)->getValue(), "abcxyzfalse5486");
+    
+    // Clear AST for next test
+    parser->clearAll();
+    table->clear();
+}
+
+BOOST_AUTO_TEST_CASE(stringConcatenationFailTest) {
+    // Testing input
+    std::stringstream input;
+    input.str(
+   "descriptor CompoContainer {\
+        service main() {\
+            |str|\
+            str := \"qwe\" + \"abc\" - \"xyz\" * false / 5486;\
+            return str;\
+        }\
+    }");
+    
+    // Parse input and create AST
+    parser->parseAll(input);
+    
+    ptr(ast_program) program = parser->getRootNode();
+    BOOST_CHECK_THROW(interpreter->run(program)->getOwner(), exceptions::runtime::CWrongStringOperationException);
     
     // Clear AST for next test
     parser->clearAll();

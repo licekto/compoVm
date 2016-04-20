@@ -9,11 +9,11 @@ namespace interpreter {
 			namespace values {
 
 				CBoolComponent::CBoolComponent(bool value)
-					: m_value(value) {
+					: CValueComponent(type_values::BOOL), m_value(value) {
 				}
 
 				CBoolComponent::CBoolComponent(ptr(CBoolComponent) instance)
-					: CValueComponent(), m_value(instance->m_value) {
+					: CValueComponent(type_values::BOOL), m_value(instance->m_value) {
 				}
 
 				CBoolComponent::~CBoolComponent() {
