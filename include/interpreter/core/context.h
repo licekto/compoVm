@@ -14,6 +14,8 @@ namespace interpreter {
 		class CContext {
                 private:
                     std::vector<ptr(CVariablesTable)> m_stack;
+                    
+                    std::map<std::string,ptr(mem_port)> m_ports;
                 
                 public:
                     void pushContext(ptr(ast_compound) node);
@@ -25,6 +27,8 @@ namespace interpreter {
                     ptr(CVariablesTable) getTopContext();
                     
                     void setVariable(const std::string& var, ptr(mem_port) port);
+                    
+                    void AddPort(ptr(mem_port) port);
                     
                     void addVariable(const std::string& var);
                     

@@ -53,6 +53,9 @@ namespace interpreter {
 			loadDescriptor(KERNEL_SERVICE_PATH);
 			loadDescriptor(KERNEL_SERVICE_SIGNATURE_PATH);
 			loadDescriptor(KERNEL_SERVICE_INVOCATION_PATH);
+                        loadDescriptor(KERNEL_STRING_PATH);
+                        loadDescriptor(KERNEL_INT_PATH);
+                        loadDescriptor(KERNEL_BOOL_PATH);
                         m_parser->clearAll();
 		}
 

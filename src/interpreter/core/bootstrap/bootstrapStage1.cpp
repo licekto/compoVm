@@ -381,22 +381,28 @@ namespace interpreter {
                                                     context->setVariable(paramName, port);
                                                 }
                                                 
+                                                std::map<std::string, ptr(mem_port)> portsMap;
                                                 if (owner.use_count()) {
-                                                    std::map<std::string, ptr(mem_port)> portsMap = owner->getAllPorts();
+                                                    portsMap = owner->getAllPorts();
 
                                                     for (auto item : portsMap) {
+                                                        context->addVariable(item.first);
                                                         if (item.second->getConnectedPortsNumber()) {
-                                                            context->addVariable(item.first);
                                                             context->setVariable(item.first, item.second->getConnectedPortAt(0));
                                                         }
                                                         else {
-                                                            context->addVariable(item.first);
                                                             context->setVariable(item.first, item.second);
                                                         }
                                                     }
                                                 }
                                                 
-						return m_interpreter.lock()->execServiceCode(code->getValue(), context);
+						ptr(mem_port) retPort = m_interpreter.lock()->execServiceCode(code->getValue(), context);
+                                                
+                                                for (size_t i = 0; i < argsPort->getConnectedPortsNumber(); ++i) {
+                                                    argsPort->disconnectPortAt(i);
+                                                }
+                                                
+                                                return retPort;
 					}
 					return nullptr;
 				};

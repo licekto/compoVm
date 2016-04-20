@@ -39,7 +39,17 @@
 // Name of kernel Service Signature file
 #define KERNEL_SERVICE_SIGNATURE_PATH "../coreModules/serviceSignature.cp"
 
+// Name of kernel Service Invocation file
 #define KERNEL_SERVICE_INVOCATION_PATH "../coreModules/serviceInvocation.cp"
+
+// Name of kernel String file
+#define KERNEL_STRING_PATH "../coreModules/string.cp"
+
+// Name of kernel Int file
+#define KERNEL_INT_PATH "../coreModules/int.cp"
+
+// Name of kernel Bool file
+#define KERNEL_BOOL_PATH "../coreModules/bool.cp"
 
 /* Names of value components */
 /******************************************************************************/

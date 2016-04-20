@@ -14,7 +14,7 @@ namespace interpreter {
 			: m_parser(parser),
 			  m_bootstrap(bootstrap),
 			  m_descriptorTable(table){
-		}
+                }
 
 		ptr(mem_port) CInterpreter::execProgram(ptr(ast_program) node) {
 			for (size_t i = 0; i < node->getNodesSize(); ++i) {
@@ -212,6 +212,12 @@ namespace interpreter {
                     ptr(mem_port) dstPort = dstComponent->getOwner()->getPortByName(destination->getPortName()->getStringValue());
                     
                     checkBindAddresses(srcPort, dstPort);
+                    
+                    bool collection = cast(mem_bool)(srcPort->getPort()->getPortByName("isCollection")->getConnectedPortAt(0)->getOwner())->getValue();
+                    
+                    if (!collection) {
+                        srcPort->disconnectPortAt(0);
+                    }
                     
                     srcPort->connectPort(dstPort);
                 }

@@ -42,11 +42,55 @@ ptr(core_interpreter) initInterpreter() {
 
 ptr(core_interpreter) interpreter = initInterpreter();
 
-BOOST_AUTO_TEST_CASE(basicTest) {
+BOOST_AUTO_TEST_CASE(nonCollectionPortTest) {
     // Testing input
     std::stringstream input;
     input.str(
    "descriptor B {\
+        externally provides {\
+            a : { add(a, b); };\
+        }\
+        service add(a, b) {\
+            return a + b;\
+        }\
+    }\
+    descriptor A {\
+        externally requires {\
+            arithmetics : B;\
+        }\
+    }\
+    descriptor CompoContainer {\
+        service main() {\
+            |a|\
+            a := A.new();\
+            connect arithmetics@a to default@(B.new());\
+            connect arithmetics@a to default@(B.new());\
+            connect arithmetics@a to default@(B.new());\
+            return a;\
+        }\
+    }");
+    
+    // Parse input and create AST
+    parser->parseAll(input);
+    
+    ptr(ast_program) program = parser->getRootNode();
+
+    ptr(mem_component) component = interpreter->run(program)->getOwner();
+    BOOST_CHECK_EQUAL(component->getPortByName("arithmetics")->getConnectedPortsNumber(), 1);
+    
+    // Clear AST for next test
+    parser->clearAll();
+    table->clear();
+}
+
+BOOST_AUTO_TEST_CASE(collectionPortTest) {
+    // Testing input
+    std::stringstream input;
+    input.str(
+   "descriptor C {\
+        /*name : String;*/\
+    }\
+    descriptor B {\
         externally provides {\
             a : { add(a, b); };\
         }\
@@ -76,6 +120,7 @@ BOOST_AUTO_TEST_CASE(basicTest) {
     ptr(ast_program) program = parser->getRootNode();
 
     ptr(mem_component) component = interpreter->run(program)->getOwner();
+    BOOST_CHECK_EQUAL(component->getPortByName("arithmetics")->getConnectedPortsNumber(), 3);
     
     // Clear AST for next test
     parser->clearAll();

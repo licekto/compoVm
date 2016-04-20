@@ -32,6 +32,10 @@ namespace interpreter {
                 getTableWithVariable(var)->setVariable(var, port);
             }
 
+            void CContext::AddPort(ptr(mem_port) port) {
+                m_ports[port->getName()] = port;
+            }
+
             void CContext::addVariable(const std::string& var) {
                 if (m_stack.empty()) {
                     pushContext();

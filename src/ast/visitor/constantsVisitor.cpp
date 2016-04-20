@@ -128,7 +128,6 @@ namespace ast {
 		}
 
 		void CConstantsVisitor::visit(ptr(ast_break) /*node*/) {
-                    TRACE(ERROR, "Break does not contain any constant.");
 		}
 
 		void CConstantsVisitor::visit(ptr(ast_compound) node) {
@@ -146,7 +145,6 @@ namespace ast {
 		}
                 
 		void CConstantsVisitor::visit(ptr(ast_continue) /*node*/) {
-                    TRACE(ERROR, "Continue does not contain any constant.");
 		}
 
 		void CConstantsVisitor::visit(ptr(ast_division) node) {

@@ -176,8 +176,7 @@ namespace interpreter {
 
 				component->removeServiceByName("new");
 
-				std::function<ptr(mem_port)(const ptr(mem_component)&)> callback;
-				callback = [this](const ptr(mem_component)& context) -> ptr(mem_port) {
+				std::function<ptr(mem_port)(const ptr(mem_component)&)> callback = [this](const ptr(mem_component)& context) -> ptr(mem_port) {
 					ptr(mem_component) newComponent = m_bootstrapStage1->m_memory->newComponent().lock();
 
 					ptr(mem_component) parent = bootstrapRootComponent(nullptr);
