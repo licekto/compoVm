@@ -289,9 +289,12 @@ BOOST_AUTO_TEST_CASE(forLoopTest) {
     input.str(
    "descriptor CompoContainer {\
         service main() {\
-            |i|\
+            |i cnt|\
+            cnt := 0;\
             for (i := 1; i < 4; i := i + 1) {\
+                cnt := cnt + i;\
             }\
+            return cnt;\
         }\
     }");
     
@@ -300,10 +303,36 @@ BOOST_AUTO_TEST_CASE(forLoopTest) {
     
     ptr(ast_program) program = parser->getRootNode();
 
-    ptr(mem_port) port;
+    ptr(mem_port) port = interpreter->run(program);
+    BOOST_CHECK_EQUAL(cast(mem_int)(port->getOwner())->getValue(), 6);
     
-//    port = interpreter->execServiceCode(cast(ast_descriptor)(program->getNodeAt(0))->getServiceAt(0)->getBodyCode());
-//    BOOST_CHECK_EQUAL(cast(mem_int)(port->getOwner())->getValue(), 30);
+    // Clear AST for next test
+    parser->clearAll();
+    table->clear();
+}
+
+BOOST_AUTO_TEST_CASE(whileLoopTest) {
+    // Testing input
+    std::stringstream input;
+    input.str(
+   "descriptor CompoContainer {\
+        service main() {\
+            |cnt|\
+            cnt := 0;\
+            while(cnt < 4) {\
+                cnt := cnt + 1;\
+            }\
+            return cnt;\
+        }\
+    }");
+    
+    // Parse input and create AST
+    parser->parseAll(input);
+    
+    ptr(ast_program) program = parser->getRootNode();
+
+    ptr(mem_port) port = interpreter->run(program);
+    BOOST_CHECK_EQUAL(cast(mem_int)(port->getOwner())->getValue(), 4);
     
     // Clear AST for next test
     parser->clearAll();

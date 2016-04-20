@@ -240,6 +240,20 @@ namespace interpreter {
                     }
                 }
 
+                void CInterpreter::execFor(ptr(ast_for) node) {
+                    exec(node->getInitExpression());
+                    while (cast(mem_bool)(exec(node->getCondition())->getOwner())->getValue()) {
+                        exec(node->getBody());
+                        exec(node->getIncrement());
+                    }
+                }
+
+                void CInterpreter::execWhile(ptr(ast_while) node) {
+                    while (cast(mem_bool)(exec(node->getCondition())->getOwner())->getValue()) {
+                        exec(node->getBody());
+                    }
+                }
+
 		ptr(mem_port)  CInterpreter::exec(ptr(ast_node) node) {
 			switch (node->getNodeType()) {
 			case type_node::PROGRAM : {
@@ -263,6 +277,14 @@ namespace interpreter {
 				return execDisconnection(cast(ast_disconnection)(node));
 			}
                         /*------------------ Procedural ----------------------*/
+                        case type_node::FOR : {
+				execFor(cast(ast_for)(node));
+				break;
+			}
+                        case type_node::WHILE : {
+				execWhile(cast(ast_while)(node));
+				break;
+			}
                         case type_node::ASSIGNMENT_EXPRESSION : {
 				execAssignment(cast(ast_assignment)(node));
 				break;

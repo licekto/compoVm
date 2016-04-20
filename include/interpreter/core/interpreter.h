@@ -74,6 +74,10 @@ namespace interpreter {
                         
                         ptr(mem_port) execDisconnection(ptr(ast_disconnection) node);
                         
+                        void execFor(ptr(ast_for) node);
+                        
+                        void execWhile(ptr(ast_while) node);
+                        
 			ptr(mem_port) exec(ptr(ast_node));
                         
                         void checkBindAddresses(ptr(mem_port) src, ptr(mem_port) dst);

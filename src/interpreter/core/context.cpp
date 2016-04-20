@@ -29,7 +29,7 @@ namespace interpreter {
                 if (m_stack.empty()) {
                     pushContext();
                 }
-                getTopContext()->setVariable(var, port);
+                getTableWithVariable(var)->setVariable(var, port);
             }
 
             void CContext::addVariable(const std::string& var) {
@@ -39,11 +39,19 @@ namespace interpreter {
                 getTopContext()->addVariable(var);
             }
 
-            ptr(mem_port) CContext::getVariable(const std::string& var) {
+            ptr(CVariablesTable) CContext::getTableWithVariable(const std::string& var) {
                 for (ptr(CVariablesTable) table : m_stack) {
                     if (table->variableFound(var)) {
-                        return table->getVariable(var);
+                        return table;
                     }
+                }
+                throw exceptions::runtime::CVariableNotFoundException(var);
+            }
+
+            ptr(mem_port) CContext::getVariable(const std::string& var) {
+                ptr(CVariablesTable) table = getTableWithVariable(var);
+                if (table->variableFound(var)) {
+                    return table->getVariable(var);
                 }
                 throw exceptions::runtime::CVariableNotFoundException(var);
             }

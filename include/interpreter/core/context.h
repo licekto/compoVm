@@ -28,6 +28,8 @@ namespace interpreter {
                     
                     void addVariable(const std::string& var);
                     
+                    ptr(CVariablesTable) getTableWithVariable(const std::string& var);
+                    
                     ptr(mem_port) getVariable(const std::string& var);
                     
                     void clear();
