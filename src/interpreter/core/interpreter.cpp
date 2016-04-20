@@ -270,6 +270,15 @@ namespace interpreter {
                     }
                 }
 
+                void CInterpreter::execIf(ptr(ast_if) node) {
+                    if (cast(mem_bool)(exec(node->getCondition())->getOwner())->getValue()) {
+                        exec(node->getIfBody());
+                    }
+                    else if (node->getElseBody().use_count()) {
+                        exec(node->getElseBody());
+                    }
+                }
+
 		ptr(mem_port)  CInterpreter::exec(ptr(ast_node) node) {
 			switch (node->getNodeType()) {
 			case type_node::PROGRAM : {
@@ -306,6 +315,10 @@ namespace interpreter {
 			}
                         case type_node::CONTINUE : {
 				throw exceptions::execution::CContinueException();
+			}
+                        case type_node::IF : {
+                                execIf(cast(ast_if)(node));
+                                break;
 			}
                         case type_node::ASSIGNMENT_EXPRESSION : {
 				execAssignment(cast(ast_assignment)(node));

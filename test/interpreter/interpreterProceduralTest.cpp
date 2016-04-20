@@ -457,4 +457,42 @@ BOOST_AUTO_TEST_CASE(continueWhileTest) {
     table->clear();
 }
 
+BOOST_AUTO_TEST_CASE(ifTest) {
+    // Testing input
+    std::stringstream input;
+    input.str(
+   "descriptor CompoContainer {\
+        service main() {\
+            |cnt a|\
+            cnt := 10;\
+            a := 0;\
+            if (cnt > 9) {\
+                a := a + 5;\
+            }\
+            if (a <= 5) {\
+                a := 13 - a;\
+            }\
+            if (a != 8) {\
+                a := a + 5;\
+            }\
+            else {\
+                a := a * 3;\
+            }\
+            return a;\
+        }\
+    }");
+    
+    // Parse input and create AST
+    parser->parseAll(input);
+    
+    ptr(ast_program) program = parser->getRootNode();
+
+    ptr(mem_port) port = interpreter->run(program);
+    BOOST_CHECK_EQUAL(cast(mem_int)(port->getOwner())->getValue(), 24);
+    
+    // Clear AST for next test
+    parser->clearAll();
+    table->clear();
+}
+
 BOOST_AUTO_TEST_SUITE_END()
