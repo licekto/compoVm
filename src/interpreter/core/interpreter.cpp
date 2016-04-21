@@ -249,15 +249,21 @@ namespace interpreter {
                     checkBindAddresses(srcPort, dstPort);
                     
                     bool collection = cast(mem_bool)(srcPort->getPort()->getPortByName("isCollection")->getConnectedPortAt(0)->getOwner())->getValue();
+                    i64 index = 0;
                     
                     if (!collection) {
                         srcPort->disconnectPortAt(0);
                     }
+                    else {
+                        index = srcPort->getConnectedPortsNumber();
+                    }
                     
                     srcPort->connectPort(dstPort);
+                    
+                    return m_bootstrap->getIntComponent(index);
                 }
 
-                ptr(mem_port) CInterpreter::execDisconnection(ptr(ast_disconnection) node) {
+                void CInterpreter::execDisconnection(ptr(ast_disconnection) node) {
                     ptr(ast_portaddress) source = node->getSourcePortIdentification();
                     ptr(ast_portaddress) destination = node->getDestinationPortIdentification();
                     
@@ -340,7 +346,8 @@ namespace interpreter {
 				return execConnection(cast(ast_connection)(node));
 			}
                         case type_node::DISCONNECTION : {
-				return execDisconnection(cast(ast_disconnection)(node));
+				execDisconnection(cast(ast_disconnection)(node));
+                                break;
 			}
                         /*------------------ Procedural ----------------------*/
                         case type_node::FOR : {
