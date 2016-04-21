@@ -383,6 +383,7 @@ namespace interpreter {
                                                 
                                                 std::map<std::string, ptr(mem_port)> portsMap;
                                                 if (owner.use_count()) {
+                                                    context->setContextComponent(owner);
                                                     portsMap = owner->getAllPorts();
 
                                                     for (auto item : portsMap) {
@@ -403,7 +404,6 @@ namespace interpreter {
                                                 for (size_t i = 0; i < argsPort->getConnectedPortsNumber(); ++i) {
                                                     argsPort->disconnectPortAt(i);
                                                 }
-                                                
                                                 return retPort;
 					}
 					return nullptr;

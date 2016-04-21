@@ -66,11 +66,29 @@ namespace interpreter {
             }
 
             ptr(mem_port) CContext::getVariable(const std::string& var) {
+                return getVariable(var, 0);
+            }
+            
+            ptr(mem_port) CContext::getVariable(const std::string& var, i64 index) {
+                if (m_contextComponent.use_count()) {
+                    try {
+                        ptr(mem_port) port = m_contextComponent->getPortByName(var);
+                        if (port->getConnectedPortsNumber() > 1) {
+                            return port->getConnectedPortAt(index);
+                        }
+                    }
+                    catch (const exceptions::runtime::CPortNotFoundException& ex) {
+                    }
+                }
                 ptr(CVariablesTable) table = getTableWithVariable(var);
                 if (table->variableFound(var)) {
                     return table->getVariable(var);
                 }
                 throw exceptions::runtime::CVariableNotFoundException(var);
+            }
+
+            void CContext::setContextComponent(ptr(mem_component) component) {
+                m_contextComponent = component;
             }
 
             void CContext::clear() {

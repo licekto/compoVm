@@ -272,9 +272,12 @@ BOOST_AUTO_TEST_CASE(collectionPortInvocationTest) {
     parser->parseAll(input);
     
     ptr(ast_program) program = parser->getRootNode();
-
+    
     ptr(mem_component) component = interpreter->run(program)->getOwner();
     BOOST_CHECK_EQUAL(component->getPortByName("comp")->getConnectedPortsNumber(), 3);
+    BOOST_CHECK_EQUAL(cast(mem_string)(component->getPortByName("comp")->getConnectedPortAt(0)->getOwner()->getPortByName("name")->getConnectedPortAt(0)->getOwner())->getValue(), "B0");
+    BOOST_CHECK_EQUAL(cast(mem_string)(component->getPortByName("comp")->getConnectedPortAt(1)->getOwner()->getPortByName("name")->getConnectedPortAt(0)->getOwner())->getValue(), "B1");
+    BOOST_CHECK_EQUAL(cast(mem_string)(component->getPortByName("comp")->getConnectedPortAt(2)->getOwner()->getPortByName("name")->getConnectedPortAt(0)->getOwner())->getValue(), "B2");
     BOOST_CHECK_EQUAL(component->getPortByName("names")->getConnectedPortsNumber(), 1);
     BOOST_CHECK_EQUAL(cast(mem_string)(component->getPortByName("names")->getConnectedPortAt(0)->getOwner())->getValue(), "B0 B1 B2");
     

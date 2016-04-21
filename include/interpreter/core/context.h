@@ -21,6 +21,8 @@ namespace interpreter {
                     std::vector<ptr(CVariablesTable)> m_stack;
                     
                     std::map<std::string,portVariable> m_ports;
+                    
+                    ptr(mem_component) m_contextComponent;
                 
                 public:
                     void pushContext(ptr(ast_compound) node);
@@ -42,6 +44,10 @@ namespace interpreter {
                     ptr(CVariablesTable) getTableWithVariable(const std::string& var);
                     
                     ptr(mem_port) getVariable(const std::string& var);
+                    
+                    ptr(mem_port) getVariable(const std::string& var, i64 index);
+                    
+                    void setContextComponent(ptr(mem_component) component);
                     
                     void clear();
 		};

@@ -186,7 +186,7 @@ namespace interpreter {
                     
                     ptr(mem_port) port;
                     try {
-                        port = m_serviceContextStack.top()->getVariable(receiver);
+                        port = m_serviceContextStack.top()->getVariable(receiver, index);
                     }
                     catch (const exceptions::runtime::CVariableNotFoundException& ex) {
                         port = m_descriptorTable->getDescriptor(receiver)->getPortByName("default");
@@ -233,6 +233,11 @@ namespace interpreter {
                     }
                     
                     ptr(mem_port) ret = port->invokeByName(selector, index);
+                    
+                    for (size_t i = 0; i < port->getOwner()->getPortByName("args")->getConnectedPortsNumber(); ++i) {
+                        port->getOwner()->getPortByName("args")->disconnectPortAt(i);
+                    }
+                    
                     return ret;
                 }
 
