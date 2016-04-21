@@ -92,6 +92,8 @@ namespace interpreter {
                                      ptr(bootstrap::CBootstrapStage2) bootstrap = nullptr,
                                      ptr(memory::memspace::CDescriptorTable) table = nullptr);
 
+                        void boot();
+                        
 			ptr(mem_port) execServiceCode(const std::string& code, ptr(CContext) context = nullptr);
                         
                         ptr(mem_port) execService(const std::string& receiver, const std::string& selector);

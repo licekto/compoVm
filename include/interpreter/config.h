@@ -51,6 +51,9 @@
 // Name of kernel Bool file
 #define KERNEL_BOOL_PATH "../coreModules/bool.cp"
 
+// Name of kernel System file
+#define KERNEL_SYSTEM_PATH "../coreModules/system.cp"
+
 /* Names of value components */
 /******************************************************************************/
 
@@ -122,3 +125,10 @@
 
 // String for delegation bind type
 #define BIND_DELEGATION "delegation"
+
+/* System elements */
+/******************************************************************************/
+
+#define STANDARD_OUT std::cout
+
+#define STANDARD_IN std::cin

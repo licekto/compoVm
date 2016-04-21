@@ -139,16 +139,70 @@ namespace interpreter {
                             return m_bootstrapStage1->bootstrapBoolValue(value)->getDefaultPort();
                         }
 
-			ptr(mem_component) CBootstrapStage2::bootstrapDescriptorComponent(ptr(ast_descriptor) descriptor) {
-				ptr(mem_component) parentComponent = bootstrapRootComponent(nullptr);
+                        ptr(mem_component) CBootstrapStage2::bootstrapPrologue(const std::string& coreDescriptorName) {
+                                ptr(mem_component) parentComponent = bootstrapRootComponent(nullptr);
 				ptr(mem_component) component = m_bootstrapStage1->m_memory->newComponent().lock();
-				ptr(ast_descriptor) coreDescriptor = m_bootstrapStage1->m_coreModules->getCoreDescriptor("Descriptor");
+				ptr(ast_descriptor) coreDescriptor = m_bootstrapStage1->m_coreModules->getCoreDescriptor(coreDescriptorName);
                                 
 				component->setParent(parentComponent);
 				parentComponent->setChild(component);
 
 				addPorts(component, coreDescriptor);
 				addServices(component, coreDescriptor);
+                                
+                                return component;
+                        }
+
+                        void CBootstrapStage2::bootstrapEpilogue(ptr(mem_component) component) {
+                                ptr(mem_port) generalPort = component->getPortByName("default")->getPort()
+				              ->getPortByName("interfaceDescription")->getConnectedPortAt(0)->getOwner()
+				              ->getPortByName("services");
+				component->connectAllServicesTo(generalPort);
+
+				generalPort = component->getPortByName("self")->getPort()
+				              ->getPortByName("interfaceDescription")->getConnectedPortAt(0)->getOwner()
+				              ->getPortByName("services");
+				component->connectAllServicesTo(generalPort);
+
+				generalPort = component->getPortByName("super")->getPort()
+				              ->getPortByName("interfaceDescription")->getConnectedPortAt(0)->getOwner()
+				              ->getPortByName("services");
+				component->connectAllParentServicesTo(generalPort);
+                        }
+
+                        ptr(mem_component) CBootstrapStage2::bootstrapSystemComponent() {
+                                ptr(mem_component) newComponent = bootstrapPrologue("System");
+                                
+                                newComponent->removeServiceByName("println");
+                                newComponent->removeServiceByName("readString");
+                                newComponent->removeServiceByName("readInt");
+                                
+                                std::function<ptr(mem_port)(const ptr(mem_component)&)> callback = [this](const ptr(mem_component)& context) -> ptr(mem_port) {
+                                    STANDARD_OUT << cast(mem_string)(context->getPortByName("args")->getConnectedPortAt(0)->getOwner())->getValue() << std::endl;
+                                    return nullptr;
+                                };
+                                newComponent->addService(m_bootstrapStage1->m_memory->newPrimitiveService(newComponent, "println", callback).lock());
+                                
+                                callback = [this](const ptr(mem_component)& /*context*/) -> ptr(mem_port) {
+                                    std::string val;
+                                    STANDARD_IN >> val;
+                                    return m_bootstrapStage1->m_memory->newStringComponent(val).lock()->getDefaultPort();
+                                };
+                                newComponent->addService(m_bootstrapStage1->m_memory->newPrimitiveService(newComponent, "readString", callback).lock());
+                                
+                                callback = [this](const ptr(mem_component)& /*context*/) -> ptr(mem_port) {
+                                    i64 val;
+                                    STANDARD_IN >> val;
+                                    return m_bootstrapStage1->m_memory->newIntComponent(val).lock()->getDefaultPort();
+                                };
+                                newComponent->addService(m_bootstrapStage1->m_memory->newPrimitiveService(newComponent, "readInt", callback).lock());
+                                
+                                bootstrapEpilogue(newComponent);
+                                return newComponent;
+                        }
+
+			ptr(mem_component) CBootstrapStage2::bootstrapDescriptorComponent(ptr(ast_descriptor) descriptor) {
+				ptr(mem_component) component = bootstrapPrologue("Descriptor");
                                 
 				component->getPortByName("name")->connectPort(m_bootstrapStage1->bootstrapStringValue(descriptor->getNameSymbol()->getStringValue())->getDefaultPort());
                                 if (descriptor->getExtendsSymbol().use_count()) {
@@ -272,23 +326,9 @@ namespace interpreter {
                                         
 					return newComponent->getPortByName("default");
 				};
-                                ptr(mem_service) newService = m_bootstrapStage1->m_memory->newPrimitiveService(component, "new", callback).lock();
-                                component->addService(newService);
+                                component->addService(m_bootstrapStage1->m_memory->newPrimitiveService(component, "new", callback).lock());
 
-				ptr(mem_port) generalPort = component->getPortByName("default")->getPort()
-				              ->getPortByName("interfaceDescription")->getConnectedPortAt(0)->getOwner()
-				              ->getPortByName("services");
-				component->connectAllServicesTo(generalPort);
-
-				generalPort = component->getPortByName("self")->getPort()
-				              ->getPortByName("interfaceDescription")->getConnectedPortAt(0)->getOwner()
-				              ->getPortByName("services");
-				component->connectAllServicesTo(generalPort);
-
-				generalPort = component->getPortByName("super")->getPort()
-				              ->getPortByName("interfaceDescription")->getConnectedPortAt(0)->getOwner()
-				              ->getPortByName("services");
-				component->connectAllParentServicesTo(generalPort);
+				bootstrapEpilogue(component);
 
 				return component;
                         }

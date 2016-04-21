@@ -22,7 +22,7 @@ BOOST_AUTO_TEST_CASE(basicTest) {
     
     coreModules->loadCoreModules();
     
-    BOOST_CHECK_EQUAL(coreModules->getCoreDescriptorsSize(), 13);
+    BOOST_CHECK_EQUAL(coreModules->getCoreDescriptorsSize(), 14);
     
     ptr(ast_descriptor) descriptor = coreModules->getCoreDescriptor("CollectionPort");
     TEST_DESCRIPTOR(descriptor, "CollectionPort", "Port", 0, 2, 0);
@@ -62,6 +62,9 @@ BOOST_AUTO_TEST_CASE(basicTest) {
     
     descriptor = coreModules->getCoreDescriptor("Bool");
     TEST_DESCRIPTOR(descriptor, "Bool", "", 2, 1, 0);
+    
+    descriptor = coreModules->getCoreDescriptor("System");
+    TEST_DESCRIPTOR(descriptor, "System", "Component", 0, 3, 0);
 }
 
 BOOST_AUTO_TEST_SUITE_END()

@@ -37,6 +37,10 @@ namespace interpreter {
                                 ptr(mem_component) cloneSignature(ptr(mem_component) signature, ptr(mem_component) owner);
                                 
                                 ptr(mem_component) cloneService(ptr(mem_component) service, ptr(mem_component) owner);
+                                
+                                ptr(mem_component) bootstrapPrologue(const std::string& coreDescriptorName);
+                                
+                                void bootstrapEpilogue(ptr(mem_component) component);
 
 			  public:                              
 				CBootstrapStage2(ptr(CBootstrapStage1) stage1 = nullptr);
@@ -49,6 +53,8 @@ namespace interpreter {
                                 
                                 ptr(mem_port) getBoolComponent(bool value);
 
+                                ptr(mem_component) bootstrapSystemComponent();
+                                
 				ptr(mem_component) bootstrapDescriptorComponent(ptr(ast_descriptor) descriptor);
 			};
 

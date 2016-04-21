@@ -18,6 +18,10 @@ namespace interpreter {
 			  m_descriptorTable(table){
                 }
 
+                void CInterpreter::boot() {
+                    m_descriptorTable->addNamedDescriptor(m_bootstrap->bootstrapSystemComponent(), "System");
+                }
+
 		ptr(mem_port) CInterpreter::execProgram(ptr(ast_program) node) {
 			for (size_t i = 0; i < node->getNodesSize(); ++i) {
 				exec(node->getNodeAt(i));
@@ -455,6 +459,7 @@ namespace interpreter {
                 }
 
 		ptr(mem_port) CInterpreter::run(ptr(ast_program) ast) {
+                        boot();
 			return exec(ast);
 		}
 

@@ -17,6 +17,8 @@ namespace interpreter {
 
 			  public:
 				void addDescriptor(ptr(mem_component) descriptor);
+                                
+                                void addNamedDescriptor(ptr(mem_component) descriptor, const std::string& name);
 
 				ptr(mem_component) getDescriptor(const std::string& name);
 

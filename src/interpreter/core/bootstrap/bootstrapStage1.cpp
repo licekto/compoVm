@@ -21,7 +21,7 @@ namespace interpreter {
 				m_coreModules->loadCoreModules();
                             }
                             if (!m_memory.use_count()) {
-                                throw exceptions::runtime::CMemoryNotFoundException();
+                                TRACE(ERROR, "Memory not found!");
                             }
                         }
 
