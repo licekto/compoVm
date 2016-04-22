@@ -360,6 +360,7 @@ namespace interpreter {
                                                 ptr(mem_component) sign = contextComponent->getPortByName("serviceSign")->getConnectedPortAt(0)->getOwner();
                                                 
                                                 size_t paramsNumber = sign->getPortByName("paramNames")->getConnectedPortsNumber();
+                                                
                                                 ptr(mem_port) argsPort = contextComponent->getPortByName("args");
                                                 if (paramsNumber != argsPort->getConnectedPortsNumber()) {
                                                     ptr(mem_port) delegatedPort = contextComponent->getPortByName("args");
@@ -367,10 +368,13 @@ namespace interpreter {
                                                     while (delegatedPort->getDelegatedPort().use_count()) {
                                                         delegatedPort = delegatedPort->getDelegatedPort();
                                                     }
-                                                    
                                                     argsPort = delegatedPort;
                                                     if (paramsNumber != argsPort->getConnectedPortsNumber()) {
-                                                        throw exceptions::runtime::CWrongNumberOfParametersException(argsPort->getConnectedPortsNumber());
+                                                        std::string name = cast(mem_string)(
+                                                                contextComponent->getPortByName("serviceSign")
+                                                                ->getConnectedPortAt(0)->getOwner()->getPortByName("selector")->getConnectedPortAt(0)->getOwner())->getValue();
+                                                        
+                                                        throw exceptions::runtime::CWrongNumberOfParametersException(name, argsPort->getConnectedPortsNumber());
                                                     }
                                                 }
                                                 

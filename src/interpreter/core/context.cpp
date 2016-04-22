@@ -73,7 +73,10 @@ namespace interpreter {
                 if (m_contextComponent.use_count()) {
                     try {
                         ptr(mem_port) port = m_contextComponent->getPortByName(var);
-                        if (port->getConnectedPortsNumber() > 1) {
+                        if (var == "self") {
+                            return m_contextComponent->getPortByName("default");
+                        }
+                        if (port->getConnectedPortsNumber()) {
                             return port->getConnectedPortAt(index);
                         }
                     }
@@ -89,6 +92,10 @@ namespace interpreter {
 
             void CContext::setContextComponent(ptr(mem_component) component) {
                 m_contextComponent = component;
+            }
+
+            ptr(mem_component) CContext::getContextComponent() {
+                return m_contextComponent;
             }
 
             void CContext::clear() {

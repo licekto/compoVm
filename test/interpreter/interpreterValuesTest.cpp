@@ -141,4 +141,34 @@ BOOST_AUTO_TEST_CASE(stringConcatenationFailTest) {
     table->clear();
 }
 
+BOOST_AUTO_TEST_CASE(serviceInvocationBinaryOpTest) {
+    // Testing input
+    std::stringstream input;
+    input.str(
+   "descriptor A {\
+        service add(a, b) {\
+            return a + b;\
+        }\
+    }\
+    descriptor CompoContainer {\
+        service main() {\
+            |a i|\
+            a := A.new();\
+            i := 1 + a.add(1,2);\
+            return i;\
+        }\
+    }");
+    
+    // Parse input and create AST
+    parser->parseAll(input);
+    
+    ptr(ast_program) program = parser->getRootNode();
+    ptr(mem_component) comp = interpreter->run(program)->getOwner();
+    BOOST_CHECK_EQUAL(cast(mem_int)(comp)->getValue(), 4);
+    
+    // Clear AST for next test
+    parser->clearAll();
+    table->clear();
+}
+
 BOOST_AUTO_TEST_SUITE_END()

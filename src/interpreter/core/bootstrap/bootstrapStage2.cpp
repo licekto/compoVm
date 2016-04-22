@@ -176,6 +176,7 @@ namespace interpreter {
                                 newComponent->removeServiceByName("println");
                                 newComponent->removeServiceByName("readString");
                                 newComponent->removeServiceByName("readInt");
+                                newComponent->removeServiceByName("getRand");
                                 
                                 std::function<ptr(mem_port)(const ptr(mem_component)&)> callback = [this](const ptr(mem_component)& context) -> ptr(mem_port) {
                                     STANDARD_OUT << cast(mem_string)(context->getPortByName("args")->getConnectedPortAt(0)->getOwner())->getValue() << std::endl;
@@ -196,6 +197,13 @@ namespace interpreter {
                                     return m_bootstrapStage1->m_memory->newIntComponent(val).lock()->getDefaultPort();
                                 };
                                 newComponent->addService(m_bootstrapStage1->m_memory->newPrimitiveService(newComponent, "readInt", callback).lock());
+                                
+                                callback = [this](const ptr(mem_component)& context) -> ptr(mem_port) {
+                                    i64 seed = cast(mem_int)(context->getPortByName("args")->getConnectedPortAt(0)->getOwner())->getValue();
+                                    srand(seed);
+                                    return m_bootstrapStage1->m_memory->newIntComponent(rand()).lock()->getDefaultPort();
+                                };
+                                newComponent->addService(m_bootstrapStage1->m_memory->newPrimitiveService(newComponent, "getRand", callback).lock());
                                 
                                 bootstrapEpilogue(newComponent);
                                 return newComponent;
@@ -323,7 +331,6 @@ namespace interpreter {
                                                 throw exceptions::runtime::CWrongBindTypeException(bindType);
                                             }
                                         }
-                                        
 					return newComponent->getPortByName("default");
 				};
                                 component->addService(m_bootstrapStage1->m_memory->newPrimitiveService(component, "new", callback).lock());

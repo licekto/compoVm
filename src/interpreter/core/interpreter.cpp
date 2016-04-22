@@ -192,8 +192,20 @@ namespace interpreter {
                         port = m_descriptorTable->getDescriptor(receiver)->getPortByName("default");
                     }
                     
+                    ptr(mem_port) delegatedPort = port->getOwner()->getPortByName("args");
+                    while (delegatedPort->getDelegatedPort().use_count()) {
+                        delegatedPort = delegatedPort->getDelegatedPort();
+                    }
+                    
+                    std::vector<ptr(mem_port)> oldArgs;
+                    for (size_t i = 0; i < delegatedPort->getOwner()->getPortByName("args")->getConnectedPortsNumber(); ++i) {
+                        oldArgs.push_back(delegatedPort->getOwner()->getPortByName("args")->getConnectedPortAt(i));
+                    }
+                    delegatedPort->getOwner()->getPortByName("args")->disconnectAll();
+                    
                     if (node->getParameters()->getNodeType() == type_node::SERVICE_SIGNATURE) {
                         ptr(ast_servicesignature) sign = cast(ast_servicesignature)(node->getParameters());
+                        std::vector<ptr(mem_port)> connectedPorts;
                         for (size_t i = 0; i < sign->getParamsSize(); ++i) {
                             type_node t = sign->getParamAt(i)->getNodeType();
                             ptr(mem_port) connectedPort;
@@ -222,7 +234,11 @@ namespace interpreter {
                                     throw exceptions::runtime::CWrongServiceInvocationParameterTypeException(t);
                                 }
                             }
-                            port->getOwner()->getPortByName("args")->connectPort(connectedPort);
+                            connectedPorts.push_back(connectedPort);
+                            //port->getOwner()->getPortByName("args")->connectPort(connectedPort);
+                        }
+                        for (size_t i = 0; i < connectedPorts.size(); ++i) {
+                            port->getOwner()->getPortByName("args")->connectPort(connectedPorts.at(i));
                         }
                     }
                     else if (node->getParameters()->getNodeType() == type_node::SERVICE_INVOCATION) {
@@ -236,6 +252,10 @@ namespace interpreter {
                     
                     for (size_t i = 0; i < port->getOwner()->getPortByName("args")->getConnectedPortsNumber(); ++i) {
                         port->getOwner()->getPortByName("args")->disconnectPortAt(i);
+                    }
+                    
+                    for (ptr(mem_port) oldPort : oldArgs) {
+                        delegatedPort->getOwner()->getPortByName("args")->connectPort(oldPort);
                     }
                     
                     return ret;
@@ -285,10 +305,12 @@ namespace interpreter {
                 }
 
                 void CInterpreter::checkBindAddresses(ptr(mem_port) srcPort, ptr(mem_port) dstPort) {
-                    if (srcPort->getName() != "default" && dstPort->getName() != "default"
-                     && (srcPort->getVisibility() == type_visibility::INTERNAL
-                     || dstPort->getVisibility() == type_visibility::INTERNAL
-                     || srcPort->getRole() == dstPort->getRole())) {
+                    bool def = srcPort->getName() != "default" && dstPort->getName() != "default";
+                    bool vis1 = srcPort->getVisibility() == type_visibility::INTERNAL && m_serviceContextStack.top()->getContextComponent()->getTopParent().get() != srcPort->getOwner()->getTopParent().get();
+                    bool vis2 = dstPort->getVisibility() == type_visibility::INTERNAL && m_serviceContextStack.top()->getContextComponent()->getTopParent().get() != dstPort->getOwner()->getTopParent().get();
+                    bool role = srcPort->getRole() == dstPort->getRole();
+                    
+                    if (def && (vis1 || vis2 || role)) {
                         std::string portNames = srcPort->getName() + " and " + dstPort->getName();
                         throw exceptions::semantic::CWrongPortVisibilityException(portNames);
                     }

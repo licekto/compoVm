@@ -47,6 +47,8 @@ namespace interpreter {
 					ptr(objects::CGeneralPort) getConnectedPortAt(size_t index);
 
 					void disconnectPortAt(size_t index);
+                                        
+                                        void disconnectAll();
 
 					void disconnectServiceByName(const std::string& name);
 

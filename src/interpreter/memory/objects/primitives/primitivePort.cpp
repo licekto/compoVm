@@ -75,7 +75,11 @@ namespace interpreter {
 					} catch (const std::out_of_range& ex) {
 						TRACE(ERROR, "Connected ports index out of range exception, index: " << index << ", exception: '" << ex.what() << "'");
 					}
-				}
+                                }
+
+                                void CPrimitivePort::disconnectAll() {
+                                    m_connectedPorts.clear();
+                                }
 
 				void CPrimitivePort::disconnectServiceByName(const std::string& name) {
 					auto it = std::find_if(m_connectedServices.begin(), m_connectedServices.end(), [&name](wptr(CGeneralService) service) {

@@ -106,6 +106,14 @@ namespace interpreter {
 				}
                         }
 
+                        void CGeneralPort::disconnectAll() {
+                            if (m_primitive) {
+					return m_primitivePort.lock()->disconnectAll();
+				} else {
+					return m_port.lock()->getPortByName("connectedPorts")->disconnectAll();
+				}
+                        }
+
                         void CGeneralPort::disconnectPortByName(const std::string& name) {
                             if (m_primitive) {
                                 for (size_t i = 0; i < m_primitivePort.lock()->getConnectedPortsNumber(); ++i) {

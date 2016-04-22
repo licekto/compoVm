@@ -11,7 +11,7 @@ namespace exceptions {
 		class CWrongNumberOfParametersException : public CAbstractException {
 		  public:
 
-			CWrongNumberOfParametersException(size_t number);
+			CWrongNumberOfParametersException(const std::string& serviceName, size_t number);
 
 			virtual const char* what() const throw();
 		};

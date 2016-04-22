@@ -68,6 +68,8 @@ namespace interpreter {
 
 				void disconnectPortAt(size_t index);
                                 
+                                void disconnectAll();
+                                
                                 void disconnectPortByName(const std::string& name);
                                 
                                 void connectPrimitiveService(ptr(CGeneralService) service);

@@ -569,4 +569,49 @@ BOOST_AUTO_TEST_CASE(manualDisconnectionTest) {
     table->clear();
 }
 
+BOOST_AUTO_TEST_CASE(signaturePortTest) {
+    // Testing input
+    std::stringstream input;
+    input.str(
+   "descriptor Add {\
+        provides {\
+            provAdd : { add(a, b); };\
+        }\
+        service add(a, b) {\
+            return a + b;\
+        }\
+    }\
+    descriptor Inst {\
+        internally requires {\
+            a : { add(a, b); };\
+        }\
+        architecture {\
+            connect a to default@(Add.new());\
+        }\
+        service test() {\
+            |tmp|\
+            tmp := a.add(1, 1);\
+            return tmp;\
+        }\
+    }\
+    descriptor CompoContainer {\
+        service main() {\
+            |i|\
+            i := Inst.new();\
+            return i.test();\
+        }\
+    }");
+    
+    // Parse input and create AST
+    parser->parseAll(input);
+    
+    ptr(ast_program) program = parser->getRootNode();
+
+    BOOST_CHECK_EQUAL(cast(mem_int)(interpreter->run(program)->getOwner())->getValue(), 2);
+    
+    // Clear AST for next test
+    parser->clearAll();
+    table->clear();
+}
+
 BOOST_AUTO_TEST_SUITE_END()

@@ -49,6 +49,8 @@ namespace interpreter {
                     
                     void setContextComponent(ptr(mem_component) component);
                     
+                    ptr(mem_component) getContextComponent();
+                    
                     void clear();
 		};
 

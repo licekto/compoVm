@@ -107,23 +107,38 @@ BOOST_AUTO_TEST_CASE(complexTest) {
         architecture {\
             connect a to default@(Add.new());\
             connect b to default@(Sub.new());\
-            connect c to default@(Div.new());\
-            connect d to default@(Mul.new());\
         }\
-        service testInternal(a) {\
-            return 1 + a;\
+        service testInternal(var) {\
+            return 1 + var;\
         }\
         service test() {\
-            |b|\
-            b := 1;\
-            return b + default.add(2);\
+            |tmp|\
+            tmp := 1;\
+            tmp := tmp + self.testInternal(2);\
+            tmp := tmp * a.add(1, tmp);\
+            tmp := tmp - b.testSub(1, tmp);\
+            tmp := tmp + c.div(4, 2);\
+            tmp := tmp - d.testMul(2, 3);\
+            return tmp + a.add(1, 1);\
+        }\
+    }\
+    descriptor Outer {\
+        internally requires {\
+            runPort : { test(); };\
+        }\
+        service run(inst) {\
+            connect runPort to g@inst;\
+            connect c@inst to default@(Div.new());\
+            connect d@inst to default@(Mul.new());\
+            return runPort.test();\
         }\
     }\
     descriptor CompoContainer {\
         service main() {\
-            |i|\
+            |i outer|\
             i := Inst.new();\
-            return i;\
+            outer := Outer.new();\
+            return outer.run(i);\
         }\
     }");
     
@@ -132,12 +147,8 @@ BOOST_AUTO_TEST_CASE(complexTest) {
     
     ptr(ast_program) program = parser->getRootNode();
 
-//    ptr(mem_component) inst = interpreter->run(program)->getOwner();
-//    
-//    BOOST_CHECK_EQUAL(inst->getPortByName("a")->getConnectedPortsNumber(), 1);
-//    
-//    ptr(mem_port) port = inst->getServiceByName("test")->invoke();
-//    BOOST_CHECK_EQUAL(cast(mem_int)(port->getOwner())->getValue(), 4);
+    ptr(mem_component) inst = interpreter->run(program)->getOwner();
+    BOOST_CHECK_EQUAL(cast(mem_int)(inst)->getValue(), 33);
     
     // Clear AST for next test
     parser->clearAll();
@@ -176,31 +187,24 @@ BOOST_AUTO_TEST_CASE(calcTest) {
             default : { getRandVal(seed) };\
         }\
         service getRandVal(seed) {\
-            return 15;\
+            return System.getRand(seed);\
         }\
     }\
     descriptor CompoContainer {\
         service main() {\
+            |c|\
             c := Calc.new();\
             connect randGen@c to default@(RandomGen.new());\
-            c.add(c.rand(),1);\
-            c.mul(3,c.pow(2,3));\
+            return c.mul(3,c.pow(2,3));\
         }\
     }");
     
     // Parse input and create AST
-    //parser->parseAll(input);
+    parser->parseAll(input);
     
-    //ptr(ast_program) program = parser->getRootNode();
-    
-    
-    //ptr(ast::visitors::CSemanticCheckVisitor) visitor = new_ptr(ast::visitors::CSemanticCheckVisitor)(parser->getDescriptorTable());
-
-    //program->accept(visitor);
-    
-    //interpreter::core::CInterpreter interpreter(parser, new_ptr(interpreter::core::CBootstrap)());
-    
-    //interpreter.run(program);
+    ptr(ast_program) program = parser->getRootNode();
+    ptr(mem_component) inst = interpreter->run(program)->getOwner();
+    BOOST_CHECK_EQUAL(cast(mem_int)(inst)->getValue(), 24);
     
     // Clear AST for next test
     parser->clearAll();
