@@ -195,6 +195,7 @@ BOOST_AUTO_TEST_CASE(calcTest) {
             |c|\
             c := Calc.new();\
             connect randGen@c to default@(RandomGen.new());\
+            c.rand();\
             return c.mul(3,c.pow(2,3));\
         }\
     }");

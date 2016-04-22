@@ -187,21 +187,21 @@ namespace interpreter {
                                 callback = [this](const ptr(mem_component)& /*context*/) -> ptr(mem_port) {
                                     std::string val;
                                     STANDARD_IN >> val;
-                                    return m_bootstrapStage1->m_memory->newStringComponent(val).lock()->getDefaultPort();
+                                    return getStringComponent(val);
                                 };
                                 newComponent->addService(m_bootstrapStage1->m_memory->newPrimitiveService(newComponent, "readString", callback).lock());
                                 
                                 callback = [this](const ptr(mem_component)& /*context*/) -> ptr(mem_port) {
                                     i64 val;
                                     STANDARD_IN >> val;
-                                    return m_bootstrapStage1->m_memory->newIntComponent(val).lock()->getDefaultPort();
+                                    return getIntComponent(val);
                                 };
                                 newComponent->addService(m_bootstrapStage1->m_memory->newPrimitiveService(newComponent, "readInt", callback).lock());
                                 
                                 callback = [this](const ptr(mem_component)& context) -> ptr(mem_port) {
                                     i64 seed = cast(mem_int)(context->getPortByName("args")->getConnectedPortAt(0)->getOwner())->getValue();
                                     srand(seed);
-                                    return m_bootstrapStage1->m_memory->newIntComponent(rand()).lock()->getDefaultPort();
+                                    return getIntComponent(rand());
                                 };
                                 newComponent->addService(m_bootstrapStage1->m_memory->newPrimitiveService(newComponent, "getRand", callback).lock());
                                 
