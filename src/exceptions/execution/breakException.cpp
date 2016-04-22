@@ -10,7 +10,7 @@ namespace exceptions {
 
 		const char* CBreakException::what() const throw() {
 			return m_msg.c_str();
-                }
+		}
 
 	}
 

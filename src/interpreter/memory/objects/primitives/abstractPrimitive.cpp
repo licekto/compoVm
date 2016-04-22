@@ -30,7 +30,7 @@ namespace interpreter {
 
 				void CAbstractPrimitive::setOwner(ptr(CComponent) owner) {
 					m_owner = wptr(CComponent)(owner);
-                                }
+				}
 
 			}
 

@@ -41,8 +41,8 @@ namespace interpreter {
 			ptr(ast_descriptor) getCoreDescriptorAt(size_t i) const;
 
 			size_t getCoreDescriptorsSize() const;
-                        
-                        ptr(ParserWrapper) getParser();
+
+			ptr(ParserWrapper) getParser();
 		};
 
 	}

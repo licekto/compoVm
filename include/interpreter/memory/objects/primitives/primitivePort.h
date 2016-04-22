@@ -24,14 +24,14 @@ namespace interpreter {
 				class CPrimitivePort : public CAbstractPrimitive {
 				  private:
 					std::vector<wptr(objects::CGeneralPort)> m_connectedPorts;
-                                        
-                                        wptr(objects::CGeneralPort) m_delegatedPort;
+
+					wptr(objects::CGeneralPort) m_delegatedPort;
 
 					std::vector<wptr(objects::CGeneralService)> m_connectedServices;
-                                        
-                                        bool m_isDelegated;
-                                        
-                                        bool m_isCollection;
+
+					bool m_isDelegated;
+
+					bool m_isCollection;
 
 				  public:
 					CPrimitivePort(const std::string& name = "", ptr(objects::CComponent) owner = nullptr, bool collection = false);
@@ -47,8 +47,8 @@ namespace interpreter {
 					ptr(objects::CGeneralPort) getConnectedPortAt(size_t index);
 
 					void disconnectPortAt(size_t index);
-                                        
-                                        void disconnectAll();
+
+					void disconnectAll();
 
 					void disconnectServiceByName(const std::string& name);
 
@@ -59,14 +59,14 @@ namespace interpreter {
 					ptr(objects::CGeneralService) getConnectedServiceAt(size_t index);
 
 					ptr(objects::CGeneralService) getConnectedServiceByName(const std::string& name);
-                                        
-                                        void delegateToPort(ptr(objects::CGeneralPort) port);
-                                        
-                                        ptr(objects::CGeneralPort) getDelegatedPort();
-                                        
-                                        bool isDelegated() const;
-                                        
-                                        bool isCollection() const;
+
+					void delegateToPort(ptr(objects::CGeneralPort) port);
+
+					ptr(objects::CGeneralPort) getDelegatedPort();
+
+					bool isDelegated() const;
+
+					bool isCollection() const;
 				};
 
 			}

@@ -29,13 +29,13 @@ namespace ast {
 		*/
 		class CConstantsVisitor : public CAbstractVisitor, public std::enable_shared_from_this<CConstantsVisitor>  {
 		  private:
-                        std::vector<ptr(nodes::procedural::CAbstractPrimaryExpression)> m_constants;
+			std::vector<ptr(nodes::procedural::CAbstractPrimaryExpression)> m_constants;
 		  public:
 
-                        size_t getConstantsSize() const;
-                        
-                        ptr(nodes::procedural::CAbstractPrimaryExpression) getConstantAt(size_t index);
-                      
+			size_t getConstantsSize() const;
+
+			ptr(nodes::procedural::CAbstractPrimaryExpression) getConstantAt(size_t index);
+
 			virtual void visit(ptr(ast_node) node);
 			virtual void visit(ptr(ast_program) node);
 
@@ -68,7 +68,7 @@ namespace ast {
 			virtual void visit(ptr(ast_break) node);
 			virtual void visit(ptr(ast_compound) node);
 			virtual void visit(ptr(ast_constant) node);
-                        virtual void visit(ptr(ast_boolean) node);
+			virtual void visit(ptr(ast_boolean) node);
 			virtual void visit(ptr(ast_continue) node);
 			virtual void visit(ptr(ast_division) node);
 			virtual void visit(ptr(ast_equality) node);

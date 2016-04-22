@@ -48,7 +48,7 @@ namespace types {
 		WHILE,
 		IF,
 		CONSTANT,
-                BOOLEAN,
+		BOOLEAN,
 		STRING_LITERAL,
 		PARENS,
 		ASSIGNMENT_EXPRESSION,
@@ -129,14 +129,14 @@ namespace types {
 		INTERNAL,
 		EXTERNAL,
 	};
-        
-        /**
-	 * \enum valueComponentType
+
+	/**
+	* \enum valueComponentType
 	 * \brief Types of value components
 	 */
-        enum valueComponentType {
-            BOOL,
-            INTEGER,
-            STRING
-        };
+	enum valueComponentType {
+		BOOL,
+		INTEGER,
+		STRING
+	};
 }

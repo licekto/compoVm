@@ -51,53 +51,53 @@ namespace interpreter {
 			ptr(bootstrap::CBootstrapStage2) m_bootstrap;
 
 			ptr(memory::memspace::CDescriptorTable) m_descriptorTable;
-                        
-                        std::stack<ptr(CContext)> m_serviceContextStack;
+
+			std::stack<ptr(CContext)> m_serviceContextStack;
 
 			ptr(mem_port) execProgram(ptr(ast_program) node);
 
 			void execDescriptor(ptr(ast_descriptor) node);
-                        
-                        void execCompound(ptr(ast_compound) node);
-                        
-                        void execAssignment(ptr(ast_assignment) node);
-                        
-                        ptr(mem_port) execArithmeticOp(ptr(ast_binary) expr, type_operator op);
-                        
-                        ptr(mem_port) execLogicalOp(ptr(ast_binary) expr, type_operator op);
-                        
-                        ptr(mem_port) execRelationalOp(ptr(ast_binary) expr, type_operator op);
-                        
-                        ptr(mem_port) execServiceInvocation(ptr(ast_serviceinvocation) node);
 
-                        ptr(mem_port) execConnection(ptr(ast_connection) node);
-                        
-                        void execDisconnection(ptr(ast_disconnection) node);
-                        
-                        void execFor(ptr(ast_for) node);
-                        
-                        void execWhile(ptr(ast_while) node);
-                        
-                        void execIf(ptr(ast_if) node);
-                        
+			void execCompound(ptr(ast_compound) node);
+
+			void execAssignment(ptr(ast_assignment) node);
+
+			ptr(mem_port) execArithmeticOp(ptr(ast_binary) expr, type_operator op);
+
+			ptr(mem_port) execLogicalOp(ptr(ast_binary) expr, type_operator op);
+
+			ptr(mem_port) execRelationalOp(ptr(ast_binary) expr, type_operator op);
+
+			ptr(mem_port) execServiceInvocation(ptr(ast_serviceinvocation) node);
+
+			ptr(mem_port) execConnection(ptr(ast_connection) node);
+
+			void execDisconnection(ptr(ast_disconnection) node);
+
+			void execFor(ptr(ast_for) node);
+
+			void execWhile(ptr(ast_while) node);
+
+			void execIf(ptr(ast_if) node);
+
 			ptr(mem_port) exec(ptr(ast_node));
-                        
-                        void checkBindAddresses(ptr(mem_port) src, ptr(mem_port) dst);
-                        
-                        std::string getStringRepresentation(ptr(mem_value) val);
+
+			void checkBindAddresses(ptr(mem_port) src, ptr(mem_port) dst);
+
+			std::string getStringRepresentation(ptr(mem_value) val);
 
 		  public:
 
 			CInterpreter(ptr(ParserWrapper) parser = nullptr,
-                                     ptr(bootstrap::CBootstrapStage2) bootstrap = nullptr,
-                                     ptr(memory::memspace::CDescriptorTable) table = nullptr);
+			             ptr(bootstrap::CBootstrapStage2) bootstrap = nullptr,
+			             ptr(memory::memspace::CDescriptorTable) table = nullptr);
 
-                        void boot();
-                        
+			void boot();
+
 			ptr(mem_port) execServiceCode(const std::string& code, ptr(CContext) context = nullptr);
-                        
-                        ptr(mem_port) execService(const std::string& receiver, const std::string& selector);
-                        
+
+			ptr(mem_port) execService(const std::string& receiver, const std::string& selector);
+
 			ptr(mem_port) run(ptr(ast_program) ast);
 		};
 

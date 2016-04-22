@@ -63,8 +63,8 @@ namespace ast {
 
 				/**
 				* Body size getter
-                                * @return size of body vector
-                                */
+				                * @return size of body vector
+				                */
 				size_t getBodySize() const;
 
 				/**
@@ -75,8 +75,8 @@ namespace ast {
 
 				/**
 				* Temporaries size getter
-                                * @return size of temporaries vector
-                                */
+				                * @return size of temporaries vector
+				                */
 				size_t getTemporariesSize() const;
 
 				/**

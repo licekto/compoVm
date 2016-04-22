@@ -46,7 +46,7 @@ namespace types {
 		{nodeType::RETURN, "return"},
 		{nodeType::BREAK, "break"},
 		{nodeType::CONTINUE, "continue"},
-                {nodeType::BOOLEAN, "boolean"},
+		{nodeType::BOOLEAN, "boolean"},
 	};
 
 	std::string typeName(nodeType type) {

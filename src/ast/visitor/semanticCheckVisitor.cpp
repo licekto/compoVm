@@ -300,10 +300,10 @@ namespace ast {
 			checkNodeType(node, type_node::CONSTANT);
 		}
 
-                void CSemanticCheckVisitor::visit(ptr(ast_boolean) node) {
+		void CSemanticCheckVisitor::visit(ptr(ast_boolean) node) {
 			checkNodeType(node, type_node::BOOLEAN);
 		}
-                
+
 		void CSemanticCheckVisitor::visit(ptr(ast_continue) node) {
 			checkNodeType(node, type_node::CONTINUE);
 		}

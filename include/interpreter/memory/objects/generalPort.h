@@ -15,10 +15,10 @@ namespace interpreter {
 		namespace objects {
 
 			class CComponent;
-                        class CGeneralService;
-                        
+			class CGeneralService;
+
 			namespace primitives {
-                                class CPrimitivePort;
+				class CPrimitivePort;
 			}
 
 			class CGeneralPort : public std::enable_shared_from_this<CGeneralPort> {
@@ -32,8 +32,8 @@ namespace interpreter {
 				types::roleType m_role;
 
 				bool m_primitive;
-                                
-                                std::vector<wptr(CGeneralService)> m_connectedPrimitiveServices;
+
+				std::vector<wptr(CGeneralService)> m_connectedPrimitiveServices;
 
 			  public:
 				CGeneralPort(ptr(CComponent) port,
@@ -67,24 +67,24 @@ namespace interpreter {
 				void connectPort(ptr(objects::CGeneralPort) port);
 
 				void disconnectPortAt(size_t index);
-                                
-                                void disconnectAll();
-                                
-                                void disconnectPortByName(const std::string& name);
-                                
-                                void connectPrimitiveService(ptr(CGeneralService) service);
-                                
-                                size_t getConnectedPrimitiveServicesNumber() const;
-                                
-                                ptr(CGeneralService) getPrimitiveServiceAt(size_t index);
-                                
-                                ptr(CGeneralPort) invokeByName(const std::string& caller, const std::string& receiver, const std::string& selector, u64 index = 0);
-                                
-                                void delegateTo(ptr(CGeneralPort) port);
-                                
-                                ptr(CGeneralPort) getDelegatedPort();
-                                
-                                bool isCollection() const;
+
+				void disconnectAll();
+
+				void disconnectPortByName(const std::string& name);
+
+				void connectPrimitiveService(ptr(CGeneralService) service);
+
+				size_t getConnectedPrimitiveServicesNumber() const;
+
+				ptr(CGeneralService) getPrimitiveServiceAt(size_t index);
+
+				ptr(CGeneralPort) invokeByName(const std::string& caller, const std::string& receiver, const std::string& selector, u64 index = 0);
+
+				void delegateTo(ptr(CGeneralPort) port);
+
+				ptr(CGeneralPort) getDelegatedPort();
+
+				bool isCollection() const;
 			};
 		}
 	}

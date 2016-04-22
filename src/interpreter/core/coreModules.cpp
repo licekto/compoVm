@@ -37,7 +37,7 @@ namespace interpreter {
 			});
 
 			if (it == m_coreDescriptors.end()) {
-                                throw exceptions::runtime::CCoreModuleNotFoundException(module);
+				throw exceptions::runtime::CCoreModuleNotFoundException(module);
 			}
 			return *it;
 		}
@@ -53,11 +53,11 @@ namespace interpreter {
 			loadDescriptor(KERNEL_SERVICE_PATH);
 			loadDescriptor(KERNEL_SERVICE_SIGNATURE_PATH);
 			loadDescriptor(KERNEL_SERVICE_INVOCATION_PATH);
-                        loadDescriptor(KERNEL_STRING_PATH);
-                        loadDescriptor(KERNEL_INT_PATH);
-                        loadDescriptor(KERNEL_BOOL_PATH);
-                        loadDescriptor(KERNEL_SYSTEM_PATH);
-                        m_parser->clearAll();
+			loadDescriptor(KERNEL_STRING_PATH);
+			loadDescriptor(KERNEL_INT_PATH);
+			loadDescriptor(KERNEL_BOOL_PATH);
+			loadDescriptor(KERNEL_SYSTEM_PATH);
+			m_parser->clearAll();
 		}
 
 		ptr(ast_descriptor) CCoreModules::getCoreDescriptorAt(size_t i) const {
@@ -70,10 +70,10 @@ namespace interpreter {
 		size_t CCoreModules::getCoreDescriptorsSize() const {
 			return m_coreDescriptors.size();
 		}
-                
-                std::shared_ptr<ParserWrapper> CCoreModules::getParser() {
-                        return m_parser;
-                }
+
+		std::shared_ptr<ParserWrapper> CCoreModules::getParser() {
+			return m_parser;
+		}
 	}
 
 }

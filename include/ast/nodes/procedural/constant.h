@@ -30,9 +30,9 @@ namespace ast {
 				CConstant(i64 val = 0);
 
 				/**
-                                * Accept method for visitor acceptation.
-                                * @param visitor: Pointer to abstract visitor.
-                                */
+				                * Accept method for visitor acceptation.
+				                * @param visitor: Pointer to abstract visitor.
+				                */
 				virtual void accept(std::shared_ptr<visitors::CAbstractVisitor> visitor);
 
 				/**

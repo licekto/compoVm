@@ -54,10 +54,10 @@ namespace interpreter {
 					return m_primitivePort.lock()->getOwner();
 				} else {
 					ptr(CGeneralPort) port = m_port.lock()->getPortByName("owner")->getPrimitivePort()->getConnectedPortAt(0);
-                                        if (port.get() == this) {
-                                            return m_port.lock()->getPortByName("owner")->getPrimitivePort()->getOwner();
-                                        }
-                                        return port->getOwner();
+					if (port.get() == this) {
+						return m_port.lock()->getPortByName("owner")->getPrimitivePort()->getOwner();
+					}
+					return port->getOwner();
 				}
 			}
 
@@ -87,14 +87,14 @@ namespace interpreter {
 
 			void CGeneralPort::connectPort(std::shared_ptr<objects::CGeneralPort> port) {
 				if (m_primitive) {
-                                        if (!isCollection()) {
-                                            //m_primitivePort.lock()->disconnectPortAt(0);
-                                        }
+					if (!isCollection()) {
+						//m_primitivePort.lock()->disconnectPortAt(0);
+					}
 					return m_primitivePort.lock()->connectPort(port);
 				} else {
-                                        if (!isCollection()) {
-                                            //m_port.lock()->getPortByName("connectedPorts")->disconnectPortAt(0);
-                                        }
+					if (!isCollection()) {
+						//m_port.lock()->getPortByName("connectedPorts")->disconnectPortAt(0);
+					}
 					return m_port.lock()->getPortByName("connectedPorts")->connectPort(port);
 				}
 			}
@@ -105,132 +105,123 @@ namespace interpreter {
 				} else {
 					return m_port.lock()->getPortByName("connectedPorts")->disconnectPortAt(index);
 				}
-                        }
+			}
 
-                        void CGeneralPort::disconnectAll() {
-                            if (m_primitive) {
+			void CGeneralPort::disconnectAll() {
+				if (m_primitive) {
 					return m_primitivePort.lock()->disconnectAll();
 				} else {
 					return m_port.lock()->getPortByName("connectedPorts")->disconnectAll();
 				}
-                        }
+			}
 
-                        void CGeneralPort::disconnectPortByName(const std::string& name) {
-                            if (m_primitive) {
-                                for (size_t i = 0; i < m_primitivePort.lock()->getConnectedPortsNumber(); ++i) {
-                                    if (m_primitivePort.lock()->getConnectedPortAt(i)->getName() == name) {
-                                        m_primitivePort.lock()->getConnectedPortAt(i)->disconnectPortAt(0);
-                                        break;
-                                    }
-                                }
-                            }
-                            else {
-                                m_port.lock()->getPortByName("connectedPorts")->disconnectPortByName(name);
-                            }
-                        }
+			void CGeneralPort::disconnectPortByName(const std::string& name) {
+				if (m_primitive) {
+					for (size_t i = 0; i < m_primitivePort.lock()->getConnectedPortsNumber(); ++i) {
+						if (m_primitivePort.lock()->getConnectedPortAt(i)->getName() == name) {
+							m_primitivePort.lock()->getConnectedPortAt(i)->disconnectPortAt(0);
+							break;
+						}
+					}
+				} else {
+					m_port.lock()->getPortByName("connectedPorts")->disconnectPortByName(name);
+				}
+			}
 
-                        void CGeneralPort::connectPrimitiveService(ptr(CGeneralService) service) {
-                                m_connectedPrimitiveServices.push_back(service);
-                        }
+			void CGeneralPort::connectPrimitiveService(ptr(CGeneralService) service) {
+				m_connectedPrimitiveServices.push_back(service);
+			}
 
-                        size_t CGeneralPort::getConnectedPrimitiveServicesNumber() const {
-                                return m_connectedPrimitiveServices.size();
-                        }
+			size_t CGeneralPort::getConnectedPrimitiveServicesNumber() const {
+				return m_connectedPrimitiveServices.size();
+			}
 
-                        ptr(CGeneralService) CGeneralPort::getPrimitiveServiceAt(size_t index) {
-                                return m_connectedPrimitiveServices.at(index).lock();
-                        }
+			ptr(CGeneralService) CGeneralPort::getPrimitiveServiceAt(size_t index) {
+				return m_connectedPrimitiveServices.at(index).lock();
+			}
 
-                        ptr(CGeneralPort) CGeneralPort::invokeByName(const std::string& caller, const std::string& receiver, const std::string& selector, u64 index) {
-                            if (m_primitive) {
-                                return m_primitivePort.lock()->getConnectedServiceByName(selector)->invoke();
-                            }
-                            else {
-                                ptr(CGeneralPort) port = this->shared_from_this();
-                                while (!port->getOwner()->containsService(selector)) {
-                                    port = port->getDelegatedPort();
-                                    if (!port.use_count()) {
-                                        throw exceptions::runtime::CServiceNotFoundException(selector);
-                                    }
-                                }
-                                
-                                std::string type = cast(objects::values::CStringComponent)
-                                        (port->getPort()->getPortByName("interfaceDescription")->getConnectedPortAt(0)
-                                               ->getOwner()->getPortByName("type")->getConnectedPortAt(0)->getOwner())->getValue();
-                                
-                                if (!port->getOwner()->getServiceByName(selector)->isPrimitive()) {
-                                    port->getOwner()->getServiceByName(selector)->getService()->getPortByName("args")->delegateTo(getOwner()->getPortByName("args"));
-                                }
-                                if (type == PORT_TYPE_SIGNATURES) {
-                                    bool found = false;
-                                    std::string definedSelector = "";
-                                    ptr(CComponent) interface = port->getPort()->getPortByName("interfaceDescription")->getConnectedPortAt(0)->getOwner();
-                                    for (size_t i = 0; i < interface->getPortByName("signatures")->getConnectedPortsNumber(); ++i) {
-                                        ptr(CComponent) signatures = interface->getPortByName("signatures")->getConnectedPortAt(i)->getOwner();
-                                        ptr(CComponent) component = signatures->getPortByName("selector")->getConnectedPortAt(0)->getOwner();
-                                        definedSelector = cast(objects::values::CStringComponent)(component)->getValue();
-                                        if (definedSelector == selector) {
-                                            found = true;
-                                            break;
-                                        }
-                                    }
-                                    if (!found) {
-                                        throw exceptions::runtime::CServiceNotFoundException(selector);
-                                    }
-                                    ptr(CGeneralService) callee = port->getOwner()->lookupService(selector);
-                                    return callee->invoke();
-                                }
-                                else if (type == PORT_TYPE_UNIVERSAL) {
-                                    ptr(CGeneralService) callee = port->getOwner()->lookupService(selector);
-                                    if (receiver == "super" && selector == caller) {
-                                        callee = callee->getSpecialized();
-                                    }
-                                    return callee->invoke();
-                                }
-                                else if (type == PORT_TYPE_NAMED) {
-                                    if (receiver == "super" && selector == caller) {
-                                        // throw
-                                    }
-                                    return port->getPort()->getPortByName("connectedPorts")->getConnectedPortAt(index)->getOwner()->lookupService(selector)->invoke();
-                                }
-                                else if (type == PORT_TYPE_INJECTED) {
-                                    throw exceptions::semantic::CUnsupportedFeatureException("injected port");
-                                }
-                                else {
-                                    throw exceptions::runtime::CUnknownPortTypeException();
-                                }
-                            }
-                        }
+			ptr(CGeneralPort) CGeneralPort::invokeByName(const std::string& caller, const std::string& receiver, const std::string& selector, u64 index) {
+				if (m_primitive) {
+					return m_primitivePort.lock()->getConnectedServiceByName(selector)->invoke();
+				} else {
+					ptr(CGeneralPort) port = this->shared_from_this();
+					while (!port->getOwner()->containsService(selector)) {
+						port = port->getDelegatedPort();
+						if (!port.use_count()) {
+							throw exceptions::runtime::CServiceNotFoundException(selector);
+						}
+					}
 
-                        void CGeneralPort::delegateTo(ptr(CGeneralPort) port) {
-                            if (m_primitive) {
-                                m_primitivePort.lock()->delegateToPort(port);
-                            }
-                            else {
-                                m_port.lock()->getPortByName("delegatedPorts")->connectPort(port);
-                            }
-                        }
+					std::string type = cast(objects::values::CStringComponent)
+					                   (port->getPort()->getPortByName("interfaceDescription")->getConnectedPortAt(0)
+					                    ->getOwner()->getPortByName("type")->getConnectedPortAt(0)->getOwner())->getValue();
 
-                        ptr(CGeneralPort) CGeneralPort::getDelegatedPort() {
-                            if (m_primitive) {
-                                return m_primitivePort.lock()->getDelegatedPort();
-                            }
-                            else {
-                                if (m_port.lock()->getPortByName("delegatedPorts")->getConnectedPortsNumber()) {
-                                    return m_port.lock()->getPortByName("delegatedPorts")->getConnectedPortAt(0);
-                                }
-                                return nullptr;
-                            }
-                        }
+					if (!port->getOwner()->getServiceByName(selector)->isPrimitive()) {
+						port->getOwner()->getServiceByName(selector)->getService()->getPortByName("args")->delegateTo(getOwner()->getPortByName("args"));
+					}
+					if (type == PORT_TYPE_SIGNATURES) {
+						bool found = false;
+						std::string definedSelector = "";
+						ptr(CComponent) interface = port->getPort()->getPortByName("interfaceDescription")->getConnectedPortAt(0)->getOwner();
+						for (size_t i = 0; i < interface->getPortByName("signatures")->getConnectedPortsNumber(); ++i) {
+							ptr(CComponent) signatures = interface->getPortByName("signatures")->getConnectedPortAt(i)->getOwner();
+							ptr(CComponent) component = signatures->getPortByName("selector")->getConnectedPortAt(0)->getOwner();
+							definedSelector = cast(objects::values::CStringComponent)(component)->getValue();
+							if (definedSelector == selector) {
+								found = true;
+								break;
+							}
+						}
+						if (!found) {
+							throw exceptions::runtime::CServiceNotFoundException(selector);
+						}
+						ptr(CGeneralService) callee = port->getOwner()->lookupService(selector);
+						return callee->invoke();
+					} else if (type == PORT_TYPE_UNIVERSAL) {
+						ptr(CGeneralService) callee = port->getOwner()->lookupService(selector);
+						if (receiver == "super" && selector == caller) {
+							callee = callee->getSpecialized();
+						}
+						return callee->invoke();
+					} else if (type == PORT_TYPE_NAMED) {
+						if (receiver == "super" && selector == caller) {
+							// throw
+						}
+						return port->getPort()->getPortByName("connectedPorts")->getConnectedPortAt(index)->getOwner()->lookupService(selector)->invoke();
+					} else if (type == PORT_TYPE_INJECTED) {
+						throw exceptions::semantic::CUnsupportedFeatureException("injected port");
+					} else {
+						throw exceptions::runtime::CUnknownPortTypeException();
+					}
+				}
+			}
 
-                        bool CGeneralPort::isCollection() const {
-                            if (m_primitive) {
-                                return m_primitivePort.lock()->isCollection();
-                            }
-                            else {
-                                return cast(values::CBoolComponent)(m_port.lock()->getPortByName("isCollection")->getConnectedPortAt(0)->getOwner())->getValue();
-                            }
-                        }
+			void CGeneralPort::delegateTo(ptr(CGeneralPort) port) {
+				if (m_primitive) {
+					m_primitivePort.lock()->delegateToPort(port);
+				} else {
+					m_port.lock()->getPortByName("delegatedPorts")->connectPort(port);
+				}
+			}
+
+			ptr(CGeneralPort) CGeneralPort::getDelegatedPort() {
+				if (m_primitive) {
+					return m_primitivePort.lock()->getDelegatedPort();
+				} else {
+					if (m_port.lock()->getPortByName("delegatedPorts")->getConnectedPortsNumber()) {
+						return m_port.lock()->getPortByName("delegatedPorts")->getConnectedPortAt(0);
+					}
+					return nullptr;
+				}
+			}
+
+			bool CGeneralPort::isCollection() const {
+				if (m_primitive) {
+					return m_primitivePort.lock()->isCollection();
+				} else {
+					return cast(values::CBoolComponent)(m_port.lock()->getPortByName("isCollection")->getConnectedPortAt(0)->getOwner())->getValue();
+				}
+			}
 
 		}
 	}

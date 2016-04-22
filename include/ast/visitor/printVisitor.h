@@ -29,17 +29,17 @@ namespace ast {
 		*/
 		class CPrintVisitor : public CAbstractVisitor, public std::enable_shared_from_this<CPrintVisitor> {
 		  private:
-                      int m_tabs;
-                      
-                      std::stringstream m_output;
-                      
-                      void printTabs();
-                      
+			int m_tabs;
+
+			std::stringstream m_output;
+
+			void printTabs();
+
 		  public:
 
 			CPrintVisitor();
-                        
-                        std::string getOutput() const;
+
+			std::string getOutput() const;
 
 			virtual void visit(ptr(ast_node) node);
 			virtual void visit(ptr(ast_program) node);
@@ -73,7 +73,7 @@ namespace ast {
 			virtual void visit(ptr(ast_break) node);
 			virtual void visit(ptr(ast_compound) node);
 			virtual void visit(ptr(ast_constant) node);
-                        virtual void visit(ptr(ast_boolean) node);
+			virtual void visit(ptr(ast_boolean) node);
 			virtual void visit(ptr(ast_continue) node);
 			virtual void visit(ptr(ast_division) node);
 			virtual void visit(ptr(ast_equality) node);

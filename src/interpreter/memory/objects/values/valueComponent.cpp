@@ -24,14 +24,14 @@ namespace interpreter {
 
 				ptr(CGeneralPort) CValueComponent::getPortByName(const std::string& name) {
 					if (name != "default") {
-                                            throw exceptions::runtime::CWrongValueComponentPortException(name);
+						throw exceptions::runtime::CWrongValueComponentPortException(name);
 					}
 					return m_ports.at(0).lock();
-                                }
+				}
 
-                                type_values CValueComponent::getType() const {
-                                        return m_type;
-                                }
+				type_values CValueComponent::getType() const {
+					return m_type;
+				}
 
 			}
 

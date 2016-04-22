@@ -43,7 +43,7 @@ namespace ast {
 			class CBreakStatement;
 			class CCompoundBody;
 			class CConstant;
-                        class CBoolean;
+			class CBoolean;
 			class CContinueStatement;
 			class CDivisionExpression;
 			class CEqualityExpression;
@@ -117,7 +117,7 @@ namespace ast {
 			virtual void visit(std::shared_ptr<ast::nodes::procedural::CBreakStatement> node) = 0;
 			virtual void visit(std::shared_ptr<ast::nodes::procedural::CCompoundBody> node) = 0;
 			virtual void visit(std::shared_ptr<ast::nodes::procedural::CConstant> node) = 0;
-                        virtual void visit(std::shared_ptr<ast::nodes::procedural::CBoolean> node) = 0;
+			virtual void visit(std::shared_ptr<ast::nodes::procedural::CBoolean> node) = 0;
 			virtual void visit(std::shared_ptr<ast::nodes::procedural::CContinueStatement> node) = 0;
 			virtual void visit(std::shared_ptr<ast::nodes::procedural::CDivisionExpression> node) = 0;
 			virtual void visit(std::shared_ptr<ast::nodes::procedural::CEqualityExpression> node) = 0;

@@ -10,7 +10,7 @@ namespace exceptions {
 
 		const char* CContinueException::what() const throw() {
 			return m_msg.c_str();
-                }
+		}
 
 	}
 

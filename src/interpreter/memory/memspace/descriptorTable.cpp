@@ -8,13 +8,13 @@ namespace interpreter {
 		namespace memspace {
 
 			void CDescriptorTable::addDescriptor(ptr(mem_component) descriptor) {
-                                addNamedDescriptor(descriptor, cast(mem_string)(descriptor->getPortByName("name")->getConnectedPortAt(0)->getOwner())->getValue());
+				addNamedDescriptor(descriptor, cast(mem_string)(descriptor->getPortByName("name")->getConnectedPortAt(0)->getOwner())->getValue());
 			}
 
-                        void CDescriptorTable::addNamedDescriptor(ptr(mem_component) descriptor, const std::string& name) {
+			void CDescriptorTable::addNamedDescriptor(ptr(mem_component) descriptor, const std::string& name) {
 				m_table[name] = descriptor;
 			}
-                        
+
 			ptr(mem_component) CDescriptorTable::getDescriptor(const std::string& name) {
 				if (!descriptorFound(name)) {
 					throw exceptions::semantic::CUndefinedDescriptorException(name);

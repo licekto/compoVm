@@ -10,7 +10,7 @@ namespace interpreter {
 			CGeneralService::CGeneralService(ptr(CComponent) service, ptr(CGeneralService) specialized)
 				: m_service(wptr(CComponent)(service)),
 				  m_primitive(false),
-                                  m_specialized(specialized) {
+				  m_specialized(specialized) {
 			}
 
 			CGeneralService::CGeneralService(ptr(primitives::CPrimitiveService) primitiveService)
@@ -44,20 +44,20 @@ namespace interpreter {
 				if (m_primitive) {
 					return m_primitiveService.lock()->invoke();
 				} else {
-                                        return m_service.lock()->getServiceByName("execute")->invoke();
+					return m_service.lock()->getServiceByName("execute")->invoke();
 				}
 			}
 
 			ptr(objects::CGeneralPort) CGeneralService::getDefaultPort() {
-                                if (m_primitive) {
-                                    throw exceptions::runtime::CPrimitiveServiceNoPortException();
-                                }
+				if (m_primitive) {
+					throw exceptions::runtime::CPrimitiveServiceNoPortException();
+				}
 				return m_service.lock()->getPortByName("default");
-                        }
+			}
 
-                        ptr(CGeneralService) CGeneralService::getSpecialized() {
-                            return m_specialized;
-                        }
+			ptr(CGeneralService) CGeneralService::getSpecialized() {
+				return m_specialized;
+			}
 
 		}
 	}

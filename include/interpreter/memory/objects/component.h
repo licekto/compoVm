@@ -61,8 +61,8 @@ namespace interpreter {
 
 				ptr(CGeneralService) getServiceByName(const std::string& name);
 
-                                bool containsService(const std::string& name);
-                                
+				bool containsService(const std::string& name);
+
 				void addService(ptr(CGeneralService) service);
 
 				ptr(CGeneralPort) getPortOfService(const std::string& serviceName);
@@ -82,14 +82,14 @@ namespace interpreter {
 				void setChild(ptr(CComponent) child);
 
 				std::stringstream dump() const;
-                                
-                                size_t getSelfPortsNumber();
-                                
-                                ptr(CGeneralPort) getSelfPortAt(size_t index);
-                                
-                                std::map<std::string, ptr(CGeneralPort)> getAllPorts();
-                                
-                                ptr(CGeneralService) lookupService(const std::string& name);
+
+				size_t getSelfPortsNumber();
+
+				ptr(CGeneralPort) getSelfPortAt(size_t index);
+
+				std::map<std::string, ptr(CGeneralPort)> getAllPorts();
+
+				ptr(CGeneralService) lookupService(const std::string& name);
 			};
 
 		}

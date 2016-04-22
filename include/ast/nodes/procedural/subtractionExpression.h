@@ -27,8 +27,8 @@ namespace ast {
 
 				/**
 				* Accept method for visitor acceptation.
-                                * @param visitor: Pointer to abstract visitor.
-                                */
+				                * @param visitor: Pointer to abstract visitor.
+				                */
 				virtual void accept(std::shared_ptr<visitors::CAbstractVisitor> visitor);
 			};
 

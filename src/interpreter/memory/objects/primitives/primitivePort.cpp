@@ -64,7 +64,7 @@ namespace interpreter {
 						throw exceptions::runtime::CServiceNotFoundException(name);
 					}
 					//return *it.base()->lock();
-                                        return it.base()->lock();
+					return it.base()->lock();
 				}
 
 				void CPrimitivePort::disconnectPortAt(size_t index) {
@@ -75,11 +75,11 @@ namespace interpreter {
 					} catch (const std::out_of_range& ex) {
 						TRACE(ERROR, "Connected ports index out of range exception, index: " << index << ", exception: '" << ex.what() << "'");
 					}
-                                }
+				}
 
-                                void CPrimitivePort::disconnectAll() {
-                                    m_connectedPorts.clear();
-                                }
+				void CPrimitivePort::disconnectAll() {
+					m_connectedPorts.clear();
+				}
 
 				void CPrimitivePort::disconnectServiceByName(const std::string& name) {
 					auto it = std::find_if(m_connectedServices.begin(), m_connectedServices.end(), [&name](wptr(CGeneralService) service) {
@@ -89,24 +89,24 @@ namespace interpreter {
 					if (it != m_connectedServices.end()) {
 						m_connectedServices.erase(it);
 					}
-                                }
+				}
 
-                                void CPrimitivePort::delegateToPort(ptr(objects::CGeneralPort) port) {
-                                        m_isDelegated = true;
-                                        m_delegatedPort = port;
-                                }
+				void CPrimitivePort::delegateToPort(ptr(objects::CGeneralPort) port) {
+					m_isDelegated = true;
+					m_delegatedPort = port;
+				}
 
-                                ptr(objects::CGeneralPort) CPrimitivePort::getDelegatedPort() {
-                                        return m_delegatedPort.lock();
-                                }
+				ptr(objects::CGeneralPort) CPrimitivePort::getDelegatedPort() {
+					return m_delegatedPort.lock();
+				}
 
-                                bool CPrimitivePort::isDelegated() const {
-                                        return m_isDelegated;
-                                }
+				bool CPrimitivePort::isDelegated() const {
+					return m_isDelegated;
+				}
 
-                                bool CPrimitivePort::isCollection() const {
-                                        return m_isCollection;
-                                }
+				bool CPrimitivePort::isCollection() const {
+					return m_isCollection;
+				}
 
 			}
 

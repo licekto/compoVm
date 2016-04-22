@@ -35,7 +35,7 @@ namespace interpreter {
 					return nullptr;
 				}
 				//return *it;
-                                return it.base()->lock();
+				return it.base()->lock();
 			}
 
 			ptr(CGeneralPort) CComponent::getPortByName(const std::string& name) {
@@ -75,12 +75,11 @@ namespace interpreter {
 
 			void CComponent::connectAllSelfServicesTo(ptr(CGeneralPort) port) {
 				for (wptr(CGeneralService) service : m_services) {
-                                        if (!service.lock()->isPrimitive()) {
-                                            port->connectPort(service.lock()->getDefaultPort());
-                                        }
-                                        else {
-                                            port->connectPrimitiveService(service.lock());
-                                        }
+					if (!service.lock()->isPrimitive()) {
+						port->connectPort(service.lock()->getDefaultPort());
+					} else {
+						port->connectPrimitiveService(service.lock());
+					}
 				}
 			}
 
@@ -118,7 +117,7 @@ namespace interpreter {
 					return nullptr;
 				}
 				//return *it;
-                                return it.base()->lock();
+				return it.base()->lock();
 			}
 
 			ptr(CGeneralService) CComponent::getServiceByName(const std::string& name) {
@@ -146,18 +145,17 @@ namespace interpreter {
 					tmp = tmp->m_child.lock();
 				}
 				throw exceptions::runtime::CServiceNotFoundException(name);
-                        }
+			}
 
-                        bool CComponent::containsService(const std::string& name) {
-                            bool ret = true;
-                            try {
-                                getServiceByName(name);
-                            }
-                            catch (const exceptions::runtime::CServiceNotFoundException& ex) {
-                                ret = false;
-                            }
-                            return ret;
-                        }
+			bool CComponent::containsService(const std::string& name) {
+				bool ret = true;
+				try {
+					getServiceByName(name);
+				} catch (const exceptions::runtime::CServiceNotFoundException& ex) {
+					ret = false;
+				}
+				return ret;
+			}
 
 			void CComponent::addService(ptr(CGeneralService) service) {
 				m_services.push_back(service);
@@ -236,10 +234,10 @@ namespace interpreter {
 			std::stringstream CComponent::dump() const {
 				std::stringstream dump;
 
-                                if (m_parent.use_count()) {
-                                    dump << m_parent.lock()->dump().str() << std::endl;
-                                }
-                                
+				if (m_parent.use_count()) {
+					dump << m_parent.lock()->dump().str() << std::endl;
+				}
+
 				dump << "ports: " << m_ports.size() << std::endl;
 				for (wptr(CGeneralPort) port : m_ports) {
 					dump << "\tname: " << port.lock()->getName() << ", connected ports: " << port.lock()->getConnectedPortsNumber() << std::endl;
@@ -251,46 +249,46 @@ namespace interpreter {
 				}
 
 				return dump;
-                        }
+			}
 
-                        size_t CComponent::getSelfPortsNumber() {
-                            return m_ports.size();
-                        }
+			size_t CComponent::getSelfPortsNumber() {
+				return m_ports.size();
+			}
 
-                        ptr(CGeneralPort) CComponent::getSelfPortAt(size_t index) {
-                            return m_ports.at(index).lock();
-                        }
+			ptr(CGeneralPort) CComponent::getSelfPortAt(size_t index) {
+				return m_ports.at(index).lock();
+			}
 
-                        std::map<std::string, ptr(CGeneralPort)> CComponent::getAllPorts() {
-                                std::map<std::string, ptr(CGeneralPort)> portsMap;
+			std::map<std::string, ptr(CGeneralPort)> CComponent::getAllPorts() {
+				std::map<std::string, ptr(CGeneralPort)> portsMap;
 
 				ptr(CComponent) tmp = m_parent.lock();
 
 				while (tmp.use_count()) {
-                                        for (size_t i = 0; i < tmp->getSelfPortsNumber(); ++i) {
-                                            portsMap[tmp->getSelfPortAt(i)->getName()] = tmp->getSelfPortAt(i);
-                                        }
+					for (size_t i = 0; i < tmp->getSelfPortsNumber(); ++i) {
+						portsMap[tmp->getSelfPortAt(i)->getName()] = tmp->getSelfPortAt(i);
+					}
 					tmp = tmp->m_parent.lock();
 				}
 
-                                for (size_t i = 0; i < getSelfPortsNumber(); ++i) {
-                                    portsMap[getSelfPortAt(i)->getName()] = getSelfPortAt(i);
-                                }
-                                
+				for (size_t i = 0; i < getSelfPortsNumber(); ++i) {
+					portsMap[getSelfPortAt(i)->getName()] = getSelfPortAt(i);
+				}
+
 				tmp = m_child.lock();
 				while (tmp.use_count()) {
 					for (size_t i = 0; i < tmp->getSelfPortsNumber(); ++i) {
-                                            portsMap[tmp->getSelfPortAt(i)->getName()] = tmp->getSelfPortAt(i);
-                                        }
+						portsMap[tmp->getSelfPortAt(i)->getName()] = tmp->getSelfPortAt(i);
+					}
 					tmp = tmp->m_child.lock();
 				}
-				
-                                return portsMap;
-                        }
 
-                        ptr(CGeneralService) CComponent::lookupService(const std::string& name) {
-                            return getBottomChild()->getServiceByName(name);
-                        }
+				return portsMap;
+			}
+
+			ptr(CGeneralService) CComponent::lookupService(const std::string& name) {
+				return getBottomChild()->getServiceByName(name);
+			}
 
 		}
 	}

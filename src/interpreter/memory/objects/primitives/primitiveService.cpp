@@ -12,7 +12,7 @@ namespace interpreter {
 				                                     ptr(objects::CComponent) context,
 				                                     std::function<ptr(objects::CGeneralPort)(const ptr(objects::CComponent)&)> callback)
 					: CAbstractPrimitive(name, context),
-					  m_callback(callback){
+					  m_callback(callback) {
 				}
 
 				CPrimitiveService::CPrimitiveService(ptr(CPrimitiveService) instance)
@@ -37,11 +37,11 @@ namespace interpreter {
 
 				void CPrimitiveService::setCallback(std::function<ptr(objects::CGeneralPort)(const ptr(objects::CComponent)&)> callback) {
 					m_callback = callback;
-                                }
+				}
 
-                                std::function<ptr(objects::CGeneralPort)(const ptr(objects::CComponent)&)> CPrimitiveService::getCallback() const {
-                                    return m_callback;
-                                }
+				std::function<ptr(objects::CGeneralPort)(const ptr(objects::CComponent)&)> CPrimitiveService::getCallback() const {
+					return m_callback;
+				}
 
 			}
 

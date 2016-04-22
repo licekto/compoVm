@@ -14,10 +14,10 @@ namespace interpreter {
 			namespace values {
 
 				class CValueComponent : public CComponent {
-                                protected:
-                                    
-                                    type_values m_type;
-                                    
+				  protected:
+
+					type_values m_type;
+
 				  public:
 
 					CValueComponent(type_values type = type_values::INTEGER);
@@ -29,8 +29,8 @@ namespace interpreter {
 					ptr(CGeneralPort) getDefaultPort();
 
 					ptr(CGeneralPort) getPortByName(const std::string& name);
-                                        
-                                        type_values getType() const;
+
+					type_values getType() const;
 
 					void addPort(ptr(CGeneralPort) port) = delete;
 
