@@ -183,8 +183,8 @@ BOOST_AUTO_TEST_CASE(complexTest) {
     
     ptr(ast_program) program = parser->getRootNode();
 
-//    ptr(mem_component) inst = interpreter->run(program)->getOwner();
-//    BOOST_CHECK_EQUAL(cast(mem_string)(inst)->getValue(), "60: Bill Linus, hours of Linux - 5");
+    ptr(mem_component) inst = interpreter->run(program)->getOwner();
+    BOOST_CHECK_EQUAL(cast(mem_string)(inst)->getValue(), "60: Bill Linus, hours of Linus - 5");
     
     // Clear AST for next test
     parser->clearAll();
