@@ -178,6 +178,7 @@ namespace interpreter {
 						ptr(CGeneralService) callee = port->getOwner()->lookupService(selector);
 						return callee->invoke();
 					} else if (type == PORT_TYPE_UNIVERSAL) {
+                                                //TRACE(DEBUG, port->getOwner().get() << ": " << port->getOwner()->getPortByName("args")->getConnectedPortsNumber());
 						ptr(CGeneralService) callee = port->getOwner()->lookupService(selector);
 						if (receiver == "super" && selector == caller) {
 							callee = callee->getSpecialized();

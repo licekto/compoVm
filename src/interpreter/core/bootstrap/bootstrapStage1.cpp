@@ -355,6 +355,9 @@ namespace interpreter {
 					if (contextComponent.use_count()) {
 						ptr(mem_string) code = cast(mem_string)(contextComponent->getPortByName("code")->getConnectedPortAt(0)->getOwner());
 
+                                                //TRACE(DEBUG, owner.get() << ": " << owner->getPortByName("args")->getConnectedPortsNumber());
+                                                //TRACE(DEBUG, contextComponent.get() << ": " << contextComponent->getPortByName("args")->getConnectedPortsNumber() << ", code: " << code->getValue());
+                                                
 						ptr(interpreter::core::CContext) context = new_ptr(interpreter::core::CContext)();
 
 						ptr(mem_component) sign = contextComponent->getPortByName("serviceSign")->getConnectedPortAt(0)->getOwner();
@@ -363,19 +366,24 @@ namespace interpreter {
 
 						ptr(mem_port) argsPort = contextComponent->getPortByName("args");
 						if (paramsNumber != argsPort->getConnectedPortsNumber()) {
-							ptr(mem_port) delegatedPort = contextComponent->getPortByName("args");
+                                                        if (paramsNumber == owner->getPortByName("args")->getConnectedPortsNumber()) {
+                                                            argsPort = owner->getPortByName("args");
+                                                        }
+                                                        else {
+                                                            ptr(mem_port) delegatedPort = contextComponent->getPortByName("args");
 
-							while (delegatedPort->getDelegatedPort().use_count()) {
-								delegatedPort = delegatedPort->getDelegatedPort();
-							}
-							argsPort = delegatedPort;
-							if (paramsNumber != argsPort->getConnectedPortsNumber()) {
-								std::string name = cast(mem_string)(
-								                       contextComponent->getPortByName("serviceSign")
-								                       ->getConnectedPortAt(0)->getOwner()->getPortByName("selector")->getConnectedPortAt(0)->getOwner())->getValue();
+                                                            while (delegatedPort->getDelegatedPort().use_count()) {
+                                                                    delegatedPort = delegatedPort->getDelegatedPort();
+                                                            }
+                                                            argsPort = delegatedPort;
+                                                            if (paramsNumber != argsPort->getConnectedPortsNumber()) {
+                                                                    std::string name = cast(mem_string)(
+                                                                                           contextComponent->getPortByName("serviceSign")
+                                                                                           ->getConnectedPortAt(0)->getOwner()->getPortByName("selector")->getConnectedPortAt(0)->getOwner())->getValue();
 
-								throw exceptions::runtime::CWrongNumberOfParametersException(name, argsPort->getConnectedPortsNumber());
-							}
+                                                                    throw exceptions::runtime::CWrongNumberOfParametersException(name, argsPort->getConnectedPortsNumber());
+                                                            }
+                                                        }
 						}
 
 						for (size_t i = 0; i < paramsNumber; ++i) {

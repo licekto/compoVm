@@ -117,8 +117,8 @@ BOOST_AUTO_TEST_CASE(serviceSpecializationTest) {
     
     ptr(ast_program) program = parser->getRootNode();
 
-//    ptr(mem_component) inst = interpreter->run(program)->getOwner();
-//    BOOST_CHECK_EQUAL(cast(mem_int)(inst)->getValue(), 8);
+    ptr(mem_component) inst = interpreter->run(program)->getOwner();
+    BOOST_CHECK_EQUAL(cast(mem_int)(inst)->getValue(), 8);
     
     // Clear AST for next test
     parser->clearAll();

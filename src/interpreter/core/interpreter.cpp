@@ -190,16 +190,20 @@ namespace interpreter {
 				port = m_descriptorTable->getDescriptor(receiver)->getPortByName("default");
 			}
 			ptr(mem_port) delegatedPort = port->getOwner()->getPortByName("args");
+                        //TRACE(DEBUG, delegatedPort->getOwner().get() << ": " << delegatedPort->getOwner()->getPortByName("args")->getConnectedPortsNumber());
 			while (delegatedPort->getDelegatedPort().use_count()) {
 				delegatedPort = delegatedPort->getDelegatedPort();
 			}
 
+                        //TRACE(DEBUG, delegatedPort->getOwner().get() << ": " << delegatedPort->getOwner()->getPortByName("args")->getConnectedPortsNumber());
 			std::vector<ptr(mem_port)> oldArgs;
 			for (size_t i = 0; i < delegatedPort->getOwner()->getPortByName("args")->getConnectedPortsNumber(); ++i) {
 				oldArgs.push_back(delegatedPort->getOwner()->getPortByName("args")->getConnectedPortAt(i));
 			}
 			delegatedPort->getOwner()->getPortByName("args")->disconnectAll();
-
+                        
+                        //TRACE(DEBUG, delegatedPort->getOwner().get() << ": " << delegatedPort->getOwner()->getPortByName("args")->getConnectedPortsNumber());
+                        
 			if (node->getParameters()->getNodeType() == type_node::SERVICE_SIGNATURE) {
 				ptr(ast_servicesignature) sign = cast(ast_servicesignature)(node->getParameters());
 				std::vector<ptr(mem_port)> connectedPorts;
@@ -215,6 +219,7 @@ namespace interpreter {
 				throw exceptions::runtime::CWrongServiceInvocationParameterTypeException(node->getParameters()->getNodeType());
 			}
 
+                        //TRACE(DEBUG, delegatedPort.get() << ": " << delegatedPort->getOwner()->getPortByName("args")->getConnectedPortsNumber());
 			std::string caller = m_serviceContextStack.top()->getServiceName();
 			ptr(mem_port) ret = port->invokeByName(caller, receiver, selector, index);
 
