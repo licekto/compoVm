@@ -23,6 +23,8 @@ namespace interpreter {
                     std::map<std::string,portVariable> m_ports;
                     
                     ptr(mem_component) m_contextComponent;
+                    
+                    std::string m_serviceName;
                 
                 public:
                     void pushContext(ptr(ast_compound) node);
@@ -50,6 +52,10 @@ namespace interpreter {
                     void setContextComponent(ptr(mem_component) component);
                     
                     ptr(mem_component) getContextComponent();
+                    
+                    void setServiceName(const std::string& name);
+                    
+                    std::string getServiceName() const;
                     
                     void clear();
 		};

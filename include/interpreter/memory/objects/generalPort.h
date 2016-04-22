@@ -78,7 +78,7 @@ namespace interpreter {
                                 
                                 ptr(CGeneralService) getPrimitiveServiceAt(size_t index);
                                 
-                                ptr(CGeneralPort) invokeByName(const std::string& selector, u64 index = 0);
+                                ptr(CGeneralPort) invokeByName(const std::string& caller, const std::string& receiver, const std::string& selector, u64 index = 0);
                                 
                                 void delegateTo(ptr(CGeneralPort) port);
                                 

@@ -7,9 +7,10 @@ namespace interpreter {
 
 		namespace objects {
 
-			CGeneralService::CGeneralService(ptr(CComponent) service)
+			CGeneralService::CGeneralService(ptr(CComponent) service, ptr(CGeneralService) specialized)
 				: m_service(wptr(CComponent)(service)),
-				  m_primitive(false) {
+				  m_primitive(false),
+                                  m_specialized(specialized) {
 			}
 
 			CGeneralService::CGeneralService(ptr(primitives::CPrimitiveService) primitiveService)
@@ -52,7 +53,11 @@ namespace interpreter {
                                     throw exceptions::runtime::CPrimitiveServiceNoPortException();
                                 }
 				return m_service.lock()->getPortByName("default");
-			}
+                        }
+
+                        ptr(CGeneralService) CGeneralService::getSpecialized() {
+                            return m_specialized;
+                        }
 
 		}
 	}

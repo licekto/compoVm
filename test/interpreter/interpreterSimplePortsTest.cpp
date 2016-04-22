@@ -112,7 +112,7 @@ BOOST_AUTO_TEST_CASE(basicInstantiationTest) {
     TEST_PORT_COMPONENT(inst->getPortByName("b")->getPort(), "b", 0);
     TEST_PORT_COMPONENT(inst->getPortByName("c")->getPort(), "c", 0);
     TEST_PORT_COMPONENT(inst->getPortByName("d")->getPort(), "d", 0);
-    ptr(mem_port) port = inst->getPortByName("d")->invokeByName("test");
+    ptr(mem_port) port = inst->getPortByName("d")->invokeByName("", "", "test");
     BOOST_CHECK_EQUAL(cast(mem_int)(port->getOwner())->getValue(), 1);
     
     // Clear AST for next test

@@ -401,6 +401,8 @@ namespace interpreter {
                                                     }
                                                 }
                                                 
+                                                std::string serviceName = cast(mem_string)(sign->getPortByName("selector")->getConnectedPortAt(0)->getOwner())->getValue();
+                                                context->setServiceName(serviceName);
 						ptr(mem_port) retPort = m_interpreter.lock()->execServiceCode(code->getValue(), context);
                                                 
                                                 context->connectPorts();

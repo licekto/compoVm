@@ -58,7 +58,7 @@ namespace interpreter {
                                 
                                 wptr(mem_service) newComponentService(ptr(mem_component) owner, ptr(ast_service) service);
                                 
-                                wptr(mem_service) newComponentService(ptr(mem_component) service);
+                                wptr(mem_service) newComponentService(ptr(mem_component) service, ptr(mem_service) specialized = nullptr);
                                 
                                 size_t getComponentsNumber() const;
 			};

@@ -191,7 +191,6 @@ namespace interpreter {
                     catch (const exceptions::runtime::CVariableNotFoundException& ex) {
                         port = m_descriptorTable->getDescriptor(receiver)->getPortByName("default");
                     }
-                    
                     ptr(mem_port) delegatedPort = port->getOwner()->getPortByName("args");
                     while (delegatedPort->getDelegatedPort().use_count()) {
                         delegatedPort = delegatedPort->getDelegatedPort();
@@ -207,35 +206,7 @@ namespace interpreter {
                         ptr(ast_servicesignature) sign = cast(ast_servicesignature)(node->getParameters());
                         std::vector<ptr(mem_port)> connectedPorts;
                         for (size_t i = 0; i < sign->getParamsSize(); ++i) {
-                            type_node t = sign->getParamAt(i)->getNodeType();
-                            ptr(mem_port) connectedPort;
-                            switch(t) {
-                                case type_node::SYMBOL : {
-                                    connectedPort = m_serviceContextStack.top()->getVariable(cast(ast_symbol)(sign->getParamAt(i))->getStringValue());
-                                    break;
-                                }
-                                case type_node::STRING_LITERAL : {
-                                    connectedPort = m_bootstrap->getStringComponent(cast(ast_string)(sign->getParamAt(i))->getValue());
-                                    break;
-                                }
-                                case type_node::CONSTANT : {
-                                    connectedPort = m_bootstrap->getIntComponent(cast(ast_constant)(sign->getParamAt(i))->getValue());
-                                    break;
-                                }
-                                case type_node::BOOLEAN : {
-                                    connectedPort = m_bootstrap->getBoolComponent(cast(ast_boolean)(sign->getParamAt(i))->getValue());
-                                    break;
-                                }
-                                case type_node::SERVICE_INVOCATION : {
-                                    connectedPort = exec(sign->getParamAt(i));
-                                    break;
-                                }
-                                default : {
-                                    throw exceptions::runtime::CWrongServiceInvocationParameterTypeException(t);
-                                }
-                            }
-                            connectedPorts.push_back(connectedPort);
-                            //port->getOwner()->getPortByName("args")->connectPort(connectedPort);
+                            connectedPorts.push_back(exec(sign->getParamAt(i)));
                         }
                         for (size_t i = 0; i < connectedPorts.size(); ++i) {
                             port->getOwner()->getPortByName("args")->connectPort(connectedPorts.at(i));
@@ -248,7 +219,8 @@ namespace interpreter {
                         throw exceptions::runtime::CWrongServiceInvocationParameterTypeException(node->getParameters()->getNodeType());
                     }
                     
-                    ptr(mem_port) ret = port->invokeByName(selector, index);
+                    std::string caller = m_serviceContextStack.top()->getServiceName();
+                    ptr(mem_port) ret = port->invokeByName(caller, receiver, selector, index);
                     
                     for (size_t i = 0; i < port->getOwner()->getPortByName("args")->getConnectedPortsNumber(); ++i) {
                         port->getOwner()->getPortByName("args")->disconnectPortAt(i);
@@ -495,7 +467,7 @@ namespace interpreter {
 		ptr(mem_port) CInterpreter::run(ptr(ast_program) ast) {
                         boot();
 			return exec(ast);
-		}
+                }
 
 	}
 

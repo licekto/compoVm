@@ -20,9 +20,11 @@ namespace interpreter {
 				wptr(primitives::CPrimitiveService) m_primitiveService;
 
 				bool m_primitive;
+                                
+                                ptr(CGeneralService) m_specialized;
 
 			  public:
-				CGeneralService(ptr(CComponent) service = nullptr);
+				CGeneralService(ptr(CComponent) service = nullptr, ptr(CGeneralService) specialized = nullptr);
 
 				CGeneralService(ptr(primitives::CPrimitiveService) primitiveService = nullptr);
 
@@ -37,6 +39,8 @@ namespace interpreter {
 				ptr(objects::CGeneralPort) invoke();
 
 				ptr(objects::CGeneralPort) getDefaultPort();
+                                
+                                ptr(CGeneralService) getSpecialized();
 			};
 		}
 	}

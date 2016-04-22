@@ -1,4 +1,5 @@
 #include "interpreter/memory/objects/generalPort.h"
+#include "interpreter/memory/objects/component.h"
 #include "interpreter/memory/objects/primitives/primitivePort.h"
 #include "interpreter/memory/objects/values/stringComponent.h"
 #include "interpreter/memory/objects/values/boolComponent.h"
@@ -140,13 +141,12 @@ namespace interpreter {
                                 return m_connectedPrimitiveServices.at(index).lock();
                         }
 
-                        ptr(CGeneralPort) CGeneralPort::invokeByName(const std::string& selector, u64 index) {
+                        ptr(CGeneralPort) CGeneralPort::invokeByName(const std::string& caller, const std::string& receiver, const std::string& selector, u64 index) {
                             if (m_primitive) {
                                 return m_primitivePort.lock()->getConnectedServiceByName(selector)->invoke();
                             }
                             else {
                                 ptr(CGeneralPort) port = this->shared_from_this();
-                                
                                 while (!port->getOwner()->containsService(selector)) {
                                     port = port->getDelegatedPort();
                                     if (!port.use_count()) {
@@ -161,7 +161,6 @@ namespace interpreter {
                                 if (!port->getOwner()->getServiceByName(selector)->isPrimitive()) {
                                     port->getOwner()->getServiceByName(selector)->getService()->getPortByName("args")->delegateTo(getOwner()->getPortByName("args"));
                                 }
-                                
                                 if (type == PORT_TYPE_SIGNATURES) {
                                     bool found = false;
                                     std::string definedSelector = "";
@@ -178,13 +177,21 @@ namespace interpreter {
                                     if (!found) {
                                         throw exceptions::runtime::CServiceNotFoundException(selector);
                                     }
-                                    return port->getOwner()->getServiceByName(selector)->invoke();
+                                    ptr(CGeneralService) callee = port->getOwner()->lookupService(selector);
+                                    return callee->invoke();
                                 }
                                 else if (type == PORT_TYPE_UNIVERSAL) {
-                                    return port->getOwner()->getServiceByName(selector)->invoke();
+                                    ptr(CGeneralService) callee = port->getOwner()->lookupService(selector);
+                                    if (receiver == "super" && selector == caller) {
+                                        callee = callee->getSpecialized();
+                                    }
+                                    return callee->invoke();
                                 }
                                 else if (type == PORT_TYPE_NAMED) {
-                                    return port->getPort()->getPortByName("connectedPorts")->getConnectedPortAt(index)->getOwner()->getServiceByName(selector)->invoke();
+                                    if (receiver == "super" && selector == caller) {
+                                        // throw
+                                    }
+                                    return port->getPort()->getPortByName("connectedPorts")->getConnectedPortAt(index)->getOwner()->lookupService(selector)->invoke();
                                 }
                                 else if (type == PORT_TYPE_INJECTED) {
                                     throw exceptions::semantic::CUnsupportedFeatureException("injected port");

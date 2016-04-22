@@ -88,6 +88,8 @@ namespace interpreter {
                                 ptr(CGeneralPort) getSelfPortAt(size_t index);
                                 
                                 std::map<std::string, ptr(CGeneralPort)> getAllPorts();
+                                
+                                ptr(CGeneralService) lookupService(const std::string& name);
 			};
 
 		}

@@ -98,6 +98,14 @@ namespace interpreter {
                 return m_contextComponent;
             }
 
+            void CContext::setServiceName(const std::string& name) {
+                m_serviceName = name;
+            }
+
+            std::string CContext::getServiceName() const {
+                return m_serviceName;
+            }
+
             void CContext::clear() {
                 m_stack.clear();
             }

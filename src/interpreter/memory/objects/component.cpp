@@ -288,6 +288,10 @@ namespace interpreter {
                                 return portsMap;
                         }
 
+                        ptr(CGeneralService) CComponent::lookupService(const std::string& name) {
+                            return getBottomChild()->getServiceByName(name);
+                        }
+
 		}
 	}
 }

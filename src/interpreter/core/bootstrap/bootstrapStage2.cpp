@@ -140,10 +140,10 @@ namespace interpreter {
                         }
 
                         ptr(mem_component) CBootstrapStage2::bootstrapPrologue(const std::string& coreDescriptorName) {
-                                ptr(mem_component) parentComponent = bootstrapRootComponent(nullptr);
 				ptr(mem_component) component = m_bootstrapStage1->m_memory->newComponent().lock();
 				ptr(ast_descriptor) coreDescriptor = m_bootstrapStage1->m_coreModules->getCoreDescriptor(coreDescriptorName);
                                 
+                                ptr(mem_component) parentComponent = bootstrapRootComponent(nullptr);
 				component->setParent(parentComponent);
 				parentComponent->setChild(component);
 
@@ -241,7 +241,15 @@ namespace interpreter {
 				std::function<ptr(mem_port)(const ptr(mem_component)&)> callback = [this](const ptr(mem_component)& context) -> ptr(mem_port) {
 					ptr(mem_component) newComponent = m_bootstrapStage1->m_memory->newComponent().lock();
 
-					ptr(mem_component) parent = bootstrapRootComponent(nullptr);
+                                        std::string parentName = cast(mem_string)(context->getPortByName("parentName")->getConnectedPortAt(0)->getOwner())->getValue();
+                                        
+                                        ptr(mem_component) parent;
+                                        if (parentName == "Component") {
+                                            parent = bootstrapRootComponent(nullptr);
+                                        }
+                                        else {
+                                            parent = m_bootstrapStage1->m_interpreter.lock()->execService(parentName, "new")->getOwner()->getBottomChild();
+                                        }
 					newComponent->setParent(parent);
 					parent->setChild(newComponent);
 
@@ -249,7 +257,15 @@ namespace interpreter {
 
                                         for (size_t i = 0; i < context->getPortByName("services")->getConnectedPortsNumber(); ++i) {
                                                 ptr(mem_component) newService = cloneService(context->getPortByName("services")->getConnectedPortAt(i)->getOwner()->getBottomChild(), newComponent);
-                                                newComponent->addService(m_bootstrapStage1->m_memory->newComponentService(newService).lock());
+                                                std::string serviceName =
+                                                        cast(mem_string)(newService->getPortByName("serviceSign")->getConnectedPortAt(0)->getOwner()
+                                                                  ->getPortByName("selector")->getConnectedPortAt(0)->getOwner())->getValue();
+                                                
+                                                ptr(mem_service) specialized;
+                                                if (newComponent->containsService(serviceName)) {
+                                                    specialized = newComponent->getServiceByName(serviceName);
+                                                }
+                                                newComponent->addService(m_bootstrapStage1->m_memory->newComponentService(newService, specialized).lock());
                                         }
 
 					for (size_t i = 0; i < context->getPortByName("ports")->getConnectedPortsNumber(); ++i) {

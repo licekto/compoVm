@@ -620,7 +620,7 @@ service_runtime_params
                 ;
 
 parameter_runtime   
-                :   primary_expression
+                :   logical_or_expression
                     {
                         parser->addServiceParam($1);
                     }

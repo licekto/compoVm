@@ -89,8 +89,8 @@ namespace interpreter {
                         return wptr(mem_service)(service);
                     }
 
-                    wptr(mem_service) CMemory::newComponentService(ptr(mem_component) service) {
-                        ptr(mem_service) newService = new_ptr(mem_service)(service);
+                    wptr(mem_service) CMemory::newComponentService(ptr(mem_component) service, ptr(mem_service) specialized) {
+                        ptr(mem_service) newService = new_ptr(mem_service)(service, specialized);
                         m_servicesMemory.push_back(newService);
                         
                         return wptr(mem_service)(newService);
