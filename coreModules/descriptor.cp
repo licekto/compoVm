@@ -37,7 +37,7 @@ descriptor Descriptor extends Component {
     service newNamed(name, superDesc) {}
 
     service addService(serviceComponent) {
-        connect default@serviceComponent to services;
+        services := serviceComponent;
     }
 
     service removeService(selector, arity) {}

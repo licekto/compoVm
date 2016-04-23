@@ -149,24 +149,25 @@ BOOST_AUTO_TEST_CASE(descriptorNameTest) {
     table->clear();
 }
 
-BOOST_AUTO_TEST_CASE(NameTest) {
+BOOST_AUTO_TEST_CASE(serviceAdditionTest) {
     // Testing input
     std::stringstream input;
     input.str(
-   "descriptor A extends Z {\
+   "descriptor A {\
     }\
     descriptor CompoContainer {\
         service main() {\
-            |a desc srv|\
+            |a b desc srv|\
             a := A.new();\
             desc := a.getDescriptor();\
             srv := Service.new();\
-            srv := srv.setName(\"test\");\
-            srv := srv.setParam(\"param1\");\
-            srv := srv.setParam(\"param2\");\
-            srv := srv.setCode(\"return param1 + param2;\");\
+            srv.setName(\"test\");\
+            srv.addParam(\"param1\");\
+            srv.addParam(\"param2\");\
+            srv.setCode(\"{ return param1 + param2; }\");\
             desc.addService(srv);\
-            return a;\
+            b := A.new();\
+            return b.test(1, 2);\
         }\
     }");
     
@@ -174,8 +175,8 @@ BOOST_AUTO_TEST_CASE(NameTest) {
     parser->parseAll(input);
     
     ptr(ast_program) program = parser->getRootNode();
-    //ptr(mem_component) component = interpreter->run(program)->getOwner();
-    //BOOST_CHECK_EQUAL(cast(mem_string)(component)->getValue(), "B C Z Y");
+    ptr(mem_component) component = interpreter->run(program)->getOwner();
+    BOOST_CHECK_EQUAL(cast(mem_int)(component)->getValue(), 3);
     
     // Clear AST for next test
     parser->clearAll();

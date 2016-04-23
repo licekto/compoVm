@@ -220,8 +220,22 @@ namespace interpreter {
 				return newComponent;
                         }
 
-                        ptr(mem_component) CBootstrapStage2::bootstrapServiceComponent() {
-                            
+                        ptr(mem_component) CBootstrapStage2::bootstrapServiceDescriptorComponent() {
+                                ptr(mem_component) component = bootstrapDescriptorComponent(m_bootstrapStage1->m_coreModules->getCoreDescriptor("Service"));
+                                
+                                component->getPortByName("name")->disconnectAll();
+                                component->getPortByName("parentName")->disconnectAll();
+                                
+                                component->getPortByName("name")->connectPort(m_bootstrapStage1->bootstrapStringValue("Service")->getDefaultPort());
+				component->getPortByName("parentName")->connectPort(m_bootstrapStage1->bootstrapStringValue("Component")->getDefaultPort());
+                                
+                                component->removeServiceByName("new");
+                                std::function<ptr(mem_port)(const ptr(mem_component)&)> callback = [this, component](const ptr(mem_component)& /*context*/) -> ptr(mem_port) {
+                                    return m_bootstrapStage1->m_memory->newEmptyServiceComponent().lock()->getPortByName("default");
+                                };
+                                component->addService(m_bootstrapStage1->m_memory->newPrimitiveService(component, "new", callback).lock());
+                                
+                                return component;
                         }
 
 			ptr(mem_component) CBootstrapStage2::bootstrapDescriptorComponent(ptr(ast_descriptor) descriptor) {

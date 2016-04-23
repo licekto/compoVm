@@ -94,7 +94,14 @@ namespace interpreter {
 				m_servicesMemory.push_back(newService);
 
 				return wptr(mem_service)(newService);
-			}
+                        }
+
+                        wptr(mem_component) CMemory::newEmptyServiceComponent() {
+                                ptr(mem_component) newService = m_bootstrap1.lock()->bootstrapServiceComponent(nullptr);
+                                m_componentsMemory.push_back(newService);
+                                
+                                return wptr(mem_component)(newService);
+                        }
 
 			size_t CMemory::getComponentsNumber() const {
 				return m_componentsMemory.size();
