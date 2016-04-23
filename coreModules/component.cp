@@ -11,10 +11,12 @@ descriptor Component {
         super : * ofKind SuperPort;
         self : * ofKind SelfPort;
     }
-
     service getPorts() {}
-    service getPortNamed(name) {}
-    service getDescriptor() {}
+    service getPortNamed(newName) {
+    }
+    service getDescriptor() {
+        return descriptorPort;
+    }
     service getOwner() {
         return owner;
     }

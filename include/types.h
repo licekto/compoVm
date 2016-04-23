@@ -67,7 +67,8 @@ namespace types {
 		COMPOUND_BODY,
 		RETURN,
 		BREAK,
-		CONTINUE
+		CONTINUE,
+                SIZEOF
 	};
 
 	/**

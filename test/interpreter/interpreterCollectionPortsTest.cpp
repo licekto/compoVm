@@ -126,6 +126,45 @@ BOOST_AUTO_TEST_CASE(collectionPortBasicTest) {
     table->clear();
 }
 
+BOOST_AUTO_TEST_CASE(sizeofTest) {
+    // Testing input
+    std::stringstream input;
+    input.str(
+   "descriptor B {\
+    }\
+    descriptor A {\
+        externally requires {\
+            comp[] : B;\
+        }\
+        service connectedNumber() {\
+            return sizeof(comp);\
+        }\
+    }\
+    descriptor CompoContainer {\
+        service main() {\
+            |a b1 b2 b3 i res|\
+            a := A.new();\
+            connect comp@a to default@(B.new());\
+            connect comp@a to default@(B.new());\
+            connect comp@a to default@(B.new());\
+            connect comp@a to default@(B.new());\
+            return a.connectedNumber();\
+        }\
+    }");
+    
+    // Parse input and create AST
+    parser->parseAll(input);
+    
+    ptr(ast_program) program = parser->getRootNode();
+
+    ptr(mem_int) component = cast(mem_int)(interpreter->run(program)->getOwner());
+    BOOST_CHECK_EQUAL(component->getValue(), 4);
+    
+    // Clear AST for next test
+    parser->clearAll();
+    table->clear();
+}
+
 BOOST_AUTO_TEST_CASE(collectionPortTest) {
     // Testing input
     std::stringstream input;

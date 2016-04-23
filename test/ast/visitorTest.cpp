@@ -38,6 +38,7 @@ class testVisitor : public ast::visitors::CAbstractVisitor, public std::enable_s
         virtual void visit(ptr(ast_serviceinvocation)  /* node */) {nodes += " CServiceInvocation";}
         virtual void visit(ptr(ast_servicesignature)  /* node */) {nodes += " CServiceSignature";}
         virtual void visit(ptr(ast_signaturesport)  /* node */) {nodes += " CSignaturesPort";}
+        virtual void visit(ptr(ast_sizeof)  /* node */) {nodes += " CSizeof";}
         virtual void visit(ptr(ast_universalport)  /* node */) {nodes += " CUniversalPort";}
 
         virtual void visit(ptr(ast_expression)  /* node */) {nodes += " CAbstractExpression";}

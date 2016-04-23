@@ -118,6 +118,8 @@ Identifier                  [a-zA-Z][a-zA-Z_0-9]*
 
 <INITIAL>continue                       {return CONTINUE;}
 
+<INITIAL>sizeof                         {return SIZEOF;}
+
 <INITIAL>true				{
                                             yylval = new_ptr(ast_boolean)(true);
                                             return TRUE;

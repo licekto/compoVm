@@ -232,7 +232,7 @@ namespace interpreter {
 
 				component->removeServiceByName("new");
 
-				std::function<ptr(mem_port)(const ptr(mem_component)&)> callback = [this](const ptr(mem_component)& context) -> ptr(mem_port) {
+				std::function<ptr(mem_port)(const ptr(mem_component)&)> callback = [this, component](const ptr(mem_component)& context) -> ptr(mem_port) {
 					ptr(mem_component) newComponent = m_bootstrapStage1->m_memory->newComponent().lock();
 
 					std::string parentName = cast(mem_string)(context->getPortByName("parentName")->getConnectedPortAt(0)->getOwner())->getValue();
@@ -246,7 +246,7 @@ namespace interpreter {
 					newComponent->setParent(parent);
 					parent->setChild(newComponent);
 
-					newComponent->getPortByName("descriptorPort")->connectPort(context->getPortByName("default"));
+					newComponent->getPortByName("descriptorPort")->connectPort(component->getPortByName("default"));
 
 					for (size_t i = 0; i < context->getPortByName("services")->getConnectedPortsNumber(); ++i) {
 						ptr(mem_component) newService = cloneService(context->getPortByName("services")->getConnectedPortAt(i)->getOwner()->getBottomChild(), newComponent);

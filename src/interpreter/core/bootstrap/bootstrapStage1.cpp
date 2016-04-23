@@ -126,11 +126,8 @@ namespace interpreter {
 					return nullptr;
 				};
 				servicesNames["getPortNamed"] = [](const ptr(mem_component)& context) -> ptr(mem_port) {
-					ptr(mem_string) name =
-					    cast(mem_string)(context->getPortByName("args")->getConnectedPortAt(0)->getOwner());
-
+					ptr(mem_string) name = cast(mem_string)(context->getPortByName("args")->getConnectedPortAt(0)->getOwner());
 					context->getPortByName("args")->disconnectPortAt(0);
-
 					return context->getPortByName(name->getValue());
 				};
 				servicesNames["getDescriptor"] = [](const ptr(mem_component)& context) -> ptr(mem_port) {

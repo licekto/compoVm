@@ -60,7 +60,7 @@ BOOST_AUTO_TEST_CASE(basicTest) {
     
     ptr(mem_component) descriptorComponent = bootstrap2->bootstrapDescriptorComponent(descriptorAst);
     
-    TEST_BASE_COMPONENT_COMPONENT(descriptorComponent);
+    TEST_BASE_COMPONENT_COMPONENT(descriptorComponent, false);
     
     TEST_DESCRIPTOR_COMPONENT(descriptorComponent, "HTTPServer", "", 3, 1, 0);
     
@@ -68,7 +68,7 @@ BOOST_AUTO_TEST_CASE(basicTest) {
     
     ptr(mem_component) newComponent = port->getOwner();
     
-    TEST_BASE_COMPONENT_COMPONENT(newComponent);
+    TEST_BASE_COMPONENT_COMPONENT(newComponent, true);
     TEST_PORT_COMPONENT(newComponent->getPortByName("req")->getPort(), "req", 0);
     TEST_PORT_COMPONENT(newComponent->getPortByName("fE")->getPort(), "fE", 0);
     TEST_PORT_COMPONENT(newComponent->getPortByName("bE")->getPort(), "bE", 0);

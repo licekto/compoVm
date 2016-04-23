@@ -60,6 +60,7 @@
 %token BREAK
 %token CONTINUE
 %token END
+%token SIZEOF
 
 %%
 
@@ -112,6 +113,10 @@ primary_expression
                 |   delegation
                     {
                         $$ = $1;
+                    }
+                |   SIZEOF '(' IDENTIFIER ')'
+                    {
+                        $$ = new_ptr(ast_sizeof)(cast(ast_symbol)($3));
                     }
                 ;
 

@@ -22,6 +22,7 @@
 #include "ast/nodes/compo/serviceSignature.h"
 #include "ast/nodes/compo/signaturesPort.h"
 #include "ast/nodes/compo/universalPort.h"
+#include "ast/nodes/compo/sizeof.h"
 
 using ast_node = ast::nodes::CNode;
 using ast_program = ast::nodes::CProgram;
@@ -46,3 +47,4 @@ using ast_serviceinvocation = ast::nodes::compo::CServiceInvocation;
 using ast_servicesignature = ast::nodes::compo::CServiceSignature;
 using ast_signaturesport = ast::nodes::compo::CSignaturesPort;
 using ast_universalport = ast::nodes::compo::CUniversalPort;
+using ast_sizeof = ast::nodes::compo::CSizeof;

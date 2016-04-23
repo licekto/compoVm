@@ -7,25 +7,50 @@ descriptor Descriptor extends Component {
         services[] : Service;
     }
     
-    service getName() {}
-    service setName(name) {}
+    service getName() {
+        return name;
+    }
+    service setName(newName) {
+        name := newName;
+    }
 
-    service getParentName() {}
-    service setParentName(parentName) {}
+    service getParentName() {
+        return parentName;
+    }
 
-    service getDescribedPorts() {}
-    service getDescribedConns() {}
-    service getService(selector) {}
+    service setParentName(newParentName) {
+        parentName := newParentName;
+    }
+
+    service getDescribedPorts() {
+        return ports;
+    }
+
+    service getDescribedConns() {
+        return architectureDefinition;
+    }
+
+    service getService(selector) {
+    }
 
     service new() {}
     service newNamed(name, superDesc) {}
 
-    service addService(serviceComponent) {}
+    service addService(serviceComponent) {
+        connect default@serviceComponent to services;
+    }
+
     service removeService(selector, arity) {}
 
-    service addPortDescription(pd) {}
+    service addPortDescription(pd) {
+        connect default@pd to ports;
+    }
+
     service removePortDescription(pd) {}
 
-    service addConnDescription(cd) {}
+    service addConnDescription(cd) {
+        connect default@cd to architectureDefinition;
+    }
+
     service removeConnDescription(cd) {}
 }

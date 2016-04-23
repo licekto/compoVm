@@ -57,6 +57,7 @@ namespace ast {
 			virtual void visit(ptr(ast_serviceinvocation) node);
 			virtual void visit(ptr(ast_servicesignature) node);
 			virtual void visit(ptr(ast_signaturesport) node);
+                        virtual void visit(ptr(ast_sizeof) node);
 			virtual void visit(ptr(ast_universalport) node);
 
 			virtual void visit(ptr(ast_expression) node);

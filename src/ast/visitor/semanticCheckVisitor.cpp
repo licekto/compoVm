@@ -257,6 +257,11 @@ namespace ast {
 			}
 		}
 
+                void CSemanticCheckVisitor::visit(ptr(ast_sizeof) node) {
+			checkNodeType(node, type_node::SIZEOF);
+                        node->getParamName()->accept(shared_from_this());
+		}
+                
 		void CSemanticCheckVisitor::visit(ptr(ast_universalport) node) {
 			checkNodeType(node, type_node::UNIVERSAL_PORT);
 

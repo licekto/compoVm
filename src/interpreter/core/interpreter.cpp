@@ -274,7 +274,13 @@ namespace interpreter {
 
 			srcPort->disconnectPortAt(0);
 			dstPort->disconnectPortAt(0);
-		}
+                }
+
+                ptr(mem_port) CInterpreter::execSizeof(ptr(ast_sizeof) node) {
+                    std::string portName = node->getParamName()->getStringValue();
+                    i64 value = m_serviceContextStack.top()->getContextComponent()->getPortByName(portName)->getConnectedPortsNumber();
+                    return m_bootstrap->getIntComponent(value);
+                }
 
 		void CInterpreter::checkBindAddresses(ptr(mem_port) srcPort, ptr(mem_port) dstPort) {
 			bool def = srcPort->getName() != "default" && dstPort->getName() != "default";
@@ -342,6 +348,9 @@ namespace interpreter {
 			case type_node::DISCONNECTION : {
 				execDisconnection(cast(ast_disconnection)(node));
 				break;
+			}
+                        case type_node::SIZEOF : {
+				return execSizeof(cast(ast_sizeof)(node));
 			}
 			/*------------------ Procedural ----------------------*/
 			case type_node::FOR : {

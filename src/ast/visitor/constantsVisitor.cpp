@@ -110,6 +110,10 @@ namespace ast {
 			}
 		}
 
+                void CConstantsVisitor::visit(ptr(ast_sizeof) node) {
+                        node->getParamName()->accept(this->shared_from_this());
+		}
+                
 		void CConstantsVisitor::visit(ptr(ast_signaturesport) /*node*/) {
 			TRACE(ERROR, "Signatures port does not contain any constant.");
 		}

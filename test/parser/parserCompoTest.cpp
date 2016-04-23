@@ -547,6 +547,30 @@ BOOST_AUTO_TEST_CASE(compoCollectionPort) {
     parser.clearAll();
 }
 
+BOOST_AUTO_TEST_CASE(sizeofPort) {
+    // Testing input
+    std::stringstream input;
+    input.str(
+    "descriptor Test {\
+        service testService() {\
+            sizeof(a);\
+        }\
+    }");
+    
+    // Parse input and create AST
+    parser.parseAll(input);
+    
+    // Check interface
+    ptr(ast_descriptor) descriptor = cast(ast_descriptor)(parser.getRootNode()->getNodeAt(0));
+    TEST_DESCRIPTOR(descriptor, "Test", "", 0, 1, 0);
+    
+    ptr(ast_sizeof) sizeOf = cast(ast_sizeof)(descriptor->getServiceAt(0)->getBodyNodeAt(0));
+    BOOST_CHECK_EQUAL(cast(ast_symbol)(sizeOf->getParamName())->getStringValue(), "a");
+    
+    // Clear AST for next test
+    parser.clearAll();
+}
+
 BOOST_AUTO_TEST_CASE(compoMultiple) {
     // Testing input
     std::stringstream input;

@@ -20,8 +20,15 @@ namespace interpreter {
 
 			size_t CComponent::getNumberOfPorts() const {
 				size_t cnt = m_ports.size();
-				if (m_parent.use_count()) {
-					cnt += m_parent.lock()->getNumberOfPorts();
+                                ptr(CComponent) tmp = m_parent.lock();
+				while (tmp.use_count()) {
+					cnt += tmp->m_ports.size();
+                                        tmp = tmp->m_parent.lock();
+				}
+                                tmp = m_child.lock();
+				while (tmp.use_count()) {
+					cnt += tmp->m_ports.size();
+                                        tmp = tmp->m_child.lock();
 				}
 				return cnt;
 			}
@@ -70,7 +77,18 @@ namespace interpreter {
 			}
 
 			size_t CComponent::getNumberOfAllServices() const {
-				return getNumberOfSelfServices() + getNumberOfInheritedServices();
+                                size_t cnt = m_services.size();
+                                ptr(CComponent) tmp = m_parent.lock();
+				while (tmp.use_count()) {
+					cnt += tmp->m_services.size();
+                                        tmp = tmp->m_parent.lock();
+				}
+                                tmp = m_child.lock();
+				while (tmp.use_count()) {
+					cnt += tmp->m_services.size();
+                                        tmp = tmp->m_child.lock();
+				}
+				return cnt;
 			}
 
 			void CComponent::connectAllSelfServicesTo(ptr(CGeneralPort) port) {
