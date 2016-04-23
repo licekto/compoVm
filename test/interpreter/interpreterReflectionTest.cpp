@@ -112,11 +112,13 @@ BOOST_AUTO_TEST_CASE(portNameTest) {
     table->clear();
 }
 
-BOOST_AUTO_TEST_CASE(descriptorTest) {
+BOOST_AUTO_TEST_CASE(descriptorNameTest) {
     // Testing input
     std::stringstream input;
     input.str(
-   "descriptor A {\
+   "descriptor Z {\
+    }\
+    descriptor A extends Z {\
         internally requires {\
             name : String;\
         }\
@@ -143,7 +145,9 @@ BOOST_AUTO_TEST_CASE(descriptorTest) {
             b := B.new();\
             desc := b.getDescriptor();\
             desc.setName(\"C\");\
-            res := desc.getName();\
+            res := res + \" \" + desc.getName() + \" \" + desc.getParentName();\
+            desc.setParentName(\"Y\");\
+            res := res + \" \" + desc.getParentName();\
             return res;\
         }\
     }");
@@ -153,7 +157,7 @@ BOOST_AUTO_TEST_CASE(descriptorTest) {
     
     ptr(ast_program) program = parser->getRootNode();
     ptr(mem_component) component = interpreter->run(program)->getOwner();
-    BOOST_CHECK_EQUAL(cast(mem_string)(component)->getValue(), "C");
+    BOOST_CHECK_EQUAL(cast(mem_string)(component)->getValue(), "B C Z Y");
     
     // Clear AST for next test
     parser->clearAll();

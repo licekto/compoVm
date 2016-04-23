@@ -222,7 +222,7 @@ namespace interpreter {
 
 			ptr(mem_component) CBootstrapStage2::bootstrapDescriptorComponent(ptr(ast_descriptor) descriptor) {
 				ptr(mem_component) component = bootstrapPrologue("Descriptor");
-
+                                
 				component->getPortByName("name")->connectPort(m_bootstrapStage1->bootstrapStringValue(descriptor->getNameSymbol()->getStringValue())->getDefaultPort());
 				if (descriptor->getExtendsSymbol().use_count()) {
 					component->getPortByName("parentName")->connectPort(m_bootstrapStage1->bootstrapStringValue(descriptor->getExtendsSymbol()->getStringValue())->getDefaultPort());
@@ -262,6 +262,7 @@ namespace interpreter {
 					newComponent->setParent(parent);
 					parent->setChild(newComponent);
 
+                                        newComponent->getPortByName("descriptorPort")->disconnectAll();
 					newComponent->getPortByName("descriptorPort")->connectPort(component->getPortByName("default"));
 
 					for (size_t i = 0; i < context->getPortByName("services")->getConnectedPortsNumber(); ++i) {
