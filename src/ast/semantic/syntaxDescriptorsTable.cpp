@@ -4,7 +4,7 @@ namespace ast {
 
 	namespace semantic {
 
-		bool CSyntaxDescriptorTable::symbolFound(std::string name) const {
+		bool CSyntaxDescriptorTable::symbolFound(const std::string& name) const {
 			return m_descriptorMap.find(name) != m_descriptorMap.end();
 		}
 
@@ -12,7 +12,7 @@ namespace ast {
 			m_descriptorMap[node->getNameSymbol()->getStringValue()] = node;
 		}
 
-		ptr(ast_descriptorinterface) CSyntaxDescriptorTable::getSymbol(std::string name) {
+		ptr(ast_descriptorinterface) CSyntaxDescriptorTable::getSymbol(const std::string& name) {
 			if (!symbolFound(name)) {
 				return nullptr;
 			}

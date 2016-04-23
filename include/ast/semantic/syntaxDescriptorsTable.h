@@ -31,11 +31,11 @@ namespace ast {
 
 		  public:
 
-			bool symbolFound(std::string name) const;
+			bool symbolFound(const std::string& name) const;
 
 			void addSymbol(ptr(ast_descriptorinterface) node);
 
-			ptr(ast_descriptorinterface) getSymbol(std::string name);
+			ptr(ast_descriptorinterface) getSymbol(const std::string& name);
 
 			void clear();
 		};

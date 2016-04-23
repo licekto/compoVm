@@ -12,7 +12,7 @@ ParserWrapper::~ParserWrapper() {
 	this->clearRootNodes();
 }
 
-int ParserWrapper::parse(std::string code) {
+int ParserWrapper::parse(const std::string& code) {
 	std::stringstream input;
 	input.str(code);
 

@@ -1,5 +1,6 @@
 #include "interpreter/core/context.h"
 #include "exceptions/runtime/variableNotFoundException.h"
+#include "exceptions/runtime/variableRedefinitionException.h"
 
 namespace interpreter {
 

@@ -142,9 +142,8 @@ namespace interpreter {
 					}
 					return nullptr;
 				};
-				servicesNames["getIdentityHash"] = [](const ptr(mem_component)& /*context*/) -> ptr(mem_port) {
-					//return new_ptr(memory::objects::CUnsignedIntComponent)(std::hash<mem_component>()(context.get()));
-					return 0;
+				servicesNames["getIdentityHash"] = [this](const ptr(mem_component)& context) -> ptr(mem_port) {
+                                        return bootstrapIntValue(context->getHash())->getDefaultPort();
 				};
 
 				bootstrapEpilogue(component, servicesNames);

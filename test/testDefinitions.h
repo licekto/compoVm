@@ -165,7 +165,7 @@ do { \
     TEST_PRIMITIVE_SERVICE(component, "default", "getPortNamed", true, _retPort_); \
     BOOST_CHECK_EQUAL(component->getPortByName("args")->getConnectedPortsNumber(), 0); \
     TEST_PRIMITIVE_SERVICE(component, "default", "getDescriptor", false, _retPort_); \
-    TEST_PRIMITIVE_SERVICE(component, "default", "getIdentityHash", false, _retPort_); \
+    TEST_PRIMITIVE_SERVICE(component, "default", "getIdentityHash", true, _retPort_); \
     if (owner.get()) { \
         TEST_PRIMITIVE_SERVICE(component, "default", "getOwner", true, _retPort_); \
         BOOST_CHECK_EQUAL(component->getPortByName("default")->getPrimitivePort()->getConnectedServiceByName("getOwner")->getPrimitiveService()->invoke().get(), owner->getPortByName("default").get()); \

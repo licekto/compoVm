@@ -8,7 +8,10 @@ namespace interpreter {
 
 		namespace objects {
 
+                        i64 CComponent::m_pseudoHash = 0;
+                    
 			CComponent::CComponent() {
+                            ++m_pseudoHash;
 			}
 
 			CComponent::~CComponent() {
@@ -306,7 +309,11 @@ namespace interpreter {
 
 			ptr(CGeneralService) CComponent::lookupService(const std::string& name) {
 				return getBottomChild()->getServiceByName(name);
-			}
+                        }
+
+                        i64 CComponent::getHash() const {
+                            return m_pseudoHash;
+                        }
 
 		}
 	}

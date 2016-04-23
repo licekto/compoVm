@@ -80,7 +80,7 @@ class ParserWrapper {
 	*/
 	~ParserWrapper();
 
-	int parse(std::string code);
+	int parse(const std::string& code);
 
 	/**
 	* Launch parsing
