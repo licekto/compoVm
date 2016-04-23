@@ -370,6 +370,46 @@ namespace interpreter {
 				};
 				component->addService(m_bootstrapStage1->m_memory->newPrimitiveService(component, "new", callback).lock());
 
+                                component->removeServiceByName("getDescribedPortAt");
+                                callback = [this, component](const ptr(mem_component)& context) -> ptr(mem_port) {
+                                    i64 index = cast(mem_int)(context->getPortByName("args")->getConnectedPortAt(0)->getOwner())->getValue();
+                                    context->getPortByName("args")->disconnectAll();
+                                    return context->getPortByName("ports")->getConnectedPortAt(index);
+                                };
+                                component->addService(m_bootstrapStage1->m_memory->newPrimitiveService(component, "getDescribedPortAt", callback).lock());
+                                
+                                component->removeServiceByName("getDescribedConnAt");
+                                callback = [this, component](const ptr(mem_component)& context) -> ptr(mem_port) {
+                                    i64 index = cast(mem_int)(context->getPortByName("args")->getConnectedPortAt(0)->getOwner())->getValue();
+                                    context->getPortByName("args")->disconnectAll();
+                                    return context->getPortByName("architectureDefinition")->getConnectedPortAt(index);
+                                };
+                                component->addService(m_bootstrapStage1->m_memory->newPrimitiveService(component, "getDescribedConnAt", callback).lock());
+                                
+                                component->removeServiceByName("newNamed");
+                                callback = [this, component](const ptr(mem_component)& /*context*/) -> ptr(mem_port) {
+                                    throw exceptions::semantic::CUnsupportedFeatureException("newNamed() function of Descriptor");
+                                };
+                                component->addService(m_bootstrapStage1->m_memory->newPrimitiveService(component, "newNamed", callback).lock());
+                                
+                                component->removeServiceByName("getService");
+                                callback = [this, component](const ptr(mem_component)& context) -> ptr(mem_port) {
+                                    std::string searchedName = cast(mem_string)(context->getPortByName("args")->getConnectedPortAt(0)->getOwner())->getValue();
+                                    //i64 arity = cast(mem_int)(context->getPortByName("args")->getConnectedPortAt(1)->getOwner())->getValue();
+                                    context->getPortByName("args")->disconnectAll();
+                                    for (size_t i = 0; i < context->getPortByName("services")->getConnectedPortsNumber(); ++i) {
+                                        std::string name = cast(mem_string)(context->getPortByName("services")
+                                                                            ->getConnectedPortAt(i)->getOwner()->getPortByName("serviceSign")
+                                                                            ->getConnectedPortAt(0)->getOwner()->getPortByName("selector")
+                                                                            ->getConnectedPortAt(0)->getOwner())->getValue();
+                                        if (name == searchedName) {
+                                            return context->getPortByName("services")->getConnectedPortAt(i);
+                                        }
+                                    }
+                                    throw exceptions::runtime::CServiceNotFoundException(searchedName);
+                                };
+                                component->addService(m_bootstrapStage1->m_memory->newPrimitiveService(component, "getService", callback).lock());
+                                
 				bootstrapEpilogue(component);
 
 				return component;

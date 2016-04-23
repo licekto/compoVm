@@ -183,4 +183,44 @@ BOOST_AUTO_TEST_CASE(serviceAdditionTest) {
     table->clear();
 }
 
+BOOST_AUTO_TEST_CASE(gettersTest) {
+    // Testing input
+    std::stringstream input;
+    input.str(
+   "descriptor A {\
+        internally requires {\
+            testName : String;\
+        }\
+        architecture {\
+            connect testName to default;\
+        }\
+        service testService(p) {\
+            return 1 + 1;\
+        }\
+    }\
+    descriptor CompoContainer {\
+        service main() {\
+            |a res|\
+            a := A.getDescribedPortAt(0);\
+            res := \"PORT: \" + a.getName() + \" \" + a.getVisibility() + \" \" + a.getRole() + \", is collection: \" + a.isCollection();\
+            a := A.getDescribedConnAt(0);\
+            res := res + \", CONN: \" + a.getSourceType() + \" \" + a.getSourceComponent() + \" \" + a.getSourcePort();\
+            a := A.getService(\"testService\", 1);\
+            res := res + \", SERV: \" + a.getName();\
+            return res;\
+        }\
+    }");
+    
+    // Parse input and create AST
+    parser->parseAll(input);
+    
+    ptr(ast_program) program = parser->getRootNode();
+    ptr(mem_component) component = interpreter->run(program)->getOwner();
+    BOOST_CHECK_EQUAL(cast(mem_string)(component)->getValue(), "PORT: testName internally requires, is collection: false, CONN: named self testName, SERV: testService");
+    
+    // Clear AST for next test
+    parser->clearAll();
+    table->clear();
+}
+
 BOOST_AUTO_TEST_SUITE_END()

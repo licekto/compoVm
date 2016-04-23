@@ -22,16 +22,11 @@ descriptor Descriptor extends Component {
         parentName := newParentName;
     }
 
-    service getDescribedPorts() {
-        return ports;
-    }
+    service getDescribedPortAt(index) {}
 
-    service getDescribedConns() {
-        return architectureDefinition;
-    }
+    service getDescribedConnAt(index) {}
 
-    service getService(selector) {
-    }
+    service getService(selector, arity) {}
 
     service new() {}
     service newNamed(name, superDesc) {}
