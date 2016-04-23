@@ -55,6 +55,8 @@ namespace interpreter {
 				ptr(mem_port) getBoolComponent(bool value);
 
 				ptr(mem_component) bootstrapSystemComponent();
+                                
+                                ptr(mem_component) bootstrapServiceComponent();
 
 				ptr(mem_component) bootstrapDescriptorComponent(ptr(ast_descriptor) descriptor);
 			};

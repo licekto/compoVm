@@ -218,7 +218,11 @@ namespace interpreter {
 
 				bootstrapEpilogue(newComponent);
 				return newComponent;
-			}
+                        }
+
+                        ptr(mem_component) CBootstrapStage2::bootstrapServiceComponent() {
+                            
+                        }
 
 			ptr(mem_component) CBootstrapStage2::bootstrapDescriptorComponent(ptr(ast_descriptor) descriptor) {
 				ptr(mem_component) component = bootstrapPrologue("Descriptor");

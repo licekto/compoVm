@@ -6,6 +6,6 @@ descriptor ServiceSignature extends Component {
     service setSelector(name) {}
     service getSelector() {}
     service getParamsCount() {}
-    service getParamName(index) {}
-    service setParamName(index, name) {}
+    service getParamAt(index) {}
+    service setParam(param) {}
 }

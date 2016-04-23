@@ -119,21 +119,6 @@ BOOST_AUTO_TEST_CASE(descriptorNameTest) {
    "descriptor Z {\
     }\
     descriptor A extends Z {\
-        internally requires {\
-            name : String;\
-        }\
-        externally requires {\
-            abcd : String;\
-        }\
-        internally provides {\
-            xyz : String;\
-        }\
-        service setName(newName) {\
-            name := newName;\
-        }\
-        service getName() {\
-            return name;\
-        }\
     }\
     descriptor CompoContainer {\
         service main() {\
@@ -158,6 +143,39 @@ BOOST_AUTO_TEST_CASE(descriptorNameTest) {
     ptr(ast_program) program = parser->getRootNode();
     ptr(mem_component) component = interpreter->run(program)->getOwner();
     BOOST_CHECK_EQUAL(cast(mem_string)(component)->getValue(), "B C Z Y");
+    
+    // Clear AST for next test
+    parser->clearAll();
+    table->clear();
+}
+
+BOOST_AUTO_TEST_CASE(NameTest) {
+    // Testing input
+    std::stringstream input;
+    input.str(
+   "descriptor A extends Z {\
+    }\
+    descriptor CompoContainer {\
+        service main() {\
+            |a desc srv|\
+            a := A.new();\
+            desc := a.getDescriptor();\
+            srv := Service.new();\
+            srv := srv.setName(\"test\");\
+            srv := srv.setParam(\"param1\");\
+            srv := srv.setParam(\"param2\");\
+            srv := srv.setCode(\"return param1 + param2;\");\
+            desc.addService(srv);\
+            return a;\
+        }\
+    }");
+    
+    // Parse input and create AST
+    parser->parseAll(input);
+    
+    ptr(ast_program) program = parser->getRootNode();
+    //ptr(mem_component) component = interpreter->run(program)->getOwner();
+    //BOOST_CHECK_EQUAL(cast(mem_string)(component)->getValue(), "B C Z Y");
     
     // Clear AST for next test
     parser->clearAll();

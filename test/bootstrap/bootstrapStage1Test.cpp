@@ -69,7 +69,7 @@ BOOST_AUTO_TEST_CASE(valuesComponentsTest) {
     BOOST_CHECK_EQUAL(intComponent->getValue(), -54854698);
 }
 
-BOOST_AUTO_TEST_CASE(serviceComponentTest) {
+BOOST_AUTO_TEST_CASE(serviceComponent1Test) {
     std::vector<ptr(ast_node)> params;
     params.push_back(new_ptr(ast_symbol)("param1"));
     params.push_back(new_ptr(ast_symbol)("param2"));
@@ -84,7 +84,7 @@ BOOST_AUTO_TEST_CASE(serviceComponentTest) {
     
     ptr(mem_component) service = bootstrap1->bootstrapServiceComponent(serviceAst, owner);
     
-    TEST_BASE_COMPONENT_PRIMITIVE(service, 6, owner, bootstrap1);
+    TEST_BASE_COMPONENT_PRIMITIVE(service, 12, owner, bootstrap1);
     ptr(mem_string) strComp = cast(mem_string)(service->getPortByName("code")->getConnectedPortAt(0)->getOwner());
     BOOST_CHECK_EQUAL(strComp->getValue(), codeStr);
     
@@ -96,6 +96,56 @@ BOOST_AUTO_TEST_CASE(serviceComponentTest) {
     BOOST_CHECK_EQUAL(cast(mem_int)(service->getPortByName("tempsV")->getConnectedPortAt(1)->getOwner())->getValue(), 5);
     BOOST_CHECK_EQUAL(cast(mem_bool)(service->getPortByName("tempsV")->getConnectedPortAt(2)->getOwner())->getValue(), false);
     BOOST_CHECK_EQUAL(cast(mem_string)(service->getPortByName("tempsV")->getConnectedPortAt(3)->getOwner())->getValue(), "hello");
+    
+    BOOST_CHECK_THROW(service->getServiceByName("abcd"), exceptions::runtime::CServiceNotFoundException);
+    BOOST_CHECK_THROW(service->getPortByName("abcd"), exceptions::runtime::CPortNotFoundException);
+}
+
+BOOST_AUTO_TEST_CASE(serviceComponent2Test) {
+    
+    std::string codeStr = "{ |a| a := 1 + 5; a := false; a := \"hello\";}";
+    
+    ptr(mem_component) owner = bootstrap1->bootstrapComponent(nullptr);
+    
+    ptr(mem_component) service = bootstrap1->bootstrapServiceComponent(owner);
+    
+    TEST_BASE_COMPONENT_PRIMITIVE(service, 12, owner, bootstrap1);
+    
+    ptr(mem_port) retPort;
+    bool ret = false;
+    service->getPortByName("args")->connectPort(bootstrap1->bootstrapStringValue("testName")->getDefaultPort());
+    TEST_PRIMITIVE_SERVICE(service, "default", "setName", ret, retPort);
+    
+    ret = true;
+    TEST_PRIMITIVE_SERVICE(service, "default", "getName", ret, retPort);
+    BOOST_CHECK_EQUAL(service->getPortByName("args")->getConnectedPortsNumber(), 0);
+    BOOST_CHECK_EQUAL(cast(mem_string)(service->getServiceByName("getName")->invoke()->getOwner())->getValue(), "testName");
+
+    ret = false;
+    service->getPortByName("args")->connectPort(bootstrap1->bootstrapStringValue("return 1 + 1;")->getDefaultPort());
+    TEST_PRIMITIVE_SERVICE(service, "default", "setCode", ret, retPort);
+    
+    ret = true;
+    TEST_PRIMITIVE_SERVICE(service, "default", "getCode", ret, retPort);
+    BOOST_CHECK_EQUAL(service->getPortByName("args")->getConnectedPortsNumber(), 0);
+    BOOST_CHECK_EQUAL(cast(mem_string)(service->getServiceByName("getCode")->invoke()->getOwner())->getValue(), "return 1 + 1;");
+    
+    ret = false;
+    service->getPortByName("args")->connectPort(bootstrap1->bootstrapStringValue("param1")->getDefaultPort());
+    TEST_PRIMITIVE_SERVICE(service, "default", "addParam", ret, retPort);
+    service->getPortByName("args")->connectPort(bootstrap1->bootstrapStringValue("param2")->getDefaultPort());
+    TEST_PRIMITIVE_SERVICE(service, "default", "addParam", ret, retPort);
+    
+    ret = true;
+    service->getPortByName("args")->connectPort(bootstrap1->bootstrapIntValue(0)->getDefaultPort());
+    TEST_PRIMITIVE_SERVICE(service, "default", "getParamAt", ret, retPort);
+    BOOST_CHECK_EQUAL(service->getPortByName("args")->getConnectedPortsNumber(), 0);
+    BOOST_CHECK_EQUAL(cast(mem_string)(retPort->getOwner())->getValue(), "param1");
+    
+    service->getPortByName("args")->connectPort(bootstrap1->bootstrapIntValue(1)->getDefaultPort());
+    TEST_PRIMITIVE_SERVICE(service, "default", "getParamAt", ret, retPort);
+    BOOST_CHECK_EQUAL(service->getPortByName("args")->getConnectedPortsNumber(), 0);
+    BOOST_CHECK_EQUAL(cast(mem_string)(retPort->getOwner())->getValue(), "param2");
     
     BOOST_CHECK_THROW(service->getServiceByName("abcd"), exceptions::runtime::CServiceNotFoundException);
     BOOST_CHECK_THROW(service->getPortByName("abcd"), exceptions::runtime::CPortNotFoundException);
@@ -140,24 +190,23 @@ BOOST_AUTO_TEST_CASE(serviceSignatureComponentTest) {
     BOOST_CHECK_EQUAL(cast(mem_int)(signatureComponent->getServiceByName("getParamsCount")->invoke()->getOwner())->getValue(), 2);
     
     signatureComponent->getPortByName("args")->connectPort(bootstrap1->bootstrapIntValue(0)->getDefaultPort());
-    TEST_PRIMITIVE_SERVICE(signatureComponent, "default", "getParamName", ret, retPort);
+    TEST_PRIMITIVE_SERVICE(signatureComponent, "default", "getParamAt", ret, retPort);
     BOOST_CHECK_EQUAL(signatureComponent->getPortByName("args")->getConnectedPortsNumber(), 0);
     BOOST_CHECK_EQUAL(cast(mem_string)(retPort->getOwner())->getValue(), "param1");
     
     signatureComponent->getPortByName("args")->connectPort(bootstrap1->bootstrapIntValue(1)->getDefaultPort());
-    TEST_PRIMITIVE_SERVICE(signatureComponent, "default", "getParamName", ret, retPort);
+    TEST_PRIMITIVE_SERVICE(signatureComponent, "default", "getParamAt", ret, retPort);
     BOOST_CHECK_EQUAL(signatureComponent->getPortByName("args")->getConnectedPortsNumber(), 0);
     BOOST_CHECK_EQUAL(cast(mem_string)(retPort->getOwner())->getValue(), "param2");
     
     ret = false;
-    signatureComponent->getPortByName("args")->connectPort(bootstrap1->bootstrapIntValue(0)->getDefaultPort());
     signatureComponent->getPortByName("args")->connectPort(bootstrap1->bootstrapStringValue("param3")->getDefaultPort());
-    TEST_PRIMITIVE_SERVICE(signatureComponent, "default", "setParamName", ret, retPort);
+    TEST_PRIMITIVE_SERVICE(signatureComponent, "default", "setParam", ret, retPort);
     BOOST_CHECK_EQUAL(signatureComponent->getPortByName("args")->getConnectedPortsNumber(), 0);
     
     ret = true;
-    signatureComponent->getPortByName("args")->connectPort(bootstrap1->bootstrapIntValue(0)->getDefaultPort());
-    TEST_PRIMITIVE_SERVICE(signatureComponent, "default", "getParamName", ret, retPort);
+    signatureComponent->getPortByName("args")->connectPort(bootstrap1->bootstrapIntValue(2)->getDefaultPort());
+    TEST_PRIMITIVE_SERVICE(signatureComponent, "default", "getParamAt", ret, retPort);
     BOOST_CHECK_EQUAL(signatureComponent->getPortByName("args")->getConnectedPortsNumber(), 0);
     BOOST_CHECK_EQUAL(cast(mem_string)(retPort->getOwner())->getValue(), "param3");
     
