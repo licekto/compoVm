@@ -101,6 +101,8 @@ namespace interpreter {
 			ptr(mem_port) execService(const std::string& receiver, const std::string& selector);
 
 			ptr(mem_port) run(ptr(ast_program) ast);
+                        
+                        void run(const std::string& code);
 		};
 
 	}

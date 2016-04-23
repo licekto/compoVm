@@ -470,7 +470,13 @@ namespace interpreter {
 			boot();
 			return exec(ast);
 		}
-
+                
+                void CInterpreter::run(const std::string& code) {
+                        std::stringstream input;
+                        input.str(code);
+                        m_parser->parseAll(input);
+                        run(m_parser->getRootNode());
+                }
 	}
 
 }
