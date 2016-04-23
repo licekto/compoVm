@@ -34,11 +34,34 @@ namespace interpreter {
 			if (m_ports.find(var) != m_ports.end()) {
 				m_ports[var].m_connectingPort = port;
 			}
-		}
+                }
+
+                void CContext::setVariableAssignment(const std::string& var, ptr(mem_port) port) {
+                        if (m_stack.empty()) {
+				pushContext();
+			}
+			getTableWithVariable(var)->setVariable(var, port);
+
+                        if (m_contextComponent.use_count()) {
+                            try {
+                                m_contextComponent->getPortByName(var);
+                            }
+                            catch (const exceptions::runtime::CPortNotFoundException& ex) {
+                                return;
+                            }
+                            if (!m_contextComponent->getPortByName(var)->isCollection()) {
+                                m_contextComponent->getPortByName(var)->disconnectAll();
+                                m_contextComponent->getPortByName(var)->connectPort(port);
+                            }
+			}
+                }
 
 		void CContext::connectPorts() {
 			for (auto item : m_ports) {
 				if (item.second.m_origPort.use_count() && item.second.m_connectingPort.use_count()) {
+                                        if (!item.second.m_origPort->isCollection()) {
+                                            item.second.m_origPort->disconnectPortAt(0);
+                                        }
 					item.second.m_origPort->connectPort(item.second.m_connectingPort);
 				}
 			}
@@ -70,12 +93,19 @@ namespace interpreter {
 		}
 
 		ptr(mem_port) CContext::getVariable(const std::string& var, i64 index) {
-			if (m_contextComponent.use_count()) {
+                        return getVariable(var, index, false);
+                }
+
+                ptr(mem_port) CContext::getVariable(const std::string& var, i64 index, bool assignment) {
+                    if (m_contextComponent.use_count()) {
 				try {
 					ptr(mem_port) port = m_contextComponent->getPortByName(var);
 					if (var == "self") {
 						return m_contextComponent->getPortByName("default");
 					}
+                                        if (assignment) {
+                                            return port;
+                                        }
 					if (port->getConnectedPortsNumber()) {
 						return port->getConnectedPortAt(index);
 					}
@@ -87,7 +117,7 @@ namespace interpreter {
 				return table->getVariable(var);
 			}
 			throw exceptions::runtime::CVariableNotFoundException(var);
-		}
+                }
 
 		void CContext::setContextComponent(ptr(mem_component) component) {
 			m_contextComponent = component;

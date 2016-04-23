@@ -36,6 +36,8 @@ namespace interpreter {
 			ptr(CVariablesTable) getTopContext();
 
 			void setVariable(const std::string& var, ptr(mem_port) port);
+                        
+                        void setVariableAssignment(const std::string& var, ptr(mem_port) port);
 
 			void setPort(const std::string& var, ptr(mem_port) port);
 
@@ -48,6 +50,8 @@ namespace interpreter {
 			ptr(mem_port) getVariable(const std::string& var);
 
 			ptr(mem_port) getVariable(const std::string& var, i64 index);
+                        
+                        ptr(mem_port) getVariable(const std::string& var, i64 index, bool assignment);
 
 			void setContextComponent(ptr(mem_component) component);
 

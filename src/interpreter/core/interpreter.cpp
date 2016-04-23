@@ -52,9 +52,9 @@ namespace interpreter {
 
 		void CInterpreter::execAssignment(ptr(ast_assignment) node) {
 			std::string variable = node->getVariable()->getStringValue();
-			ptr(mem_port) port = m_serviceContextStack.top()->getVariable(variable);
+			ptr(mem_port) port = m_serviceContextStack.top()->getVariable(variable, 0, true);
 			port = exec(node->getRightSide());
-			m_serviceContextStack.top()->setVariable(variable, port);
+			m_serviceContextStack.top()->setVariableAssignment(variable, port);
 		}
 
 		std::string CInterpreter::getStringRepresentation(ptr(mem_value) val) {

@@ -36,7 +36,7 @@ ptr(core_interpreter) initInterpreter() {
 
 ptr(core_interpreter) interpreter = initInterpreter();
 
-BOOST_AUTO_TEST_CASE(getDescriptorTest) {
+BOOST_AUTO_TEST_CASE(basicDescriptorTest) {
     // Testing input
     std::stringstream input;
     input.str(
@@ -106,6 +106,50 @@ BOOST_AUTO_TEST_CASE(portNameTest) {
     ptr(ast_program) program = parser->getRootNode();
     ptr(mem_component) component = interpreter->run(program)->getOwner();
     BOOST_CHECK_EQUAL(cast(mem_string)(component)->getValue(), "name abcd xyz");
+    
+    // Clear AST for next test
+    parser->clearAll();
+    table->clear();
+}
+
+BOOST_AUTO_TEST_CASE(descriptorTest) {
+    // Testing input
+    std::stringstream input;
+    input.str(
+   "descriptor A {\
+        internally requires {\
+            name : String;\
+        }\
+        externally requires {\
+            abcd : String;\
+        }\
+        internally provides {\
+            xyz : String;\
+        }\
+        service setName(newName) {\
+            name := newName;\
+        }\
+        service getName() {\
+            return name;\
+        }\
+    }\
+    descriptor CompoContainer {\
+        service main() {\
+            |a desc res b|\
+            a := A.new();\
+            desc := a.getDescriptor();\
+            desc.setName(\"B\");\
+            res := desc.getName();\
+            return res;\
+        }\
+    }");
+    
+    // Parse input and create AST
+    parser->parseAll(input);
+    
+    ptr(ast_program) program = parser->getRootNode();
+    ptr(mem_component) component = interpreter->run(program)->getOwner();
+    BOOST_CHECK_EQUAL(cast(mem_string)(component)->getValue(), "B");
     
     // Clear AST for next test
     parser->clearAll();
