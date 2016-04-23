@@ -140,6 +140,10 @@ BOOST_AUTO_TEST_CASE(descriptorTest) {
             desc := a.getDescriptor();\
             desc.setName(\"B\");\
             res := desc.getName();\
+            b := B.new();\
+            desc := b.getDescriptor();\
+            desc.setName(\"C\");\
+            res := desc.getName();\
             return res;\
         }\
     }");
@@ -149,7 +153,7 @@ BOOST_AUTO_TEST_CASE(descriptorTest) {
     
     ptr(ast_program) program = parser->getRootNode();
     ptr(mem_component) component = interpreter->run(program)->getOwner();
-    BOOST_CHECK_EQUAL(cast(mem_string)(component)->getValue(), "B");
+    BOOST_CHECK_EQUAL(cast(mem_string)(component)->getValue(), "C");
     
     // Clear AST for next test
     parser->clearAll();

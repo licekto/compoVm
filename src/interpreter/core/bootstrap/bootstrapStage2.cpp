@@ -182,6 +182,8 @@ namespace interpreter {
 			ptr(mem_component) CBootstrapStage2::bootstrapSystemComponent() {
 				ptr(mem_component) newComponent = bootstrapPrologue("System");
 
+                                newComponent->getPortByName("name")->connectPort(m_bootstrapStage1->bootstrapStringValue("System")->getDefaultPort());
+                                
 				newComponent->removeServiceByName("println");
 				newComponent->removeServiceByName("readString");
 				newComponent->removeServiceByName("readInt");

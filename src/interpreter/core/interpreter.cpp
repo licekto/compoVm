@@ -19,7 +19,7 @@ namespace interpreter {
 		}
 
 		void CInterpreter::boot() {
-			m_descriptorTable->addNamedDescriptor(m_bootstrap->bootstrapSystemComponent(), "System");
+			m_descriptorTable->addDescriptor(m_bootstrap->bootstrapSystemComponent());
 		}
 
 		ptr(mem_port) CInterpreter::execProgram(ptr(ast_program) node) {

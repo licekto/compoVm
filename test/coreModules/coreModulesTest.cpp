@@ -64,7 +64,7 @@ BOOST_AUTO_TEST_CASE(basicTest) {
     TEST_DESCRIPTOR(descriptor, "Bool", "", 2, 1, 0);
     
     descriptor = coreModules->getCoreDescriptor("System");
-    TEST_DESCRIPTOR(descriptor, "System", "Component", 0, 4, 0);
+    TEST_DESCRIPTOR(descriptor, "System", "Component", 1, 4, 0);
 }
 
 BOOST_AUTO_TEST_SUITE_END()

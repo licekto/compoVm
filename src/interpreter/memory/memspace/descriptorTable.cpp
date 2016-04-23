@@ -8,25 +8,23 @@ namespace interpreter {
 		namespace memspace {
 
 			void CDescriptorTable::addDescriptor(ptr(mem_component) descriptor) {
-				addNamedDescriptor(descriptor, cast(mem_string)(descriptor->getPortByName("name")->getConnectedPortAt(0)->getOwner())->getValue());
-			}
-
-			void CDescriptorTable::addNamedDescriptor(ptr(mem_component) descriptor, const std::string& name) {
-				m_table[name] = descriptor;
+				m_table.push_back(descriptor);
 			}
 
 			ptr(mem_component) CDescriptorTable::getDescriptor(const std::string& name) {
-				if (!descriptorFound(name)) {
-					throw exceptions::semantic::CUndefinedDescriptorException(name);
+				auto it = std::find_if(m_table.begin(), m_table.end(), [&name](ptr(mem_component) descriptor) {
+                                        std::string tmpName = cast(mem_string)(descriptor->getPortByName("name")->getConnectedPortAt(0)->getOwner())->getValue();
+					return tmpName == name;
+				});
+
+				if (it == m_table.end()) {
+					return nullptr;
 				}
-				return m_table.at(name);
+				return *it;
 			}
 
-			bool CDescriptorTable::descriptorFound(const std::string& name) const {
-				if (m_table.find(name) == m_table.end()) {
-					return false;
-				}
-				return true;
+			bool CDescriptorTable::descriptorFound(const std::string& name) {
+                            return getDescriptor(name).use_count() != 0;
 			}
 
 			void CDescriptorTable::clear() {
