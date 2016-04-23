@@ -46,6 +46,20 @@ namespace interpreter {
 				}
 				component->setParent(nullptr);
 
+                                component->removeServiceByName("getPortNamed");
+                                auto callback = [](const ptr(mem_component)& context) -> ptr(mem_port) {
+					std::string name = cast(mem_string)(context->getPortByName("args")->getConnectedPortAt(0)->getOwner())->getValue();
+					context->getPortByName("args")->disconnectPortAt(0);
+                                        
+					if (context->getPortByName(name)->isPrimitive()) {
+                                            return context->getPortByName(name);
+                                        }
+                                        else {
+                                            return context->getPortByName(name)->getPort()->getPortByName("default");
+                                        }
+				};
+                                component->addService(m_bootstrapStage1->m_memory->newPrimitiveService(component, "getPortNamed", callback).lock());
+                                
 				return component;
 			}
 

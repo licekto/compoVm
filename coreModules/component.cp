@@ -12,8 +12,7 @@ descriptor Component {
         self : * ofKind SelfPort;
     }
     service getPorts() {}
-    service getPortNamed(newName) {
-    }
+    service getPortNamed(newName) {}
     service getDescriptor() {
         return descriptorPort;
     }

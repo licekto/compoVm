@@ -76,15 +76,27 @@ BOOST_AUTO_TEST_CASE(portNameTest) {
         internally requires {\
             name : String;\
         }\
+        externally requires {\
+            abcd : String;\
+        }\
+        internally provides {\
+            xyz : String;\
+        }\
         service setName(newName) {\
             name := newName;\
         }\
     }\
     descriptor CompoContainer {\
         service main() {\
-            |a n c|\
+            |a n res|\
             a := A.new();\
             n := a.getPortNamed(\"name\");\
+            res := n.getName();\
+            n := a.getPortNamed(\"abcd\");\
+            res := res + \" \" + n.getName();\
+            n := a.getPortNamed(\"xyz\");\
+            res := res + \" \" + n.getName();\
+            return res;\
         }\
     }");
     
@@ -92,7 +104,8 @@ BOOST_AUTO_TEST_CASE(portNameTest) {
     parser->parseAll(input);
     
     ptr(ast_program) program = parser->getRootNode();
-    interpreter->run(program);
+    ptr(mem_component) component = interpreter->run(program)->getOwner();
+    BOOST_CHECK_EQUAL(cast(mem_string)(component)->getValue(), "name abcd xyz");
     
     // Clear AST for next test
     parser->clearAll();
