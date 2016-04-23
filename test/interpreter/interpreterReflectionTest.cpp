@@ -18,6 +18,7 @@
 #include "exceptions/semantic/wrongPortVisibiltyException.h"
 #include "ast/visitor/printVisitor.h"
 #include "exceptions/runtime/wrongStringOperationException.h"
+#include "exceptions/runtime/variableNotFoundException.h"
 
 BOOST_AUTO_TEST_SUITE(interpreterReflectionTest)
 
@@ -286,6 +287,41 @@ BOOST_AUTO_TEST_CASE(newPortDescriptionTest) {
     ptr(ast_program) program = parser->getRootNode();
     ptr(mem_component) component = interpreter->run(program)->getOwner();
     BOOST_CHECK_EQUAL(cast(mem_string)(component)->getValue(), "testName");
+    
+    // Clear AST for next test
+    parser->clearAll();
+    table->clear();
+}
+
+BOOST_AUTO_TEST_CASE(removePortTest) {
+    // Testing input
+    std::stringstream input;
+    input.str(
+   "descriptor A {\
+        externally requires {\
+            name : String;\
+        }\
+        service setName(newName) {\
+            name := newName;\
+        }\
+        service getName() {\
+            return name;\
+        }\
+    }\
+    descriptor CompoContainer {\
+        service main() {\
+            |a|\
+            A.removePortDescription(\"name\");\
+            a := A.new();\
+            return a.getName();\
+        }\
+    }");
+    
+    // Parse input and create AST
+    parser->parseAll(input);
+    
+    ptr(ast_program) program = parser->getRootNode();
+    BOOST_CHECK_THROW(interpreter->run(program), exceptions::runtime::CVariableNotFoundException);
     
     // Clear AST for next test
     parser->clearAll();

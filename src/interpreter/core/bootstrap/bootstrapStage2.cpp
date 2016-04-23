@@ -463,6 +463,24 @@ namespace interpreter {
                                 };
                                 component->addService(m_bootstrapStage1->m_memory->newPrimitiveService(component, "removeService", callback).lock());
                                 
+                                component->removeServiceByName("removePortDescription");
+                                callback = [this, component](const ptr(mem_component)& context) -> ptr(mem_port) {
+                                    std::string searchedName = cast(mem_string)(context->getPortByName("args")->getConnectedPortAt(0)->getOwner())->getValue();
+                                    //i64 arity = cast(mem_int)(context->getPortByName("args")->getConnectedPortAt(1)->getOwner())->getValue();
+                                    context->getPortByName("args")->disconnectAll();
+                                    for (size_t i = 0; i < context->getPortByName("ports")->getConnectedPortsNumber(); ++i) {
+                                        std::string name = cast(mem_string)(context->getPortByName("ports")
+                                                                            ->getConnectedPortAt(i)->getOwner()->getPortByName("name")
+                                                                            ->getConnectedPortAt(0)->getOwner())->getValue();
+                                        if (name == searchedName) {
+                                            context->getPortByName("ports")->disconnectPortAt(i);
+                                            break;
+                                        }
+                                    }
+                                    return nullptr;
+                                };
+                                component->addService(m_bootstrapStage1->m_memory->newPrimitiveService(component, "removePortDescription", callback).lock());
+                                
 				bootstrapEpilogue(component);
 
 				return component;
