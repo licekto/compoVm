@@ -30,7 +30,7 @@ namespace ast {
 			class CServiceInvocation;
 			class CServiceSignature;
 			class CSignaturesPort;
-                        class CSizeof;
+			class CSizeof;
 			class CUniversalPort;
 		}
 
@@ -107,7 +107,7 @@ namespace ast {
 			virtual void visit(std::shared_ptr<ast::nodes::compo::CServiceInvocation> node) = 0;
 			virtual void visit(std::shared_ptr<ast::nodes::compo::CServiceSignature> node) = 0;
 			virtual void visit(std::shared_ptr<ast::nodes::compo::CSignaturesPort> node) = 0;
-                        virtual void visit(std::shared_ptr<ast::nodes::compo::CSizeof> node) = 0;
+			virtual void visit(std::shared_ptr<ast::nodes::compo::CSizeof> node) = 0;
 			virtual void visit(std::shared_ptr<ast::nodes::compo::CUniversalPort> node) = 0;
 
 			virtual void visit(std::shared_ptr<ast::nodes::procedural::CAbstractExpression> node) = 0;

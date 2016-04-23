@@ -8,10 +8,10 @@ namespace interpreter {
 
 		namespace objects {
 
-                        i64 CComponent::m_pseudoHash = 0;
-                    
+			i64 CComponent::m_pseudoHash = 0;
+
 			CComponent::CComponent() {
-                            ++m_pseudoHash;
+				++m_pseudoHash;
 			}
 
 			CComponent::~CComponent() {
@@ -23,15 +23,15 @@ namespace interpreter {
 
 			size_t CComponent::getNumberOfPorts() const {
 				size_t cnt = m_ports.size();
-                                ptr(CComponent) tmp = m_parent.lock();
+				ptr(CComponent) tmp = m_parent.lock();
 				while (tmp.use_count()) {
 					cnt += tmp->m_ports.size();
-                                        tmp = tmp->m_parent.lock();
+					tmp = tmp->m_parent.lock();
 				}
-                                tmp = m_child.lock();
+				tmp = m_child.lock();
 				while (tmp.use_count()) {
 					cnt += tmp->m_ports.size();
-                                        tmp = tmp->m_child.lock();
+					tmp = tmp->m_child.lock();
 				}
 				return cnt;
 			}
@@ -80,16 +80,16 @@ namespace interpreter {
 			}
 
 			size_t CComponent::getNumberOfAllServices() const {
-                                size_t cnt = m_services.size();
-                                ptr(CComponent) tmp = m_parent.lock();
+				size_t cnt = m_services.size();
+				ptr(CComponent) tmp = m_parent.lock();
 				while (tmp.use_count()) {
 					cnt += tmp->m_services.size();
-                                        tmp = tmp->m_parent.lock();
+					tmp = tmp->m_parent.lock();
 				}
-                                tmp = m_child.lock();
+				tmp = m_child.lock();
 				while (tmp.use_count()) {
 					cnt += tmp->m_services.size();
-                                        tmp = tmp->m_child.lock();
+					tmp = tmp->m_child.lock();
 				}
 				return cnt;
 			}
@@ -192,8 +192,7 @@ namespace interpreter {
 							}
 						}
 					} else {
-						//ptr(CGeneralPort) generalPort = port->getPort()->getPortByName("connectedPorts");
-						TRACE(ERROR, "Not implemented yet");
+						TRACE(ERROR, "Not implemented");
 						return nullptr;
 					}
 				}
@@ -309,11 +308,11 @@ namespace interpreter {
 
 			ptr(CGeneralService) CComponent::lookupService(const std::string& name) {
 				return getBottomChild()->getServiceByName(name);
-                        }
+			}
 
-                        i64 CComponent::getHash() const {
-                            return m_pseudoHash;
-                        }
+			i64 CComponent::getHash() const {
+				return m_pseudoHash;
+			}
 
 		}
 	}

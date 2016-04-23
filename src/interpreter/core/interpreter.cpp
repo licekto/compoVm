@@ -20,8 +20,8 @@ namespace interpreter {
 
 		void CInterpreter::boot() {
 			m_descriptorTable->addDescriptor(m_bootstrap->bootstrapSystemComponent());
-                        m_descriptorTable->addDescriptor(m_bootstrap->bootstrapServiceDescriptorComponent());
-                        m_descriptorTable->addDescriptor(m_bootstrap->bootstrapPortDescriptionComponent());
+			m_descriptorTable->addDescriptor(m_bootstrap->bootstrapServiceDescriptorComponent());
+			m_descriptorTable->addDescriptor(m_bootstrap->bootstrapPortDescriptionComponent());
 		}
 
 		ptr(mem_port) CInterpreter::execProgram(ptr(ast_program) node) {
@@ -200,7 +200,7 @@ namespace interpreter {
 				oldArgs.push_back(delegatedPort->getOwner()->getPortByName("args")->getConnectedPortAt(i));
 			}
 			delegatedPort->getOwner()->getPortByName("args")->disconnectAll();
-                        
+
 			if (node->getParameters()->getNodeType() == type_node::SERVICE_SIGNATURE) {
 				ptr(ast_servicesignature) sign = cast(ast_servicesignature)(node->getParameters());
 				std::vector<ptr(mem_port)> connectedPorts;
@@ -270,13 +270,13 @@ namespace interpreter {
 
 			srcPort->disconnectPortAt(0);
 			dstPort->disconnectPortAt(0);
-                }
+		}
 
-                ptr(mem_port) CInterpreter::execSizeof(ptr(ast_sizeof) node) {
-                    std::string portName = node->getParamName()->getStringValue();
-                    i64 value = m_serviceContextStack.top()->getContextComponent()->getPortByName(portName)->getConnectedPortsNumber();
-                    return m_bootstrap->getIntComponent(value);
-                }
+		ptr(mem_port) CInterpreter::execSizeof(ptr(ast_sizeof) node) {
+			std::string portName = node->getParamName()->getStringValue();
+			i64 value = m_serviceContextStack.top()->getContextComponent()->getPortByName(portName)->getConnectedPortsNumber();
+			return m_bootstrap->getIntComponent(value);
+		}
 
 		void CInterpreter::checkBindAddresses(ptr(mem_port) srcPort, ptr(mem_port) dstPort) {
 			bool def = srcPort->getName() != "default" && dstPort->getName() != "default";
@@ -345,7 +345,7 @@ namespace interpreter {
 				execDisconnection(cast(ast_disconnection)(node));
 				break;
 			}
-                        case type_node::SIZEOF : {
+			case type_node::SIZEOF : {
 				return execSizeof(cast(ast_sizeof)(node));
 			}
 			/*------------------ Procedural ----------------------*/
@@ -459,9 +459,9 @@ namespace interpreter {
 		}
 
 		ptr(mem_port) CInterpreter::execService(const std::string& receiver, const std::string& selector) {
-                        if (!m_descriptorTable->descriptorFound(receiver)) {
-                            throw exceptions::semantic::CUndefinedDescriptorException(receiver);
-                        }
+			if (!m_descriptorTable->descriptorFound(receiver)) {
+				throw exceptions::semantic::CUndefinedDescriptorException(receiver);
+			}
 			ptr(mem_component) descriptor = m_descriptorTable->getDescriptor(receiver);
 			return descriptor->getServiceByName(selector)->invoke();
 		}

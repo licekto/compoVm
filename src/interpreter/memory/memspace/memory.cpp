@@ -94,22 +94,22 @@ namespace interpreter {
 				m_servicesMemory.push_back(newService);
 
 				return wptr(mem_service)(newService);
-                        }
+			}
 
-                        wptr(mem_component) CMemory::newEmptyServiceComponent() {
-                                ptr(mem_component) newService = m_bootstrap1.lock()->bootstrapServiceComponent(nullptr);
-                                m_componentsMemory.push_back(newService);
-                                
-                                return wptr(mem_component)(newService);
-                        }
+			wptr(mem_component) CMemory::newEmptyServiceComponent() {
+				ptr(mem_component) newService = m_bootstrap1.lock()->bootstrapServiceComponent(nullptr);
+				m_componentsMemory.push_back(newService);
 
-                        wptr(mem_component) CMemory::newPortDescriptionComponent() {
-                                ptr(mem_component) newPortDescription = m_bootstrap1.lock()->bootstrapPortDescriptionComponent(nullptr);
-                                m_componentsMemory.push_back(newPortDescription);
-                                
-                                return wptr(mem_component)(newPortDescription);
-                        }
-                        
+				return wptr(mem_component)(newService);
+			}
+
+			wptr(mem_component) CMemory::newPortDescriptionComponent() {
+				ptr(mem_component) newPortDescription = m_bootstrap1.lock()->bootstrapPortDescriptionComponent(nullptr);
+				m_componentsMemory.push_back(newPortDescription);
+
+				return wptr(mem_component)(newPortDescription);
+			}
+
 			size_t CMemory::getComponentsNumber() const {
 				return m_componentsMemory.size();
 			}

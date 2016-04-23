@@ -46,39 +46,38 @@ namespace interpreter {
 				}
 				component->setParent(nullptr);
 
-                                component->removeServiceByName("getPortNamed");
-                                {
-                                    auto callback = [](const ptr(mem_component)& context) -> ptr(mem_port) {
-                                            std::string name = cast(mem_string)(context->getPortByName("args")->getConnectedPortAt(0)->getOwner())->getValue();
-                                            context->getPortByName("args")->disconnectPortAt(0);
+				component->removeServiceByName("getPortNamed");
+				{
+					auto callback = [](const ptr(mem_component)& context) -> ptr(mem_port) {
+						std::string name = cast(mem_string)(context->getPortByName("args")->getConnectedPortAt(0)->getOwner())->getValue();
+						context->getPortByName("args")->disconnectPortAt(0);
 
-                                            if (context->getPortByName(name)->isPrimitive()) {
-                                                return context->getPortByName(name);
-                                            }
-                                            else {
-                                                return context->getPortByName(name)->getPort()->getPortByName("default");
-                                            }
-                                    };
-                                    component->addService(m_bootstrapStage1->m_memory->newPrimitiveService(component, "getPortNamed", callback).lock());
-                                }
-                                
-                                component->removeServiceByName("getIdentityHash");
-                                {
-                                    auto callback = [this](const ptr(mem_component)& context) -> ptr(mem_port) {
-                                            return m_bootstrapStage1->bootstrapIntValue(context->getHash())->getDefaultPort();
-                                    };
-                                    component->addService(m_bootstrapStage1->m_memory->newPrimitiveService(component, "getIdentityHash", callback).lock());
-                                }
-                                
+						if (context->getPortByName(name)->isPrimitive()) {
+							return context->getPortByName(name);
+						} else {
+							return context->getPortByName(name)->getPort()->getPortByName("default");
+						}
+					};
+					component->addService(m_bootstrapStage1->m_memory->newPrimitiveService(component, "getPortNamed", callback).lock());
+				}
+
+				component->removeServiceByName("getIdentityHash");
+				{
+					auto callback = [this](const ptr(mem_component)& context) -> ptr(mem_port) {
+						return m_bootstrapStage1->bootstrapIntValue(context->getHash())->getDefaultPort();
+					};
+					component->addService(m_bootstrapStage1->m_memory->newPrimitiveService(component, "getIdentityHash", callback).lock());
+				}
+
 				return component;
 			}
 
 			ptr(mem_component) CBootstrapStage2::buildPortFromDescription(ptr(mem_component) description, ptr(mem_component) owner) {
 				bool isCollection = false;
-                                
-                                if (description->getPortByName("isCollectionPort")->getConnectedPortsNumber()) {
-                                    isCollection = cast(mem_bool)(description->getPortByName("isCollectionPort")->getConnectedPortAt(0)->getOwner())->getValue();
-                                }
+
+				if (description->getPortByName("isCollectionPort")->getConnectedPortsNumber()) {
+					isCollection = cast(mem_bool)(description->getPortByName("isCollectionPort")->getConnectedPortAt(0)->getOwner())->getValue();
+				}
 
 				ptr(mem_component) port;
 				if (isCollection) {
@@ -196,8 +195,8 @@ namespace interpreter {
 			ptr(mem_component) CBootstrapStage2::bootstrapSystemComponent() {
 				ptr(mem_component) newComponent = bootstrapPrologue("System");
 
-                                newComponent->getPortByName("name")->connectPort(m_bootstrapStage1->bootstrapStringValue("System")->getDefaultPort());
-                                
+				newComponent->getPortByName("name")->connectPort(m_bootstrapStage1->bootstrapStringValue("System")->getDefaultPort());
+
 				newComponent->removeServiceByName("println");
 				newComponent->removeServiceByName("readString");
 				newComponent->removeServiceByName("readInt");
@@ -232,47 +231,47 @@ namespace interpreter {
 
 				bootstrapEpilogue(newComponent);
 				return newComponent;
-                        }
+			}
 
-                        ptr(mem_component) CBootstrapStage2::bootstrapServiceDescriptorComponent() {
-                                ptr(mem_component) component = bootstrapDescriptorComponent(m_bootstrapStage1->m_coreModules->getCoreDescriptor("Service"));
-                                
-                                component->getPortByName("name")->disconnectAll();
-                                component->getPortByName("parentName")->disconnectAll();
-                                
-                                component->getPortByName("name")->connectPort(m_bootstrapStage1->bootstrapStringValue("Service")->getDefaultPort());
-				component->getPortByName("parentName")->connectPort(m_bootstrapStage1->bootstrapStringValue("Component")->getDefaultPort());
-                                
-                                component->removeServiceByName("new");
-                                std::function<ptr(mem_port)(const ptr(mem_component)&)> callback = [this, component](const ptr(mem_component)& /*context*/) -> ptr(mem_port) {
-                                    return m_bootstrapStage1->m_memory->newEmptyServiceComponent().lock()->getPortByName("default");
-                                };
-                                component->addService(m_bootstrapStage1->m_memory->newPrimitiveService(component, "new", callback).lock());
-                                
-                                return component;
-                        }
+			ptr(mem_component) CBootstrapStage2::bootstrapServiceDescriptorComponent() {
+				ptr(mem_component) component = bootstrapDescriptorComponent(m_bootstrapStage1->m_coreModules->getCoreDescriptor("Service"));
 
-                        ptr(mem_component) CBootstrapStage2::bootstrapPortDescriptionComponent() {
-                                ptr(mem_component) component = bootstrapDescriptorComponent(m_bootstrapStage1->m_coreModules->getCoreDescriptor("PortDescription"));
-                                
-                                component->getPortByName("name")->disconnectAll();
-                                component->getPortByName("parentName")->disconnectAll();
-                                
-                                component->getPortByName("name")->connectPort(m_bootstrapStage1->bootstrapStringValue("PortDescription")->getDefaultPort());
+				component->getPortByName("name")->disconnectAll();
+				component->getPortByName("parentName")->disconnectAll();
+
+				component->getPortByName("name")->connectPort(m_bootstrapStage1->bootstrapStringValue("Service")->getDefaultPort());
 				component->getPortByName("parentName")->connectPort(m_bootstrapStage1->bootstrapStringValue("Component")->getDefaultPort());
-                                
-                                component->removeServiceByName("new");
-                                std::function<ptr(mem_port)(const ptr(mem_component)&)> callback = [this, component](const ptr(mem_component)& /*context*/) -> ptr(mem_port) {
-                                    return m_bootstrapStage1->m_memory->newPortDescriptionComponent().lock()->getPortByName("default");
-                                };
-                                component->addService(m_bootstrapStage1->m_memory->newPrimitiveService(component, "new", callback).lock());
-                                
-                                return component;
-                        }
+
+				component->removeServiceByName("new");
+				std::function<ptr(mem_port)(const ptr(mem_component)&)> callback = [this, component](const ptr(mem_component)& /*context*/) -> ptr(mem_port) {
+					return m_bootstrapStage1->m_memory->newEmptyServiceComponent().lock()->getPortByName("default");
+				};
+				component->addService(m_bootstrapStage1->m_memory->newPrimitiveService(component, "new", callback).lock());
+
+				return component;
+			}
+
+			ptr(mem_component) CBootstrapStage2::bootstrapPortDescriptionComponent() {
+				ptr(mem_component) component = bootstrapDescriptorComponent(m_bootstrapStage1->m_coreModules->getCoreDescriptor("PortDescription"));
+
+				component->getPortByName("name")->disconnectAll();
+				component->getPortByName("parentName")->disconnectAll();
+
+				component->getPortByName("name")->connectPort(m_bootstrapStage1->bootstrapStringValue("PortDescription")->getDefaultPort());
+				component->getPortByName("parentName")->connectPort(m_bootstrapStage1->bootstrapStringValue("Component")->getDefaultPort());
+
+				component->removeServiceByName("new");
+				std::function<ptr(mem_port)(const ptr(mem_component)&)> callback = [this, component](const ptr(mem_component)& /*context*/) -> ptr(mem_port) {
+					return m_bootstrapStage1->m_memory->newPortDescriptionComponent().lock()->getPortByName("default");
+				};
+				component->addService(m_bootstrapStage1->m_memory->newPrimitiveService(component, "new", callback).lock());
+
+				return component;
+			}
 
 			ptr(mem_component) CBootstrapStage2::bootstrapDescriptorComponent(ptr(ast_descriptor) descriptor) {
 				ptr(mem_component) component = bootstrapPrologue("Descriptor");
-                                
+
 				component->getPortByName("name")->connectPort(m_bootstrapStage1->bootstrapStringValue(descriptor->getNameSymbol()->getStringValue())->getDefaultPort());
 				if (descriptor->getExtendsSymbol().use_count()) {
 					component->getPortByName("parentName")->connectPort(m_bootstrapStage1->bootstrapStringValue(descriptor->getExtendsSymbol()->getStringValue())->getDefaultPort());
@@ -312,7 +311,7 @@ namespace interpreter {
 					newComponent->setParent(parent);
 					parent->setChild(newComponent);
 
-                                        newComponent->getPortByName("descriptorPort")->disconnectAll();
+					newComponent->getPortByName("descriptorPort")->disconnectAll();
 					newComponent->getPortByName("descriptorPort")->connectPort(component->getPortByName("default"));
 
 					for (size_t i = 0; i < context->getPortByName("services")->getConnectedPortsNumber(); ++i) {
@@ -402,95 +401,95 @@ namespace interpreter {
 				};
 				component->addService(m_bootstrapStage1->m_memory->newPrimitiveService(component, "new", callback).lock());
 
-                                component->removeServiceByName("getDescribedPortAt");
-                                callback = [this, component](const ptr(mem_component)& context) -> ptr(mem_port) {
-                                    i64 index = cast(mem_int)(context->getPortByName("args")->getConnectedPortAt(0)->getOwner())->getValue();
-                                    context->getPortByName("args")->disconnectAll();
-                                    return context->getPortByName("ports")->getConnectedPortAt(index);
-                                };
-                                component->addService(m_bootstrapStage1->m_memory->newPrimitiveService(component, "getDescribedPortAt", callback).lock());
-                                
-                                component->removeServiceByName("getDescribedConnAt");
-                                callback = [this, component](const ptr(mem_component)& context) -> ptr(mem_port) {
-                                    i64 index = cast(mem_int)(context->getPortByName("args")->getConnectedPortAt(0)->getOwner())->getValue();
-                                    context->getPortByName("args")->disconnectAll();
-                                    return context->getPortByName("architectureDefinition")->getConnectedPortAt(index);
-                                };
-                                component->addService(m_bootstrapStage1->m_memory->newPrimitiveService(component, "getDescribedConnAt", callback).lock());
-                                
-                                component->removeServiceByName("newNamed");
-                                callback = [this, component](const ptr(mem_component)& /*context*/) -> ptr(mem_port) {
-                                    throw exceptions::semantic::CUnsupportedFeatureException("newNamed() function of Descriptor");
-                                };
-                                component->addService(m_bootstrapStage1->m_memory->newPrimitiveService(component, "newNamed", callback).lock());
-                                
-                                component->removeServiceByName("removeConnDescription");
-                                callback = [this, component](const ptr(mem_component)& /*context*/) -> ptr(mem_port) {
-                                    throw exceptions::semantic::CUnsupportedFeatureException("removeConnDescription() function of Descriptor");
-                                };
-                                component->addService(m_bootstrapStage1->m_memory->newPrimitiveService(component, "removeConnDescription", callback).lock());
-                                
-                                component->removeServiceByName("addConnDescription");
-                                callback = [this, component](const ptr(mem_component)& /*context*/) -> ptr(mem_port) {
-                                    throw exceptions::semantic::CUnsupportedFeatureException("addConnDescription() function of Descriptor");
-                                };
-                                component->addService(m_bootstrapStage1->m_memory->newPrimitiveService(component, "addConnDescription", callback).lock());
-                                
-                                component->removeServiceByName("getService");
-                                callback = [this, component](const ptr(mem_component)& context) -> ptr(mem_port) {
-                                    std::string searchedName = cast(mem_string)(context->getPortByName("args")->getConnectedPortAt(0)->getOwner())->getValue();
-                                    //i64 arity = cast(mem_int)(context->getPortByName("args")->getConnectedPortAt(1)->getOwner())->getValue();
-                                    context->getPortByName("args")->disconnectAll();
-                                    for (size_t i = 0; i < context->getPortByName("services")->getConnectedPortsNumber(); ++i) {
-                                        std::string name = cast(mem_string)(context->getPortByName("services")
-                                                                            ->getConnectedPortAt(i)->getOwner()->getPortByName("serviceSign")
-                                                                            ->getConnectedPortAt(0)->getOwner()->getPortByName("selector")
-                                                                            ->getConnectedPortAt(0)->getOwner())->getValue();
-                                        if (name == searchedName) {
-                                            return context->getPortByName("services")->getConnectedPortAt(i);
-                                        }
-                                    }
-                                    throw exceptions::runtime::CServiceNotFoundException(searchedName);
-                                };
-                                component->addService(m_bootstrapStage1->m_memory->newPrimitiveService(component, "getService", callback).lock());
-                                
-                                component->removeServiceByName("removeService");
-                                callback = [this, component](const ptr(mem_component)& context) -> ptr(mem_port) {
-                                    std::string searchedName = cast(mem_string)(context->getPortByName("args")->getConnectedPortAt(0)->getOwner())->getValue();
-                                    //i64 arity = cast(mem_int)(context->getPortByName("args")->getConnectedPortAt(1)->getOwner())->getValue();
-                                    context->getPortByName("args")->disconnectAll();
-                                    for (size_t i = 0; i < context->getPortByName("services")->getConnectedPortsNumber(); ++i) {
-                                        std::string name = cast(mem_string)(context->getPortByName("services")
-                                                                            ->getConnectedPortAt(i)->getOwner()->getPortByName("serviceSign")
-                                                                            ->getConnectedPortAt(0)->getOwner()->getPortByName("selector")
-                                                                            ->getConnectedPortAt(0)->getOwner())->getValue();
-                                        if (name == searchedName) {
-                                            context->getPortByName("services")->disconnectPortAt(i);
-                                            break;
-                                        }
-                                    }
-                                    return nullptr;
-                                };
-                                component->addService(m_bootstrapStage1->m_memory->newPrimitiveService(component, "removeService", callback).lock());
-                                
-                                component->removeServiceByName("removePortDescription");
-                                callback = [this, component](const ptr(mem_component)& context) -> ptr(mem_port) {
-                                    std::string searchedName = cast(mem_string)(context->getPortByName("args")->getConnectedPortAt(0)->getOwner())->getValue();
-                                    //i64 arity = cast(mem_int)(context->getPortByName("args")->getConnectedPortAt(1)->getOwner())->getValue();
-                                    context->getPortByName("args")->disconnectAll();
-                                    for (size_t i = 0; i < context->getPortByName("ports")->getConnectedPortsNumber(); ++i) {
-                                        std::string name = cast(mem_string)(context->getPortByName("ports")
-                                                                            ->getConnectedPortAt(i)->getOwner()->getPortByName("name")
-                                                                            ->getConnectedPortAt(0)->getOwner())->getValue();
-                                        if (name == searchedName) {
-                                            context->getPortByName("ports")->disconnectPortAt(i);
-                                            break;
-                                        }
-                                    }
-                                    return nullptr;
-                                };
-                                component->addService(m_bootstrapStage1->m_memory->newPrimitiveService(component, "removePortDescription", callback).lock());
-                                
+				component->removeServiceByName("getDescribedPortAt");
+				callback = [this, component](const ptr(mem_component)& context) -> ptr(mem_port) {
+					i64 index = cast(mem_int)(context->getPortByName("args")->getConnectedPortAt(0)->getOwner())->getValue();
+					context->getPortByName("args")->disconnectAll();
+					return context->getPortByName("ports")->getConnectedPortAt(index);
+				};
+				component->addService(m_bootstrapStage1->m_memory->newPrimitiveService(component, "getDescribedPortAt", callback).lock());
+
+				component->removeServiceByName("getDescribedConnAt");
+				callback = [this, component](const ptr(mem_component)& context) -> ptr(mem_port) {
+					i64 index = cast(mem_int)(context->getPortByName("args")->getConnectedPortAt(0)->getOwner())->getValue();
+					context->getPortByName("args")->disconnectAll();
+					return context->getPortByName("architectureDefinition")->getConnectedPortAt(index);
+				};
+				component->addService(m_bootstrapStage1->m_memory->newPrimitiveService(component, "getDescribedConnAt", callback).lock());
+
+				component->removeServiceByName("newNamed");
+				callback = [this, component](const ptr(mem_component)& /*context*/) -> ptr(mem_port) {
+					throw exceptions::semantic::CUnsupportedFeatureException("newNamed() function of Descriptor");
+				};
+				component->addService(m_bootstrapStage1->m_memory->newPrimitiveService(component, "newNamed", callback).lock());
+
+				component->removeServiceByName("removeConnDescription");
+				callback = [this, component](const ptr(mem_component)& /*context*/) -> ptr(mem_port) {
+					throw exceptions::semantic::CUnsupportedFeatureException("removeConnDescription() function of Descriptor");
+				};
+				component->addService(m_bootstrapStage1->m_memory->newPrimitiveService(component, "removeConnDescription", callback).lock());
+
+				component->removeServiceByName("addConnDescription");
+				callback = [this, component](const ptr(mem_component)& /*context*/) -> ptr(mem_port) {
+					throw exceptions::semantic::CUnsupportedFeatureException("addConnDescription() function of Descriptor");
+				};
+				component->addService(m_bootstrapStage1->m_memory->newPrimitiveService(component, "addConnDescription", callback).lock());
+
+				component->removeServiceByName("getService");
+				callback = [this, component](const ptr(mem_component)& context) -> ptr(mem_port) {
+					std::string searchedName = cast(mem_string)(context->getPortByName("args")->getConnectedPortAt(0)->getOwner())->getValue();
+					//i64 arity = cast(mem_int)(context->getPortByName("args")->getConnectedPortAt(1)->getOwner())->getValue();
+					context->getPortByName("args")->disconnectAll();
+					for (size_t i = 0; i < context->getPortByName("services")->getConnectedPortsNumber(); ++i) {
+						std::string name = cast(mem_string)(context->getPortByName("services")
+						                                    ->getConnectedPortAt(i)->getOwner()->getPortByName("serviceSign")
+						                                    ->getConnectedPortAt(0)->getOwner()->getPortByName("selector")
+						                                    ->getConnectedPortAt(0)->getOwner())->getValue();
+						if (name == searchedName) {
+							return context->getPortByName("services")->getConnectedPortAt(i);
+						}
+					}
+					throw exceptions::runtime::CServiceNotFoundException(searchedName);
+				};
+				component->addService(m_bootstrapStage1->m_memory->newPrimitiveService(component, "getService", callback).lock());
+
+				component->removeServiceByName("removeService");
+				callback = [this, component](const ptr(mem_component)& context) -> ptr(mem_port) {
+					std::string searchedName = cast(mem_string)(context->getPortByName("args")->getConnectedPortAt(0)->getOwner())->getValue();
+					//i64 arity = cast(mem_int)(context->getPortByName("args")->getConnectedPortAt(1)->getOwner())->getValue();
+					context->getPortByName("args")->disconnectAll();
+					for (size_t i = 0; i < context->getPortByName("services")->getConnectedPortsNumber(); ++i) {
+						std::string name = cast(mem_string)(context->getPortByName("services")
+						                                    ->getConnectedPortAt(i)->getOwner()->getPortByName("serviceSign")
+						                                    ->getConnectedPortAt(0)->getOwner()->getPortByName("selector")
+						                                    ->getConnectedPortAt(0)->getOwner())->getValue();
+						if (name == searchedName) {
+							context->getPortByName("services")->disconnectPortAt(i);
+							break;
+						}
+					}
+					return nullptr;
+				};
+				component->addService(m_bootstrapStage1->m_memory->newPrimitiveService(component, "removeService", callback).lock());
+
+				component->removeServiceByName("removePortDescription");
+				callback = [this, component](const ptr(mem_component)& context) -> ptr(mem_port) {
+					std::string searchedName = cast(mem_string)(context->getPortByName("args")->getConnectedPortAt(0)->getOwner())->getValue();
+					//i64 arity = cast(mem_int)(context->getPortByName("args")->getConnectedPortAt(1)->getOwner())->getValue();
+					context->getPortByName("args")->disconnectAll();
+					for (size_t i = 0; i < context->getPortByName("ports")->getConnectedPortsNumber(); ++i) {
+						std::string name = cast(mem_string)(context->getPortByName("ports")
+						                                    ->getConnectedPortAt(i)->getOwner()->getPortByName("name")
+						                                    ->getConnectedPortAt(0)->getOwner())->getValue();
+						if (name == searchedName) {
+							context->getPortByName("ports")->disconnectPortAt(i);
+							break;
+						}
+					}
+					return nullptr;
+				};
+				component->addService(m_bootstrapStage1->m_memory->newPrimitiveService(component, "removePortDescription", callback).lock());
+
 				bootstrapEpilogue(component);
 
 				return component;

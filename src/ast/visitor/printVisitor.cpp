@@ -153,10 +153,10 @@ namespace ast {
 			m_output << "signs" << std::endl;
 		}
 
-                void CPrintVisitor::visit(ptr(ast_sizeof) /*node*/) {
+		void CPrintVisitor::visit(ptr(ast_sizeof) /*node*/) {
 			m_output << "sizeof" << std::endl;
 		}
-                
+
 		void CPrintVisitor::visit(ptr(ast_universalport) /*node*/) {
 			TRACE(ERROR, "Universal port cannot be printed.");
 		}

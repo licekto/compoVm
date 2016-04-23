@@ -19,7 +19,7 @@ namespace interpreter {
 	namespace memory {
 
 		namespace objects {
-                    
+
 			class CComponent : public std::enable_shared_from_this<CComponent> {
 			  protected:
 
@@ -31,10 +31,10 @@ namespace interpreter {
 
 				std::vector<wptr(CGeneralService)> m_services;
 
-                                static i64 m_pseudoHash;
-                                
+				static i64 m_pseudoHash;
+
 			  public:
-                              
+
 				CComponent();
 
 				virtual ~CComponent();
@@ -92,8 +92,8 @@ namespace interpreter {
 				std::map<std::string, ptr(CGeneralPort)> getAllPorts();
 
 				ptr(CGeneralService) lookupService(const std::string& name);
-                                
-                                i64 getHash() const;
+
+				i64 getHash() const;
 			};
 
 		}

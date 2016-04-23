@@ -13,7 +13,7 @@ namespace interpreter {
 
 			ptr(mem_component) CDescriptorTable::getDescriptor(const std::string& name) {
 				auto it = std::find_if(m_table.begin(), m_table.end(), [&name](ptr(mem_component) descriptor) {
-                                        std::string tmpName = cast(mem_string)(descriptor->getPortByName("name")->getConnectedPortAt(0)->getOwner())->getValue();
+					std::string tmpName = cast(mem_string)(descriptor->getPortByName("name")->getConnectedPortAt(0)->getOwner())->getValue();
 					return tmpName == name;
 				});
 
@@ -24,7 +24,7 @@ namespace interpreter {
 			}
 
 			bool CDescriptorTable::descriptorFound(const std::string& name) {
-                            return getDescriptor(name).use_count() != 0;
+				return getDescriptor(name).use_count() != 0;
 			}
 
 			void CDescriptorTable::clear() {

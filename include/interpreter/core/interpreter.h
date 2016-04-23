@@ -73,8 +73,8 @@ namespace interpreter {
 			ptr(mem_port) execConnection(ptr(ast_connection) node);
 
 			void execDisconnection(ptr(ast_disconnection) node);
-                        
-                        ptr(mem_port) execSizeof(ptr(ast_sizeof) node);
+
+			ptr(mem_port) execSizeof(ptr(ast_sizeof) node);
 
 			void execFor(ptr(ast_for) node);
 
