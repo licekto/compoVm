@@ -86,6 +86,8 @@ namespace interpreter {
 				ptr(mem_component) bootstrapServiceSignatureComponent(ptr(mem_component) owner);
 
 				ptr(mem_component) bootstrapPortDescriptionComponent(ptr(ast_port) astPort, ptr(mem_component) owner);
+                                
+                                ptr(mem_component) bootstrapPortDescriptionComponent(ptr(mem_component) owner);
 
 				ptr(mem_component) bootstrapServiceInvocationComponent(ptr(ast_serviceinvocation) astServiceInv, ptr(mem_component) owner);
 

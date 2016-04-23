@@ -43,7 +43,7 @@ BOOST_AUTO_TEST_CASE(basicTest) {
     TEST_DESCRIPTOR(descriptor, "Port", "Component", 5, 8, 0);
     
     descriptor = coreModules->getCoreDescriptor("PortDescription");
-    TEST_DESCRIPTOR(descriptor, "PortDescription", "Component", 6, 12, 0);
+    TEST_DESCRIPTOR(descriptor, "PortDescription", "Component", 6, 14, 0);
     
     descriptor = coreModules->getCoreDescriptor("Service");
     TEST_DESCRIPTOR(descriptor, "Service", "Component", 4, 7, 0);

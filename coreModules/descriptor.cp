@@ -38,14 +38,12 @@ descriptor Descriptor extends Component {
     service removeService(selector, arity) {}
 
     service addPortDescription(pd) {
-        connect default@pd to ports;
+        ports := pd;
     }
 
-    service removePortDescription(pd) {}
+    service removePortDescription(name) {}
 
-    service addConnDescription(cd) {
-        connect default@cd to architectureDefinition;
-    }
+    service addConnDescription(cd) {}
 
     service removeConnDescription(cd) {}
 }

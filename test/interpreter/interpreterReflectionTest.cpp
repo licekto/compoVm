@@ -252,4 +252,44 @@ BOOST_AUTO_TEST_CASE(removeServiceTest) {
     table->clear();
 }
 
+BOOST_AUTO_TEST_CASE(newPortDescriptionTest) {
+    // Testing input
+    std::stringstream input;
+    input.str(
+   "descriptor A {\
+        service setName(newName) {\
+            testPort := newName;\
+        }\
+        service getName() {\
+            return testPort;\
+        }\
+    }\
+    descriptor CompoContainer {\
+        service main() {\
+            |a pd|\
+            pd := PortDescription.new();\
+            pd.setName(\"testPort\");\
+            pd.setRole(\"requires\");\
+            pd.setVisibility(\"externally\");\
+            pd.setType(\"named\");\
+            pd.setComponentName(\"String\");\
+            A.addPortDescription(pd);\
+            a := A.new();\
+            a.setName(\"testName\");\
+            return a.getName();\
+        }\
+    }");
+    
+    // Parse input and create AST
+    parser->parseAll(input);
+    
+    ptr(ast_program) program = parser->getRootNode();
+    ptr(mem_component) component = interpreter->run(program)->getOwner();
+    BOOST_CHECK_EQUAL(cast(mem_string)(component)->getValue(), "testName");
+    
+    // Clear AST for next test
+    parser->clearAll();
+    table->clear();
+}
+
 BOOST_AUTO_TEST_SUITE_END()

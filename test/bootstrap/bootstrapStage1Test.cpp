@@ -633,7 +633,7 @@ BOOST_AUTO_TEST_CASE(portDescriptionComponentTest) {
     
     ptr(mem_component) portDescriptionComponent = bootstrap1->bootstrapPortDescriptionComponent(astPort, owner);
     
-    TEST_BASE_COMPONENT_PRIMITIVE(portDescriptionComponent->getParent(), 17, owner, bootstrap1);
+    TEST_BASE_COMPONENT_PRIMITIVE(portDescriptionComponent->getParent(), 19, owner, bootstrap1);
     
     TEST_PRIMITIVE_PORT(portDescriptionComponent, "name", types::roleType::REQUIRES, types::visibilityType::INTERNAL, 0);
     BOOST_CHECK_EQUAL(cast(mem_string)(portDescriptionComponent->getPortByName("name")->getConnectedPortAt(0)->getOwner())->getValue(), "testPortDescription");

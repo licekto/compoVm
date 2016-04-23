@@ -20,4 +20,6 @@ descriptor PortDescription extends Component {
     service getVisibility() {}
     service setIsCollection(bool) {}
     service isCollection() {}
+    service setType(type) {}
+    service setComponentName(componentName) {}
 }

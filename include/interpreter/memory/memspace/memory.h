@@ -61,6 +61,8 @@ namespace interpreter {
 				wptr(mem_service) newComponentService(ptr(mem_component) service, ptr(mem_service) specialized = nullptr);
                                 
                                 wptr(mem_component) newEmptyServiceComponent();
+                                
+                                wptr(mem_component) newPortDescriptionComponent();
 
 				size_t getComponentsNumber() const;
 			};
