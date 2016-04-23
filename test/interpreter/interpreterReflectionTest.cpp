@@ -223,4 +223,33 @@ BOOST_AUTO_TEST_CASE(gettersTest) {
     table->clear();
 }
 
+BOOST_AUTO_TEST_CASE(removeServiceTest) {
+    // Testing input
+    std::stringstream input;
+    input.str(
+   "descriptor A {\
+        service testService(p) {\
+            return 1 + p;\
+        }\
+    }\
+    descriptor CompoContainer {\
+        service main() {\
+            |a|\
+            A.removeService(\"testService\", 1);\
+            a := A.new();\
+            a.testService(1);\
+        }\
+    }");
+    
+    // Parse input and create AST
+    parser->parseAll(input);
+    
+    ptr(ast_program) program = parser->getRootNode();
+    BOOST_CHECK_THROW(interpreter->run(program), exceptions::runtime::CServiceNotFoundException);
+    
+    // Clear AST for next test
+    parser->clearAll();
+    table->clear();
+}
+
 BOOST_AUTO_TEST_SUITE_END()

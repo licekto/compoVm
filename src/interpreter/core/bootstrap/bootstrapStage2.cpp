@@ -410,6 +410,25 @@ namespace interpreter {
                                 };
                                 component->addService(m_bootstrapStage1->m_memory->newPrimitiveService(component, "getService", callback).lock());
                                 
+                                component->removeServiceByName("removeService");
+                                callback = [this, component](const ptr(mem_component)& context) -> ptr(mem_port) {
+                                    std::string searchedName = cast(mem_string)(context->getPortByName("args")->getConnectedPortAt(0)->getOwner())->getValue();
+                                    //i64 arity = cast(mem_int)(context->getPortByName("args")->getConnectedPortAt(1)->getOwner())->getValue();
+                                    context->getPortByName("args")->disconnectAll();
+                                    for (size_t i = 0; i < context->getPortByName("services")->getConnectedPortsNumber(); ++i) {
+                                        std::string name = cast(mem_string)(context->getPortByName("services")
+                                                                            ->getConnectedPortAt(i)->getOwner()->getPortByName("serviceSign")
+                                                                            ->getConnectedPortAt(0)->getOwner()->getPortByName("selector")
+                                                                            ->getConnectedPortAt(0)->getOwner())->getValue();
+                                        if (name == searchedName) {
+                                            context->getPortByName("services")->disconnectPortAt(i);
+                                            break;
+                                        }
+                                    }
+                                    return nullptr;
+                                };
+                                component->addService(m_bootstrapStage1->m_memory->newPrimitiveService(component, "removeService", callback).lock());
+                                
 				bootstrapEpilogue(component);
 
 				return component;
