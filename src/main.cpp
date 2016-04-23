@@ -13,11 +13,9 @@ std::string readFile(const std::string& filename) {
         }
 
         std::string line, code;
-        
         while (std::getline(infile, line)) {
             code += line;
         }
-        
 	infile.close();
         
         return code;
@@ -37,16 +35,12 @@ ptr(core_interpreter) init() {
 }
 
 int main(int argc, char **argv) {
-
 	if (argc != 2) {
-		std::cerr << "Wrong args" << std::endl;
+		std::cerr << "Wrong arguments" << std::endl << "Usage: compoVm <file_name>" << std::endl;
 		return -1;
 	}
-
 	std::string code = readFile(std::string(argv[1]));
-        
         ptr(core_interpreter) interpreter = init();
-        
         interpreter->run(code);
 
 	return 0;
