@@ -359,6 +359,9 @@ namespace interpreter {
 		}
 
 		ptr(mem_port)  CInterpreter::exec(ptr(ast_node) node) {
+                        if (!node.use_count()) {
+                            return nullptr;
+                        }
 			switch (node->getNodeType()) {
 			case type_node::PROGRAM : {
 				return execProgram(cast(ast_program)(node));
