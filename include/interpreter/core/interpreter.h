@@ -85,10 +85,9 @@ namespace interpreter {
 			ptr(mem_port) exec(ptr(ast_node));
 
 			void checkBindAddresses(ptr(mem_port) src, ptr(mem_port) dst);
-
+                
+                public:
 			std::string getStringRepresentation(ptr(mem_value) val);
-
-		  public:
 
 			CInterpreter(ptr(ParserWrapper) parser = nullptr,
 			             ptr(bootstrap::CBootstrapStage2) bootstrap = nullptr,

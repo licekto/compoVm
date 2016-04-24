@@ -203,7 +203,9 @@ namespace interpreter {
 				newComponent->removeServiceByName("getRand");
 
 				std::function<ptr(mem_port)(const ptr(mem_component)&)> callback = [this](const ptr(mem_component)& context) -> ptr(mem_port) {
-					STANDARD_OUT << cast(mem_string)(context->getPortByName("args")->getConnectedPortAt(0)->getOwner())->getValue() << std::endl;
+                                        std::string str = m_bootstrapStage1->m_interpreter.lock()
+                                                ->getStringRepresentation(cast(mem_value)(context->getPortByName("args")->getConnectedPortAt(0)->getOwner()));
+					STANDARD_OUT << str << std::endl;
 					return nullptr;
 				};
 				newComponent->addService(m_bootstrapStage1->m_memory->newPrimitiveService(newComponent, "println", callback).lock());
