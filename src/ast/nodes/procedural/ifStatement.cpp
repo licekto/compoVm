@@ -8,7 +8,7 @@ namespace ast {
 
 			CIfStatement::CIfStatement(std::shared_ptr<ast::nodes::procedural::CAbstractExpression> condition,
 			                           std::shared_ptr<ast::nodes::procedural::CCompoundBody> ifBody,
-			                           std::shared_ptr<ast::nodes::procedural::CCompoundBody> elseBody)
+			                           std::shared_ptr<CNode> elseBody)
 				:   CNode(types::nodeType::IF),
 				    m_condition(condition),
 				    m_ifBody(ifBody),
@@ -23,7 +23,7 @@ namespace ast {
 				return m_ifBody;
 			}
 
-			std::shared_ptr<ast::nodes::procedural::CCompoundBody> CIfStatement::getElseBody() const {
+			std::shared_ptr<CNode> CIfStatement::getElseBody() const {
 				return m_elseBody;
 			}
 

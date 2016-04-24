@@ -24,7 +24,7 @@ namespace ast {
 				std::shared_ptr<procedural::CCompoundBody> m_ifBody;
 
 				/**< Else body */
-				std::shared_ptr<procedural::CCompoundBody> m_elseBody;
+				std::shared_ptr<CNode> m_elseBody;
 
 			  public:
 				/**
@@ -35,12 +35,12 @@ namespace ast {
 				*/
 				CIfStatement(std::shared_ptr<procedural::CAbstractExpression> condition = nullptr,
 				             std::shared_ptr<procedural::CCompoundBody> ifBody = nullptr,
-				             std::shared_ptr<procedural::CCompoundBody> elseBody = nullptr);
+				             std::shared_ptr<CNode> elseBody = nullptr);
 
 				/**
-				            * Accept method for visitor acceptation.
-				            * @param visitor: Pointer to abstract visitor.
-				            */
+                                * Accept method for visitor acceptation.
+                                * @param visitor: Pointer to abstract visitor.
+                                */
 				virtual void accept(std::shared_ptr<visitors::CAbstractVisitor> visitor);
 
 				/**
@@ -51,9 +51,9 @@ namespace ast {
 
 				/**
 				* Else body getter
-						* @return Constant pointer to else body
-						*/
-				std::shared_ptr<procedural::CCompoundBody> getElseBody() const;
+                                * @return Constant pointer to else body
+                                */
+				std::shared_ptr<CNode> getElseBody() const;
 
 				/**
 				* End condition getter

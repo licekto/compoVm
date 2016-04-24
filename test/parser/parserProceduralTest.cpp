@@ -711,7 +711,76 @@ BOOST_AUTO_TEST_CASE(nodesIfStatement) {
     TEST_SYMBOL(var, "b");
     
     // Check else body
-    compoundBody = ifStatement->getElseBody();
+    compoundBody = cast(ast_compound)(ifStatement->getElseBody());
+    var = cast(ast_symbol)(compoundBody->getBodyNodeAt(0));
+    TEST_SYMBOL(var, "c");
+    
+    // Clear parser
+    parser.clearAll();
+}
+
+BOOST_AUTO_TEST_CASE(nodesElseIfStatement) {
+    // Testing input
+    std::stringstream input;
+    input.str("descriptor test {\
+        service main() {\
+            if (a < 5) {\
+                b;\
+            } else if (a == 10) {\
+                c;\
+            }\
+        }\
+    }");
+    // Parse input and create AST
+    parser.parseAll(input);
+    
+    // Check descriptor
+    ptr(ast_descriptor) descriptor = cast(ast_descriptor)(parser.getRootNode()->getNodeAt(0));
+    TEST_DESCRIPTOR(descriptor, "test", "", 0, 1, 0);
+    
+    // Check service
+    ptr(ast_service) service = cast(ast_service)(descriptor->getServiceAt(0));
+    TEST_SERVICE(service, "main", 0, 1, 0);
+    
+    // Check if statement
+    ptr(ast_if) ifStatement = cast(ast_if)(service->getBodyNodeAt(0));
+    BOOST_CHECK_EQUAL(types::nodeType::IF, ifStatement->getNodeType());
+    
+    // Check condition
+    ptr(ast_less) cond = cast(ast_less)(ifStatement->getCondition());
+    BOOST_CHECK_EQUAL(types::nodeType::LESS_EXPRESSION, cond->getNodeType());
+    
+    // Check variable
+    ptr(ast_symbol) var = cast(ast_symbol)(cond->getOperand1());
+    TEST_SYMBOL(var, "a");
+    
+    // Check constant
+    ptr(ast_constant) constant = cast(ast_constant)(cond->getOperand2());
+    TEST_CONSTANT(constant, 5);
+    
+    // Check if body
+    ptr(ast_compound) compoundBody = ifStatement->getIfBody();
+    var = cast(ast_symbol)(compoundBody->getBodyNodeAt(0));
+    TEST_SYMBOL(var, "b");
+    
+    // Check else if body
+    ifStatement = cast(ast_if)(ifStatement->getElseBody());
+    BOOST_CHECK_EQUAL(types::nodeType::IF, ifStatement->getNodeType());
+    
+    // Check condition
+    ptr(ast_equality) eq = cast(ast_equality)(ifStatement->getCondition());
+    BOOST_CHECK_EQUAL(types::nodeType::EQUALITY_EXPRESSION, eq->getNodeType());
+    
+    // Check variable
+    var = cast(ast_symbol)(eq->getOperand1());
+    TEST_SYMBOL(var, "a");
+    
+    // Check constant
+    constant = cast(ast_constant)(eq->getOperand2());
+    TEST_CONSTANT(constant, 10);
+    
+    // Check if body
+    compoundBody = ifStatement->getIfBody();
     var = cast(ast_symbol)(compoundBody->getBodyNodeAt(0));
     TEST_SYMBOL(var, "c");
     

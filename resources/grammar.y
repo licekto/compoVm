@@ -322,7 +322,7 @@ selection_statement
                     {
                         $$ = new_ptr(ast_if)(cast(ast_expression)($3),
                                              cast(ast_compound)($5),
-                                             cast(ast_compound)($7));
+                                             $7);
                     }
                 ;
 
