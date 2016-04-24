@@ -31,10 +31,19 @@ descriptor CompoContainer {
 	service main() {
 		|calc op|
 		calc := Calculator.new();
+		System.print("test ");
 		System.println("Operation (+, -, *, /, fact)");
 		op := System.readString();
-		System.println(op);
-		/* res := calc.add(2,3);
+		if (op == "+") {
+			|op1 op2|
+			System.println("Value 1: ");
+			op1 := System.readInt();
+			System.print("Value 2: ");
+			op2 := System.readInt();
+			System.println(calc.add(op1, op2));
+		}
+		/*System.println(op);
+		res := calc.add(2,3);
 		System.println(res);
 		System.println(calc.sub(calc.fact(4),10));*/
 	}

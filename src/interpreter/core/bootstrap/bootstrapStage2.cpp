@@ -197,6 +197,7 @@ namespace interpreter {
 
 				newComponent->getPortByName("name")->connectPort(m_bootstrapStage1->bootstrapStringValue("System")->getDefaultPort());
 
+                                newComponent->removeServiceByName("print");
 				newComponent->removeServiceByName("println");
 				newComponent->removeServiceByName("readString");
 				newComponent->removeServiceByName("readInt");
@@ -205,11 +206,21 @@ namespace interpreter {
 				std::function<ptr(mem_port)(const ptr(mem_component)&)> callback = [this](const ptr(mem_component)& context) -> ptr(mem_port) {
                                         std::string str = m_bootstrapStage1->m_interpreter.lock()
                                                 ->getStringRepresentation(cast(mem_value)(context->getPortByName("args")->getConnectedPortAt(0)->getOwner()));
+                                        context->getPortByName("args")->disconnectAll();
 					STANDARD_OUT << str << std::endl;
 					return nullptr;
 				};
 				newComponent->addService(m_bootstrapStage1->m_memory->newPrimitiveService(newComponent, "println", callback).lock());
 
+                                callback = [this](const ptr(mem_component)& context) -> ptr(mem_port) {
+                                        std::string str = m_bootstrapStage1->m_interpreter.lock()
+                                                ->getStringRepresentation(cast(mem_value)(context->getPortByName("args")->getConnectedPortAt(0)->getOwner()));
+                                        context->getPortByName("args")->disconnectAll();
+					STANDARD_OUT << str;
+					return nullptr;
+				};
+				newComponent->addService(m_bootstrapStage1->m_memory->newPrimitiveService(newComponent, "print", callback).lock());
+                                
 				callback = [this](const ptr(mem_component)& /*context*/) -> ptr(mem_port) {
 					std::string val;
 					STANDARD_IN >> val;
@@ -226,6 +237,7 @@ namespace interpreter {
 
 				callback = [this](const ptr(mem_component)& context) -> ptr(mem_port) {
 					i64 seed = cast(mem_int)(context->getPortByName("args")->getConnectedPortAt(0)->getOwner())->getValue();
+                                        context->getPortByName("args")->disconnectAll();
 					srand(seed);
 					return getIntComponent(rand());
 				};

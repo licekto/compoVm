@@ -86,7 +86,7 @@ BOOST_AUTO_TEST_CASE(identityHashTest) {
     ptr(ast_program) program = parser->getRootNode();
 
     ptr(mem_int) intComponent = cast(mem_int)(interpreter->run(program)->getOwner());
-    BOOST_CHECK_EQUAL(intComponent->getValue(), 41830);
+    BOOST_CHECK_EQUAL(intComponent->getValue(), 41998);
     
     // Clear AST for next test
     parser->clearAll();
