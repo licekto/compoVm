@@ -33,7 +33,7 @@ descriptor CompoContainer {
 		|calc op res|
 		calc := Calculator.new();
 		while (true) {
-			System.println("Operation (+, -, *, /, fact, pow, q)");
+			System.println("Operations (+, -, *, /, fact(n), pow(base,exp), (q)uit)");
 			op := System.readString();
 			if (op == "+") {
 				|op1 op2|
@@ -86,7 +86,7 @@ descriptor CompoContainer {
 				break;
 			}
 			else {
-				System.println("Wrong operation!");
+				System.println("Wrong operation: " + op + "!");
 			}
 			System.println(res);
 		}

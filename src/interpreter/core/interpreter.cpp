@@ -288,6 +288,7 @@ namespace interpreter {
 			}
 
 			srcPort->connectPort(dstPort);
+                        dstPort->connectPort(srcPort);
 
 			return m_bootstrap->getIntComponent(index);
 		}

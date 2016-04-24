@@ -86,7 +86,7 @@ BOOST_AUTO_TEST_CASE(identityHashTest) {
     ptr(ast_program) program = parser->getRootNode();
 
     ptr(mem_int) intComponent = cast(mem_int)(interpreter->run(program)->getOwner());
-    BOOST_CHECK_EQUAL(intComponent->getValue(), 43037);
+    BOOST_CHECK_EQUAL(intComponent->getValue(), 43182);
     
     // Clear AST for next test
     parser->clearAll();
@@ -249,7 +249,7 @@ BOOST_AUTO_TEST_CASE(connection1Test) {
     ptr(mem_component) inst = interpreter->run(program)->getOwner();
     
     BOOST_CHECK_EQUAL(inst->getPortByName("a")->getConnectedPortsNumber(), 1);
-    TEST_PORT_COMPONENT(inst->getPortByName("a")->getConnectedPortAt(0)->getPort(), "default", 0);
+    TEST_PORT_COMPONENT(inst->getPortByName("a")->getConnectedPortAt(0)->getPort(), "default", 1);
     
     ptr(mem_port) port = inst->getServiceByName("test")->invoke();
     BOOST_CHECK_EQUAL(cast(mem_int)(port->getOwner())->getValue(), 4);
