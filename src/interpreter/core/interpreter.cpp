@@ -137,9 +137,45 @@ namespace interpreter {
 		}
 
 		ptr(mem_port) CInterpreter::execRelationalOp(ptr(ast_binary) expr, type_operator op) {
-			i64 l = cast(mem_int)(exec(expr->getOperand1())->getOwner())->getValue();
-			i64 r = cast(mem_int)(exec(expr->getOperand2())->getOwner())->getValue();
-			bool res = 0;
+                        ptr(mem_value) val1 = cast(mem_value)(exec(expr->getOperand1())->getOwner());
+			ptr(mem_value) val2 = cast(mem_value)(exec(expr->getOperand2())->getOwner());
+
+			if (val1->getType() == type_values::STRING || val2->getType() == type_values::STRING) {
+                                std::string l = getStringRepresentation(val1);
+                                std::string r = getStringRepresentation(val2);
+                                bool res;
+				if (op == type_operator::EQUALITY) {
+                                    res = l == r;
+				}
+                                else if (op == type_operator::NON_EQUALITY) {
+                                    res = l != r;
+				}
+                                else {
+                                    throw exceptions::runtime::CWrongStringOperationException();
+                                }
+                                return m_bootstrap->getBoolComponent(res);
+			}
+                        
+                        if (val1->getType() == type_values::BOOL && val2->getType() == type_values::BOOL) {
+                                bool l = cast(mem_bool)(val1)->getValue();
+                                bool r = cast(mem_bool)(val2)->getValue();
+                                bool res;
+                                
+				if (op == type_operator::EQUALITY) {
+                                    res = l == r;
+				}
+                                else if (op == type_operator::NON_EQUALITY) {
+                                    res = l != r;
+				}
+                                else {
+                                    throw exceptions::runtime::CUnknownOperatorTypeException();
+                                }
+                                return m_bootstrap->getBoolComponent(res);
+			}
+
+			i64 l = cast(mem_int)(val1)->getValue();
+			i64 r = cast(mem_int)(val2)->getValue();
+			i64 res = false;
 
 			switch (op) {
 			case type_operator::EQUALITY : {
@@ -171,7 +207,7 @@ namespace interpreter {
 			}
 			}
 			return m_bootstrap->getBoolComponent(res);
-		}
+                }
 
 		ptr(mem_port) CInterpreter::execServiceInvocation(ptr(ast_serviceinvocation) node) {
 			std::string receiver = node->getReceiverName()->getStringValue();

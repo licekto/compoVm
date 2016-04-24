@@ -171,4 +171,36 @@ BOOST_AUTO_TEST_CASE(serviceInvocationBinaryOpTest) {
     table->clear();
 }
 
+BOOST_AUTO_TEST_CASE(stringCompareTest) {
+    // Testing input
+    std::stringstream input;
+    input.str(
+   "descriptor CompoContainer {\
+        service main() {\
+            |s1 s2 b res|\
+            s1 := \"hello\";\
+            s2 := \"world\";\
+            b := s1 == s2;\
+            res := b;\
+            s1 := \"world\";\
+            b := s1 != s2;\
+            res := res + \" \" + b;\
+            b := s1 == s2;\
+            res := res + \" \" + b;\
+            return res;\
+        }\
+    }");
+    
+    // Parse input and create AST
+    parser->parseAll(input);
+    
+    ptr(ast_program) program = parser->getRootNode();
+    ptr(mem_component) comp = interpreter->run(program)->getOwner();
+    BOOST_CHECK_EQUAL(cast(mem_string)(comp)->getValue(), "false false true");
+    
+    // Clear AST for next test
+    parser->clearAll();
+    table->clear();
+}
+
 BOOST_AUTO_TEST_SUITE_END()
