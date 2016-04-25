@@ -39,9 +39,21 @@ int main(int argc, char **argv) {
 		std::cerr << "Wrong arguments" << std::endl << "Usage: compoVm <file_name>" << std::endl;
 		return -1;
 	}
-	std::string code = readFile(std::string(argv[1]));
+        std::string code;
+        try {
+            code = readFile(std::string(argv[1]));
+        }
+        catch (const exceptions::runtime::CWrongParametersException& ex) {
+            std::cerr << ex.what() << std::endl;
+            return -1;
+        }
         ptr(core_interpreter) interpreter = init();
-        interpreter->run(code);
+        try {
+            interpreter->run(code);
+        } catch (const std::exception& ex) {
+            std::cerr << ex.what() << std::endl;
+            return -1;
+        }
 
 	return 0;
 }

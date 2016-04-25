@@ -200,6 +200,7 @@ namespace interpreter {
                                 newComponent->removeServiceByName("print");
 				newComponent->removeServiceByName("println");
 				newComponent->removeServiceByName("readString");
+                                newComponent->removeServiceByName("readLine");
 				newComponent->removeServiceByName("readInt");
 				newComponent->removeServiceByName("getRand");
 
@@ -235,7 +236,7 @@ namespace interpreter {
 				newComponent->addService(m_bootstrapStage1->m_memory->newPrimitiveService(newComponent, "readString", callback).lock());
 
                                 callback = [this](const ptr(mem_component)& /*context*/) -> ptr(mem_port) {
-					std::string val, dummy;
+					std::string val;
                                         std::getline(STANDARD_IN, val);
 					return getStringComponent(val);
 				};
