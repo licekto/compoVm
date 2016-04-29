@@ -1,4 +1,5 @@
 #include "ast/nodes/program.h"
+#include "logger/logger.h"
 
 namespace ast {
 
@@ -23,12 +24,12 @@ namespace ast {
 			return m_rootNodes.size();
 		}
 
-		std::shared_ptr<CNode> CProgram::getNodeAt(size_t i) const {
+		std::shared_ptr<CNode> CProgram::getNodeAt(size_t index) const {
 			std::shared_ptr<CNode> node = nullptr;
 			try {
-				node = m_rootNodes.at(i);
+				node = m_rootNodes.at(index);
 			} catch (const std::out_of_range& ex) {
-				// log error message
+                                TRACE(ERROR, ex.what());
 			}
 			return node;
 		}

@@ -137,7 +137,7 @@ namespace ast {
 			m_output << "}" << std::endl;
 		}
 
-		void CPrintVisitor::visit(ptr(ast_serviceinvocation) node) {
+		void CPrintVisitor::visit(ptr(ast_serviceinvocation) /*node*/) {
 			printTabs();
 			m_output << "service invocation" << std::endl;
 		}
@@ -166,7 +166,7 @@ namespace ast {
 			node->getOperand2()->accept(this->shared_from_this());
 		}
 
-		void CPrintVisitor::visit(ptr(ast_assignment) node) {
+		void CPrintVisitor::visit(ptr(ast_assignment) /*node*/) {
 			printTabs();
 			m_output << "assignment" << std::endl;
 		}
@@ -181,10 +181,10 @@ namespace ast {
 			}
 		}
 
-		void CPrintVisitor::visit(ptr(ast_constant) node) {
+		void CPrintVisitor::visit(ptr(ast_constant) /*node*/) {
 		}
 
-		void CPrintVisitor::visit(ptr(ast_boolean) node) {
+		void CPrintVisitor::visit(ptr(ast_boolean) /*node*/) {
 		}
 
 		void CPrintVisitor::visit(ptr(ast_continue) /*node*/) {
@@ -269,7 +269,7 @@ namespace ast {
 			node->getOperand2()->accept(this->shared_from_this());
 		}
 
-		void CPrintVisitor::visit(ptr(ast_string) node) {
+		void CPrintVisitor::visit(ptr(ast_string) /*node*/) {
 		}
 
 		void CPrintVisitor::visit(ptr(ast_symbol) /*node*/) {

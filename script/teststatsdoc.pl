@@ -18,9 +18,9 @@ my $lcovCommand4 = "lcov --remove coverage.info \"include/generated/*\" -o cover
 my $lcovCommand5 = "lcov --remove coverage.info \"src/generated/*\" -o coverage.info";
 my $genhtmlCommand = "genhtml coverage.info --output-directory ../doc/coverage";
 
-if (not -d "doc/doxygen") {
-system("mkdir doc");
-system("mkdir doc/doxygen");
+if (not -d "../doc/doxygen") {
+system("mkdir ../doc");
+system("mkdir ../doc/doxygen");
 }
 
 chdir("../resources");

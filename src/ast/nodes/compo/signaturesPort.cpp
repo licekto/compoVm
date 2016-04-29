@@ -1,5 +1,6 @@
 #include "ast/nodes/compo/port.h"
 #include "ast/nodes/compo/signaturesPort.h"
+#include "logger/logger.h"
 
 namespace ast {
 
@@ -31,7 +32,7 @@ namespace ast {
 				try {
 					signature = m_signaturesList.at(index);
 				} catch (const std::out_of_range& ex) {
-					// log error message
+					TRACE(ERROR, ex.what());
 				}
 				return signature;
 			}

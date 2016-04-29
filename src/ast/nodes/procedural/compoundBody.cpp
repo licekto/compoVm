@@ -1,4 +1,5 @@
 #include "ast/nodes/procedural/compoundBody.h"
+#include "logger/logger.h"
 
 namespace ast {
 
@@ -22,7 +23,7 @@ namespace ast {
 				try {
 					node = m_body.at(index);
 				} catch (const std::out_of_range& ex) {
-					// log error message
+                                        TRACE(ERROR, ex.what());
 				}
 				return node;
 			}
@@ -32,7 +33,7 @@ namespace ast {
 				try {
 					symbol = m_temporaries.at(index);
 				} catch (const std::out_of_range& ex) {
-					// log error message
+					TRACE(ERROR, ex.what());
 				}
 				return symbol;
 			}

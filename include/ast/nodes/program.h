@@ -51,7 +51,7 @@ namespace ast {
 			 * @param i - index of wanted node
 			 * @return shared pointer to node
 			 */
-			std::shared_ptr<CNode> getNodeAt(size_t i) const;
+			std::shared_ptr<CNode> getNodeAt(size_t index) const;
 		};
 
 	}

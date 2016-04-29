@@ -1,4 +1,5 @@
 #include "ast/nodes/compo/serviceSignature.h"
+#include "logger/logger.h"
 
 namespace ast {
 
@@ -24,7 +25,7 @@ namespace ast {
 				try {
 					param = m_params.at(index);
 				} catch (const std::out_of_range& ex) {
-					// log error message
+					TRACE(ERROR, ex.what());
 				}
 				return param;
 			}
