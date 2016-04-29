@@ -18,31 +18,30 @@ namespace ast {
 		namespace compo {
 
 			/**
-			 * \class CAbstractServConstr
-			 * \brief Abstract base class for service and constraint nodes.
-			 *
-			 * Abstract base class for service and constraint nodes. Class inherits virtually from CCompoNode prevent diamond problem.
-			 * This class was designed because of the similar structure of service a constraint nodes thus to prevent code repetition.
+			 * \class CService
+			 * \brief Class for Compo service representation
 			 */
 			class CService : public virtual CNode, public std::enable_shared_from_this<CService> {
 			  protected:
 				/**< Name */
 				std::shared_ptr<compo::CServiceSignature> m_signature;
 
+				/**< String representation of service code */
 				std::shared_ptr<procedural::CStringLiteral> m_code;
 
 				/**< Compound body node */
 				std::shared_ptr<procedural::CCompoundBody> m_body;
 
+				/**
+				 * Checks if body is compiled
+				 */
 				void checkBodyCompiled() const;
 
 			  public:
 				/**
 				* Parametric constructor with default values
-				* Constructor is made protected to prevent from creation of object of this (abstract) type.
-				* @param name: name of entity
-				* @param params: vector of parameter names
-				* @param body: vector of body expressions
+				* @param signature: service signature
+				* @param code: string representation of code
 				*/
 				CService(std::shared_ptr<compo::CServiceSignature> signature = nullptr,
 				         std::shared_ptr<procedural::CStringLiteral> code = nullptr);
@@ -59,6 +58,10 @@ namespace ast {
 				*/
 				std::shared_ptr<procedural::CSymbol> getNameSymbol() const;
 
+				/**
+				 * Parsed AST node setter
+				 * @param body
+				 */
 				void setParsedBodyNode(std::shared_ptr<procedural::CCompoundBody> body);
 
 				/**
@@ -104,10 +107,22 @@ namespace ast {
 				*/
 				std::shared_ptr<CNode> getParamAt(int index) const;
 
+				/**
+				 * Code string setter
+				 * @param code
+				 */
 				void setBodyCode(const std::string& code);
 
+				/**
+				 * Code string getter
+				 * @return code string
+				 */
 				std::string getBodyCode() const;
 
+				/**
+				 * Signature getter
+				 * @return service signature
+				 */
 				std::shared_ptr<compo::CServiceSignature> getSignature() const;
 			};
 

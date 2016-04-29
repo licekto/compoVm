@@ -22,10 +22,8 @@ namespace ast {
 	namespace visitors {
 
 		/**
-		* \class CAbstractVisitor
-		* \brief Abstract base class (interface) for other visitors.
-		*
-		* Abstract base class for visitors servers as interface. Every visitor derived from this one.
+		* \class CSemanticCheckVisitor
+		* \brief Visitor that checks semantics
 		*/
 		class CSemanticCheckVisitor : public CAbstractVisitor, public std::enable_shared_from_this<CSemanticCheckVisitor> {
 		  private:

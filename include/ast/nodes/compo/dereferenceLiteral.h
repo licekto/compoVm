@@ -10,8 +10,8 @@ namespace ast {
 		namespace compo {
 
 			/**
-			 * \class CNamedPort
-			 * \brief Class for named port representation.
+			 * \class CDereferenceLiteral
+			 * \brief Class for dereference literal representation.
 			 */
 			class CDereferenceLiteral : public CNode, public std::enable_shared_from_this<CDereferenceLiteral> {
 			  protected:
@@ -21,8 +21,7 @@ namespace ast {
 			  public:
 				/**
 				* Parametric constructor with default value
-				* @param name: Name of port
-				* @param atomic: Is atomic?
+				* @param parameter: dereference parameter
 				*/
 				CDereferenceLiteral(std::shared_ptr<procedural::CSymbol> parameter = nullptr);
 
@@ -33,8 +32,8 @@ namespace ast {
 				virtual void accept(std::shared_ptr<visitors::CAbstractVisitor> visitor);
 
 				/**
-				 * Signatures getter
-				 * @return shared_ptr to CServiceSignature
+				 * Name getter
+				 * @return shared_ptr to CSymbol
 				 */
 				std::shared_ptr<procedural::CSymbol> getParamName() const;
 			};

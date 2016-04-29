@@ -12,8 +12,8 @@ namespace ast {
 		namespace compo {
 
 			/**
-			 * \class CInjectedPort
-			 * \brief Class for Compo injected port representation
+			 * \class CBind
+			 * \brief Class for abstract bindings representation
 			 */
 			class CBind : public virtual CNode {
 			  protected:
@@ -25,9 +25,8 @@ namespace ast {
 
 				/**
 				* Parametric constructor with default values
-				* @param name: name of port
-				* @param atomic: is atomic
-				* @param injectedWith: name of injected port
+				* @param portIdentification1: address of source port
+				* @param portIdentification2: address of destination port
 				*/
 				CBind(std::shared_ptr<compo::CPortAddress> portIdentification1 = nullptr,
 				      std::shared_ptr<compo::CPortAddress> portIdentification2 = nullptr);

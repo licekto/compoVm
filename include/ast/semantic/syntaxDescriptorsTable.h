@@ -23,20 +23,37 @@ namespace ast {
 
 		/**
 		* \class CGLobalDescriptorTable
-		 * \brief Abstract base class for other nodes.
+		 * \brief Descriptor table class
 		 */
 		class CSyntaxDescriptorTable {
 		  private:
+			/**< Hash map string -> reference */
 			std::map<std::string, ptr(ast_descriptorinterface)> m_descriptorMap;
 
 		  public:
-
+			/**
+			 * Looks for symbol name
+			 * @param name - string
+			 * @return bool
+			 */
 			bool symbolFound(const std::string& name) const;
 
+			/**
+			 * Adds symbol to table
+			 * @param node - string
+			 */
 			void addSymbol(ptr(ast_descriptorinterface) node);
 
+			/**
+			 * Returns symbol with given name
+			 * @param name - string
+			 * @return reference
+			 */
 			ptr(ast_descriptorinterface) getSymbol(const std::string& name);
 
+			/**
+			 * Clears table
+			 */
 			void clear();
 		};
 

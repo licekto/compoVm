@@ -33,8 +33,8 @@ namespace ast {
 			  public:
 				/**
 				* Parametric constructor with default value
-				* @param startCond: Star condition node pointer
-				* @param endCond: Star condition node pointer
+				* @param startCond: Start condition node pointer
+				* @param endCond: End condition node pointer
 				* @param step: Step node pointer
 				* @param body: Reference to vector of body nodes
 				*/
@@ -44,9 +44,9 @@ namespace ast {
 				              std::shared_ptr<procedural::CCompoundBody> body = nullptr);
 
 				/**
-				            * Accept method for visitor acceptation.
-				            * @param visitor: Pointer to abstract visitor.
-				            */
+				                * Accept method for visitor acceptation.
+				                * @param visitor: Pointer to abstract visitor.
+				                */
 				virtual void accept(std::shared_ptr<visitors::CAbstractVisitor> visitor);
 
 				/**

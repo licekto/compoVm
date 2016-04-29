@@ -85,8 +85,8 @@ namespace interpreter {
 			ptr(mem_port) exec(ptr(ast_node));
 
 			void checkBindAddresses(ptr(mem_port) src, ptr(mem_port) dst);
-                
-                public:
+
+		  public:
 			std::string getStringRepresentation(ptr(mem_value) val);
 
 			CInterpreter(ptr(ParserWrapper) parser = nullptr,
@@ -100,8 +100,8 @@ namespace interpreter {
 			ptr(mem_port) execService(const std::string& receiver, const std::string& selector);
 
 			ptr(mem_port) run(ptr(ast_program) ast);
-                        
-                        void run(const std::string& code);
+
+			void run(const std::string& code);
 		};
 
 	}

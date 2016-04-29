@@ -11,15 +11,15 @@ namespace ast {
 		namespace compo {
 
 			/**
-			 * \class CInjectedPort
-			 * \brief Class for Compo injected port representation
+			 * \class CDisconnection
+			 * \brief Class for Compo disconnection representation
 			 */
 			class CDisconnection : public CBind, public std::enable_shared_from_this<CDisconnection> {
 			  public:
 				/**
 				* Parametric constructor with default values
-				* @param name: name of port
-				* @param atomic: is atomic
+				* @param portIdentification1: address of source port
+				* @param portIdentification2: address of destination port
 				*/
 				CDisconnection(std::shared_ptr<compo::CPortAddress> portIdentification1 = nullptr,
 				               std::shared_ptr<compo::CPortAddress> portIdentification2 = nullptr);

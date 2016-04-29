@@ -22,18 +22,26 @@ namespace ast {
 	namespace visitors {
 
 		/**
-		* \class CAbstractVisitor
-		* \brief Abstract base class (interface) for other visitors.
-		*
-		* Abstract base class for visitors servers as interface. Every visitor derived from this one.
+		* \class CConstantsVisitor
+		* \brief Visitor that extracts constants from service code
 		*/
 		class CConstantsVisitor : public CAbstractVisitor, public std::enable_shared_from_this<CConstantsVisitor>  {
 		  private:
+			/**< Vector of references to constants */
 			std::vector<ptr(nodes::procedural::CAbstractPrimaryExpression)> m_constants;
 		  public:
 
+			/**
+			 * Constants vector size getter
+			 * @return size_t
+			 */
 			size_t getConstantsSize() const;
 
+			/**
+			 * Constant getter
+			 * @param index - int
+			 * @return reference
+			 */
 			ptr(nodes::procedural::CAbstractPrimaryExpression) getConstantAt(size_t index);
 
 			virtual void visit(ptr(ast_node) node);

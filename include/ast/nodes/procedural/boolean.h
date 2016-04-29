@@ -12,20 +12,18 @@ namespace ast {
 		namespace procedural {
 
 			/**
-			 * \class CConstant
-			 * \brief Class for integer literal representation.
-			 *
-			 * Class contains positive or negative 4B integer value.
+			 * \class CBoolean
+			 * \brief Class for boolean value representation.
 			 */
 			class CBoolean : public CAbstractPrimaryExpression, public std::enable_shared_from_this<CBoolean> {
 			  private:
-				/**< Integer 4B value */
+				/**< Bool value */
 				bool m_value;
 
 			  public:
 				/**
 				* Parametric constructor with default value
-				* @param val: integer value
+				* @param val: bool value
 				*/
 				CBoolean(bool val = false);
 
@@ -36,8 +34,8 @@ namespace ast {
 				virtual void accept(std::shared_ptr<visitors::CAbstractVisitor> visitor);
 
 				/**
-				 * Integer value getter
-				 * @return integer value
+				 * Bool value getter
+				 * @return bool value
 				 */
 				bool getValue() const;
 			};

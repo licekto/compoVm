@@ -11,8 +11,8 @@ namespace ast {
 		namespace compo {
 
 			/**
-			 * \class CInjectedPort
-			 * \brief Class for Compo injected port representation
+			 * \class CPortAddress
+			 * \brief Class for Compo port address representation
 			 */
 			class CPortAddress : public CNode, public std::enable_shared_from_this<CPortAddress> {
 			  private:
@@ -25,9 +25,8 @@ namespace ast {
 			  public:
 				/**
 				* Parametric constructor with default values
-				* @param name: name of port
-				* @param atomic: is atomic
-				* @param injectedWith: name of injected port
+				* @param portName: name of port
+				* @param component: component reference
 				*/
 				CPortAddress(std::shared_ptr<procedural::CSymbol> portName = nullptr,
 				             std::shared_ptr<CNode> component = nullptr);

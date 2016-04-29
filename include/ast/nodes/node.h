@@ -23,13 +23,13 @@ namespace ast {
 	*/
 
 	/**
-	 * nodes Namespace to uniquely identify compo AST nodes.
+	 * nodes Namespace for only Compo nodes.
 	 */
 	namespace nodes {
 
 		/**
 		* \class CNode
-		 * \brief Abstract base class for other nodes.
+		 * \brief Abstract base class for other nodes to derive from.
 		 *
 		 * Abstract base class of AST. Every node in AST is derived from this one.
 		 */
@@ -41,6 +41,7 @@ namespace ast {
 			/**
 			* Parametric constructor with default value
 			* @param type: type of node
+			            * Constructor is made private to disable construction of instance of abstract class.
 			*/
 			CNode(types::nodeType type = types::nodeType::END);
 

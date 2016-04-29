@@ -13,7 +13,7 @@ namespace ast {
 		 */
 
 		/**
-		 * procedural Namespace to uniquely identify compo AST nodes.
+		 * procedural Namespace to uniquely identify procedural compo AST nodes.
 		 */
 		namespace procedural {
 
@@ -25,9 +25,9 @@ namespace ast {
 			  public:
 
 				/**
-				  * Accept method for visitor acceptation.
-				  * @param visitor: Pointer to abstract visitor.
-				  */
+				* Accept method for visitor acceptation.
+				* @param visitor: Pointer to abstract visitor.
+				*/
 				virtual void accept(std::shared_ptr<visitors::CAbstractVisitor> visitor) = 0;
 			};
 

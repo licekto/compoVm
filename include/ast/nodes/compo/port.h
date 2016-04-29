@@ -14,10 +14,10 @@ namespace ast {
 
 			/**
 			 * \class CPort
-			 * \brief Class for port and inherited injected port nodes.
+			 * \brief Class for port and inherited port nodes.
 			 *
-			 * Class for port and inherited injected port nodes. Class inherits virtually from nodes::CNode prevent diamond problem.
-			 * This class was designed because of the similar structure of port a injected port nodes thus to prevent code repetition.
+			 * Class for port and inherited port nodes. Class inherits virtually from CNode to prevent diamond problem.
+			 * This class was designed because of the similar structure of various port nodes, thus to prevent code repetition.
 			 */
 			class CPort : public virtual CNode {
 			  protected:
@@ -44,8 +44,12 @@ namespace ast {
 			  public:
 				/**
 				* Parametric constructor with default value
-				* @param name: Name of port
-				* @param atomic: Is atomic?
+				* @param type: Port type
+				                * @param name: Name of port
+				                * @param atomicity: is atomic?
+				                * @param collectivity: is collection?
+				                * @param visibilityType: Visibility type
+				                * @param role: Role type
 				*/
 				CPort(types::portType type = types::portType::UNIVERSAL,
 				      std::shared_ptr<nodes::procedural::CSymbol> name = nullptr,
@@ -96,12 +100,28 @@ namespace ast {
 				                */
 				bool isCollection() const;
 
+				/**
+				 * Visibility type setter
+				 * @param visibility
+				 */
 				void setVisibility(types::visibilityType visibility);
 
+				/**
+				 * Visibility getter
+				 * @return Visibility type
+				 */
 				types::visibilityType getVisibility() const;
 
+				/**
+				 * Role type setter
+				 * @param role - Role type
+				 */
 				void setRole(types::roleType role);
 
+				/**
+				 * Role getter
+				 * @return Role type
+				 */
 				types::roleType getRole() const;
 			};
 

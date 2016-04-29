@@ -137,40 +137,36 @@ namespace interpreter {
 		}
 
 		ptr(mem_port) CInterpreter::execRelationalOp(ptr(ast_binary) expr, type_operator op) {
-                        ptr(mem_value) val1 = cast(mem_value)(exec(expr->getOperand1())->getOwner());
+			ptr(mem_value) val1 = cast(mem_value)(exec(expr->getOperand1())->getOwner());
 			ptr(mem_value) val2 = cast(mem_value)(exec(expr->getOperand2())->getOwner());
 
 			if (val1->getType() == type_values::STRING || val2->getType() == type_values::STRING) {
-                                std::string l = getStringRepresentation(val1);
-                                std::string r = getStringRepresentation(val2);
-                                bool res;
+				std::string l = getStringRepresentation(val1);
+				std::string r = getStringRepresentation(val2);
+				bool res;
 				if (op == type_operator::EQUALITY) {
-                                    res = l == r;
+					res = l == r;
+				} else if (op == type_operator::NON_EQUALITY) {
+					res = l != r;
+				} else {
+					throw exceptions::runtime::CWrongStringOperationException();
 				}
-                                else if (op == type_operator::NON_EQUALITY) {
-                                    res = l != r;
-				}
-                                else {
-                                    throw exceptions::runtime::CWrongStringOperationException();
-                                }
-                                return m_bootstrap->getBoolComponent(res);
+				return m_bootstrap->getBoolComponent(res);
 			}
-                        
-                        if (val1->getType() == type_values::BOOL && val2->getType() == type_values::BOOL) {
-                                bool l = cast(mem_bool)(val1)->getValue();
-                                bool r = cast(mem_bool)(val2)->getValue();
-                                bool res;
-                                
+
+			if (val1->getType() == type_values::BOOL && val2->getType() == type_values::BOOL) {
+				bool l = cast(mem_bool)(val1)->getValue();
+				bool r = cast(mem_bool)(val2)->getValue();
+				bool res;
+
 				if (op == type_operator::EQUALITY) {
-                                    res = l == r;
+					res = l == r;
+				} else if (op == type_operator::NON_EQUALITY) {
+					res = l != r;
+				} else {
+					throw exceptions::runtime::CUnknownOperatorTypeException();
 				}
-                                else if (op == type_operator::NON_EQUALITY) {
-                                    res = l != r;
-				}
-                                else {
-                                    throw exceptions::runtime::CUnknownOperatorTypeException();
-                                }
-                                return m_bootstrap->getBoolComponent(res);
+				return m_bootstrap->getBoolComponent(res);
 			}
 
 			i64 l = cast(mem_int)(val1)->getValue();
@@ -207,7 +203,7 @@ namespace interpreter {
 			}
 			}
 			return m_bootstrap->getBoolComponent(res);
-                }
+		}
 
 		ptr(mem_port) CInterpreter::execServiceInvocation(ptr(ast_serviceinvocation) node) {
 			std::string receiver = node->getReceiverName()->getStringValue();
@@ -288,7 +284,7 @@ namespace interpreter {
 			}
 
 			srcPort->connectPort(dstPort);
-                        dstPort->connectPort(srcPort);
+			dstPort->connectPort(srcPort);
 
 			return m_bootstrap->getIntComponent(index);
 		}
@@ -360,9 +356,9 @@ namespace interpreter {
 		}
 
 		ptr(mem_port)  CInterpreter::exec(ptr(ast_node) node) {
-                        if (!node.use_count()) {
-                            return nullptr;
-                        }
+			if (!node.use_count()) {
+				return nullptr;
+			}
 			switch (node->getNodeType()) {
 			case type_node::PROGRAM : {
 				return execProgram(cast(ast_program)(node));
@@ -510,13 +506,13 @@ namespace interpreter {
 			boot();
 			return exec(ast);
 		}
-                
-                void CInterpreter::run(const std::string& code) {
-                        std::stringstream input;
-                        input.str(code);
-                        m_parser->parseAll(input);
-                        run(m_parser->getRootNode());
-                }
+
+		void CInterpreter::run(const std::string& code) {
+			std::stringstream input;
+			input.str(code);
+			m_parser->parseAll(input);
+			run(m_parser->getRootNode());
+		}
 	}
 
 }

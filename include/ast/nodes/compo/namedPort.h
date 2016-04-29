@@ -23,7 +23,11 @@ namespace ast {
 				/**
 				* Parametric constructor with default value
 				* @param name: Name of port
-				* @param atomic: Is atomic?
+				* @param atomicity: Is atomic?
+				                * @param collectivity: Is collection?
+				                * @param visibilityType: Visibility type.
+				                * @param role: Role type.
+				                * @param componentName: Name of component.
 				*/
 				CNamedPort(std::shared_ptr<procedural::CSymbol> name = nullptr,
 				           bool atomicity = false,
@@ -39,9 +43,8 @@ namespace ast {
 				virtual void accept(std::shared_ptr<visitors::CAbstractVisitor> visitor);
 
 				/**
-				 * Signatures getter
-				 * @param index
-				 * @return shared_ptr to CServiceSignature
+				 * Name getter
+				 * @return shared_ptr to CSymbol
 				 */
 				std::shared_ptr<procedural::CSymbol> getComponentName() const;
 			};

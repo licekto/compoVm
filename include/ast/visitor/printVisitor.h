@@ -22,23 +22,31 @@ namespace ast {
 	namespace visitors {
 
 		/**
-		* \class CAbstractVisitor
-		* \brief Abstract base class (interface) for other visitors.
-		*
-		* Abstract base class for visitors servers as interface. Every visitor derived from this one.
+		* \class CPrintVisitor
+		* \brief Visitor that prints code in readable form.
 		*/
 		class CPrintVisitor : public CAbstractVisitor, public std::enable_shared_from_this<CPrintVisitor> {
 		  private:
+			/**< Number of tabulators to print */
 			int m_tabs;
 
+			/**< Final string */
 			std::stringstream m_output;
 
+			/**< Prints tabulators */
 			void printTabs();
 
 		  public:
 
+			/**
+			 * Default constructor
+			 */
 			CPrintVisitor();
 
+			/**
+			 * Output getter
+			 * @return string
+			 */
 			std::string getOutput() const;
 
 			virtual void visit(ptr(ast_node) node);

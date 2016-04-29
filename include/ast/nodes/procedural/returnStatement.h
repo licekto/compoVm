@@ -18,7 +18,7 @@ namespace ast {
 			 */
 			class CReturnStatement : public CAbstractStatement, public std::enable_shared_from_this<CReturnStatement> {
 			  private:
-				/**< Start condition node */
+				/**< Expression node */
 				std::shared_ptr<CNode> m_expression;
 
 			  public:
@@ -29,9 +29,9 @@ namespace ast {
 				CReturnStatement(std::shared_ptr<CNode> expression = nullptr);
 
 				/**
-				            * Accept method for visitor acceptation.
-				            * @param visitor: Pointer to abstract visitor.
-				            */
+				                * Accept method for visitor acceptation.
+				                * @param visitor: Pointer to abstract visitor.
+				                */
 				virtual void accept(std::shared_ptr<visitors::CAbstractVisitor> visitor);
 
 				/**

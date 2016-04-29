@@ -197,51 +197,51 @@ namespace interpreter {
 
 				newComponent->getPortByName("name")->connectPort(m_bootstrapStage1->bootstrapStringValue("System")->getDefaultPort());
 
-                                newComponent->removeServiceByName("print");
+				newComponent->removeServiceByName("print");
 				newComponent->removeServiceByName("println");
 				newComponent->removeServiceByName("readString");
-                                newComponent->removeServiceByName("readLine");
+				newComponent->removeServiceByName("readLine");
 				newComponent->removeServiceByName("readInt");
 				newComponent->removeServiceByName("getRand");
 
 				std::function<ptr(mem_port)(const ptr(mem_component)&)> callback = [this](const ptr(mem_component)& context) -> ptr(mem_port) {
-                                        std::string str = "";
-                                        if (context->getPortByName("args")->getConnectedPortsNumber()) {
-                                        str = m_bootstrapStage1->m_interpreter.lock()
-                                                ->getStringRepresentation(cast(mem_value)(context->getPortByName("args")->getConnectedPortAt(0)->getOwner()));
-                                        context->getPortByName("args")->disconnectAll();
-                                        }
+					std::string str = "";
+					if (context->getPortByName("args")->getConnectedPortsNumber()) {
+						str = m_bootstrapStage1->m_interpreter.lock()
+						      ->getStringRepresentation(cast(mem_value)(context->getPortByName("args")->getConnectedPortAt(0)->getOwner()));
+						context->getPortByName("args")->disconnectAll();
+					}
 					STANDARD_OUT << str << std::endl;
 					return nullptr;
 				};
 				newComponent->addService(m_bootstrapStage1->m_memory->newPrimitiveService(newComponent, "println", callback).lock());
 
-                                callback = [this](const ptr(mem_component)& context) -> ptr(mem_port) {
-                                        std::string str = "";
-                                        if (context->getPortByName("args")->getConnectedPortsNumber()) {
-                                        str = m_bootstrapStage1->m_interpreter.lock()
-                                                ->getStringRepresentation(cast(mem_value)(context->getPortByName("args")->getConnectedPortAt(0)->getOwner()));
-                                        context->getPortByName("args")->disconnectAll();
-                                        }
+				callback = [this](const ptr(mem_component)& context) -> ptr(mem_port) {
+					std::string str = "";
+					if (context->getPortByName("args")->getConnectedPortsNumber()) {
+						str = m_bootstrapStage1->m_interpreter.lock()
+						      ->getStringRepresentation(cast(mem_value)(context->getPortByName("args")->getConnectedPortAt(0)->getOwner()));
+						context->getPortByName("args")->disconnectAll();
+					}
 					STANDARD_OUT << str;
 					return nullptr;
 				};
 				newComponent->addService(m_bootstrapStage1->m_memory->newPrimitiveService(newComponent, "print", callback).lock());
-                                
+
 				callback = [this](const ptr(mem_component)& /*context*/) -> ptr(mem_port) {
 					std::string val;
-                                        STANDARD_IN >> val;
+					STANDARD_IN >> val;
 					return getStringComponent(val);
 				};
 				newComponent->addService(m_bootstrapStage1->m_memory->newPrimitiveService(newComponent, "readString", callback).lock());
 
-                                callback = [this](const ptr(mem_component)& /*context*/) -> ptr(mem_port) {
+				callback = [this](const ptr(mem_component)& /*context*/) -> ptr(mem_port) {
 					std::string val;
-                                        std::getline(STANDARD_IN, val);
+					std::getline(STANDARD_IN, val);
 					return getStringComponent(val);
 				};
 				newComponent->addService(m_bootstrapStage1->m_memory->newPrimitiveService(newComponent, "readLine", callback).lock());
-                                
+
 				callback = [this](const ptr(mem_component)& /*context*/) -> ptr(mem_port) {
 					i64 val;
 					STANDARD_IN >> val;
@@ -251,7 +251,7 @@ namespace interpreter {
 
 				callback = [this](const ptr(mem_component)& context) -> ptr(mem_port) {
 					i64 seed = cast(mem_int)(context->getPortByName("args")->getConnectedPortAt(0)->getOwner())->getValue();
-                                        context->getPortByName("args")->disconnectAll();
+					context->getPortByName("args")->disconnectAll();
 					srand(seed);
 					return getIntComponent(rand());
 				};
@@ -416,27 +416,25 @@ namespace interpreter {
 
 						std::string bindType = cast(mem_string)(connection->getPortByName("bindType")->getConnectedPortAt(0)->getOwner())->getValue();
 						if (bindType == BIND_CONNECTION) {
-                                                        if (!srcPort->isCollection()) {
-                                                            srcPort->disconnectAll();
-                                                        }
+							if (!srcPort->isCollection()) {
+								srcPort->disconnectAll();
+							}
 							srcPort->connectPort(dstPort);
-                                                        if (!dstPort->isCollection()) {
-                                                            dstPort->disconnectAll();
-                                                        }
+							if (!dstPort->isCollection()) {
+								dstPort->disconnectAll();
+							}
 							dstPort->connectPort(srcPort);
 						} else if (bindType == BIND_DISCONNECTION) {
-                                                        if (srcPort->isCollection()) {
-                                                            srcPort->disconnectAll();
-                                                        }
-                                                        else {
-                                                            srcPort->disconnectPortByName(dstPort->getName());
-                                                        }
-                                                        if (dstPort->isCollection()) {
-                                                            dstPort->disconnectAll();
-                                                        }
-                                                        else {
-                                                            dstPort->disconnectPortByName(srcPort->getName());
-                                                        }
+							if (srcPort->isCollection()) {
+								srcPort->disconnectAll();
+							} else {
+								srcPort->disconnectPortByName(dstPort->getName());
+							}
+							if (dstPort->isCollection()) {
+								dstPort->disconnectAll();
+							} else {
+								dstPort->disconnectPortByName(srcPort->getName());
+							}
 						} else if (bindType == BIND_DELEGATION) {
 							srcPort->delegateTo(dstPort);
 						} else {

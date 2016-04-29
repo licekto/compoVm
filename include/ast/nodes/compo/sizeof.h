@@ -21,8 +21,7 @@ namespace ast {
 			  public:
 				/**
 				* Parametric constructor with default value
-				* @param name: Name of port
-				* @param atomic: Is atomic?
+				* @param parameter: Name of parameter
 				*/
 				CSizeof(std::shared_ptr<procedural::CSymbol> parameter = nullptr);
 
@@ -33,8 +32,8 @@ namespace ast {
 				virtual void accept(std::shared_ptr<visitors::CAbstractVisitor> visitor);
 
 				/**
-				 * Signatures getter
-				 * @return shared_ptr to CServiceSignature
+				 * Parameter getter
+				 * @return shared_ptr to CSymbol
 				 */
 				std::shared_ptr<procedural::CSymbol> getParamName() const;
 			};

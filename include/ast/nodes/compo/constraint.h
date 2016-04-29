@@ -24,9 +24,8 @@ namespace ast {
 			  public:
 				/**
 				* Parametric constructor with default values
-				* @param name: Name of constraint
-				* @param params: Vector of parameters
-				* @param body: Vector of body expressions
+				* @param signature: service signature
+				* @param body: compound body
 				*/
 				CConstraint(std::shared_ptr<compo::CServiceSignature> signature = nullptr,
 				            std::shared_ptr<procedural::CCompoundBody> body = nullptr);
@@ -39,14 +38,14 @@ namespace ast {
 
 				/**
 				* Name getter
-							* @return Name of entity
-							*/
+				                * @return Name of entity
+				                */
 				std::shared_ptr<procedural::CSymbol> getNameSymbol() const;
 
 				/**
 				* Body size getter
-				                            * @return size of body vector
-				                            */
+				                * @return size of body vector
+				                */
 				size_t getBodySize() const;
 
 				/**
@@ -63,8 +62,8 @@ namespace ast {
 
 				/**
 				* Parameter size vector size
-						 * @return number of parameters
-						 */
+				                * @return number of parameters
+				                */
 				size_t getParamsSize() const;
 
 				/**

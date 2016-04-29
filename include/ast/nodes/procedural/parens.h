@@ -22,15 +22,14 @@ namespace ast {
 			  public:
 				/**
 				* Parametric constructor with default values
-				* @param type: type of node
-				* @param val: integer value
+				* @param expr: expression
 				*/
 				CParens(std::shared_ptr<CNode> expr = nullptr);
 
 				/**
-				            * Accept method for visitor acceptation.
-				            * @param visitor: Pointer to abstract visitor.
-				            */
+				                * Accept method for visitor acceptation.
+				                * @param visitor: Pointer to abstract visitor.
+				                */
 				virtual void accept(std::shared_ptr<visitors::CAbstractVisitor> visitor);
 
 				/**

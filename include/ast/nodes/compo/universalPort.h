@@ -19,8 +19,12 @@ namespace ast {
 			  public:
 				/**
 				* Parametric constructor with default value
-				* @param name: Name of port
-				* @param atomic: Is atomic?
+				                * @param name: Name of port
+				                * @param atomicity: is atomic?
+				                * @param collectivity: is collection?
+				                * @param visibilityType: Visibility type
+				                * @param role: Role type
+				                * @param list: Signatures list
 				*/
 				CUniversalPort(std::shared_ptr<procedural::CSymbol> name = nullptr,
 				               bool atomicity = false,

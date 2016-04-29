@@ -31,9 +31,9 @@ namespace ast {
 				* @param variable: name of variable
 				* @param rval: right-hand side of assignment
 				*/
-				CBinaryExpression         ( types::operatorType type = types::operatorType::PLUS,
-				                            std::shared_ptr<CNode> op1 = nullptr,
-				                            std::shared_ptr<CNode> op2 = nullptr);
+				CBinaryExpression(types::operatorType type = types::operatorType::PLUS,
+				                  std::shared_ptr<CNode> op1 = nullptr,
+				                  std::shared_ptr<CNode> op2 = nullptr);
 
 			  public:
 

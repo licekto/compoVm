@@ -19,8 +19,8 @@ namespace ast {
 			  public:
 				/**
 				* Parametric constructor with default values
-				* @param variable: name of variable
-				* @param rval: right-hand side of assignment
+				* @param op1: first operand
+				* @param op2: second operand
 				*/
 				CSubtractionExpression(std::shared_ptr<CNode> op1 = nullptr,
 				                       std::shared_ptr<CNode> op2 = nullptr);

@@ -30,17 +30,17 @@ namespace ast {
 				/**
 				* Parametric constructor with default value
 				* @param condition: condition node pointer
-				            * @param ifBody: if branch body node
-				            * @param elseBody: else branch body node
+				* @param ifBody: if branch body node
+				                * @param elseBody: else branch body node
 				*/
 				CIfStatement(std::shared_ptr<procedural::CAbstractExpression> condition = nullptr,
 				             std::shared_ptr<procedural::CCompoundBody> ifBody = nullptr,
 				             std::shared_ptr<CNode> elseBody = nullptr);
 
 				/**
-                                * Accept method for visitor acceptation.
-                                * @param visitor: Pointer to abstract visitor.
-                                */
+				                * Accept method for visitor acceptation.
+				                * @param visitor: Pointer to abstract visitor.
+				                */
 				virtual void accept(std::shared_ptr<visitors::CAbstractVisitor> visitor);
 
 				/**
@@ -51,8 +51,8 @@ namespace ast {
 
 				/**
 				* Else body getter
-                                * @return Constant pointer to else body
-                                */
+				                * @return Constant pointer to else body
+				                */
 				std::shared_ptr<CNode> getElseBody() const;
 
 				/**

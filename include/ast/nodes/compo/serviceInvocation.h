@@ -10,8 +10,8 @@ namespace ast {
 		namespace compo {
 
 			/**
-			 * \class CNamedPort
-			 * \brief Class for named port representation.
+			 * \class CServiceInvocation
+			 * \brief Class for service invocation representation.
 			 */
 			class CServiceInvocation : public CNode, public std::enable_shared_from_this<CServiceInvocation> {
 			  protected:
@@ -30,8 +30,10 @@ namespace ast {
 			  public:
 				/**
 				* Parametric constructor with default value
-				* @param name: Name of port
-				* @param atomic: Is atomic?
+				* @param receiver: name of receiver
+				* @param selector: name of selector
+				                * @param parameters: node with parameters
+				                * @param index: Index for collection port call
 				*/
 				CServiceInvocation(std::shared_ptr<procedural::CSymbol> receiver = nullptr,
 				                   std::shared_ptr<procedural::CSymbol> selector = nullptr,
@@ -57,11 +59,15 @@ namespace ast {
 				std::shared_ptr<procedural::CSymbol> getSelectorName() const;
 
 				/**
-				* Index expression getter
-				                * @return shared_ptr to CAbstractExpression
+				* Parameters getter
+				                * @return shared_ptr to CNode
 				                */
 				std::shared_ptr<CNode> getParameters() const;
 
+				/**
+				* Index expression getter
+				                            * @return shared_ptr to CAbstractExpression
+				                            */
 				std::shared_ptr<CNode> getIndex() const;
 			};
 

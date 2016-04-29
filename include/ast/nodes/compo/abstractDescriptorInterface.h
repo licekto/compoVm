@@ -14,10 +14,10 @@ namespace ast {
 
 			/**
 			 * \class CAbstractDescriptorInterface
-			 * \brief Abstract base class for service and constraint nodes.
+			 * \brief Abstract base class for descriptor and interface nodes.
 			 *
-			 * Abstract base class for service and constraint nodes. Class inherits virtually from CCompoNode prevent diamond problem.
-			 * This class was designed because of the similar structure of service a constraint nodes thus to prevent code repetition.
+			 * Abstract base class for descriptor and interface nodes. Class inherits virtually from CNode to prevent diamond problem.
+			 * This class was designed because of the similar structure of descriptor and interface nodes, thus to prevent code repetition.
 			 */
 			class CAbstractDescriptorInterface : public virtual CNode {
 			  protected:
@@ -30,16 +30,16 @@ namespace ast {
 			  public:
 				/**
 				* Parametric constructor with default value
-						* @param name: Name
-						* @param atomic: Name of base
-						*/
+				                * @param name: Name
+				                * @param atomic: Name of base
+				                */
 				CAbstractDescriptorInterface(std::shared_ptr<procedural::CSymbol> name = nullptr,
 				                             std::shared_ptr<procedural::CSymbol> extends = nullptr);
 
 				/**
 				* Accept method for visitor acceptation.
-						* @param visitor: Pointer to abstract visitor.
-						*/
+				                * @param visitor: Pointer to abstract visitor.
+				                */
 				virtual void accept(std::shared_ptr<visitors::CAbstractVisitor> visitor) = 0;
 
 				/**
