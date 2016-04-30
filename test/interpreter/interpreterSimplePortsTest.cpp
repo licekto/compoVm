@@ -66,33 +66,6 @@ BOOST_AUTO_TEST_CASE(basicTest) {
     table->clear();
 }
 
-BOOST_AUTO_TEST_CASE(identityHashTest) {
-    // Testing input
-    std::stringstream input;
-    input.str(
-   "descriptor A {\
-    }\
-    descriptor CompoContainer {\
-        service main() {\
-            |a|\
-            a := A.new();\
-            return a.getIdentityHash();\
-        }\
-    }");
-    
-    // Parse input and create AST
-    parser->parseAll(input);
-    
-    ptr(ast_program) program = parser->getRootNode();
-
-    ptr(mem_int) intComponent = cast(mem_int)(interpreter->run(program)->getOwner());
-    BOOST_CHECK_EQUAL(intComponent->getValue(), 43182);
-    
-    // Clear AST for next test
-    parser->clearAll();
-    table->clear();
-}
-
 BOOST_AUTO_TEST_CASE(serviceCallParamTest) {
     // Testing input
     std::stringstream input;
