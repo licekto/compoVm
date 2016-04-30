@@ -40,8 +40,8 @@ set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
 # Boost settings
 #------------------------------
-set(Boost_ADDITIONAL_VERSIONS "1.58" "1.58.0")
-find_package(Boost 1.58 REQUIRED COMPONENTS thread date_time filesystem system unit_test_framework)
+set(Boost_ADDITIONAL_VERSIONS "1.55" "1.55.0")
+find_package(Boost 1.55 REQUIRED COMPONENTS thread date_time filesystem system unit_test_framework)
 find_package(Threads)
 
 if(Boost_FOUND)

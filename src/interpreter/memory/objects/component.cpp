@@ -251,26 +251,6 @@ namespace interpreter {
 				m_child = wptr(CComponent)(child);
 			}
 
-			std::stringstream CComponent::dump() const {
-				std::stringstream dump;
-
-				if (m_parent.use_count()) {
-					dump << m_parent.lock()->dump().str() << std::endl;
-				}
-
-				dump << "ports: " << m_ports.size() << std::endl;
-				for (wptr(CGeneralPort) port : m_ports) {
-					dump << "\tname: " << port.lock()->getName() << ", connected ports: " << port.lock()->getConnectedPortsNumber() << std::endl;
-				}
-
-				dump << "services: " << m_services.size() << std::endl;
-				for (wptr(CGeneralService) service : m_services) {
-					dump << "\tname: " << service.lock()->getName() << std::endl;
-				}
-
-				return dump;
-			}
-
 			size_t CComponent::getSelfPortsNumber() {
 				return m_ports.size();
 			}

@@ -83,8 +83,6 @@ namespace interpreter {
 
 				void setChild(ptr(CComponent) child);
 
-				std::stringstream dump() const;
-
 				size_t getSelfPortsNumber();
 
 				ptr(CGeneralPort) getSelfPortAt(size_t index);
