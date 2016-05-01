@@ -17,12 +17,12 @@ my $testCommand = "ctest -T Test -D ExperimentalBuild -D ExperimentalTest -D Exp
 my $oclintCommand = "oclint-json-compilation-database -e ../src/generated/parser.cpp -e ../src/generated/lexer.cpp -- -rc=LONG_LINE=200 -report-type html -o oclint.html";
 my $doxygenCommand = "doxygen Doxyfile 2> /dev/null > /dev/null";
 my $cppcheckCommand = "cppcheck -j 4 -i src/generated/ -i include/generated/ src/ include/ --force --enable=warning,performance,information,style --xml 2> cppcheck.xml";
-my $lcovCommand1 = "lcov --capture --directory ../ -o coverage.info";
+my $lcovCommand1 = "lcov --capture --directory . -o coverage.info";
 my $lcovCommand2 = "lcov --remove coverage.info \"/usr*\" -o coverage.info";
 my $lcovCommand3 = "lcov --remove coverage.info \"test/*\" -o coverage.info";
 my $lcovCommand4 = "lcov --remove coverage.info \"include/generated/*\" -o coverage.info";
 my $lcovCommand5 = "lcov --remove coverage.info \"src/generated/*\" -o coverage.info";
-my $genhtmlCommand = "genhtml coverage.info --output-directory ../doc/coverage";
+my $genhtmlCommand = "genhtml coverage.info --output-directory doc/coverage";
 my $locCommand = "cloc .. --exclude-dir=bin,build,doc,nbproject,generated";
 
 if (not -d "../doc/doxygen") {
@@ -59,7 +59,7 @@ say "Running Doxygen...";
 say "Doxygen generation completed";
 say "-----------------------------------\n";
 
-chdir("../build/");
+chdir("..");
 
 say "Running lcov...";
 `$lcovCommand1`;
@@ -68,9 +68,11 @@ say "Running lcov...";
 `$lcovCommand4`;
 `$lcovCommand5`;
 `$genhtmlCommand`;
-system("rm ../coverage.info");
+system("rm coverage.info");
 say "Code coverage report completed";
 say "-----------------------------------\n";
+
+chdir("build");
 
 my $oclintFile = "compile_commands.json";
 copy($oclintFile, "../" . $oclintFile);
@@ -95,19 +97,23 @@ move("build/valgrind.xml", "doc/stats");
 move("oclint.html", "doc/stats");
 move("cppcheck.xml", "doc/stats");
 move("doc/loc.txt", "doc/stats");
-move("doc/tests.txt", "doc/stats");
-move("script/Testing", "build/");
 
-my $testingDir = "build/Testing/";
-opendir(my $dh, $testingDir);
-
-my $testingDirPattern = "[0-9]{8}-[0-9]{4}";
-
-my @files = grep(/$testingDirPattern/, readdir($dh));
-
-closedir($dh);
-
-my $testingXml = $testingDir . $files[0] . "/Test.xml";
-move($testingXml, "doc/stats/tests.xml");
+if ($test) {
+	move("doc/tests.txt", "doc/stats");
+	move("script/Testing", "build/");
+	
+	my $testingDir = "build/Testing/";
+	opendir(my $dh, $testingDir);
+	
+	my $testingDirPattern = "[0-9]{8}-[0-9]{4}";
+	
+	my @files = grep(/$testingDirPattern/, readdir($dh));
+	
+	closedir($dh);
+	
+	my $testingXml = $testingDir . $files[0] . "/Test.xml";
+	move($testingXml, "doc/stats/tests.xml");
+}
 
 say "Cleaning completed";
+
