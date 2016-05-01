@@ -25,7 +25,7 @@ my $lcovCommand5 = "lcov --remove coverage.info \"src/generated/*\" -o coverage.
 my $genhtmlCommand = "genhtml coverage.info --output-directory doc/coverage";
 my $locCommand = "cloc .. --exclude-dir=bin,build,doc,nbproject,generated";
 
-if (not -d "../doc/doxygen") {
+if (not -e "../doc/doxygen") {
 	system("mkdir ../doc");
 	system("mkdir ../doc/doxygen");
 }
